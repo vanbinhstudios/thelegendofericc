@@ -1,15 +1,15 @@
 package com.ericc.the.game.mapGenerator;
 
 public class Tile {
-    private boolean active;
+    private boolean passable;
 
     Tile(boolean active) {
-        this.active = active;
+        this.passable = active;
     }
 
     @Override
     public String toString() {
-        return active ? "1" : "0";
+        return passable ? "1" : "0";
     }
 
     static Tile generateCorridor() {
@@ -24,7 +24,7 @@ public class Tile {
         return new Tile(true);
     }
 
-    boolean isAvailable() {
-        return active;
+    boolean isPassable() {
+        return passable;
     }
 }

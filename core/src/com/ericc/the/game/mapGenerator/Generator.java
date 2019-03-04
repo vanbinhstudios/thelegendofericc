@@ -1,5 +1,7 @@
 package com.ericc.the.game.mapGenerator;
 
+import com.badlogic.gdx.math.GridPoint2;
+
 import java.util.Random;
 
 public class Generator {
@@ -24,15 +26,15 @@ public class Generator {
     }
 
     /**
-     * fills the given room (it randomizes a little bit the given arguments),
-     * after that it return the middle of the room that it has just generated
+     * Fills the given room (it randomizes the given arguments a little bit),
+     * after that it returns the middle of the room that it has just generated
      */
-    Coordinates<Integer> fillRoomReturnCenter(int x, int y, int width, int height) {
+    private GridPoint2 fillRoomReturnCenter(int x, int y, int width, int height) {
         int roomX = random.nextInt(width / 8 + 1);
         int roomY = random.nextInt(height / 8 + 1);
         int roomWidth = Math.max(4, width / 8 + random.nextInt(Math.max(1 + width - roomX, 1)));
         int roomHeight = Math.max(4, height / 8 + random.nextInt(Math.max(1 + height - roomY, 1)));
-        Coordinates<Integer> center = new Coordinates<Integer>(0, 0);
+        GridPoint2 center = new GridPoint2(0, 0);
 
         for (int i = x + roomX; i < x + roomWidth && i < this.width && i < x + width - 1; ++i) {
             for (int j = y + roomY; j < y + roomHeight && j < this.height && j < y + height - 1; ++j) {
@@ -53,13 +55,16 @@ public class Generator {
     }
 
     /**
-     * Indicates the rectangle of [x][y] to [x + width)[y + height)
+     * Recursive function that generates a room in a given
+     * rectangle of [x][y] to [x + width)[y + height) if (and only if)
+     * one of the dimensions passed is less than maximalRoomSize.
+     *
      * @param x indicates the x axis of the top right corner
      * @param y same but indicates the y axis of the same corner
      * @param width the width of a rectangle (from x till x + width (excluded))
      * @param height the height of a rectangle (from y till y + height (excluded))
      */
-    Coordinates<Integer> generateMap(int x, int y, int width, int height) {
+    private GridPoint2 generateMap(int x, int y, int width, int height) {
         if (width < this.maximalRoomSize || height < this.maximalRoomSize) {
             return fillRoomReturnCenter(x, y, width, height);
         }
@@ -69,7 +74,7 @@ public class Generator {
                 random.nextInt(1 + (height - 1) / 2) + height / 4 :
                 random.nextInt(1 + (width - 1) / 2) + width / 4;
 
-        Coordinates<Integer> firstRoom, secondRoom;
+        GridPoint2 firstRoom, secondRoom;
 
         if (pickHeight) {
             firstRoom = generateMap(x, y, width, slice);
@@ -86,7 +91,7 @@ public class Generator {
     /**
      * Generates the entire map.
      */
-    void generateMap() {
+    public void generateMap() {
         generateMap(1, 1, width - 1, height - 1);
     }
 
@@ -95,21 +100,21 @@ public class Generator {
      *
      * @param firstRoom  centre of a first room
      * @param secondRoom centre of a second room
-     *                   <p>
-     *                   Disclaimer:
-     *                   Rooms can be given in any order. The function indicates
-     *                   the minimal (x-axis wise) and draws a corridor from x1 (minimal one)
-     *                   to x2 (maximal). Then does the same (from the position it is on at that time)
-     *                   but considers the y-axis this time - so starts from [x2][y1] and draws
-     *                   a corridor till it reaches [x2][y2]. (Assumptions for the explanation x1 <= x2
-     *                   y1 <= y2, the function look for that order on its own, though.)
+     *
+     * Disclaimer:
+     * Rooms can be given in any order. The function indicates
+     * the minimal (x-axis wise) and draws a corridor from x1 (minimal one)
+     * to x2 (maximal). Then does the same (from the position it is on at that time)
+     * but considers the y-axis this time - so starts from [x2][y1] and draws
+     * a corridor till it reaches [x2][y2]. (Assumptions for the explanation x1 <= x2
+     * y1 <= y2, the function look for that order on its own, though.)
      */
-    void connectRooms(Coordinates<Integer> firstRoom, Coordinates<Integer> secondRoom) {
+    private void connectRooms(GridPoint2 firstRoom, GridPoint2 secondRoom) {
         boolean startFromFirst = firstRoom.x < secondRoom.x;
         int starter = Math.min(firstRoom.x, secondRoom.x);
 
         while (starter <= Math.max(firstRoom.x, secondRoom.x)) {
-            if (!map[starter][startFromFirst ? firstRoom.y : secondRoom.y].isAvailable()) {
+            if (!map[starter][startFromFirst ? firstRoom.y : secondRoom.y].isPassable()) {
                 map[starter][startFromFirst ? firstRoom.y : secondRoom.y] = Tile.generateCorridor();
             }
 
@@ -119,7 +124,7 @@ public class Generator {
         starter = Math.min(firstRoom.y, secondRoom.y);
 
         while (starter <= Math.max(firstRoom.y, secondRoom.y)) {
-            if (!map[startFromFirst ? secondRoom.x : firstRoom.x][starter].isAvailable()) {
+            if (!map[startFromFirst ? secondRoom.x : firstRoom.x][starter].isPassable()) {
                 map[startFromFirst ? secondRoom.x : firstRoom.x][starter] = Tile.generateCorridor();
             }
 
@@ -130,7 +135,7 @@ public class Generator {
     /**
      * Prints the entire map, using toString method of a Tile object.
      */
-    void printMap() {
+    private void printMap() {
         for (int j = 0; j < height; ++j) { // we have to draw the map in this way, cause i = x, j = y
             for (int i = 0; i < width; ++i) {
                 System.out.print(map[i][j]);
@@ -140,7 +145,7 @@ public class Generator {
     }
 
     public static void main(String[] arg) {
-        Generator mapGenerator = new Generator(100, 20, 8);
+        Generator mapGenerator = new Generator(200, 50, 8);
         mapGenerator.generateMap();
         mapGenerator.printMap();
     }
