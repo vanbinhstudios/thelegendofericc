@@ -6,7 +6,7 @@ import java.util.Random;
 
 public class Generator {
     private int width, height;
-    private Tile[][] map;
+    private Map map;
     private Random random;
     private int maximalRoomSize;
 
@@ -16,13 +16,7 @@ public class Generator {
         this.maximalRoomSize = maximalRoomSize;
 
         random = new Random();
-        map = new Tile[width][height];
-
-        for (int i = 0; i < width; ++i) {
-            for (int j = 0; j < height; ++j) {
-                map[i][j] = Tile.generateNotAvailableTile();
-            }
-        }
+        map = new Map(width, height);
     }
 
     /**
@@ -38,7 +32,7 @@ public class Generator {
 
         for (int i = x + roomX; i < x + roomWidth && i < this.width && i < x + width - 1; ++i) {
             for (int j = y + roomY; j < y + roomHeight && j < this.height && j < y + height - 1; ++j) {
-                map[i][j] = Tile.generateRoomTile();
+                map.setTile(i, j, Tile.generateRoomTile());
 
                 if (center.x == 0) {
                     center.y++;
@@ -114,8 +108,8 @@ public class Generator {
         int starter = Math.min(firstRoom.x, secondRoom.x);
 
         while (starter <= Math.max(firstRoom.x, secondRoom.x)) {
-            if (!map[starter][startFromFirst ? firstRoom.y : secondRoom.y].isPassable()) {
-                map[starter][startFromFirst ? firstRoom.y : secondRoom.y] = Tile.generateCorridor();
+            if (!map.getTile(starter, startFromFirst ? firstRoom.y : secondRoom.y).isPassable()) {
+                map.setTile(starter, startFromFirst ? firstRoom.y : secondRoom.y, Tile.generateCorridor());
             }
 
             ++starter;
@@ -124,8 +118,8 @@ public class Generator {
         starter = Math.min(firstRoom.y, secondRoom.y);
 
         while (starter <= Math.max(firstRoom.y, secondRoom.y)) {
-            if (!map[startFromFirst ? secondRoom.x : firstRoom.x][starter].isPassable()) {
-                map[startFromFirst ? secondRoom.x : firstRoom.x][starter] = Tile.generateCorridor();
+            if (!map.getTile(startFromFirst ? secondRoom.x : firstRoom.x, starter).isPassable()) {
+                map.setTile(startFromFirst ? secondRoom.x : firstRoom.x, starter, Tile.generateCorridor());
             }
 
             ++starter;
@@ -138,7 +132,7 @@ public class Generator {
     private void printMap() {
         for (int j = 0; j < height; ++j) { // we have to draw the map in this way, cause i = x, j = y
             for (int i = 0; i < width; ++i) {
-                System.out.print(map[i][j]);
+                System.out.print(map.getTile(i, j));
             }
             System.out.println();
         }
