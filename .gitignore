@@ -5,9 +5,6 @@
 *.ear
 hs_err_pid*
 
-## INTELLIJ
-.idea
-
 ## Robovm
 /ios/robovm-build/
 
