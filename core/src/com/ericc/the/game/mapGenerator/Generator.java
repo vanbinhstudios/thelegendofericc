@@ -10,7 +10,22 @@ public class Generator {
     private Random random;
     private int maximalRoomSize;
 
+    /**
+     * Generator class.
+     *
+     * @param width           dimension of a map to generate, must be > 1 (NOT IN PIXELS, IT IS A CUSTOM METRIC)
+     * @param height          same as above
+     * @param maximalRoomSize if any of the dimensions of a generated room are less than
+     *                        this value, the room is being generated, otherwise it calls
+     *                        the generator method recursively
+     *                        <p>
+     *                        Disclaimer:
+     *                        Note that it uses O(width * height) memory, so time complexity is also bound by that value.
+     *                        Keep that in mind when calling the Generator methods.
+     */
     Generator(int width, int height, int maximalRoomSize) {
+        assert width > 1 && height > 1;
+
         this.width = width;
         this.height = height;
         this.maximalRoomSize = maximalRoomSize;
@@ -138,9 +153,9 @@ public class Generator {
         }
     }
 
-    public static void main(String[] arg) {
-        Generator mapGenerator = new Generator(200, 50, 8);
-        mapGenerator.generateMap();
-        mapGenerator.printMap();
-    }
+//    public static void main(String[] arg) {
+//        Generator mapGenerator = new Generator(200, 50, 8);
+//        mapGenerator.generateMap();
+//        mapGenerator.printMap();
+//    }
 }
