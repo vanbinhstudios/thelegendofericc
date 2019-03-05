@@ -11,35 +11,38 @@ import com.badlogic.gdx.math.Vector3;
 public class KeyboardControls extends InputAdapter implements InputProcessor {
     OrthographicCamera camera;
 
+    // Button flags
     public boolean up, down, left, right;
-
     public boolean LMB, RMB, click;
 
-    public Vector2 click_pos = new Vector2();
-    public Vector2 map_click_pos = new Vector2();
+    // Click coordinates in screen and map frames of reference
+    public Vector2 clickPos = new Vector2();
+    public Vector2 mapClickPos = new Vector2();
 
+    // Debug mode flag enabled with BACKSPACE
     public boolean debug = false;
 
-    private int screen_width;
-    private int screen_height;
+    private int screenWidth;
+    private int screenHeight;
 
-    public KeyboardControls(int screen_width, int screen_height, OrthographicCamera camera) {
-        this.screen_height = screen_height;
-        this.screen_width = screen_width;
+    public KeyboardControls(int screenWidth, int screenHeight, OrthographicCamera camera) {
+        this.screenHeight = screenHeight;
+        this.screenWidth = screenWidth;
         this.camera = camera;
     }
 
-    private void setClickPos(int pos_x, int pos_y) {
-        click_pos.set(pos_x, screen_height - pos_y);
-        map_click_pos.set(getCoords(click_pos));
+    private void setClickPos(int posX, int posY) {
+        clickPos.set(posX, screenHeight - posY);
+        mapClickPos.set(getCoords(clickPos));
     }
 
     private Vector2 getCoords(Vector2 mouse) {
-        Vector3 temp = new Vector3(mouse.x, screen_height - mouse.y, 0);
+        Vector3 temp = new Vector3(mouse.x, screenHeight - mouse.y, 0);
         this.camera.unproject(temp);
         return new Vector2(temp.x, temp.y);
     }
 
+    // Called on key press
     @Override
     public boolean keyDown(int keycode) {
         switch (keycode) {
@@ -63,6 +66,7 @@ public class KeyboardControls extends InputAdapter implements InputProcessor {
         return false;
     }
 
+    // Called on key release
     @Override
     public boolean keyUp(int keycode) {
         switch (keycode) {
@@ -96,6 +100,8 @@ public class KeyboardControls extends InputAdapter implements InputProcessor {
         return false;
     }
 
+
+    // Mouse pointer and touchscreen support methods
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         if (pointer == 0 && button == Input.Buttons.LEFT) {
@@ -103,7 +109,6 @@ public class KeyboardControls extends InputAdapter implements InputProcessor {
         } else if (pointer == 0 && button == Input.Buttons.RIGHT) {
             RMB = true;
         }
-
         setClickPos(screenX, screenY);
         return false;
     }

@@ -3,40 +3,42 @@ package com.ericc.the.game.Map;
 import java.util.ArrayList;
 
 public class Chunk {
-
-    public int n_rows, n_col;
-    public int tile_size;
+    public int nRows, nCol;
+    public int tileSize;
     public ArrayList<ArrayList<Tile>> tiles;
 
-    public Chunk(int n_rows, int n_col, int tile_size) {
+    public Chunk(int nRows, int nCol, int tileSize) {
         tiles = new ArrayList<ArrayList<Tile>>();
-        this.n_rows = n_rows;
-        this.n_col = n_col;
-        this.tile_size = tile_size;
+        this.nRows = nRows;
+        this.nCol = nCol;
+        this.tileSize = tileSize;
     }
 
     public Tile getTile(int row, int col) {
-        ArrayList<Tile> selected_row;
+        ArrayList<Tile> selectedRow;
 
         if (row >= 0 && row < tiles.size()) {
-            selected_row = tiles.get(row);
+            selectedRow = tiles.get(row);
 
-            if (selected_row != null && col < selected_row.size() && col >= 0) {
-                return selected_row.get(col);
+            if (selectedRow != null
+                    && col < selectedRow.size()
+                    && col >= 0) {
+                return selectedRow.get(col);
             }
         }
         return null;
     }
 
     public String getTileCode(int row, int col) {
-        ArrayList<Tile> selected_row;
+        ArrayList<Tile> selectedRow;
 
-        if(row >= 0 && row < tiles.size()) {
-            selected_row = tiles.get(row);
+        if (row >= 0 && row < tiles.size()) {
+            selectedRow = tiles.get(row);
 
-            if (selected_row != null && col < selected_row.size() && col >= 0) {
-                return selected_row.get(col).isPassable() ? "1" : "0";
+            if (selectedRow != null && col < selectedRow.size() && col >= 0) {
+                return selectedRow.get(col).isPassable() ? "1" : "0";
             }
+
         }
         return "0";
     }

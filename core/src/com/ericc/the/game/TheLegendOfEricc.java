@@ -14,38 +14,40 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import java.util.ArrayList;
 
 public class TheLegendOfEricc extends ApplicationAdapter {
-	KeyboardControls controls;
-	OrthographicCamera camera;
-	SpriteBatch batch;
-	Texture img;
-	Sprite img_sprite;
+	// Controls
+	private KeyboardControls controls;
+	private OrthographicCamera camera;
+
+	// Sprite data
+	private SpriteBatch batch;
+	private Texture img;
+	private Sprite imgSprite;
 
 	// Window size
 	private int displayW;
 	private int displayH;
 
-	// Current coords
-	int x, y;
-
-	Room room;
+	// Example room data
+	private Room room;
 
 	// Movement tracking
-	int dir_x, dir_y;
-	int spd = 100;
+	private int dirX, dirY;
+	private int spd = 100;
 
 	@Override
-	public void create () {
+	public void create() {
+		// Test sprite
 		batch = new SpriteBatch();
 		img = new Texture("eric.png");
-		img_sprite = new Sprite(img);
-		img_sprite.setColor(1, 1, 1, 0.5f);
+		imgSprite = new Sprite(img);
+		imgSprite.setColor(1, 1, 1, 0.5f);
 
 		// Camera settings
 		displayH = Gdx.graphics.getHeight();
 		displayW = Gdx.graphics.getWidth();
 
-		int h = (int) (displayH/Math.floor(displayH/160));
-		int w = (int) (displayW/(displayH/(displayH/Math.floor(displayH/160))));
+		int h = (int) (displayH / Math.floor(displayH / 160));
+		int w = (int) (displayW / (displayH / (displayH / Math.floor(displayH / 160))));
 
 		camera = new OrthographicCamera(w, h);
 		camera.zoom = 1.2f;
@@ -58,20 +60,20 @@ public class TheLegendOfEricc extends ApplicationAdapter {
 	}
 
 	@Override
-	public void render () {
+	public void render() {
 		Gdx.gl.glClearColor(.145f, .075f, .102f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-		dir_x = 0;
-		dir_y = 0;
+		dirX = 0;
+		dirY = 0;
 
-		if(controls.up) dir_y = 1;
-		if(controls.down) dir_y = -1;
-		if(controls.right) dir_x = 1;
-		if(controls.left) dir_x = -1;
+		if (controls.up) dirY = 1;
+		if (controls.down) dirY = -1;
+		if (controls.right) dirX = 1;
+		if (controls.left) dirX = -1;
 
-		camera.position.x += dir_x*spd*Gdx.graphics.getDeltaTime();
-		camera.position.y += dir_y*spd*Gdx.graphics.getDeltaTime();
+		camera.position.x += dirX * spd * Gdx.graphics.getDeltaTime();
+		camera.position.y += dirY * spd * Gdx.graphics.getDeltaTime();
 		camera.update();
 
 		batch.setProjectionMatrix(camera.combined);
@@ -84,13 +86,14 @@ public class TheLegendOfEricc extends ApplicationAdapter {
 				batch.draw(tile.texture, tile.pos.x, tile.pos.y, tile.size, tile.size);
 			}
 		}
+
 		// A small test of transparency and sprite layering
-		img_sprite.draw(batch);
+		imgSprite.draw(batch);
 		batch.end();
 	}
 
 	@Override
-	public void dispose () {
+	public void dispose() {
 		batch.dispose();
 		img.dispose();
 	}

@@ -9,15 +9,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Room {
-
     // Textures
-    private Texture dun_void;
-    private Texture floor_mid_1, floor_mid_2;
-    private Texture wall_u_1, wall_u_2;
-    private Texture wall_d_1, wall_d_2;
-    private Texture wall_l_1, wall_l_2, wall_l_3;
-    private Texture wall_r_1, wall_r_2, wall_r_3;
-    private Texture wall_lu, wall_ru, wall_ld, wall_rd;
+    private Texture dunVoid;
+    private Texture floorMid1, floorMid2;
+    private Texture wallU1, wallU2;
+    private Texture wallD1, wallD2;
+    private Texture wallL1, wallL2, wallL3;
+    private Texture wallR1, wallR2, wallR3;
+    private Texture wallLU, wallRU, wallLD, wallRD;
 
     // Camera centering
     public Tile center;
@@ -26,15 +25,16 @@ public class Room {
     public Chunk chunk;
     ArrayList<Entity> entities = new ArrayList<Entity>();
 
-    // Code-texture maps
-    private String[] mask_wall_left = {"001001001", "001001000", "000001001"};
-    private String[] mask_wall_right = {"100100100", "100100000", "000100100"};
-    private String[] mask_wall_up = {"111000000", "011000000", "110000000"};
-    private String[] mask_wall_down = {"000000111", "000000011", "000000110"};
-    private String[] mask_wall_up_left = {"000000001"};
-    private String[] mask_wall_up_right = {"000000100"};
-    private String[] mask_wall_down_left = {"001000000"};
-    private String[] mask_wall_down_right = {"100000000"};
+    // Code-texture masks
+    // TODO: Change strings to integers and use binary operators for code comparsion
+    private String[] maskWallLeft = {"001001001", "001001000", "000001001"};
+    private String[] maskWallRight = {"100100100", "100100000", "000100100"};
+    private String[] maskWallUp = {"111000000", "011000000", "110000000"};
+    private String[] maskWallDown = {"000000111", "000000011", "000000110"};
+    private String[] maskWallUpLeft = {"000000001"};
+    private String[] maskWallUpRight = {"000000100"};
+    private String[] maskWallDownLeft = {"001000000"};
+    private String[] maskWallDownRight = {"100000000"};
 
     public Room() {
         setImages();
@@ -42,104 +42,111 @@ public class Room {
         encodeTiles();
     }
 
+    // Method to generate an example chunk with an example room in the middle of the chunk
     private void setTiles() {
         chunk = new Chunk(16, 16, 16);
 
-        int current_row = 0;
+        int currentRow = 0;
         int w, h;
+
         w = MathUtils.random(3, 6);
         h = MathUtils.random(3, 6);
 
-        int central_row = chunk.n_rows / 2;
-        int central_col = chunk.n_col / 2;
+        // Center of the chunk
+        int centralRow = chunk.nRows / 2;
+        int centralCol = chunk.nCol / 2;
 
-        int top_row = central_row + h;
-        int bot_row = central_row - h;
-        int right_col = central_col + w;
-        int left_col = central_col - w;
+        // Room size limits
+        int topRow = centralRow + h;
+        int botRow = centralRow - h;
+        int rightCol = centralCol + w;
+        int leftCol = centralCol - w;
 
         // Container for a single row
-        ArrayList<Tile> tile_row = new ArrayList<Tile>();
+        ArrayList<Tile> tileRow = new ArrayList<Tile>();
 
-        for (int row = 0; row < chunk.n_rows; row++) {
-            for (int col = 0; col < chunk.n_col; col++) {
-                Tile tile = new Tile(col, row, chunk.tile_size, TILE.VOID, dun_void);
+        for (int row = 0; row < chunk.nRows; row++) {
+            for (int col = 0; col < chunk.nCol; col++) {
+                // Defaulting tile to VOID type
+                Tile tile = new Tile(col, row, chunk.tileSize, TILE.VOID, dunVoid);
 
-                if (row < top_row && row > bot_row && col < right_col && col > left_col) {
+                // If the tile is within the limits of the room type is set to FLOOR
+                if (row < topRow && row > botRow && col < rightCol && col > leftCol) {
                     tile.texture = randomFloor();
                     tile.type = TILE.FLOOR;
                 }
 
-                if (current_row == row) {
-                    tile_row.add(tile);
+                // Adding tiles to their rows and finished rows to the chunk itself
+                if (currentRow == row) {
+                    tileRow.add(tile);
 
-                    if (row == chunk.n_rows - 1 && col == chunk.n_col - 1) {
-                        chunk.tiles.add(tile_row);
+                    if (row == chunk.nRows - 1 && col == chunk.nCol - 1) {
+                        chunk.tiles.add(tileRow);
                     }
+
                 } else {
-                    current_row = row;
+                    currentRow = row;
+                    chunk.tiles.add(tileRow);
 
-                    chunk.tiles.add(tile_row);
-
-                    tile_row = new ArrayList<Tile>();
-
-                    tile_row.add(tile);
+                    tileRow = new ArrayList<Tile>();
+                    tileRow.add(tile);
                 }
+
             }
         }
 
-        center = chunk.getTile(central_col, central_row);
+        center = chunk.getTile(centralCol, centralRow);
     }
 
     private void updateImage(Tile tile) {
-        if (Arrays.asList(mask_wall_left).contains(tile.code)) {
-            tile.texture = wall_l_1;
-        } else if (Arrays.asList(mask_wall_right).contains(tile.code)) {
-            tile.texture = wall_r_1;
-        } else if (Arrays.asList(mask_wall_up).contains(tile.code)) {
-            tile.texture = wall_u_1;
-        } else if (Arrays.asList(mask_wall_down).contains(tile.code)) {
-            tile.texture = wall_d_1;
-        } else if (Arrays.asList(mask_wall_up_left).contains(tile.code)) {
-            tile.texture = wall_lu;
-        } else if (Arrays.asList(mask_wall_down_left).contains(tile.code)) {
-            tile.texture = wall_ld;
-        } else if (Arrays.asList(mask_wall_up_right).contains(tile.code)) {
-            tile.texture = wall_ru;
-        } else if (Arrays.asList(mask_wall_down_right).contains(tile.code)) {
-            tile.texture = wall_rd;
+        if (Arrays.asList(maskWallLeft).contains(tile.code)) {
+            tile.texture = wallL1;
+        } else if (Arrays.asList(maskWallRight).contains(tile.code)) {
+            tile.texture = wallR1;
+        } else if (Arrays.asList(maskWallUp).contains(tile.code)) {
+            tile.texture = wallU1;
+        } else if (Arrays.asList(maskWallDown).contains(tile.code)) {
+            tile.texture = wallD1;
+        } else if (Arrays.asList(maskWallUpLeft).contains(tile.code)) {
+            tile.texture = wallLU;
+        } else if (Arrays.asList(maskWallDownLeft).contains(tile.code)) {
+            tile.texture = wallLD;
+        } else if (Arrays.asList(maskWallUpRight).contains(tile.code)) {
+            tile.texture = wallRU;
+        } else if (Arrays.asList(maskWallDownRight).contains(tile.code)) {
+            tile.texture = wallRD;
         }
     }
 
+    // Assigning images to their texture objects
     private void setImages() {
-        dun_void = new Texture("void.png");
+        dunVoid = new Texture("void.png");
 
-        floor_mid_1 = new Texture("mid_dun_flr1.png");
-        floor_mid_2 = new Texture("mid_dun_flr2.png");
+        floorMid1 = new Texture("mid_dun_flr1.png");
+        floorMid2 = new Texture("mid_dun_flr2.png");
 
-        wall_d_1 = new Texture("d_dun_wall1.png");
-        wall_u_1 = new Texture("u_dun_wall1.png");
-        wall_l_1 = new Texture("l_dun_wall1.png");
-        wall_r_1 = new Texture("r_dun_wall1.png");
+        wallD1 = new Texture("d_dun_wall1.png");
+        wallU1 = new Texture("u_dun_wall1.png");
+        wallL1 = new Texture("l_dun_wall1.png");
+        wallR1 = new Texture("r_dun_wall1.png");
 
-        wall_ld = new Texture("ld_dun_wall.png");
-        wall_rd = new Texture("rd_dun_wall.png");
-        wall_lu = new Texture("lu_dun_wall.png");
-        wall_ru = new Texture("ru_dun_wall.png");
+        wallLD = new Texture("ld_dun_wall.png");
+        wallRD = new Texture("rd_dun_wall.png");
+        wallLU = new Texture("lu_dun_wall.png");
+        wallRU = new Texture("ru_dun_wall.png");
     }
 
+    // Generating tile codes and assigning textures
     private void encodeTiles() {
-        for(ArrayList<Tile> row : chunk.tiles) {
-            for(Tile tile : row) {
+        for (ArrayList<Tile> row : chunk.tiles) {
+            for (Tile tile : row) {
 
-                int[] rows = {1,0,-1};
-                int[] cols = {-1,0,1};
-
-                for(int r: rows){
-                    for(int c: cols){
+                for (int r = 1; r >= -1; r--) {
+                    for (int c = -1; c <= 1; c++) {
                         tile.code += chunk.getTileCode(tile.row + r, tile.col + c);
                     }
                 }
+
                 updateImage(tile);
 
                 System.out.print("code for tile: " + tile.code);
@@ -150,31 +157,31 @@ public class Room {
     }
 
     // TODO: Randomizer methods for wall tiles
-
+    // TODO: Add in more floor tile types
     private Texture randomFloor() {
         int type = MathUtils.random(1, 3);
-        // TODO: Add in more floor tile types
+
         switch (type) {
-
-            case 1: return floor_mid_1;
-
-            default: return floor_mid_2;
+            case 1:
+                return floorMid1;
+            default:
+                return floorMid2;
         }
     }
 
     public void dispose() {
-        dun_void.dispose();
+        dunVoid.dispose();
 
-        floor_mid_1.dispose();
-        floor_mid_2.dispose();
+        floorMid1.dispose();
+        floorMid2.dispose();
 
-        wall_u_1.dispose();
-        wall_d_1.dispose();
-        wall_l_1.dispose();
-        wall_r_1.dispose();
-        wall_lu.dispose();
-        wall_ru.dispose();
-        wall_ld.dispose();
-        wall_rd.dispose();
+        wallU1.dispose();
+        wallD1.dispose();
+        wallL1.dispose();
+        wallR1.dispose();
+        wallLU.dispose();
+        wallRU.dispose();
+        wallLD.dispose();
+        wallRD.dispose();
     }
 }

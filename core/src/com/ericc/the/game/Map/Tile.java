@@ -12,8 +12,8 @@ public class Tile extends Entity {
 
     public Tile(float x, float y, int size, TILE type, Texture texture) {
         super();
-        pos.x = x*size;
-        pos.y = y*size;
+        pos.x = x * size;
+        pos.y = y * size;
         this.size = size;
         this.texture = texture;
         this.col = (int) x;
@@ -38,3 +38,4 @@ public class Tile extends Entity {
         return !isWall() && !isVoid();
     }
 }
+
