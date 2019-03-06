@@ -30,6 +30,9 @@ public class TheLegendOfEricc extends ApplicationAdapter {
 	// Example room data
 	private Room room;
 
+	// Example player character
+	private Player player;
+
 	// Movement tracking
 	private int dirX, dirY;
 	private int spd = 100;
@@ -57,6 +60,8 @@ public class TheLegendOfEricc extends ApplicationAdapter {
 		Gdx.input.setInputProcessor(controls);
 
 		room = new Room();
+
+		player = new Player(room.center);
 	}
 
 	@Override
@@ -64,16 +69,10 @@ public class TheLegendOfEricc extends ApplicationAdapter {
 		Gdx.gl.glClearColor(.145f, .075f, .102f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-		dirX = 0;
-		dirY = 0;
+		player.update(controls, room);
 
-		if (controls.up) dirY = 1;
-		if (controls.down) dirY = -1;
-		if (controls.right) dirX = 1;
-		if (controls.left) dirX = -1;
-
-		camera.position.x += dirX * spd * Gdx.graphics.getDeltaTime();
-		camera.position.y += dirY * spd * Gdx.graphics.getDeltaTime();
+		// Camera interpolation
+		camera.position.lerp(player.camPos, .001f);
 		camera.update();
 
 		batch.setProjectionMatrix(camera.combined);
@@ -88,6 +87,7 @@ public class TheLegendOfEricc extends ApplicationAdapter {
 		}
 
 		// A small test of transparency and sprite layering
+		player.draw(batch);
 		imgSprite.draw(batch);
 		batch.end();
 	}

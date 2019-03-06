@@ -2,24 +2,18 @@ package com.ericc.the.game.Map;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.ericc.the.game.Entity;
 import com.ericc.the.game.Enums.TILE;
+import com.ericc.the.game.Media;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Room {
-    // Textures
-    private Texture dunVoid;
-    private Texture floorMid1, floorMid2;
-    private Texture wallU1, wallU2;
-    private Texture wallD1, wallD2;
-    private Texture wallL1, wallL2, wallL3;
-    private Texture wallR1, wallR2, wallR3;
-    private Texture wallLU, wallRU, wallLD, wallRD;
 
     // Camera centering
-    public Tile center;
+    public Vector2 center;
 
     // Data about the room
     public Chunk chunk;
@@ -37,7 +31,7 @@ public class Room {
     private String[] maskWallDownRight = {"100000000"};
 
     public Room() {
-        setImages();
+        Media.loadAssets();
         setTiles();
         encodeTiles();
     }
@@ -68,7 +62,7 @@ public class Room {
         for (int row = 0; row < chunk.nRows; row++) {
             for (int col = 0; col < chunk.nCol; col++) {
                 // Defaulting tile to VOID type
-                Tile tile = new Tile(col, row, chunk.tileSize, TILE.VOID, dunVoid);
+                Tile tile = new Tile(col, row, chunk.tileSize, TILE.VOID, Media.dunVoid);
 
                 // If the tile is within the limits of the room type is set to FLOOR
                 if (row < topRow && row > botRow && col < rightCol && col > leftCol) {
@@ -95,46 +89,30 @@ public class Room {
             }
         }
 
-        center = chunk.getTile(centralCol, centralRow);
+        center = new Vector2(centralCol*chunk.tileSize, centralRow*chunk.tileSize);
     }
 
     private void updateImage(Tile tile) {
         if (Arrays.asList(maskWallLeft).contains(tile.code)) {
-            tile.texture = wallL1;
+            tile.texture = Media.wallL1;
         } else if (Arrays.asList(maskWallRight).contains(tile.code)) {
-            tile.texture = wallR1;
+            tile.texture = Media.wallR1;
         } else if (Arrays.asList(maskWallUp).contains(tile.code)) {
-            tile.texture = wallU1;
+            tile.texture = Media.wallU1;
         } else if (Arrays.asList(maskWallDown).contains(tile.code)) {
-            tile.texture = wallD1;
+            tile.texture = Media.wallD1;
         } else if (Arrays.asList(maskWallUpLeft).contains(tile.code)) {
-            tile.texture = wallLU;
+            tile.texture = Media.wallLU;
         } else if (Arrays.asList(maskWallDownLeft).contains(tile.code)) {
-            tile.texture = wallLD;
+            tile.texture = Media.wallLD;
         } else if (Arrays.asList(maskWallUpRight).contains(tile.code)) {
-            tile.texture = wallRU;
+            tile.texture = Media.wallRU;
         } else if (Arrays.asList(maskWallDownRight).contains(tile.code)) {
-            tile.texture = wallRD;
+            tile.texture = Media.wallRD;
         }
     }
 
     // Assigning images to their texture objects
-    private void setImages() {
-        dunVoid = new Texture("void.png");
-
-        floorMid1 = new Texture("mid_dun_flr1.png");
-        floorMid2 = new Texture("mid_dun_flr2.png");
-
-        wallD1 = new Texture("d_dun_wall1.png");
-        wallU1 = new Texture("u_dun_wall1.png");
-        wallL1 = new Texture("l_dun_wall1.png");
-        wallR1 = new Texture("r_dun_wall1.png");
-
-        wallLD = new Texture("ld_dun_wall.png");
-        wallRD = new Texture("rd_dun_wall.png");
-        wallLU = new Texture("lu_dun_wall.png");
-        wallRU = new Texture("ru_dun_wall.png");
-    }
 
     // Generating tile codes and assigning textures
     private void encodeTiles() {
@@ -163,25 +141,9 @@ public class Room {
 
         switch (type) {
             case 1:
-                return floorMid1;
+                return Media.floorMid1;
             default:
-                return floorMid2;
+                return Media.floorMid2;
         }
-    }
-
-    public void dispose() {
-        dunVoid.dispose();
-
-        floorMid1.dispose();
-        floorMid2.dispose();
-
-        wallU1.dispose();
-        wallD1.dispose();
-        wallL1.dispose();
-        wallR1.dispose();
-        wallLU.dispose();
-        wallRU.dispose();
-        wallLD.dispose();
-        wallRD.dispose();
     }
 }

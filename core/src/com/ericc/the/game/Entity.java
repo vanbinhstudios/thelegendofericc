@@ -7,10 +7,12 @@ import com.badlogic.gdx.math.Vector2;
 public class Entity {
     public Vector2 pos;
 
-    private Texture texture;
+    public Enums.ENTITY_TYPE type;
 
-    private int width;
-    private int height;
+    protected Texture texture;
+
+    protected int width;
+    protected int height;
 
     public void draw(SpriteBatch batch) {
         batch.draw(texture, pos.x, pos.y, width, height);
