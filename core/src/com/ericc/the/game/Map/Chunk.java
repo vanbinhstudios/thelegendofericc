@@ -4,14 +4,12 @@ import java.util.ArrayList;
 
 public class Chunk {
     public int nRows, nCol;
-    public int tileSize;
     public ArrayList<ArrayList<Tile>> tiles;
 
-    public Chunk(int nRows, int nCol, int tileSize) {
+    public Chunk(int nRows, int nCol) {
         tiles = new ArrayList<ArrayList<Tile>>();
         this.nRows = nRows;
         this.nCol = nCol;
-        this.tileSize = tileSize;
     }
 
     public Tile getTile(int row, int col) {

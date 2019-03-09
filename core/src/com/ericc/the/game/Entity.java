@@ -11,11 +11,8 @@ public class Entity {
 
     protected Texture texture;
 
-    protected int width;
-    protected int height;
-
     public void draw(SpriteBatch batch) {
-        batch.draw(texture, pos.x, pos.y, width, height);
+        batch.draw(texture, pos.x, pos.y, 1, 1);
     }
 
     public Entity() {

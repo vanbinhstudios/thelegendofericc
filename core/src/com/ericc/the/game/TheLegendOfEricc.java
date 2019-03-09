@@ -23,19 +23,11 @@ public class TheLegendOfEricc extends ApplicationAdapter {
 	private Texture img;
 	private Sprite imgSprite;
 
-	// Window size
-	private int displayW;
-	private int displayH;
-
 	// Example room data
 	private Room room;
 
 	// Example player character
 	private Player player;
-
-	// Movement tracking
-	private int dirX, dirY;
-	private int spd = 100;
 
 	@Override
 	public void create() {
@@ -45,18 +37,10 @@ public class TheLegendOfEricc extends ApplicationAdapter {
 		imgSprite = new Sprite(img);
 		imgSprite.setColor(1, 1, 1, 0.5f);
 
-		// Camera settings
-		displayH = Gdx.graphics.getHeight();
-		displayW = Gdx.graphics.getWidth();
-
-		int h = (int) (displayH / Math.floor(displayH / 160));
-		int w = (int) (displayW / (displayH / (displayH / Math.floor(displayH / 160))));
-
-		camera = new OrthographicCamera(w, h);
-		camera.zoom = 1.2f;
+		camera = new OrthographicCamera(12, 9);
 
 		// Input settings
-		controls = new KeyboardControls(displayH, displayW, camera);
+		controls = new KeyboardControls();
 		Gdx.input.setInputProcessor(controls);
 
 		room = new Room();
@@ -72,7 +56,8 @@ public class TheLegendOfEricc extends ApplicationAdapter {
 		player.update(controls, room);
 
 		// Camera interpolation
-		camera.position.lerp(player.camPos, .001f);
+		camera.position.lerp(player.camPos, .1f);
+		camera.zoom = 1f;
 		camera.update();
 
 		batch.setProjectionMatrix(camera.combined);
@@ -82,7 +67,7 @@ public class TheLegendOfEricc extends ApplicationAdapter {
 		batch.begin();
 		for (ArrayList<Tile> row : room.chunk.tiles) {
 			for (Tile tile : row) {
-				batch.draw(tile.texture, tile.pos.x, tile.pos.y, tile.size, tile.size);
+				batch.draw(tile.texture, tile.pos.x, tile.pos.y, 1, 1);
 			}
 		}
 

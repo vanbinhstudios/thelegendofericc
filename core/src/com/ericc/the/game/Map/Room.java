@@ -38,7 +38,7 @@ public class Room {
 
     // Method to generate an example chunk with an example room in the middle of the chunk
     private void setTiles() {
-        chunk = new Chunk(16, 16, 16);
+        chunk = new Chunk(16, 16);
 
         int currentRow = 0;
         int w, h;
@@ -62,7 +62,7 @@ public class Room {
         for (int row = 0; row < chunk.nRows; row++) {
             for (int col = 0; col < chunk.nCol; col++) {
                 // Defaulting tile to VOID type
-                Tile tile = new Tile(col, row, chunk.tileSize, TILE.VOID, Media.dunVoid);
+                Tile tile = new Tile(col, row, 1, TILE.VOID, Media.dunVoid);
 
                 // If the tile is within the limits of the room type is set to FLOOR
                 if (row < topRow && row > botRow && col < rightCol && col > leftCol) {
@@ -89,7 +89,7 @@ public class Room {
             }
         }
 
-        center = new Vector2(centralCol*chunk.tileSize, centralRow*chunk.tileSize);
+        center = new Vector2(centralCol, centralRow);
     }
 
     private void updateImage(Tile tile) {
