@@ -5,10 +5,10 @@ import com.badlogic.gdx.graphics.Texture;
 public class Media {
     public static Texture dunVoid;
     public static Texture floorMid1, floorMid2;
-    public static Texture wallU1, wallU2;
-    public static Texture wallD1, wallD2;
-    public static Texture wallL1, wallL2, wallL3;
-    public static Texture wallR1, wallR2, wallR3;
+    public static Texture wallU1;
+    public static Texture wallD1;
+    public static Texture wallL1;
+    public static Texture wallR1;
     public static Texture wallLU, wallRU, wallLD, wallRD;
     public static Texture playerFront, playerLeft, playerRight, playerBack;
 

@@ -6,15 +6,4 @@ public class Enums {
         FLOOR,
         VOID
     }
-
-    public enum ENTITY_TYPE {
-        PLAYER
-    }
-
-    public enum FACING {
-        FRONT,
-        LEFT,
-        RIGHT,
-        BACK
-    }
 }

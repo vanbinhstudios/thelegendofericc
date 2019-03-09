@@ -1,9 +1,9 @@
 package com.ericc.the.game.Map;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.ericc.the.game.Entity;
 import com.ericc.the.game.Enums.TILE;
 import com.ericc.the.game.Media;
 
@@ -17,14 +17,13 @@ public class Room {
 
     // Data about the room
     public Chunk chunk;
-    ArrayList<Entity> entities = new ArrayList<Entity>();
 
     // Code-texture masks
     // TODO: Change strings to integers and use binary operators for code comparsion
     private String[] maskWallLeft = {"001001001", "001001000", "000001001"};
     private String[] maskWallRight = {"100100100", "100100000", "000100100"};
-    private String[] maskWallUp = {"111000000", "011000000", "110000000"};
-    private String[] maskWallDown = {"000000111", "000000011", "000000110"};
+    private String[] maskWallDown = {"111000000", "011000000", "110000000"};
+    private String[] maskWallUp = {"000000111", "000000011", "000000110"};
     private String[] maskWallUpLeft = {"000000001"};
     private String[] maskWallUpRight = {"000000100"};
     private String[] maskWallDownLeft = {"001000000"};
@@ -62,11 +61,11 @@ public class Room {
         for (int row = 0; row < chunk.nRows; row++) {
             for (int col = 0; col < chunk.nCol; col++) {
                 // Defaulting tile to VOID type
-                Tile tile = new Tile(col, row, 1, TILE.VOID, Media.dunVoid);
+                Tile tile = new Tile(col, row, TILE.VOID, Media.dunVoid);
 
                 // If the tile is within the limits of the room type is set to FLOOR
                 if (row < topRow && row > botRow && col < rightCol && col > leftCol) {
-                    tile.texture = randomFloor();
+                    tile.renderable.sprite.setTexture(randomFloor());
                     tile.type = TILE.FLOOR;
                 }
 
@@ -94,22 +93,28 @@ public class Room {
 
     private void updateImage(Tile tile) {
         if (Arrays.asList(maskWallLeft).contains(tile.code)) {
-            tile.texture = Media.wallL1;
+            tile.renderable.sprite.setTexture(Media.wallL1);
+            tile.renderable.sprite.setOrigin(0, -0.5f);
         } else if (Arrays.asList(maskWallRight).contains(tile.code)) {
-            tile.texture = Media.wallR1;
+            tile.renderable.sprite.setTexture(Media.wallR1);
+            tile.renderable.sprite.setOrigin(0, -0.5f);
         } else if (Arrays.asList(maskWallUp).contains(tile.code)) {
-            tile.texture = Media.wallU1;
+            tile.renderable.sprite.setTexture(Media.wallU1);
         } else if (Arrays.asList(maskWallDown).contains(tile.code)) {
-            tile.texture = Media.wallD1;
+            tile.renderable.sprite.setTexture(Media.wallD1);
+            tile.renderable.sprite.setOrigin(0, -0.5f);
         } else if (Arrays.asList(maskWallUpLeft).contains(tile.code)) {
-            tile.texture = Media.wallLU;
+            tile.renderable.sprite.setTexture(Media.wallLU);
         } else if (Arrays.asList(maskWallDownLeft).contains(tile.code)) {
-            tile.texture = Media.wallLD;
+            tile.renderable.sprite.setTexture(Media.wallLD);
+            tile.renderable.sprite.setOrigin(0, -0.5f);
         } else if (Arrays.asList(maskWallUpRight).contains(tile.code)) {
-            tile.texture = Media.wallRU;
+            tile.renderable.sprite.setTexture(Media.wallRU);
         } else if (Arrays.asList(maskWallDownRight).contains(tile.code)) {
-            tile.texture = Media.wallRD;
+            tile.renderable.sprite.setTexture(Media.wallRD);
+            tile.renderable.sprite.setOrigin(0, -0.5f);
         }
+        tile.renderable.sprite.setOriginBasedPosition(tile.pos.x, tile.pos.y);
     }
 
     // Assigning images to their texture objects
@@ -131,7 +136,6 @@ public class Room {
                 System.out.print("\n");
             }
         }
-
     }
 
     // TODO: Randomizer methods for wall tiles

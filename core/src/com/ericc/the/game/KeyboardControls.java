@@ -3,19 +3,12 @@ package com.ericc.the.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 
-public class KeyboardControls extends InputAdapter implements InputProcessor {
+public class KeyboardControls extends InputAdapter {
     public boolean up, down, left, right;
 
     // Debug mode flag enabled with BACKSPACE
     public boolean debug = false;
-
-    public KeyboardControls() {
-    }
 
     // Called on key press
     @Override
@@ -68,5 +61,9 @@ public class KeyboardControls extends InputAdapter implements InputProcessor {
                 debug = !debug;
         }
         return false;
+    }
+
+    public void clear() {
+        up = down = left = right = false;
     }
 }

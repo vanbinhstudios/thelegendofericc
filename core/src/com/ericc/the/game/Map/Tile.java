@@ -1,23 +1,23 @@
 package com.ericc.the.game.Map;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.ericc.the.game.Entity;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.ericc.the.game.Enums.TILE;
+import com.ericc.the.game.PositionComponent;
+import com.ericc.the.game.RenderableComponent;
 
-public class Tile extends Entity {
-    public int size, col, row;
+public class Tile {
+    public RenderableComponent renderable;
+    public PositionComponent pos;
+    public int col, row;
     public String code;
-    public Texture texture;
     public TILE type;
 
-    public Tile(float x, float y, int size, TILE type, Texture texture) {
-        super();
-        pos.x = x * size;
-        pos.y = y * size;
-        this.size = size;
-        this.texture = texture;
-        this.col = (int) x;
-        this.row = (int) y;
+    public Tile(int x, int y, TILE type, Texture texture) {
+        pos = new PositionComponent(x, y);
+        renderable = new RenderableComponent(new Sprite(texture));
+        col = x;
+        row = y;
         this.type = type;
         this.code = "";
     }
