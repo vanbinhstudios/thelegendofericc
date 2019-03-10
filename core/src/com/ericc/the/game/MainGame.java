@@ -2,6 +2,7 @@ package com.ericc.the.game;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Vector3;
 import com.ericc.the.game.Map.Generator;
 import com.ericc.the.game.Map.Map;
@@ -10,6 +11,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 
 public class MainGame extends Game {
+
 	private KeyboardControls controls;
 	private OrthographicCamera camera;
 
@@ -26,8 +28,8 @@ public class MainGame extends Game {
 		controls = new KeyboardControls();
 		Gdx.input.setInputProcessor(controls);
 
-		map = new Generator(200, 50, 8).generateMap();
-		player = new Player(map.width()/4, map.height()/4);
+		map = new Generator(200, 50, 12).generateMap();
+		player = new Player(map.getRandomPassableTile());
 
 		engine.addEntity(player);
 		engine.addSystem(new RenderSystem(map, camera));

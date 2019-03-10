@@ -1,6 +1,10 @@
 package com.ericc.the.game;
 
+/**
+ * Indicates the indexes of every possible tile's texture dimension.
+ */
 public enum TileTextureIndicator {
+
     UP(0),
     RIGHT(1),
     DOWN(2),
@@ -17,6 +21,9 @@ public enum TileTextureIndicator {
         return direction;
     }
 
+    /**
+     * @return the number of possible values of this enum
+     */
     public static int countValues() {
         return 5;
     }

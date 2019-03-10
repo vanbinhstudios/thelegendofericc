@@ -6,11 +6,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Media {
+
     public static Texture dunVoid;
     public static ArrayList<Texture> floors, wallUp, wallDown, wallLeft, wallRight;
     public static Texture wallLU, wallRU, wallLD, wallRD;
     public static Texture playerFront, playerLeft, playerRight, playerBack;
-    public static ArrayList<ArrayList<Texture>> textures;
+    public static ArrayList<ArrayList<Texture>> textures; ///< Stores every texture asset to safely dispose them later
 
     static {
         floors = new ArrayList<>();
@@ -23,7 +24,7 @@ public class Media {
 
     public static void loadAssets() {
         dunVoid = new Texture("void.png");
-        textures.add(new ArrayList<>(Arrays.asList(dunVoid)));
+        textures.add(new ArrayList<>(Arrays.asList(dunVoid))); // you can add assets to textures as single asset too
 
         floors.add(new Texture("mid_dun_flr1.png"));
         floors.add(new Texture("mid_dun_flr2.png"));

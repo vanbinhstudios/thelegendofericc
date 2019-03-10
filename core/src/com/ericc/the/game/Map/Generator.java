@@ -2,9 +2,10 @@ package com.ericc.the.game.Map;
 
 import com.badlogic.gdx.math.GridPoint2;
 
-import java.util.Random;
+import java.util.*;
 
 public class Generator {
+
     private int width, height;
     private Map map;
     private Random random;
@@ -57,6 +58,7 @@ public class Generator {
             center.x++;
         }
 
+        map.addRoom(new Room(x + roomX, y + roomY, x + roomX + center.x, y + roomY + center.y));
         center.x = x + roomX + (center.x / 2);
         center.y = y + roomY + (center.y / 2);
 
@@ -74,7 +76,9 @@ public class Generator {
      * @param height the height of a rectangle (from y till y + height (excluded))
      */
     private GridPoint2 generateMap(int x, int y, int width, int height) {
-        if (width < this.maximalRoomSize || height < this.maximalRoomSize) {
+        // this preserves the ratio (width:height and height:width) of every room (max ratio is 3:1)
+        if ((width < this.maximalRoomSize && height < 3 * this.maximalRoomSize)
+                || (height < this.maximalRoomSize && width < 3 * this.maximalRoomSize)) {
             return fillRoomReturnCenter(x, y, width, height);
         }
 
@@ -82,6 +86,14 @@ public class Generator {
         int slice = pickHeight ?
                 random.nextInt(1 + (height - 1) / 2) + height / 4 :
                 random.nextInt(1 + (width - 1) / 2) + width / 4;
+
+        if (width < this.maximalRoomSize) {
+            pickHeight = true;
+            slice = height / 2;
+        } else if (height < this.maximalRoomSize) {
+            pickHeight = false;
+            slice = width / 2;
+        }
 
         GridPoint2 firstRoom, secondRoom;
 
@@ -102,7 +114,20 @@ public class Generator {
      */
     public Map generateMap() {
         generateMap(1, 1, width - 1, height - 1);
+        connectRandomRooms();
+
         return map;
+    }
+
+    private void connectRandomRooms() {
+        HashSet<Room> rooms = map.getRooms();
+        List<Room> roomsListed = Arrays.asList(rooms.toArray(new Room[rooms.size()]));
+        Collections.shuffle(roomsListed);
+        ArrayList<Room> roomsArray = new ArrayList<>(roomsListed);
+
+        for (int i = 0; i < roomsArray.size() - 1; ++i) {
+            connectRooms(roomsArray.get(i).getCentre(), roomsArray.get(i + 1).getCentre());
+        }
     }
 
     /**

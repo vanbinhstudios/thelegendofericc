@@ -2,6 +2,7 @@ package com.ericc.the.game;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Vector2;
 import com.ericc.the.game.Map.Map;
 
@@ -15,6 +16,10 @@ public class Player extends Entity {
         renderable.sprite.setOrigin(0, -0.5f);
         add(pos);
         add(renderable);
+    }
+
+    public Player(GridPoint2 pos) {
+        this(pos.x, pos.y);
     }
 
     public void update(KeyboardControls controls, Map map) {

@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 
 public class KeyboardControls extends InputAdapter {
+
     public boolean up, down, left, right;
 
     // Debug mode flag enabled with BACKSPACE
