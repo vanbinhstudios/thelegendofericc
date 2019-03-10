@@ -2,21 +2,20 @@ package com.ericc.the.game;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.GridPoint2;
 
 public class Entity {
-    public Vector2 pos;
-
-    private Texture texture;
-
-    private int width;
-    private int height;
+    private GridPoint2 pos;
+    public Texture texture;
+    private int width, height;
 
     public void draw(SpriteBatch batch) {
         batch.draw(texture, pos.x, pos.y, width, height);
     }
 
-    public Entity() {
-        pos = new Vector2();
+    public Entity(GridPoint2 pos, int width, int height) {
+        this.pos = pos;
+        this.width = width;
+        this.height = height;
     }
 }

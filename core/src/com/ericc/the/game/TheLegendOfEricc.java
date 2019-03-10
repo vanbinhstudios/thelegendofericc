@@ -1,17 +1,14 @@
 package com.ericc.the.game;
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.ericc.the.game.Map.Tile;
-import com.ericc.the.game.Map.Room;
-
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
-import java.util.ArrayList;
+import com.ericc.the.game.map.Map;
+import com.ericc.the.game.map.Tile;
 
 public class TheLegendOfEricc extends ApplicationAdapter {
 	// Controls
@@ -27,36 +24,31 @@ public class TheLegendOfEricc extends ApplicationAdapter {
 	private int displayW;
 	private int displayH;
 
-	// Example room data
-	private Room room;
+    private int width, height, tileSize, maximalRoomSize;
+    private Map map;
 
-	// Movement tracking
-	private int dirX, dirY;
-	private int spd = 100;
+    // Movement tracking
+    private int dirX, dirY;
+    private int spd = 100;
 
 	@Override
 	public void create() {
-		// Test sprite
 		batch = new SpriteBatch();
-		img = new Texture("eric.png");
-		imgSprite = new Sprite(img);
-		imgSprite.setColor(1, 1, 1, 0.5f);
 
-		// Camera settings
 		displayH = Gdx.graphics.getHeight();
 		displayW = Gdx.graphics.getWidth();
-
 		int h = (int) (displayH / Math.floor(displayH / 160));
 		int w = (int) (displayW / (displayH / (displayH / Math.floor(displayH / 160))));
 
 		camera = new OrthographicCamera(w, h);
 		camera.zoom = 1.2f;
 
-		// Input settings
 		controls = new KeyboardControls(displayH, displayW, camera);
 		Gdx.input.setInputProcessor(controls);
 
-		room = new Room();
+        setMapProperties();
+        map = new Map(width, height, tileSize, maximalRoomSize);
+        map.printMap();
 	}
 
 	@Override
@@ -67,10 +59,10 @@ public class TheLegendOfEricc extends ApplicationAdapter {
 		dirX = 0;
 		dirY = 0;
 
-		if (controls.up) dirY = 1;
-		if (controls.down) dirY = -1;
-		if (controls.right) dirX = 1;
-		if (controls.left) dirX = -1;
+        if (controls.up) dirY = 3;
+        if (controls.down) dirY = -3;
+        if (controls.right) dirX = 3;
+        if (controls.left) dirX = -3;
 
 		camera.position.x += dirX * spd * Gdx.graphics.getDeltaTime();
 		camera.position.y += dirY * spd * Gdx.graphics.getDeltaTime();
@@ -78,23 +70,28 @@ public class TheLegendOfEricc extends ApplicationAdapter {
 
 		batch.setProjectionMatrix(camera.combined);
 		batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-
-		// Drawing the room
 		batch.begin();
-		for (ArrayList<Tile> row : room.chunk.tiles) {
-			for (Tile tile : row) {
-				batch.draw(tile.texture, tile.pos.x, tile.pos.y, tile.size, tile.size);
-			}
-		}
 
-		// A small test of transparency and sprite layering
-		imgSprite.draw(batch);
+        for (int x = 0; x < width; ++x) {
+            for (int y = 0; y < height; ++y) {
+                Tile tile = map.getTile(x, y);
+                tile.draw(batch);
+            }
+        }
+
 		batch.end();
 	}
 
 	@Override
 	public void dispose() {
 		batch.dispose();
-		img.dispose();
-	}
+        map.dispose();
+    }
+
+    private void setMapProperties() {
+        this.width = 100;
+        this.height = 60;
+        this.tileSize = 16;
+        this.maximalRoomSize = 8;
+    }
 }
