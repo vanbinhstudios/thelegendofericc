@@ -4,26 +4,28 @@ import com.badlogic.gdx.math.GridPoint2;
 
 import java.util.Random;
 
-public class Generator {
+public class MazeGenerator {
     private int width, height, tileSize;
     private Map map;
     private Random random;
     private int maximalRoomSize;
 
     /**
-     * Generator class.
+     * MazeGenerator class.
      *
      * @param width           dimension of a map to generate, must be > 1 (NOT IN PIXELS, IT IS A CUSTOM METRIC)
      * @param height          same as above
      * @param maximalRoomSize if any of the dimensions of a generated room are less than
      *                        this value, the room is being generated, otherwise it calls
      *                        the generator method recursively
+     * @param tileSize        size of a single tile in pixels
+     * @param map             a Map object to generate passages in
      *                        <p>
      *                        Disclaimer:
      *                        Note that it uses O(width * height) memory, so time complexity is also bound by that value.
-     *                        Keep that in mind when calling the Generator methods.
+     *                        Keep that in mind when calling the MazeGenerator methods.
      */
-    Generator(int width, int height, int maximalRoomSize, int tileSize, Map map) {
+    MazeGenerator(int width, int height, int maximalRoomSize, int tileSize, Map map) {
         assert width > 1 && height > 1;
 
         this.width = width;
@@ -35,7 +37,10 @@ public class Generator {
         this.map = map;
     }
 
-    Generator(int width, int height, int maximalRoomSize, int tileSize) {
+    /**
+     * MazeGenerator class ctor without a given Map object.
+     */
+    MazeGenerator(int width, int height, int maximalRoomSize, int tileSize) {
         this(width, height, maximalRoomSize, tileSize, new Map(width, height, tileSize, maximalRoomSize));
     }
 

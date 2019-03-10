@@ -4,7 +4,7 @@ import com.badlogic.gdx.math.GridPoint2;
 import com.ericc.the.game.Entity;
 
 public class Tile extends Entity {
-    private boolean passable;
+    private boolean passable; ///< Indicates whether a single tile should be accessible by a player
 
     Tile(int x, int y, int size, boolean passable) {
         super(new GridPoint2(x * size, y * size), size, size);

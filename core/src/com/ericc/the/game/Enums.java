@@ -1,6 +1,9 @@
 package com.ericc.the.game;
 
 public class Enums {
+    /**
+     * Types of textures of a single tile on a Map object.
+     */
     public enum TILETEXTURE {
         WALL_LEFT,
         WALL_RIGHT,

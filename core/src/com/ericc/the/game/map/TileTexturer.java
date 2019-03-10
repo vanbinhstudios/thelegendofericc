@@ -3,26 +3,34 @@ package com.ericc.the.game.map;
 import com.badlogic.gdx.graphics.Texture;
 import com.ericc.the.game.Enums;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
 
 public class TileTexturer {
     private Texture dunVoid;
-    private Texture floorMid1, floorMid2;
-    private Texture wallU1, wallU2, wallU3, wallU4;
-    private Texture wallD1, wallD2;
+    private ArrayList<Texture> floors;
+    private ArrayList<Texture> up;
+    private ArrayList<Texture> down;
     private Texture wallL1, wallL2, wallL3;
     private Texture wallR1, wallR2, wallR3;
     private Texture wallLU, wallRU, wallLD, wallRD;
     private Texture wallLUcorner, wallLDcorner, wallRUcorner, wallRDcorner,
             wallFancyCornerSmallLeft, wallTwoCorners, wallFancyCornerSmallRight;
     private Texture wallCorridorMiddle, wallCorridorUp;
+
     private HashMap<String, Enums.TILETEXTURE> textures;
     private Random random;
+    private ArrayList<ArrayList<Texture>> texturesBundle;
 
     TileTexturer() {
         this.textures = new HashMap<String, Enums.TILETEXTURE>();
         this.random = new Random();
+        this.floors = new ArrayList<Texture>();
+        this.up = new ArrayList<Texture>();
+        this.down = new ArrayList<Texture>();
+        this.texturesBundle = new ArrayList<ArrayList<Texture>>();
 
         loadTextures();
         generateTextures();
@@ -30,13 +38,26 @@ public class TileTexturer {
 
     private void loadTextures() {
         dunVoid = new Texture("void.png");
-        floorMid1 = new Texture("mid_dun_flr1.png");
-        floorMid2 = new Texture("mid_dun_flr2.png");
-        wallD1 = new Texture("d_dun_wall1.png");
-        wallU1 = new Texture("u_dun_wall1.png");
-        wallU2 = new Texture("u_dun_wall2.png");
-        wallU3 = new Texture("u_dun_wall3.png");
-        wallU4 = new Texture("u_dun_wall4.png");
+        texturesBundle.add(new ArrayList<Texture>(Arrays.asList(dunVoid)));
+
+        floors.add(new Texture("mid_dun_flr1.png"));
+        floors.add(new Texture("mid_dun_flr2.png"));
+        floors.add(new Texture("mid_dun_flr3.png"));
+        floors.add(new Texture("mid_dun_flr4.png"));
+        floors.add(new Texture("mid_dun_flr5.png"));
+        floors.add(new Texture("mid_dun_flr6.png"));
+        texturesBundle.add(floors);
+
+        down.add(new Texture("d_dun_wall1.png"));
+        down.add(new Texture("d_dun_wall2.png"));
+        texturesBundle.add(down);
+
+        up.add(new Texture("u_dun_wall1.png"));
+        up.add(new Texture("u_dun_wall2.png"));
+        up.add(new Texture("u_dun_wall3.png"));
+        up.add(new Texture("u_dun_wall4.png"));
+        texturesBundle.add(up);
+
         wallL1 = new Texture("l_dun_wall1.png");
         wallR1 = new Texture("r_dun_wall1.png");
         wallLD = new Texture("ld_dun_wall.png");
@@ -55,14 +76,12 @@ public class TileTexturer {
     }
 
     public void dispose() {
-        dunVoid.dispose();
-        floorMid1.dispose();
-        floorMid2.dispose();
-        wallU1.dispose();
-        wallU2.dispose();
-        wallU3.dispose();
-        wallU4.dispose();
-        wallD1.dispose();
+        for (ArrayList<Texture> singleBundle : texturesBundle) {
+            for (Texture texture : singleBundle) {
+                texture.dispose();
+            }
+        }
+
         wallL1.dispose();
         wallR1.dispose();
         wallLU.dispose();
@@ -82,12 +101,12 @@ public class TileTexturer {
 
     Texture getTileTexture(String tileCode, boolean passable) {
         if (passable) {
-            return random.nextBoolean() ? floorMid1 : floorMid2;
+            return floors.get(random.nextInt(floors.size()));
         }
 
         if ((tileCode.charAt(0) == '1' && tileCode.charAt(3) == '1' && tileCode.charAt(6) == '1')
                 || (tileCode.charAt(3) == '1')) {
-            return random.nextBoolean() ? wallU1 : wallU2;
+            return up.get(random.nextInt(up.size()));
         }
 
         if (!textures.containsKey(tileCode)) {
@@ -102,9 +121,9 @@ public class TileTexturer {
             case WALL_LEFT_DOWN_CORNER:
             case WALL_RIGHT_DOWN_CORNER:
             case WALL_UP:
-                return random.nextBoolean() ? wallU1 : wallU2;
+                return up.get(random.nextInt(up.size()));
             case WALL_DOWN:
-                return wallD1;
+                return down.get(random.nextInt(down.size()));
             case WALL_UP_LEFT:
                 return wallLU;
             case WALL_UP_RIGHT:
@@ -128,7 +147,7 @@ public class TileTexturer {
             case WALL_TWO_CORNERS:
                 return wallTwoCorners;
             case FLOOR:
-                return floorMid1;
+                return floors.get(random.nextInt(floors.size()));
             case VOID:
                 return dunVoid;
             default:
@@ -169,12 +188,12 @@ public class TileTexturer {
                 "111000100", "110000100", "100000110", "100000111", "011000011", "101000111",
                 "101000110", "011000111", "100000100", "111000011", "011000111", "011000110",
                 "110000011", "100000011", "011000001", "011000100", "111000101", "111000010",
-                "010000011", "011000010", "010000111", "111000010"};
+                "010000011", "011000010", "010000111", "111000010", "101000100"};
         String[] maskWallCorridorUp = {"111001111", "011001111", "111001011", "011001011",
                 "111001101", "011001101", "101001101", "100001111", "111001100", "101001111",
-                "111001101", "101001011", "011001101"};
-        String[] maskCornerFancyLeft = {"011000001", "111000001", "100000001"};
-        String[] maskCornerFancyRight = {"001000011", "001000111", "001000100"};
+                "111001101", "101001011", "011001101", "101001100", "100001101"};
+        String[] maskCornerFancyLeft = {"011000001", "111000001", "100000001", "010000001"};
+        String[] maskCornerFancyRight = {"001000011", "001000111", "001000100", "001000010"};
         String[] maskTwoCorners = {"001000001"};
 
         HashMap<String[], Enums.TILETEXTURE> tempTextures = new HashMap<String[], Enums.TILETEXTURE>();
