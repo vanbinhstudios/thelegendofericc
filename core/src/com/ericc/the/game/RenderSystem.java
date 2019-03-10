@@ -9,7 +9,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.MathUtils;
 import com.ericc.the.game.Map.Map;
 
 public class RenderSystem extends EntitySystem  {
@@ -60,12 +59,14 @@ public class RenderSystem extends EntitySystem  {
 		int code = encodeTile(x, y);
 
 		if ((code & 0b000010000) != 0) {
-			batch.draw(Media.floor[MathUtils.random(0, 1)/2], x, y, 1, 1);
+			batch.draw(Media.floors.get(map.getRandomNumber(x, y, TileTextureIndicator.FLOOR.getValue())),
+                    x, y, 1, 1);
 			return;
 		}
 
 		if ((code & 0b000000010) != 0) {
-			batch.draw(Media.wallD, x, y + 0.5f, 1, 1);
+			batch.draw(Media.wallDown.get(map.getRandomNumber(x, y, TileTextureIndicator.DOWN.getValue())),
+                    x, y + 0.5f, 1, 1);
 		} else {
 			if ((code & 0b000100010) == 0 && (code & 0b000000100) != 0) {
 				batch.draw(Media.wallRD, x, y + 0.5f, 0.5f, 1, 0, 1, 0.5f, 0);
@@ -76,7 +77,8 @@ public class RenderSystem extends EntitySystem  {
 		}
 
 		if ((code & 0b010000000) != 0) {
-			batch.draw(Media.wallU, x, y, 1, 1);
+			batch.draw(Media.wallUp.get(map.getRandomNumber(x, y, TileTextureIndicator.UP.getValue())),
+                    x, y, 1, 1);
 		} else {
 			if ((code & 0b010100000) == 0 && (code & 0b100000000) != 0) {
 				batch.draw(Media.wallRU, x, y, 0.5f, 1, 0, 1, 0.5f, 0);
@@ -87,20 +89,26 @@ public class RenderSystem extends EntitySystem  {
 		}
 
 		if ((code & 0b010100010) == 0b000100000 || (code & 0b010101010) == 0b010100010) {
-			batch.draw(Media.wallR, x, y + 0.5f, 0.5f, 1, 0, 0, 0.5f, 1);
+			batch.draw(Media.wallRight.get(map.getRandomNumber(x, y, TileTextureIndicator.RIGHT.getValue())),
+                    x, y + 0.5f, 0.5f, 1, 0, 0, 0.5f, 1);
 		} else if ((code & 0b010100010) == 0b000100010) {
-			batch.draw(Media.wallR, x, y + 0.5f, 0.5f, 0.5f, 0, 0.5f, 0.5f, 1);
+			batch.draw(Media.wallRight.get(map.getRandomNumber(x, y, TileTextureIndicator.RIGHT.getValue())),
+                    x, y + 0.5f, 0.5f, 0.5f, 0, 0.5f, 0.5f, 1);
 		} else if ((code & 0b010100010) == 0b010100000) {
-			batch.draw(Media.wallR, x, y + 0.5f + 0.5f, 0.5f, 0.5f, 0, 0, 0.5f, 0.5f);
+			batch.draw(Media.wallRight.get(map.getRandomNumber(x, y, TileTextureIndicator.RIGHT.getValue())),
+                    x, y + 0.5f + 0.5f, 0.5f, 0.5f, 0, 0, 0.5f, 0.5f);
 		}
 
 
 		if ((code & 0b010001010) == 0b000001000 || (code & 0b010101010) == 0b010001010) {
-			batch.draw(Media.wallL, x + 0.5f, y + 0.5f, 0.5f, 1, 0.5f, 0, 1, 1);
+			batch.draw(Media.wallLeft.get(map.getRandomNumber(x, y, TileTextureIndicator.LEFT.getValue())),
+                    x + 0.5f, y + 0.5f, 0.5f, 1, 0.5f, 0, 1, 1);
 		} else if ((code & 0b010001010) == 0b000001010) {
-			batch.draw(Media.wallL, x + 0.5f, y + 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 1, 1);
+			batch.draw(Media.wallLeft.get(map.getRandomNumber(x, y, TileTextureIndicator.LEFT.getValue())),
+                    x + 0.5f, y + 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 1, 1);
 		} else if ((code & 0b010001010) == 0b010001000) {
-			batch.draw(Media.wallL, x + 0.5f, y + 0.5f + 0.5f, 0.5f, 0.5f, 0.5f, 0, 1, 0.5f);
+			batch.draw(Media.wallLeft.get(map.getRandomNumber(x, y, TileTextureIndicator.LEFT.getValue())),
+                    x + 0.5f, y + 0.5f + 0.5f, 0.5f, 0.5f, 0.5f, 0, 1, 0.5f);
 		}
 	}
 
