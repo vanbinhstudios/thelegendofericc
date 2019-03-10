@@ -4,24 +4,21 @@ import com.badlogic.gdx.graphics.Texture;
 
 public class Media {
     public static Texture dunVoid;
-    public static Texture floorMid1, floorMid2;
-    public static Texture wallU1;
-    public static Texture wallD1;
-    public static Texture wallL1;
-    public static Texture wallR1;
+    public static Texture[] floor = new Texture[2];
+    public static Texture wallU, wallD, wallL, wallR;
     public static Texture wallLU, wallRU, wallLD, wallRD;
     public static Texture playerFront, playerLeft, playerRight, playerBack;
 
     public static void loadAssets() {
         dunVoid = new Texture("void.png");
 
-        floorMid1 = new Texture("mid_dun_flr1.png");
-        floorMid2 = new Texture("mid_dun_flr2.png");
+        floor[0] = new Texture("mid_dun_flr1.png");
+        floor[1] = new Texture("mid_dun_flr2.png");
 
-        wallD1 = new Texture("d_dun_wall1.png");
-        wallU1 = new Texture("u_dun_wall1.png");
-        wallL1 = new Texture("l_dun_wall1.png");
-        wallR1 = new Texture("r_dun_wall1.png");
+        wallD = new Texture("d_dun_wall1.png");
+        wallU = new Texture("u_dun_wall1.png");
+        wallL = new Texture("l_dun_wall1.png");
+        wallR = new Texture("r_dun_wall1.png");
 
         wallLD = new Texture("ld_dun_wall.png");
         wallRD = new Texture("rd_dun_wall.png");
@@ -37,13 +34,13 @@ public class Media {
     public void dispose() {
         dunVoid.dispose();
 
-        floorMid1.dispose();
-        floorMid2.dispose();
+        floor[0].dispose();
+        floor[1].dispose();
 
-        wallU1.dispose();
-        wallD1.dispose();
-        wallL1.dispose();
-        wallR1.dispose();
+        wallU.dispose();
+        wallD.dispose();
+        wallL.dispose();
+        wallR.dispose();
         wallLU.dispose();
         wallRU.dispose();
         wallLD.dispose();

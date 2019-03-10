@@ -2,41 +2,35 @@ package com.ericc.the.game;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector3;
-import com.ericc.the.game.Map.Tile;
-import com.ericc.the.game.Map.Room;
+import com.ericc.the.game.Map.Generator;
+import com.ericc.the.game.Map.Map;
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
-import java.util.ArrayList;
 
 public class MainGame extends Game {
 	private KeyboardControls controls;
 	private OrthographicCamera camera;
 
-	private Room room;
+	private Map map;
 	private Player player;
 
 	private Engine engine = new Engine();
 
 	@Override
 	public void create() {
+		Media.loadAssets();
 		camera = new OrthographicCamera(24, 18);
 
 		controls = new KeyboardControls();
 		Gdx.input.setInputProcessor(controls);
 
-		room = new Room();
-		player = new Player(room.center);
+		map = new Generator(200, 50, 8).generateMap();
+		player = new Player(map.width()/4, map.height()/4);
 
 		engine.addEntity(player);
-		engine.addSystem(new RenderSystem(room, camera));
+		engine.addSystem(new RenderSystem(map, camera));
 	}
 
 	@Override
@@ -46,7 +40,7 @@ public class MainGame extends Game {
 		camera.zoom = 1f;
 		camera.update();
 
-		player.update(controls, room);
+		player.update(controls, map);
 		engine.update(Gdx.graphics.getDeltaTime());
 	}
 }

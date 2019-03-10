@@ -9,18 +9,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.ericc.the.game.Map.Room;
-import com.ericc.the.game.Map.Tile;
-
-import java.util.ArrayList;
+import com.badlogic.gdx.math.MathUtils;
+import com.ericc.the.game.Map.Map;
 
 public class RenderSystem extends EntitySystem  {
 
-	private Room room;
+	private Map map;
 	private Camera camera;
 
-	public RenderSystem(Room room, Camera camera) {
-		this.room = room;
+	public RenderSystem(Map map, Camera camera) {
+		this.map = map;
 		this.camera = camera;
 	}
 
@@ -42,9 +40,9 @@ public class RenderSystem extends EntitySystem  {
 
 		batch.begin();
 
-		for (int i = room.chunk.tiles.size() - 1; i >= 0; --i) {
-			for (Tile tile : room.chunk.tiles.get(i)) {
-				tile.renderable.sprite.draw(batch);
+		for (int j = map.height() - 1; j >= 0; --j) {
+			for (int i = 0; i < map.width(); ++i) {
+				drawTile(i, j);
 			}
 		}
 
@@ -56,5 +54,65 @@ public class RenderSystem extends EntitySystem  {
 		}
 
 		batch.end();
+	}
+
+	private void drawTile(int x, int y) {
+		int code = encodeTile(x, y);
+
+		if ((code & 0b000010000) != 0) {
+			batch.draw(Media.floor[MathUtils.random(0, 1)/2], x, y, 1, 1);
+			return;
+		}
+
+		if ((code & 0b000000010) != 0) {
+			batch.draw(Media.wallD, x, y + 0.5f, 1, 1);
+		} else {
+			if ((code & 0b000100010) == 0 && (code & 0b000000100) != 0) {
+				batch.draw(Media.wallRD, x, y + 0.5f, 0.5f, 1, 0, 1, 0.5f, 0);
+			}
+			if ((code & 0b000001010) == 0 && (code & 0b000000001) != 0) {
+				batch.draw(Media.wallLD, x + 0.5f, y + 0.5f, 0.5f, 1, 0.5f, 1, 1, 0);
+			}
+		}
+
+		if ((code & 0b010000000) != 0) {
+			batch.draw(Media.wallU, x, y, 1, 1);
+		} else {
+			if ((code & 0b010100000) == 0 && (code & 0b100000000) != 0) {
+				batch.draw(Media.wallRU, x, y, 0.5f, 1, 0, 1, 0.5f, 0);
+			}
+			if ((code & 0b010001000) == 0 && (code & 0b001000000) != 0) {
+				batch.draw(Media.wallLU, x + 0.5f, y, 0.5f, 1, 0.5f, 1, 1, 0);
+			}
+		}
+
+		if ((code & 0b010100010) == 0b000100000 || (code & 0b010101010) == 0b010100010) {
+			batch.draw(Media.wallR, x, y + 0.5f, 0.5f, 1, 0, 0, 0.5f, 1);
+		} else if ((code & 0b010100010) == 0b000100010) {
+			batch.draw(Media.wallR, x, y + 0.5f, 0.5f, 0.5f, 0, 0.5f, 0.5f, 1);
+		} else if ((code & 0b010100010) == 0b010100000) {
+			batch.draw(Media.wallR, x, y + 0.5f + 0.5f, 0.5f, 0.5f, 0, 0, 0.5f, 0.5f);
+		}
+
+
+		if ((code & 0b010001010) == 0b000001000 || (code & 0b010101010) == 0b010001010) {
+			batch.draw(Media.wallL, x + 0.5f, y + 0.5f, 0.5f, 1, 0.5f, 0, 1, 1);
+		} else if ((code & 0b010001010) == 0b000001010) {
+			batch.draw(Media.wallL, x + 0.5f, y + 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 1, 1);
+		} else if ((code & 0b010001010) == 0b010001000) {
+			batch.draw(Media.wallL, x + 0.5f, y + 0.5f + 0.5f, 0.5f, 0.5f, 0.5f, 0, 1, 0.5f);
+		}
+	}
+
+	public int encodeTile(int x, int y) {
+		int ans = 0;
+		int cnt = 8;
+		for (int j = y - 1; j <= y + 1; ++j) {
+			for (int i = x - 1; i <= x + 1; ++i) {
+				ans |= (map.isPassable(i, j)?1:0) << cnt;
+				--cnt;
+			}
+		}
+		return ans;
 	}
 }
