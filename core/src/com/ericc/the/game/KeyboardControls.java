@@ -31,6 +31,8 @@ public class KeyboardControls extends InputAdapter {
             case Input.Keys.RIGHT:
                 right = true;
                 break;
+            default:
+                break;
         }
         return false;
     }
@@ -60,6 +62,8 @@ public class KeyboardControls extends InputAdapter {
                 break;
             case Input.Keys.BACKSPACE:
                 debug = !debug;
+            default:
+                break;
         }
         return false;
     }

@@ -20,13 +20,13 @@ public class RenderSystem extends EntitySystem {
     private Map map;
     private Camera camera;
 
+    private SpriteBatch batch = new SpriteBatch();
+    private ImmutableArray<Entity> entities;
+
     public RenderSystem(Map map, Camera camera) {
         this.map = map;
         this.camera = camera;
     }
-
-    SpriteBatch batch = new SpriteBatch();
-    ImmutableArray<Entity> entities;
 
     @Override
     public void addedToEngine(Engine engine) {
@@ -116,7 +116,7 @@ public class RenderSystem extends EntitySystem {
         }
     }
 
-    public int encodeTile(int x, int y) {
+    private int encodeTile(int x, int y) {
         int ans = 0;
         int cnt = 8;
         for (int j = y - 1; j <= y + 1; ++j) {

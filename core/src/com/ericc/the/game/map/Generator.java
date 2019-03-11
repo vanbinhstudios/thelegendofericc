@@ -95,7 +95,8 @@ public class Generator {
             slice = width / 2;
         }
 
-        GridPoint2 firstRoom, secondRoom;
+        GridPoint2 firstRoom;
+        GridPoint2 secondRoom;
 
         if (pickHeight) {
             firstRoom = generateMap(x, y, width, slice);

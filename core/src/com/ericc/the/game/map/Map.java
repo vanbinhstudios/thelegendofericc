@@ -17,6 +17,16 @@ public class Map {
     private HashSet<GridPoint2> passableTiles; ///< stores every passable tile in a map
     private HashSet<Room> rooms; ///< stores every room made while generating (without corridors)
 
+    // Helper structure, static in order not to waste memory
+    private static ArrayList<GridPoint2> moves = new ArrayList<>(
+            Arrays.asList(
+                    new GridPoint2(-2, 0),
+                    new GridPoint2(2, 0),
+                    new GridPoint2(0, -2),
+                    new GridPoint2(0, 2)
+            )
+    );
+
     Map(int width, int height) {
         this.width = width;
         this.height = height;
@@ -43,17 +53,7 @@ public class Map {
         }
     }
 
-    // Helper structure, static in order not to waste memory
-    static ArrayList<GridPoint2> moves = new ArrayList<>(
-            Arrays.asList(
-                    new GridPoint2(-2, 0),
-                    new GridPoint2(2, 0),
-                    new GridPoint2(0, -2),
-                    new GridPoint2(0, 2)
-            )
-    );
-
-    protected void setTile(int x, int y, boolean passable) {
+    void setTile(int x, int y, boolean passable) {
         map[x][y] = passable;
 
         if (passable) {
@@ -62,7 +62,8 @@ public class Map {
             /* in order to have a map which is more condensed we will sometimes connect rooms or corridors
                which are next to each other, the constant in shouldConnect indicates the % of that action happening */
             for (GridPoint2 move : moves) {
-                int newX = x + move.x, newY = y + move.y;
+                int newX = x + move.x;
+                int newY = y + move.y;
                 boolean shouldConnect = MathUtils.random(0, 100) < 7; // for now it is 7%
 
                 if (shouldConnect && inBoundaries(newX, newY) && map[newX][newY]) {
