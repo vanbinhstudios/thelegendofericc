@@ -2,8 +2,8 @@ package com.ericc.the.game.Map;
 
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.MathUtils;
-import com.ericc.the.game.TileTextureIndicator;
 import com.ericc.the.game.Media;
+import com.ericc.the.game.TileTextureIndicator;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -78,6 +78,7 @@ public class Map {
 
     /**
      * Checks whether the given point in 2D grid is in boundaries of a map.
+     *
      * @param x x coordinate of a given point in the 2D grid
      * @param y y coordinate of a given point in the 2D grid
      * @return true if the given point is in the map's boundaries, false otherwise

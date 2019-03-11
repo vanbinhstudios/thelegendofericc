@@ -68,8 +68,8 @@ public class Media {
     }
 
     public static void dispose() {
-        for (ArrayList<Texture> bundle: textures) {
-            for (Texture texture: bundle) {
+        for (ArrayList<Texture> bundle : textures) {
+            for (Texture texture : bundle) {
                 texture.dispose();
             }
         }

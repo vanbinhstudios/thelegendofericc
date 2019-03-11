@@ -3,10 +3,10 @@ package com.ericc.the.game;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.GridPoint2;
-import com.badlogic.gdx.math.Vector2;
 import com.ericc.the.game.Map.Map;
 
 public class Player extends Entity {
+
     public PositionComponent pos;
     public RenderableComponent renderable;
 
@@ -24,7 +24,7 @@ public class Player extends Entity {
 
     public void update(KeyboardControls controls, Map map) {
         if (controls.left) {
-            if (map.isPassable(pos.x -1, pos.y)) {
+            if (map.isPassable(pos.x - 1, pos.y)) {
                 pos.x -= 1;
             }
             pos.dir = Direction.W;
@@ -39,7 +39,7 @@ public class Player extends Entity {
             }
             pos.dir = Direction.N;
         } else if (controls.down) {
-            if (map.isPassable(pos.x , pos.y - 1)) {
+            if (map.isPassable(pos.x, pos.y - 1)) {
                 pos.y -= 1;
             }
             pos.dir = Direction.S;

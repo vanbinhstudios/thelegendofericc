@@ -70,9 +70,9 @@ public class Generator {
      * rectangle of [x][y] to [x + width)[y + height) if (and only if)
      * one of the dimensions passed is less than maximalRoomSize.
      *
-     * @param x indicates the x axis of the top right corner
-     * @param y same but indicates the y axis of the same corner
-     * @param width the width of a rectangle (from x till x + width (excluded))
+     * @param x      indicates the x axis of the top right corner
+     * @param y      same but indicates the y axis of the same corner
+     * @param width  the width of a rectangle (from x till x + width (excluded))
      * @param height the height of a rectangle (from y till y + height (excluded))
      */
     private GridPoint2 generateMap(int x, int y, int width, int height) {
@@ -135,14 +135,14 @@ public class Generator {
      *
      * @param firstRoom  centre of a first room
      * @param secondRoom centre of a second room
-     *
-     * Disclaimer:
-     * Rooms can be given in any order. The function indicates
-     * the minimal (x-axis wise) and draws a corridor from x1 (minimal one)
-     * to x2 (maximal). Then does the same (from the position it is on at that time)
-     * but considers the y-axis this time - so starts from [x2][y1] and draws
-     * a corridor till it reaches [x2][y2]. (Assumptions for the explanation x1 <= x2
-     * y1 <= y2, the function look for that order on its own, though.)
+     *                   <p>
+     *                   Disclaimer:
+     *                   Rooms can be given in any order. The function indicates
+     *                   the minimal (x-axis wise) and draws a corridor from x1 (minimal one)
+     *                   to x2 (maximal). Then does the same (from the position it is on at that time)
+     *                   but considers the y-axis this time - so starts from [x2][y1] and draws
+     *                   a corridor till it reaches [x2][y2]. (Assumptions for the explanation x1 <= x2
+     *                   y1 <= y2, the function look for that order on its own, though.)
      */
     private void connectRooms(GridPoint2 firstRoom, GridPoint2 secondRoom) {
         boolean startFromFirst = firstRoom.x < secondRoom.x;
@@ -178,10 +178,4 @@ public class Generator {
             System.out.println();
         }
     }
-
-//    public static void main(String[] arg) {
-//        Generator mapGenerator = new Generator(200, 50, 8);
-//        mapGenerator.generateMap();
-//        mapGenerator.printMap();
-//    }
 }
