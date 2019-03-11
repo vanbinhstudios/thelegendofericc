@@ -125,7 +125,7 @@ public class Generator {
         Collections.shuffle(roomsListed);
         ArrayList<Room> roomsArray = new ArrayList<>(roomsListed);
 
-        for (int i = 0; i < roomsArray.size() - 1; ++i) {
+        for (int i = 0; i < roomsArray.size() - 1; i = i + 2) {
             connectRooms(roomsArray.get(i).getCentre(), roomsArray.get(i + 1).getCentre());
         }
     }
