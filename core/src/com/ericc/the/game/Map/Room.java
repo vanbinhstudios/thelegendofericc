@@ -1,4 +1,4 @@
-package com.ericc.the.game.Map;
+package com.ericc.the.game.map;
 
 import com.badlogic.gdx.math.GridPoint2;
 

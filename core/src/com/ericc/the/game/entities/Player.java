@@ -1,9 +1,14 @@
-package com.ericc.the.game;
+package com.ericc.the.game.entities;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.GridPoint2;
-import com.ericc.the.game.Map.Map;
+import com.ericc.the.game.Direction;
+import com.ericc.the.game.KeyboardControls;
+import com.ericc.the.game.Media;
+import com.ericc.the.game.components.PositionComponent;
+import com.ericc.the.game.components.RenderableComponent;
+import com.ericc.the.game.map.Map;
 
 public class Player extends Entity {
 

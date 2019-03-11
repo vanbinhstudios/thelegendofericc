@@ -5,8 +5,10 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
-import com.ericc.the.game.Map.Generator;
-import com.ericc.the.game.Map.Map;
+import com.ericc.the.game.entities.Player;
+import com.ericc.the.game.map.Generator;
+import com.ericc.the.game.map.Map;
+import com.ericc.the.game.systems.RenderSystem;
 
 public class MainGame extends Game {
 

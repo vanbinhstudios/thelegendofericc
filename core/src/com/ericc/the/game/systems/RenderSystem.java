@@ -1,4 +1,4 @@
-package com.ericc.the.game;
+package com.ericc.the.game.systems;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
@@ -9,7 +9,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.ericc.the.game.Map.Map;
+import com.ericc.the.game.Media;
+import com.ericc.the.game.TileTextureIndicator;
+import com.ericc.the.game.components.PositionComponent;
+import com.ericc.the.game.components.RenderableComponent;
+import com.ericc.the.game.map.Map;
 
 public class RenderSystem extends EntitySystem {
 
