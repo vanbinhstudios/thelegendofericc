@@ -9,10 +9,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Affine2;
+import com.badlogic.gdx.math.Vector2;
 import com.ericc.the.game.Media;
 import com.ericc.the.game.TileTextureIndicator;
 import com.ericc.the.game.components.PositionComponent;
-import com.ericc.the.game.components.RenderableComponent;
+import com.ericc.the.game.components.SpriteSheetComponent;
 import com.ericc.the.game.map.Map;
 
 public class RenderSystem extends EntitySystem {
@@ -24,13 +26,14 @@ public class RenderSystem extends EntitySystem {
     private ImmutableArray<Entity> entities;
 
     public RenderSystem(Map map, Camera camera) {
+        super(9999); // Rendering should be the last system.
         this.map = map;
         this.camera = camera;
     }
 
     @Override
     public void addedToEngine(Engine engine) {
-        entities = engine.getEntitiesFor(Family.all(PositionComponent.class, RenderableComponent.class).get());
+        entities = engine.getEntitiesFor(Family.all(PositionComponent.class, SpriteSheetComponent.class).get());
     }
 
     @Override
@@ -51,9 +54,14 @@ public class RenderSystem extends EntitySystem {
 
         for (Entity entity : entities) {
             PositionComponent pos = entity.getComponent(PositionComponent.class);
-            RenderableComponent render = entity.getComponent(RenderableComponent.class);
-            render.sprite.setOriginBasedPosition(pos.x, pos.y);
-            render.sprite.draw(batch);
+            SpriteSheetComponent render = entity.getComponent(SpriteSheetComponent.class);
+
+            Affine2 transform = new Affine2();
+            transform.translate(-render.sprite.getOriginX(), -render.sprite.getOriginY());
+            transform.mul(render.transform);
+            transform.translate(new Vector2(pos.x, pos.y));
+
+            batch.draw(render.sprite, render.sprite.getWidth(), render.sprite.getWidth(), transform);
         }
 
         batch.end();

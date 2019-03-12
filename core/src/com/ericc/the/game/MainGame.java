@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.ericc.the.game.entities.Player;
 import com.ericc.the.game.map.Generator;
 import com.ericc.the.game.map.Map;
+import com.ericc.the.game.systems.AnimationSystem;
 import com.ericc.the.game.systems.RenderSystem;
 
 public class MainGame extends Game {
@@ -33,6 +34,7 @@ public class MainGame extends Game {
 
         engine.addEntity(player);
         engine.addSystem(new RenderSystem(map, camera));
+        engine.addSystem(new AnimationSystem());
     }
 
     @Override
