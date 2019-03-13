@@ -5,6 +5,8 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.ericc.the.game.entities.Player;
 import com.ericc.the.game.map.Generator;
 import com.ericc.the.game.map.Map;
@@ -15,6 +17,9 @@ public class MainGame extends Game {
 
     private KeyboardControls controls;
     private OrthographicCamera camera;
+    private Viewport viewport;
+    private final static int viewportWidth = 24;
+    private final static int viewportHeight = 18;
 
     private Map map;
     private Player player;
@@ -24,8 +29,9 @@ public class MainGame extends Game {
     @Override
     public void create() {
         Media.loadAssets();
-        // TODO: Wrap the camera with a Viewport.
-        camera = new OrthographicCamera(24, 18);
+        camera = new OrthographicCamera(viewportWidth, viewportHeight);
+        viewport = new FillViewport(viewportWidth, viewportHeight, camera);
+        viewport.apply();
 
         controls = new KeyboardControls();
         Gdx.input.setInputProcessor(controls);
@@ -40,11 +46,21 @@ public class MainGame extends Game {
 
     @Override
     public void render() {
-        camera.position.lerp(new Vector3(player.pos.x, player.pos.y, 0), .1f);
-        camera.zoom = 1f;
-        camera.update();
+        centerCamera();
 
         player.update(controls, map);
         engine.update(Gdx.graphics.getDeltaTime());
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        viewport.update(width, height);
+        centerCamera();
+    }
+
+    private void centerCamera() {
+        camera.position.lerp(new Vector3(player.pos.x, player.pos.y, 0), .1f);
+        camera.zoom = 1f;
+        camera.update();
     }
 }
