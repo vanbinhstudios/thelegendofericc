@@ -6,9 +6,11 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Affine2;
 import com.ericc.the.game.Direction;
 
+/**
+ * The primary graphical component. Subject to violent change.
+ */
 public class SpriteSheetComponent implements Component {
-
-    // This should be TextureRegion[]. We will get there when we come up with sane asset management.
+    // This should be TextureRegion[]. We will get there when we come up with saner texture management.
     public Texture[] sheet;
     public Sprite sprite;
     public Affine2 transform;

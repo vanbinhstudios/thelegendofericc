@@ -14,8 +14,10 @@ import com.ericc.the.game.components.PositionComponent;
 import com.ericc.the.game.components.SpriteSheetComponent;
 import com.ericc.the.game.map.Map;
 
+/**
+ * A mishmash for prototyping. This class should be broken down as soon as proper Actor systems are introduced.
+ */
 public class Player extends Entity {
-
     public PositionComponent pos;
     public DirectionComponent dir;
     public SpriteSheetComponent renderable;

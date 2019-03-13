@@ -5,13 +5,19 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
+import com.ericc.the.game.Mappers;
 import com.ericc.the.game.components.AffineAnimationComponent;
 import com.ericc.the.game.components.DirectionComponent;
 import com.ericc.the.game.components.SpriteSheetComponent;
 
+/**
+ * The system responsible for:
+ * - updating sprite textures accordingly to entity state changes
+ * - updating the sprite-local transforms based on affine animations
+ */
 public class AnimationSystem extends EntitySystem {
-    private ImmutableArray<Entity> affineAnimated;
-    private ImmutableArray<Entity> directed;
+    private ImmutableArray<Entity> affineAnimated; // Entities with affine animation currently attached.
+    private ImmutableArray<Entity> directed; // Entities with appearance varying with their orientation.
 
     @Override
     public void addedToEngine(Engine engine) {
@@ -21,15 +27,17 @@ public class AnimationSystem extends EntitySystem {
 
     @Override
     public void update(float deltaTime) {
+        // Update sprites according to orientation (face direction) of the Entity.
         for (Entity entity : directed) {
-            SpriteSheetComponent render = entity.getComponent(SpriteSheetComponent.class);
-            DirectionComponent dir = entity.getComponent(DirectionComponent.class);
+            SpriteSheetComponent render = Mappers.spriteSheet.get(entity);
+            DirectionComponent dir = Mappers.direction.get(entity);
 
             render.sprite.setTexture(render.sheet[dir.direction.getValue()]);
         }
+        // Update the animation-derived local transform.
         for (Entity entity : affineAnimated) {
-            SpriteSheetComponent render = entity.getComponent(SpriteSheetComponent.class);
-            AffineAnimationComponent animation = entity.getComponent(AffineAnimationComponent.class);
+            SpriteSheetComponent render = Mappers.spriteSheet.get(entity);
+            AffineAnimationComponent animation = Mappers.affineAnimation.get(entity);
 
             animation.update(deltaTime);
             render.transform = animation.getTransform();

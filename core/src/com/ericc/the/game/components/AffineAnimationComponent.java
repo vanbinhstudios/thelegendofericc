@@ -4,8 +4,11 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.math.Affine2;
 import com.ericc.the.game.animations.AffineAnimation;
 
+/**
+ * See {@link AffineAnimation}
+ */
 public class AffineAnimationComponent implements Component {
-    private float time = 0;
+    private float time = 0; // Time since animation start.
     private AffineAnimation animationFunction;
 
     public AffineAnimationComponent(AffineAnimation animationFunction) {

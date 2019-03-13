@@ -5,8 +5,8 @@ import com.badlogic.gdx.graphics.Texture;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+// TODO: Texture packing. A texture rebind for every sprite drawn is a Bad Idea™
 public class Media {
-
     public static Texture dunVoid;
     public static ArrayList<Texture> floors, wallUp, wallDown, wallLeft, wallRight;
     public static Texture wallLU, wallRU, wallLD, wallRD;

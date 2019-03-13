@@ -24,6 +24,7 @@ public class MainGame extends Game {
     @Override
     public void create() {
         Media.loadAssets();
+        // TODO: Wrap the camera with a Viewport.
         camera = new OrthographicCamera(24, 18);
 
         controls = new KeyboardControls();
@@ -39,7 +40,6 @@ public class MainGame extends Game {
 
     @Override
     public void render() {
-        // Camera interpolation
         camera.position.lerp(new Vector3(player.pos.x, player.pos.y, 0), .1f);
         camera.zoom = 1f;
         camera.update();
