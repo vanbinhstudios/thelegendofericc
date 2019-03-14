@@ -1,7 +1,6 @@
 package com.ericc.the.game.entities;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Vector2;
 import com.ericc.the.game.Direction;
@@ -26,7 +25,7 @@ public class Player extends Entity {
         pos = new PositionComponent(x, y);
         dir = new DirectionComponent(Direction.DOWN);
         renderable = new SpriteSheetComponent(Media.playerBack, Media.playerRight, Media.playerFront, Media.playerLeft);
-        renderable.sprite.setOrigin(0, -0.5f);
+        renderable.sprite.setOrigin(0, -0.35f);
         add(pos);
         add(renderable);
         add(dir);

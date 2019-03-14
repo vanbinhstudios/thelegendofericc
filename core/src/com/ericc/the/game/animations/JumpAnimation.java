@@ -13,6 +13,7 @@ public class JumpAnimation implements AffineAnimation {
     private Vector2 start;
     private float duration;
     private float height;
+    private final Affine2 transform = new Affine2();
 
     /**
      * @param transition the vector from start to end position
@@ -25,11 +26,10 @@ public class JumpAnimation implements AffineAnimation {
 
     @Override
     public Affine2 getTransform(float time) {
-        Affine2 transform = new Affine2();
+        transform.idt();
         float timeFraction = time / duration;
 
         if (timeFraction > 1) {
-            transform.setToTranslation(0, 0);
             return transform;
         }
 

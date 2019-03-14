@@ -32,7 +32,7 @@ public class AnimationSystem extends EntitySystem {
             SpriteSheetComponent render = Mappers.spriteSheet.get(entity);
             DirectionComponent dir = Mappers.direction.get(entity);
 
-            render.sprite.setTexture(render.sheet[dir.direction.getValue()]);
+            render.sprite.setRegion(render.sheet[dir.direction.getValue()]);
         }
         // Update the animation-derived local transform.
         for (Entity entity : affineAnimated) {
@@ -40,7 +40,7 @@ public class AnimationSystem extends EntitySystem {
             AffineAnimationComponent animation = Mappers.affineAnimation.get(entity);
 
             animation.update(deltaTime);
-            render.transform = animation.getTransform();
+            render.transform.set(animation.getTransform());
         }
     }
 }
