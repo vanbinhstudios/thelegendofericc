@@ -47,6 +47,13 @@ public class MainGame extends Game {
 
         player.update(controls, map);
         engine.update(Gdx.graphics.getDeltaTime());
+        // TODO: Make FPS cap more resistant against extreme framerate drops
+        try {
+            Thread.sleep(16);
+        } catch(Exception e) {
+            System.out.print("Unexpected sleep interruption\n");
+        }
+        System.out.print(Gdx.graphics.getFramesPerSecond() + "\n");
     }
 
     @Override
