@@ -3,6 +3,7 @@ package com.ericc.the.game;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -32,6 +33,10 @@ public class MainGame extends Game {
 
         controls = new KeyboardControls();
         Gdx.input.setInputProcessor(controls);
+
+        Sound sound = Gdx.audio.newSound(Gdx.files.internal("8bitAdventure.mp3"));
+        sound.loop();
+        sound.play();
 
         map = new Generator(200, 50, 12).generateMap();
         player = new Player(map.getRandomPassableTile());
