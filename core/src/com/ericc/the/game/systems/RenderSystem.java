@@ -20,7 +20,6 @@ import com.ericc.the.game.components.SpriteSheetComponent;
 import com.ericc.the.game.map.Map;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 
 import static java.lang.Integer.max;
 import static java.lang.Integer.min;
@@ -88,7 +87,7 @@ public class RenderSystem extends EntitySystem {
         The ordering here is based on the logical position.
         This might need to change in the future.
         */
-        visibleEntities.sort(Comparator.comparingInt(a -> Mappers.position.get(a).y));
+        visibleEntities.sort((a, b) -> Mappers.position.get(b).y - Mappers.position.get(a).y);
 
         /*
         Perform the drawing.
@@ -102,6 +101,10 @@ public class RenderSystem extends EntitySystem {
                 drawEntity(visibleEntities.get(entityIndex));
                 ++entityIndex;
             }
+        }
+        while (entityIndex < visibleEntities.size()) {
+            drawEntity(visibleEntities.get(entityIndex));
+            ++entityIndex;
         }
 
         batch.end();
@@ -226,6 +229,12 @@ public class RenderSystem extends EntitySystem {
         return ans;
     }
 
+    /**
+     * Draw a part of a texture region.
+     * Similar to SpriteBatch.draw(texture, x, y, w, h, u, v, u2, v2), except
+     * u, v, u2, v2 describe a fraction of the given region,
+     * not a fraction of the entire texture.
+     */
     private void draw(SpriteBatch batch, TextureRegion t,
                       float x, float y, float width, float height,
                       float u, float v, float u2, float v2) {
