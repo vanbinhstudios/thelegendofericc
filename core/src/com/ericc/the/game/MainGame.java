@@ -56,7 +56,8 @@ public class MainGame extends Game {
     }
 
     private void centerCamera() {
-        viewport.getCamera().position.lerp(new Vector3(player.pos.x, player.pos.y, 0), .1f);
+        viewport.getCamera().position.lerp(new Vector3(player.pos.x, player.pos.y, 0),
+                1 - (float) Math.pow(.1f, Gdx.graphics.getDeltaTime()));
         viewport.getCamera().update();
     }
 }
