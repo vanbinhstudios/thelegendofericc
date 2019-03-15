@@ -1,4 +1,4 @@
-package com.ericc.the.game.systems;
+package com.ericc.the.game.systems.realtime;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
