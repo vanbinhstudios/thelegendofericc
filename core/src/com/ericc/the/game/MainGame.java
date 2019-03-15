@@ -15,6 +15,7 @@ import com.ericc.the.game.systems.logic.AiSystem;
 import com.ericc.the.game.systems.logic.MovementSystem;
 import com.ericc.the.game.systems.realtime.AnimationSystem;
 import com.ericc.the.game.systems.realtime.RenderSystem;
+import com.ericc.the.game.systems.realtime.TileChanger;
 
 public class MainGame extends Game {
 
@@ -48,6 +49,7 @@ public class MainGame extends Game {
 
         engines.getRealtimeEngine().addSystem(new RenderSystem(map, viewport));
         engines.getRealtimeEngine().addSystem(new AnimationSystem());
+        engines.getRealtimeEngine().addSystem(new TileChanger(.75f));
 
         engines.getLogicEngine().addSystem(new AiSystem());
         engines.getLogicEngine().addSystem(new MovementSystem(map));

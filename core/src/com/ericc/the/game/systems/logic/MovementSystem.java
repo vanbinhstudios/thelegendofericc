@@ -53,7 +53,7 @@ public class MovementSystem extends EntitySystem {
                     if (map.isPassable(pos.x, pos.y + 1)) {
                         dy = 1;
                     }
-                } else {
+                } else { // if (move.direction == Direction.DOWN)
                     if (map.isPassable(pos.x, pos.y - 1)) {
                         dy = -1;
                     }

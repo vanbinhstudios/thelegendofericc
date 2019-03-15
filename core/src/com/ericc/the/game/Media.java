@@ -8,17 +8,20 @@ import java.util.ArrayList;
 
 public class Media {
     public static TextureRegion dunVoid;
-    public static ArrayList<TextureRegion> floors, wallUp, wallDown, wallLeft, wallRight;
+    public static ArrayList<TextureRegion> floors, wallUp, wallDown, wallLeft, wallRight, floorsRev;
     public static TextureRegion wallLU, wallRU, wallLD, wallRD;
     public static TextureRegion playerFront, playerLeft, playerRight, playerBack;
     public static TextureAtlas atlas;
+    public static int floorsConfiguration;
 
     static {
         floors = new ArrayList<>();
+        floorsRev = new ArrayList<>();
         wallUp = new ArrayList<>();
         wallDown = new ArrayList<>();
         wallLeft = new ArrayList<>();
         wallRight = new ArrayList<>();
+        floorsConfiguration = 0;
     }
 
     public static void loadAssets() {
@@ -32,6 +35,7 @@ public class Media {
         floors.add(atlas.findRegion("mid_dun_flr4"));
         floors.add(atlas.findRegion("mid_dun_flr5"));
         floors.add(atlas.findRegion("mid_dun_flr6"));
+        floorsRev.add(atlas.findRegion("mid_dun_flr1_rev")); // for now lets stick with only one reversed texture
 
         wallUp.add(atlas.findRegion("u_dun_wall1"));
         wallUp.add(atlas.findRegion("u_dun_wall2"));
@@ -62,5 +66,13 @@ public class Media {
 
     public static void dispose() {
         atlas.dispose();
+    }
+
+    public static TextureRegion getRandomFloorTile(int x, int y, int index) {
+        if (floorsConfiguration == 0) {
+            return ((x + y) % 2 == 0) ? floors.get(index) : floorsRev.get(0);
+        } else {
+            return ((x + y) % 2 == 0) ? floorsRev.get(0) : floors.get(index);
+        }
     }
 }

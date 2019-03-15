@@ -88,7 +88,7 @@ public class RenderSystem extends EntitySystem {
         The ordering here is based on the logical position.
         This might need to change in the future.
         */
-        visibleEntities.sort(Comparator.comparingInt(a -> Mappers.position.get(a).y));
+        visibleEntities.sort((a, b) -> Mappers.position.get(b).y - Mappers.position.get(a).y);
 
         /*
         Perform the drawing.
@@ -102,6 +102,10 @@ public class RenderSystem extends EntitySystem {
                 drawEntity(visibleEntities.get(entityIndex));
                 ++entityIndex;
             }
+        }
+        while (entityIndex < visibleEntities.size()) {
+            drawEntity(visibleEntities.get(entityIndex));
+            ++entityIndex;
         }
 
         batch.end();
@@ -153,7 +157,7 @@ public class RenderSystem extends EntitySystem {
 
         if ((code & 0b000010000) != 0) {
             // Floor tile.
-            batch.draw(Media.floors.get(map.getRandomNumber(x, y, TileTextureIndicator.FLOOR.getValue())),
+            batch.draw(Media.getRandomFloorTile(x, y, map.getRandomNumber(x, y, TileTextureIndicator.FLOOR.getValue())),
                     x, y, 1, 1);
             return;
         }
