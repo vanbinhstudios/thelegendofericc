@@ -1,9 +1,9 @@
 package com.ericc.the.game;
 
-import com.badlogic.ashley.core.Engine;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -20,6 +20,7 @@ import com.ericc.the.game.systems.realtime.TileChanger;
 public class MainGame extends Game {
 
     private KeyboardController controls;
+    private OrthographicCamera camera;
     private Viewport viewport;
     private final static int viewportWidth = 24;
     private final static int viewportHeight = 18;
@@ -29,16 +30,22 @@ public class MainGame extends Game {
 
     private Engines engines = new Engines();
 
+    public final static boolean DEBUG = true;
+    private final static boolean MUSIC = false;
+
     @Override
     public void create() {
         Media.loadAssets();
-        viewport = new FillViewport(viewportWidth, viewportHeight);
+
+        // we need a camera here to have an instance of Orthographic one in a viewport
+        this.camera = new OrthographicCamera();
+        viewport = new FillViewport(viewportWidth, viewportHeight, camera);
         viewport.apply();
 
         map = new Generator(200, 50, 12).generateMap();
         player = new Player(map.getRandomPassableTile());
 
-        controls = new KeyboardController(engines.getLogicEngine(), player);
+        controls = new KeyboardController(engines.getLogicEngine(), player, camera);
         Gdx.input.setInputProcessor(controls);
 
         engines.addEntityToBothEngines(player);
@@ -54,9 +61,11 @@ public class MainGame extends Game {
         engines.getLogicEngine().addSystem(new AiSystem());
         engines.getLogicEngine().addSystem(new MovementSystem(map));
 
-        Sound sound = Gdx.audio.newSound(Gdx.files.internal("music/8bitAdventure.mp3"));
-        sound.loop();
-        sound.play();
+        if (MUSIC) {
+            Sound sound = Gdx.audio.newSound(Gdx.files.internal("music/8bitAdventure.mp3"));
+            sound.loop();
+            sound.play();
+        }
     }
 
     @Override
