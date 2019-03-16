@@ -14,7 +14,9 @@ public class Map {
     private int width, height;
     private boolean[][] map;
     private int[][][] randomTileNumber;
-    private HashSet<GridPoint2> passableTiles; ///< stores every passable tile in a map
+    private int[][][] randomClutterNumber;
+    private HashSet<GridPoint2> passableTiles; ///< stores every passable tile in a map (AFTER THE FIRST GENERATION)
+    // the above is NOT AN INVARIANT, this changes after spawning some entities on some tiles from this collection
     private HashSet<Room> rooms; ///< stores every room made while generating (without corridors)
 
     // Helper structure, static in order not to waste memory
@@ -34,6 +36,7 @@ public class Map {
         this.rooms = new HashSet<>();
         map = new boolean[width][height];
         randomTileNumber = new int[width][height][TileTextureIndicator.countValues()];
+        randomClutterNumber = new int[width][height][TileTextureIndicator.countValues()];
 
         clearMap();
     }
@@ -49,6 +52,10 @@ public class Map {
                 randomTileNumber[x][y][TileTextureIndicator.DOWN.getValue()] = MathUtils.random(0, Media.wallDown.size() - 1);
                 randomTileNumber[x][y][TileTextureIndicator.LEFT.getValue()] = MathUtils.random(0, Media.wallLeft.size() - 1);
                 randomTileNumber[x][y][TileTextureIndicator.FLOOR.getValue()] = MathUtils.random(0, Media.floors.size() - 1);
+
+                // table for terrain clutter generation
+                randomClutterNumber[x][y][TileTextureIndicator.UP.getValue()] = MathUtils.random(0, 30*Media.wallClutter.size());
+                randomClutterNumber[x][y][TileTextureIndicator.FLOOR.getValue()] = MathUtils.random(0, 30*Media.clutter.size());
             }
         }
     }
@@ -76,6 +83,8 @@ public class Map {
     public int getRandomNumber(int x, int y, int direction) {
         return randomTileNumber[x][y][direction];
     }
+
+    public int getRandomClutter(int x, int y, int direction) { return randomClutterNumber[x][y][direction]; }
 
     /**
      * Checks whether the given point in 2D grid is in boundaries of a map.
@@ -110,9 +119,14 @@ public class Map {
 
     /**
      * @return random passable point in the 2D grid of this map
+     *
+     * DISCLAIMER:
+     * It does REMOVE the passable tile it is going to return from the passableTiles collection!
      */
     public GridPoint2 getRandomPassableTile() {
-        return passableTiles.iterator().next();
+        GridPoint2 ret = passableTiles.iterator().next();
+        passableTiles.remove(ret);
+        return ret;
     }
 
     public void addRoom(Room room) {
