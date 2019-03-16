@@ -14,13 +14,14 @@ import com.ericc.the.game.Media;
 public class TileChanger extends IntervalSystem {
     private int ctr; ///< counter - counts the number of updateInterval calls
 
-    public TileChanger (float interval){
+    public TileChanger(float interval) {
         super(interval);
         ctr = 0;
     }
 
     @Override
-    public void addedToEngine(Engine engine) {}
+    public void addedToEngine(Engine engine) {
+    }
 
     @Override
     protected void updateInterval() {

@@ -5,7 +5,10 @@ import com.badlogic.gdx.math.GridPoint2;
 import com.ericc.the.game.Direction;
 import com.ericc.the.game.Media;
 import com.ericc.the.game.actions.NoAction;
-import com.ericc.the.game.components.*;
+import com.ericc.the.game.components.CurrentActionComponent;
+import com.ericc.the.game.components.DirectionComponent;
+import com.ericc.the.game.components.PositionComponent;
+import com.ericc.the.game.components.SpriteSheetComponent;
 
 /**
  * A mishmash for prototyping. This class should be broken down as soon as proper Actor systems are introduced.

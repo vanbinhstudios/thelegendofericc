@@ -10,7 +10,10 @@ import com.ericc.the.game.Direction;
 import com.ericc.the.game.Mappers;
 import com.ericc.the.game.actions.MovementAction;
 import com.ericc.the.game.animations.JumpAnimation;
-import com.ericc.the.game.components.*;
+import com.ericc.the.game.components.AffineAnimationComponent;
+import com.ericc.the.game.components.CurrentActionComponent;
+import com.ericc.the.game.components.DirectionComponent;
+import com.ericc.the.game.components.PositionComponent;
 import com.ericc.the.game.map.Map;
 
 public class MovementSystem extends EntitySystem {
