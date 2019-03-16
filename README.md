@@ -11,7 +11,7 @@ TLE is a turn-based single player rogue-like game made in Java with the help of 
 
 After the first sprint we ended up with some stupid mobs (rendering is done real time, the mobs can turn only after the player makes a move, there are no mobs collision yet)
 
-![Alt Text](https://im2.ezgif.com/tmp/ezgif-2-8337fa9e765f.gif)
+![Alt Text](https://media.giphy.com/media/Zy9k0cvt6piTgrtTrl/giphy.gif)
 
 For our first procedural map generation we implemented BSP algorithm, we do consider chaning it to tunelling one.
 
