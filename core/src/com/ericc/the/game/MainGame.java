@@ -42,7 +42,7 @@ public class MainGame extends Game {
         viewport = new FillViewport(viewportWidth, viewportHeight, camera);
         viewport.apply();
 
-        map = new Generator(200, 50, 12).generateMap();
+        map = new Generator(30, 30, 8).generateMap();
         player = new Player(map.getRandomPassableTile());
 
         controls = new KeyboardController(engines.getLogicEngine(), player, camera);
@@ -50,7 +50,7 @@ public class MainGame extends Game {
 
         engines.addEntityToBothEngines(player);
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 10; i++) {
             engines.addEntityToBothEngines(new Mob(map.getRandomPassableTile()));
         }
 
