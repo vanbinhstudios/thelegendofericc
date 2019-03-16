@@ -11,6 +11,7 @@ public class Media {
     public static ArrayList<TextureRegion> floors, wallUp, wallDown, wallLeft, wallRight, floorsRev;
     public static TextureRegion wallLU, wallRU, wallLD, wallRD;
     public static TextureRegion playerFront, playerLeft, playerRight, playerBack;
+    public static TextureRegion mobFront, mobLeft, mobRight, mobBack;
     public static TextureAtlas atlas;
     public static int floorsConfiguration;
 
@@ -62,6 +63,11 @@ public class Media {
         playerBack = atlas.findRegion("entity/hero/hero_back");
         playerLeft = atlas.findRegion("entity/hero/hero_left");
         playerRight = atlas.findRegion("entity/hero/hero_right");
+
+        mobFront = atlas.findRegion("entity/mage/mage_front");
+        mobBack = atlas.findRegion("entity/mage/mage_back");
+        mobLeft = atlas.findRegion("entity/mage/mage_left");
+        mobRight = atlas.findRegion("entity/mage/mage_right");
     }
 
     public static void dispose() {
