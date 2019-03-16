@@ -14,7 +14,8 @@ public class Map {
     private int width, height;
     private boolean[][] map;
     private int[][][] randomTileNumber;
-    private HashSet<GridPoint2> passableTiles; ///< stores every passable tile in a map
+    private HashSet<GridPoint2> passableTiles; ///< stores every passable tile in a map (AFTER THE FIRST GENERATION)
+    // the above is NOT AN INVARIANT, this changes after spawning some entities on some tiles from this collection
     private HashSet<Room> rooms; ///< stores every room made while generating (without corridors)
 
     // Helper structure, static in order not to waste memory
@@ -110,9 +111,14 @@ public class Map {
 
     /**
      * @return random passable point in the 2D grid of this map
+     *
+     * DISCLAIMER:
+     * It does REMOVE the passable tile it is going to return from the passableTiles collection!
      */
     public GridPoint2 getRandomPassableTile() {
-        return passableTiles.iterator().next();
+        GridPoint2 ret = passableTiles.iterator().next();
+        passableTiles.remove(ret);
+        return ret;
     }
 
     public void addRoom(Room room) {
