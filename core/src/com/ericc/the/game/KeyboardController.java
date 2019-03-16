@@ -101,4 +101,13 @@ public class KeyboardController extends InputAdapter {
         return zoom >= (this.initialCameraZoom - this.cameraZoomMaxDeviation)
                 && zoom <= (this.initialCameraZoom + this.cameraZoomMaxDeviation);
     }
+
+    /**
+     * Reacts to scroll on mouse and changes the zoom of a map.
+     */
+    @Override
+    public boolean scrolled(int amount) {
+        zoomCamera(this.cameraChange * amount);
+        return false;
+    }
 }

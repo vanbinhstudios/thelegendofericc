@@ -30,8 +30,8 @@ public class MainGame extends Game {
 
     private Engines engines = new Engines();
 
-    public final static boolean DEBUG = true;
-    private final static boolean MUSIC = false;
+    public final static boolean DEBUG = true; ///< turns the debug mode on and off
+    private final static boolean MUSIC = false; ///< turns the music on and off
 
     @Override
     public void create() {
