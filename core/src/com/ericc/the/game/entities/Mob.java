@@ -9,7 +9,7 @@ import com.ericc.the.game.components.*;
 
 public class Mob extends Entity {
     public Mob(int x, int y) {
-        SpriteSheetComponent renderable = new SpriteSheetComponent(Media.playerBack, Media.playerRight, Media.playerFront, Media.playerLeft);
+        SpriteSheetComponent renderable = new SpriteSheetComponent(Media.mobBack, Media.mobRight, Media.mobFront, Media.mobLeft);
         renderable.sprite.setOrigin(0, -0.35f);
         add(new PositionComponent(x, y));
         add(renderable);

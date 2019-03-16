@@ -53,7 +53,7 @@ public class MainGame extends Game {
         engines.getLogicEngine().addSystem(new AiSystem());
         engines.getLogicEngine().addSystem(new MovementSystem(map));
 
-        Sound sound = Gdx.audio.newSound(Gdx.files.internal("8bitAdventure.mp3"));
+        Sound sound = Gdx.audio.newSound(Gdx.files.internal("music/8bitAdventure.mp3"));
         sound.loop();
         sound.play();
     }

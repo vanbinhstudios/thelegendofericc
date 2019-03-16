@@ -11,6 +11,7 @@ public class Media {
     public static ArrayList<TextureRegion> floors, wallUp, wallDown, wallLeft, wallRight, floorsRev;
     public static TextureRegion wallLU, wallRU, wallLD, wallRD;
     public static TextureRegion playerFront, playerLeft, playerRight, playerBack;
+    public static TextureRegion mobFront, mobLeft, mobRight, mobBack;
     public static TextureAtlas atlas;
     public static int floorsConfiguration;
 
@@ -27,41 +28,46 @@ public class Media {
     public static void loadAssets() {
         atlas = new TextureAtlas(Gdx.files.internal("pack.atlas"));
 
-        dunVoid = atlas.findRegion("void");
+        dunVoid = atlas.findRegion("map/void");
 
-        floors.add(atlas.findRegion("mid_dun_flr1"));
-        floors.add(atlas.findRegion("mid_dun_flr2"));
-        floors.add(atlas.findRegion("mid_dun_flr3"));
-        floors.add(atlas.findRegion("mid_dun_flr4"));
-        floors.add(atlas.findRegion("mid_dun_flr5"));
-        floors.add(atlas.findRegion("mid_dun_flr6"));
-        floorsRev.add(atlas.findRegion("mid_dun_flr1_rev")); // for now lets stick with only one reversed texture
+        floors.add(atlas.findRegion("map/floors/floor1"));
+        floors.add(atlas.findRegion("map/floors/floor2"));
+        floors.add(atlas.findRegion("map/floors/floor3"));
+        floors.add(atlas.findRegion("map/floors/floor4"));
+        floors.add(atlas.findRegion("map/floors/floor5"));
+        floors.add(atlas.findRegion("map/floors/floor6"));
+        floorsRev.add(atlas.findRegion("map/floors/floor1_reversed")); // for now lets stick with only one reversed texture
 
-        wallUp.add(atlas.findRegion("u_dun_wall1"));
-        wallUp.add(atlas.findRegion("u_dun_wall2"));
-        wallUp.add(atlas.findRegion("u_dun_wall3"));
-        wallUp.add(atlas.findRegion("u_dun_wall4"));
+        wallUp.add(atlas.findRegion("map/walls/wall1_up"));
+        wallUp.add(atlas.findRegion("map/walls/wall2_up"));
+        wallUp.add(atlas.findRegion("map/walls/wall3_up"));
+        wallUp.add(atlas.findRegion("map/walls/wall4_up"));
 
-        wallDown.add(atlas.findRegion("d_dun_wall1"));
-        wallDown.add(atlas.findRegion("d_dun_wall2"));
+        wallDown.add(atlas.findRegion("map/walls/wall1_down"));
+        wallDown.add(atlas.findRegion("map/walls/wall2_down"));
 
-        wallLeft.add(atlas.findRegion("l_dun_wall1"));
-        wallLeft.add(atlas.findRegion("l_dun_wall2"));
-        wallLeft.add(atlas.findRegion("l_dun_wall3"));
+        wallLeft.add(atlas.findRegion("map/walls/wall1_left"));
+        wallLeft.add(atlas.findRegion("map/walls/wall2_left"));
+        wallLeft.add(atlas.findRegion("map/walls/wall3_left"));
 
-        wallRight.add(atlas.findRegion("r_dun_wall1"));
-        wallRight.add(atlas.findRegion("r_dun_wall2"));
-        wallRight.add(atlas.findRegion("r_dun_wall3"));
+        wallRight.add(atlas.findRegion("map/walls/wall1_right"));
+        wallRight.add(atlas.findRegion("map/walls/wall2_right"));
+        wallRight.add(atlas.findRegion("map/walls/wall3_right"));
 
-        wallLD = atlas.findRegion("ld_dun_wall");
-        wallRD = atlas.findRegion("rd_dun_wall");
-        wallLU = atlas.findRegion("lu_dun_wall");
-        wallRU = atlas.findRegion("ru_dun_wall");
+        wallLD = atlas.findRegion("map/walls/wall1_corner_left_down");
+        wallRD = atlas.findRegion("map/walls/wall1_corner_right_down");
+        wallLU = atlas.findRegion("map/walls/wall1_corner_left_up");
+        wallRU = atlas.findRegion("map/walls/wall1_corner_right_up");
 
-        playerFront = atlas.findRegion("testhero_front");
-        playerBack = atlas.findRegion("testhero_back");
-        playerLeft = atlas.findRegion("testhero_left");
-        playerRight = atlas.findRegion("testhero_right");
+        playerFront = atlas.findRegion("entity/hero/hero_front");
+        playerBack = atlas.findRegion("entity/hero/hero_back");
+        playerLeft = atlas.findRegion("entity/hero/hero_left");
+        playerRight = atlas.findRegion("entity/hero/hero_right");
+
+        mobFront = atlas.findRegion("entity/mage/mage_front");
+        mobBack = atlas.findRegion("entity/mage/mage_back");
+        mobLeft = atlas.findRegion("entity/mage/mage_left");
+        mobRight = atlas.findRegion("entity/mage/mage_right");
     }
 
     public static void dispose() {
