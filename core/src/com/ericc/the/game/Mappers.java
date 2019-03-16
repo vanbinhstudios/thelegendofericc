@@ -1,10 +1,7 @@
 package com.ericc.the.game;
 
 import com.badlogic.ashley.core.ComponentMapper;
-import com.ericc.the.game.components.AffineAnimationComponent;
-import com.ericc.the.game.components.DirectionComponent;
-import com.ericc.the.game.components.PositionComponent;
-import com.ericc.the.game.components.SpriteSheetComponent;
+import com.ericc.the.game.components.*;
 
 
 /**
@@ -17,5 +14,5 @@ public class Mappers {
     public static final ComponentMapper<DirectionComponent> direction = ComponentMapper.getFor(DirectionComponent.class);
     public static final ComponentMapper<AffineAnimationComponent> affineAnimation = ComponentMapper.getFor(AffineAnimationComponent.class);
     public static final ComponentMapper<SpriteSheetComponent> spriteSheet = ComponentMapper.getFor(SpriteSheetComponent.class);
-    
+    public static final ComponentMapper<CurrentActionComponent> currentAction = ComponentMapper.getFor(CurrentActionComponent.class);
 }

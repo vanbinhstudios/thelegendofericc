@@ -256,6 +256,13 @@ mid_dun_flr1
   orig: 16, 16
   offset: 0, 0
   index: -1
+mid_dun_flr1_rev
+  rotate: false
+  xy: 361, 187
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
 mid_dun_flr2
   rotate: false
   xy: 110, 20
@@ -293,218 +300,490 @@ mid_dun_flr6
   index: -1
 middle
   rotate: false
-  xy: 361, 187
+  xy: 379, 205
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 r_dun_flr1
   rotate: false
-  xy: 379, 205
+  xy: 397, 223
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 r_dun_wall1
   rotate: false
-  xy: 397, 223
+  xy: 110, 2
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 r_dun_wall3
   rotate: false
-  xy: 397, 223
+  xy: 110, 2
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 r_dun_wall2
   rotate: false
-  xy: 110, 2
+  xy: 128, 20
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 rd_dun_flr
   rotate: false
-  xy: 128, 20
+  xy: 289, 97
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 rd_dun_wall
   rotate: false
-  xy: 289, 97
+  xy: 307, 115
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 right_down_corner
   rotate: false
-  xy: 307, 115
+  xy: 325, 133
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 right_up_corner
   rotate: false
-  xy: 325, 133
+  xy: 343, 151
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 ru_dun_flr
   rotate: false
-  xy: 343, 151
+  xy: 361, 169
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 ru_dun_wall
   rotate: false
-  xy: 361, 169
+  xy: 379, 187
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 testhero_back
   rotate: false
-  xy: 379, 187
+  xy: 397, 205
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 testhero_front
   rotate: false
-  xy: 397, 205
+  xy: 415, 223
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 testhero_left
   rotate: false
-  xy: 415, 223
+  xy: 128, 2
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 testhero_right
   rotate: false
-  xy: 128, 2
+  xy: 146, 20
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 two_corners
   rotate: false
-  xy: 146, 20
+  xy: 289, 79
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 u_dun_flr1
   rotate: false
-  xy: 289, 79
+  xy: 307, 97
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 u_dun_flr2
   rotate: false
-  xy: 307, 97
+  xy: 325, 115
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 u_dun_wall1
   rotate: false
-  xy: 325, 115
+  xy: 343, 133
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 u_dun_wall4
   rotate: false
-  xy: 325, 115
+  xy: 343, 133
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 u_dun_wall2
   rotate: false
-  xy: 343, 133
+  xy: 361, 151
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 u_dun_wall3
   rotate: false
-  xy: 361, 151
+  xy: 379, 169
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 void
   rotate: false
-  xy: 379, 169
+  xy: 397, 187
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 wallClutter1
   rotate: false
-  xy: 397, 187
+  xy: 415, 205
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 wallClutter2
   rotate: false
-  xy: 415, 205
+  xy: 433, 223
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 wallClutter3
   rotate: false
-  xy: 433, 223
+  xy: 146, 2
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 wallClutter4
   rotate: false
-  xy: 146, 2
+  xy: 164, 20
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 wallClutter5
   rotate: false
-  xy: 164, 20
+  xy: 289, 61
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 wallClutter6
   rotate: false
-  xy: 289, 61
+  xy: 307, 79
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 wallClutter7
   rotate: false
-  xy: 307, 79
+  xy: 325, 97
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 wallClutter8
   rotate: false
-  xy: 325, 97
+  xy: 343, 115
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
+
+pack2.png
+size: 128,32
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+vampire/v1/vampire_v1
+  rotate: false
+  xy: 2, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 1
+vampire/v1/vampire_v1
+  rotate: false
+  xy: 20, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 2
+vampire/v1/vampire_v1
+  rotate: false
+  xy: 38, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 3
+vampire/v1/vampire_v1
+  rotate: false
+  xy: 56, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 4
+
+pack3.png
+size: 128,32
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+vampire/v2/vampire_v2
+  rotate: false
+  xy: 2, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 1
+vampire/v2/vampire_v2
+  rotate: false
+  xy: 20, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 2
+vampire/v2/vampire_v2
+  rotate: false
+  xy: 38, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 3
+vampire/v2/vampire_v2
+  rotate: false
+  xy: 56, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 4
+
+pack4.png
+size: 128,32
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+skull/v1/skull_v1
+  rotate: false
+  xy: 2, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 1
+skull/v1/skull_v1
+  rotate: false
+  xy: 20, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 2
+skull/v1/skull_v1
+  rotate: false
+  xy: 38, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 3
+skull/v1/skull_v1
+  rotate: false
+  xy: 56, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 4
+
+pack5.png
+size: 128,32
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+skull/v2/skull_v2
+  rotate: false
+  xy: 2, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 1
+skull/v2/skull_v2
+  rotate: false
+  xy: 20, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 2
+skull/v2/skull_v2
+  rotate: false
+  xy: 38, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 3
+skull/v2/skull_v2
+  rotate: false
+  xy: 56, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 4
+
+pack6.png
+size: 128,32
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+skeleton2/v1/skeleton2_v1
+  rotate: false
+  xy: 2, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 1
+skeleton2/v1/skeleton2_v1
+  rotate: false
+  xy: 20, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 2
+skeleton2/v1/skeleton2_v1
+  rotate: false
+  xy: 38, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 3
+skeleton2/v1/skeleton2_v1
+  rotate: false
+  xy: 56, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 4
+
+pack7.png
+size: 128,32
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+skeleton2/v2/skeleton2_v2
+  rotate: false
+  xy: 2, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 1
+skeleton2/v2/skeleton2_v2
+  rotate: false
+  xy: 20, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 2
+skeleton2/v2/skeleton2_v2
+  rotate: false
+  xy: 38, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 3
+skeleton2/v2/skeleton2_v2
+  rotate: false
+  xy: 56, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 4
+
+pack8.png
+size: 128,32
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+skeleton1/v1/skeleton_v1
+  rotate: false
+  xy: 2, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 1
+skeleton1/v1/skeleton_v1
+  rotate: false
+  xy: 20, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 2
+skeleton1/v1/skeleton_v1
+  rotate: false
+  xy: 38, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 3
+skeleton1/v1/skeleton_v1
+  rotate: false
+  xy: 56, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 4
+
+pack9.png
+size: 128,32
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+skeleton1/v2/skeleton_v2
+  rotate: false
+  xy: 2, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 1
+skeleton1/v2/skeleton_v2
+  rotate: false
+  xy: 20, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 2
+skeleton1/v2/skeleton_v2
+  rotate: false
+  xy: 38, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 3
+skeleton1/v2/skeleton_v2
+  rotate: false
+  xy: 56, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 4
