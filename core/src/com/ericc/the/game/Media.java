@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class Media {
     public static TextureRegion dunVoid;
-    public static ArrayList<TextureRegion> floors, wallUp, wallDown, wallLeft, wallRight;
+    public static ArrayList<TextureRegion> floors, wallUp, wallDown, wallLeft, wallRight, clutter, wallClutter;
     public static TextureRegion wallLU, wallRU, wallLD, wallRD;
     public static TextureRegion playerFront, playerLeft, playerRight, playerBack;
     public static TextureAtlas atlas;
@@ -19,6 +19,8 @@ public class Media {
         wallDown = new ArrayList<>();
         wallLeft = new ArrayList<>();
         wallRight = new ArrayList<>();
+        clutter = new ArrayList<>();
+        wallClutter = new ArrayList<>();
     }
 
     public static void loadAssets() {
@@ -48,6 +50,33 @@ public class Media {
         wallRight.add(atlas.findRegion("r_dun_wall1"));
         wallRight.add(atlas.findRegion("r_dun_wall2"));
         wallRight.add(atlas.findRegion("r_dun_wall3"));
+
+        clutter.add(atlas.findRegion("clutter1"));
+        clutter.add(atlas.findRegion("clutter2"));
+        clutter.add(atlas.findRegion("clutter3"));
+        clutter.add(atlas.findRegion("clutter4"));
+        clutter.add(atlas.findRegion("clutter5"));
+        clutter.add(atlas.findRegion("clutter6"));
+        clutter.add(atlas.findRegion("clutter7"));
+        clutter.add(atlas.findRegion("clutter8"));
+        clutter.add(atlas.findRegion("clutter9"));
+        clutter.add(atlas.findRegion("clutter10"));
+        clutter.add(atlas.findRegion("clutter11"));
+        clutter.add(atlas.findRegion("clutter12"));
+        clutter.add(atlas.findRegion("clutter13"));
+        clutter.add(atlas.findRegion("clutter14"));
+        clutter.add(atlas.findRegion("clutter15"));
+        clutter.add(atlas.findRegion("clutter16"));
+        clutter.add(atlas.findRegion("clutter17"));
+
+        wallClutter.add(atlas.findRegion("wallClutter1"));
+        wallClutter.add(atlas.findRegion("wallClutter2"));
+        wallClutter.add(atlas.findRegion("wallClutter3"));
+        wallClutter.add(atlas.findRegion("wallClutter4"));
+        wallClutter.add(atlas.findRegion("wallClutter5"));
+        wallClutter.add(atlas.findRegion("wallClutter6"));
+        wallClutter.add(atlas.findRegion("wallClutter7"));
+        wallClutter.add(atlas.findRegion("wallClutter8"));
 
         wallLD = atlas.findRegion("ld_dun_wall");
         wallRD = atlas.findRegion("rd_dun_wall");
