@@ -128,5 +128,5 @@ Thumbs.db
 /ios-moe/xcode/native/
 
 core/assets/pack.atlas
-core/assets/pack.png
+core/assets/pack*.png
 core/out/

@@ -159,6 +159,14 @@ public class RenderSystem extends EntitySystem {
             // Floor tile.
             batch.draw(Media.getRandomFloorTile(x, y, map.getRandomNumber(x, y, TileTextureIndicator.FLOOR.getValue())),
                     x, y, 1, 1);
+
+            // Drawing decorations on the floor.
+            int clutterType = map.getRandomClutter(x, y, TileTextureIndicator.FLOOR.getValue());
+
+            if (clutterType < Media.clutter.size()) {
+                batch.draw(Media.clutter.get(clutterType),
+                        x, y, 1, 1);
+            }
             return;
         }
 
@@ -215,6 +223,16 @@ public class RenderSystem extends EntitySystem {
         } else if ((code & 0b010001010) == 0b010001000) {
             draw(batch, Media.wallLeft.get(map.getRandomNumber(x, y, TileTextureIndicator.LEFT.getValue())),
                     x + 0.5f, y + 0.5f + 0.5f, 0.5f, 0.5f, 0.5f, 0, 1, 0.5f);
+        }
+
+        // Drawing decorations on the upper walls.
+        if ((code & 0b010000000) != 0) {
+            int clutterType = map.getRandomClutter(x, y, TileTextureIndicator.UP.getValue());
+
+            if (clutterType < Media.wallClutter.size()) {
+                batch.draw(Media.wallClutter.get(clutterType),
+                        x, y, 1, 1);
+            }
         }
     }
 

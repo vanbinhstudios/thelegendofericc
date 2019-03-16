@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class Media {
     public static TextureRegion dunVoid;
-    public static ArrayList<TextureRegion> floors, wallUp, wallDown, wallLeft, wallRight, floorsRev;
+    public static ArrayList<TextureRegion> floors, wallUp, wallDown, wallLeft, wallRight, clutter, wallClutter, floorsRev;
     public static TextureRegion wallLU, wallRU, wallLD, wallRD;
     public static TextureRegion playerFront, playerLeft, playerRight, playerBack;
     public static TextureRegion mobFront, mobLeft, mobRight, mobBack;
@@ -22,6 +22,8 @@ public class Media {
         wallDown = new ArrayList<>();
         wallLeft = new ArrayList<>();
         wallRight = new ArrayList<>();
+        clutter = new ArrayList<>();
+        wallClutter = new ArrayList<>();
         floorsConfiguration = 0;
     }
 
@@ -58,6 +60,33 @@ public class Media {
         wallRD = atlas.findRegion("map/walls/wall1_corner_right_down");
         wallLU = atlas.findRegion("map/walls/wall1_corner_left_up");
         wallRU = atlas.findRegion("map/walls/wall1_corner_right_up");
+
+        clutter.add(atlas.findRegion("map/clutter/clutter1"));
+        clutter.add(atlas.findRegion("map/clutter/clutter2"));
+        clutter.add(atlas.findRegion("map/clutter/clutter3"));
+        clutter.add(atlas.findRegion("map/clutter/clutter4"));
+        clutter.add(atlas.findRegion("map/clutter/clutter5"));
+        clutter.add(atlas.findRegion("map/clutter/clutter6"));
+        clutter.add(atlas.findRegion("map/clutter/clutter7"));
+        clutter.add(atlas.findRegion("map/clutter/clutter8"));
+        clutter.add(atlas.findRegion("map/clutter/clutter9"));
+        clutter.add(atlas.findRegion("map/clutter/clutter10"));
+        clutter.add(atlas.findRegion("map/clutter/clutter11"));
+        clutter.add(atlas.findRegion("map/clutter/clutter12"));
+        clutter.add(atlas.findRegion("map/clutter/clutter13"));
+        clutter.add(atlas.findRegion("map/clutter/clutter14"));
+        clutter.add(atlas.findRegion("map/clutter/clutter15"));
+        clutter.add(atlas.findRegion("map/clutter/clutter16"));
+        clutter.add(atlas.findRegion("map/clutter/clutter17"));
+
+        wallClutter.add(atlas.findRegion("map/clutter/wallClutter1"));
+        wallClutter.add(atlas.findRegion("map/clutter/wallClutter2"));
+        wallClutter.add(atlas.findRegion("map/clutter/wallClutter3"));
+        wallClutter.add(atlas.findRegion("map/clutter/wallClutter4"));
+        wallClutter.add(atlas.findRegion("map/clutter/wallClutter5"));
+        wallClutter.add(atlas.findRegion("map/clutter/wallClutter6"));
+        wallClutter.add(atlas.findRegion("map/clutter/wallClutter7"));
+        wallClutter.add(atlas.findRegion("map/clutter/wallClutter8"));
 
         playerFront = atlas.findRegion("entity/hero/hero_front");
         playerBack = atlas.findRegion("entity/hero/hero_back");

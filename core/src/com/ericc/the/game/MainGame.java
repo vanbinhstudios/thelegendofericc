@@ -1,5 +1,6 @@
 package com.ericc.the.game;
 
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
@@ -67,7 +68,7 @@ public class MainGame extends Game {
         // TODO: Make FPS cap more resistant against extreme framerate drops
         try {
             Thread.sleep(16);
-        } catch (Exception e) {
+        } catch(Exception e) {
             System.out.print("Unexpected sleep interruption\n");
         }
 
