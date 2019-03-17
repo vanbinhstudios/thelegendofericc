@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 public class GrayscaleShader {
     // yeah, it is c++ code
 
-    static String vertexShader = "attribute vec4 a_position;\n" +
+    private static String vertexShader = "attribute vec4 a_position;\n" +
             "attribute vec4 a_color;\n" +
             "attribute vec2 a_texCoord0;\n" +
             "\n" +
@@ -24,7 +24,7 @@ public class GrayscaleShader {
             "    gl_Position = u_projTrans * a_position;\n" +
             "}";
 
-    static String fragmentShader = "#ifdef GL_ES\n" +
+    private static String fragmentShader = "#ifdef GL_ES\n" +
             "    precision mediump float;\n" +
             "#endif\n" +
             "\n" +

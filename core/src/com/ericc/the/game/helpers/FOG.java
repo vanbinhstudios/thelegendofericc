@@ -1,7 +1,7 @@
 package com.ericc.the.game.helpers;
 
 public class FOG {
-    private static boolean[][] tileSeen; ///< any tile that was seen by the hero from the start
+    private boolean[][] tileSeen; ///< any tile that was seen by the hero from the start
 
     public FOG(int width, int height) {
         tileSeen = new boolean[width][height];

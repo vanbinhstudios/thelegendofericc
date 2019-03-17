@@ -1,6 +1,5 @@
 package com.ericc.the.game.helpers;
 
-import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.MathUtils;
 import com.ericc.the.game.entities.Player;
 import com.ericc.the.game.map.Map;
