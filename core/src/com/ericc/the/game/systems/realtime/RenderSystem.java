@@ -10,23 +10,19 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Affine2;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.ericc.the.game.Mappers;
 import com.ericc.the.game.Media;
 import com.ericc.the.game.TileTextureIndicator;
+import com.ericc.the.game.components.FieldOfViewComponent;
 import com.ericc.the.game.components.PositionComponent;
 import com.ericc.the.game.components.SpriteSheetComponent;
 import com.ericc.the.game.entities.Player;
-import com.ericc.the.game.helpers.FOG;
-import com.ericc.the.game.helpers.FOV;
+import com.ericc.the.game.helpers.ScreenBoundsGetter;
 import com.ericc.the.game.map.Map;
 import com.ericc.the.game.shaders.GrayscaleShader;
 
 import java.util.ArrayList;
-
-import static java.lang.Integer.max;
-import static java.lang.Integer.min;
 
 /**
  * The system responsible for drawing the map and the entities on the screen.
@@ -35,20 +31,20 @@ import static java.lang.Integer.min;
 public class RenderSystem extends EntitySystem {
     private Map map;
     private Viewport viewport;
+    private ScreenBoundsGetter sbh;
     private final Affine2 transform = new Affine2();
 
     private SpriteBatch batch = new SpriteBatch();
     private SpriteBatch tilesSeen = new SpriteBatch();
     private ImmutableArray<Entity> entities; // Renderable entities.
-    private FOV fov;
-    private FOG fogOfWar;
+    private FieldOfViewComponent playersFieldOfView;
 
-    public RenderSystem(Map map, Viewport viewport, Player player) {
+    public RenderSystem(Map map, Viewport viewport, Player player, ScreenBoundsGetter sbh) {
         super(9999); // Rendering should be the last system in effect.
         this.map = map;
         this.viewport = viewport;
-        this.fogOfWar = new FOG(map.width(), map.height());
-        this.fov = new FOV(player, map, fogOfWar);
+        this.playersFieldOfView = Mappers.fov.get(player);
+        this.sbh = sbh;
     }
 
     @Override
@@ -62,21 +58,13 @@ public class RenderSystem extends EntitySystem {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         // Compute the visible map area.
-        Vector2 topLeft = viewport.unproject(new Vector2(0, 0));
-        int top = clamp(0, (int) topLeft.y, map.height() - 1);
-        int left = clamp(0, (int) topLeft.x, map.width() - 1);
-
-        Vector2 bottomRight = viewport.unproject(new Vector2(viewport.getScreenWidth(), viewport.getScreenHeight()));
-        int bottom = clamp(0, (int) bottomRight.y - 1, map.height() - 1);
-        int right = clamp(0, (int) bottomRight.x, map.width() - 1);
-
-        fov.updateFOV(top, bottom, left, right);
+        sbh.update();
 
         initBatch(tilesSeen);
         tilesSeen.setShader(GrayscaleShader.grayscaleShader);
-        for (int y = top; y >= bottom; --y) {
-            for (int x = left; x <= right; ++x) {
-                if (fogOfWar.hasBeenRegistered(x, y)) {
+        for (int y = sbh.top; y >= sbh.bottom; --y) {
+            for (int x = sbh.left; x <= sbh.right; ++x) {
+                if (map.hasBeenRegistered(x, y)) {
                     drawTile(tilesSeen, x, y, true);
                 }
             }
@@ -97,11 +85,11 @@ public class RenderSystem extends EntitySystem {
         final int margin = 5; // Assume that no sprite is more than 5 tiles away from it's logical position.
         for (Entity entity : entities) {
             PositionComponent pos = Mappers.position.get(entity);
-            if (left - margin <= pos.x
-                    && pos.x <= right + margin
-                    && bottom - margin <= pos.y
-                    && pos.y <= top + margin
-                    && fov.inFOV(pos.x, pos.y)) {
+            if (sbh.left - margin <= pos.x
+                    && pos.x <= sbh.right + margin
+                    && sbh.bottom - margin <= pos.y
+                    && pos.y <= sbh.top + margin
+                    && playersFieldOfView.visibility[pos.x][pos.y]) {
                 visibleEntities.add(entity);
             }
         }
@@ -117,9 +105,9 @@ public class RenderSystem extends EntitySystem {
         Perform the drawing.
          */
         int entityIndex = 0;
-        for (int y = top; y >= bottom; --y) {
-            for (int x = left; x <= right; ++x) {
-                if (fov.inFOV(x, y)) {
+        for (int y = sbh.top; y >= sbh.bottom; --y) {
+            for (int x = sbh.left; x <= sbh.right; ++x) {
+                if (playersFieldOfView.visibility[x][y]) {
                     drawTile(batch, x, y, false);
                 }
             }
@@ -134,12 +122,6 @@ public class RenderSystem extends EntitySystem {
         }
 
         batch.end();
-    }
-
-    private int clamp(int lowerBound, int x, int upperBound) {
-        x = min(x, upperBound);
-        x = max(x, lowerBound);
-        return x;
     }
 
     private void drawEntity(Entity entity) {

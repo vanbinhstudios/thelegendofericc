@@ -4,9 +4,8 @@ import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.MathUtils;
 import com.ericc.the.game.Media;
 import com.ericc.the.game.TileTextureIndicator;
+import com.ericc.the.game.helpers.FogOfWar;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 
 public class Map {
@@ -18,12 +17,14 @@ public class Map {
     private HashSet<GridPoint2> passableTiles; ///< stores every passable tile in a map (AFTER THE FIRST GENERATION)
     // the above is NOT AN INVARIANT, this changes after spawning some entities on some tiles from this collection
     private HashSet<Room> rooms; ///< stores every room made while generating (without corridors)
+    private FogOfWar fogOfWar;
 
     Map(int width, int height) {
         this.width = width;
         this.height = height;
         this.passableTiles = new HashSet<>();
         this.rooms = new HashSet<>();
+        this.fogOfWar = new FogOfWar(width, height);
         map = new boolean[width][height];
         randomTileNumber = new int[width][height][TileTextureIndicator.countValues()];
         randomClutterNumber = new int[width][height][TileTextureIndicator.countValues()];
@@ -113,5 +114,19 @@ public class Map {
 
     public HashSet<Room> getRooms() {
         return rooms;
+    }
+
+    /**
+     * Registers a tile in a fog of war structure, marks it as seen.
+     */
+    public void registerTile(int x, int y) {
+        fogOfWar.registerTile(x, y);
+    }
+
+    /**
+     * Returns whether an object at given position has even been in any fov.
+     */
+    public boolean hasBeenRegistered(int x, int y) {
+        return fogOfWar.hasBeenRegistered(x, y);
     }
 }

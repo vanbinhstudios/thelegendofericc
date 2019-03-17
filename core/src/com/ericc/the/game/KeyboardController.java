@@ -6,21 +6,18 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.ericc.the.game.actions.Actions;
 import com.ericc.the.game.entities.Player;
+import com.ericc.the.game.helpers.CameraZoom;
 
 public class KeyboardController extends InputAdapter {
 
     private Engine logicEngine;
     private Player player;
-    private OrthographicCamera camera;
-    private float initialCameraZoom;
-    private final float cameraZoomMaxDeviation = .3f;
-    private final float cameraChange = .05f;
+    private CameraZoom zoom;
 
     public KeyboardController(Engine logicEngine, Player player, OrthographicCamera camera) {
         this.logicEngine = logicEngine;
         this.player = player;
-        this.camera = camera;
-        this.initialCameraZoom = this.camera.zoom;
+        this.zoom = new CameraZoom(camera);
     }
 
     @Override
@@ -64,10 +61,10 @@ public class KeyboardController extends InputAdapter {
     private boolean playersGUIActions(int keycode) {
         switch (keycode) {
             case Input.Keys.MINUS:
-                zoomCamera(this.cameraChange);
+                zoom.zoomOutCamera();
                 break;
             case Input.Keys.PLUS:
-                zoomCamera((-1) * this.cameraChange);
+                zoom.zoomInCamera();
                 break;
             default:
                 return false;
@@ -77,35 +74,11 @@ public class KeyboardController extends InputAdapter {
     }
 
     /**
-     * Zooms the camera by the given value (either out or in)
-     * @param zoom the value to add to a camera zoom
-     */
-    private void zoomCamera(float zoom) {
-        if (canZoom(camera.zoom + zoom)) {
-            this.camera.zoom += zoom;
-        }
-    }
-
-    /**
-     * Checks whether we can zoom in or zoom out
-     * @param zoom camera zoom altogether (sum of the previous zoom and the adder)
-     * @return true if zoom is possible, false otherwise
-     */
-    private boolean canZoom(float zoom) {
-        if (MainGame.DEBUG) {
-            return true;
-        }
-
-        return zoom >= (this.initialCameraZoom - this.cameraZoomMaxDeviation)
-                && zoom <= (this.initialCameraZoom + this.cameraZoomMaxDeviation);
-    }
-
-    /**
      * Reacts to scroll on mouse and changes the zoom of a map.
      */
     @Override
     public boolean scrolled(int amount) {
-        zoomCamera(this.cameraChange * amount);
+        zoom.zoomAnyCamera(amount);
         return false;
     }
 }

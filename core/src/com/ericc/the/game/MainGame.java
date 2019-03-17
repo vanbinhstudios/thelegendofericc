@@ -9,9 +9,11 @@ import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.ericc.the.game.entities.Mob;
 import com.ericc.the.game.entities.Player;
+import com.ericc.the.game.helpers.ScreenBoundsGetter;
 import com.ericc.the.game.map.Generator;
 import com.ericc.the.game.map.Map;
 import com.ericc.the.game.systems.logic.AiSystem;
+import com.ericc.the.game.systems.logic.FieldOfViewSystem;
 import com.ericc.the.game.systems.logic.MovementSystem;
 import com.ericc.the.game.systems.realtime.AnimationSystem;
 import com.ericc.the.game.systems.realtime.RenderSystem;
@@ -43,7 +45,7 @@ public class MainGame extends Game {
         viewport.apply();
 
         map = new Generator(30, 30, 9).generateMap();
-        player = new Player(map.getRandomPassableTile());
+        player = new Player(map.getRandomPassableTile(), map.width(), map.height());
 
         controls = new KeyboardController(engines.getLogicEngine(), player, camera);
         Gdx.input.setInputProcessor(controls);
@@ -54,12 +56,17 @@ public class MainGame extends Game {
             engines.addEntityToBothEngines(new Mob(map.getRandomPassableTile()));
         }
 
-        engines.getRealtimeEngine().addSystem(new RenderSystem(map, viewport, player));
+        ScreenBoundsGetter sbh = new ScreenBoundsGetter(viewport, map);
+        engines.getRealtimeEngine().addSystem(new RenderSystem(map, viewport, player, sbh));
         engines.getRealtimeEngine().addSystem(new AnimationSystem());
         engines.getRealtimeEngine().addSystem(new TileChanger(.75f));
 
+        FieldOfViewSystem fieldOfViewSystem = new FieldOfViewSystem(map, sbh);
         engines.getLogicEngine().addSystem(new AiSystem());
         engines.getLogicEngine().addSystem(new MovementSystem(map));
+        engines.getLogicEngine().addSystem(fieldOfViewSystem);
+
+        fieldOfViewSystem.update(0); // update to calculate the initial fov
 
         if (MUSIC) {
             Sound sound = Gdx.audio.newSound(Gdx.files.internal("music/8bitAdventure.mp3"));
