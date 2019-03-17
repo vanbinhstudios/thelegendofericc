@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Affine2;
+import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.ericc.the.game.Mappers;
@@ -17,6 +18,8 @@ import com.ericc.the.game.Media;
 import com.ericc.the.game.TileTextureIndicator;
 import com.ericc.the.game.components.PositionComponent;
 import com.ericc.the.game.components.SpriteSheetComponent;
+import com.ericc.the.game.entities.Player;
+import com.ericc.the.game.helpers.FOV;
 import com.ericc.the.game.map.Map;
 
 import java.util.ArrayList;
@@ -35,11 +38,13 @@ public class RenderSystem extends EntitySystem {
 
     private SpriteBatch batch = new SpriteBatch();
     private ImmutableArray<Entity> entities; // Renderable entities.
+    private FOV fov;
 
-    public RenderSystem(Map map, Viewport viewport) {
+    public RenderSystem(Map map, Viewport viewport, Player player) {
         super(9999); // Rendering should be the last system in effect.
         this.map = map;
         this.viewport = viewport;
+        this.fov = new FOV(player, map);
     }
 
     @Override
@@ -65,6 +70,8 @@ public class RenderSystem extends EntitySystem {
         int bottom = clamp(0, (int) bottomRight.y - 1, map.height() - 1);
         int right = clamp(0, (int) bottomRight.x, map.width() - 1);
 
+        fov.updateFOV(top, bottom, left, right);
+
         /*
         If we could access entities standing on a given position,
         there would be no need to perform the culling and sorting.
@@ -77,7 +84,11 @@ public class RenderSystem extends EntitySystem {
         final int margin = 5; // Assume that no sprite is more than 5 tiles away from it's logical position.
         for (Entity entity : entities) {
             PositionComponent pos = Mappers.position.get(entity);
-            if (left - margin <= pos.x && pos.x <= right + margin && bottom - margin <= pos.y && pos.y <= top + margin) {
+            if (left - margin <= pos.x
+                    && pos.x <= right + margin
+                    && bottom - margin <= pos.y
+                    && pos.y <= top + margin
+                    && fov.inFOV(pos.x, pos.y)) {
                 visibleEntities.add(entity);
             }
         }
@@ -129,6 +140,10 @@ public class RenderSystem extends EntitySystem {
     }
 
     private void drawTile(int x, int y) {
+        if (!fov.inFOV(x, y)) {
+            return;
+        }
+
         /*
         The nine-digit tile code describes the neighbourhood of the tile.
         1 - passable / floor

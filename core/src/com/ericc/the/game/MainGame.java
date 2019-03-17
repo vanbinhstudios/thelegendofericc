@@ -54,7 +54,7 @@ public class MainGame extends Game {
             engines.addEntityToBothEngines(new Mob(map.getRandomPassableTile()));
         }
 
-        engines.getRealtimeEngine().addSystem(new RenderSystem(map, viewport));
+        engines.getRealtimeEngine().addSystem(new RenderSystem(map, viewport, player));
         engines.getRealtimeEngine().addSystem(new AnimationSystem());
         engines.getRealtimeEngine().addSystem(new TileChanger(.75f));
 
