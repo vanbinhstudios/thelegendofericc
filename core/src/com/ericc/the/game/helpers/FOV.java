@@ -12,13 +12,16 @@ import com.ericc.the.game.map.Map;
 public class FOV {
     private Player player;
     private static final int VIEW_RADIUS = 6;
-    private boolean[][] visibility;
+    private boolean[][] visibility; ///< calculated every render, tiles that are visible atm
+    private boolean[][] wasInFov; ///< any tile that was seen by the hero from the start
     private Map map;
 
     public FOV(Player player, Map map) {
         this.player = player;
         this.map = map;
+
         visibility = new boolean[map.width()][map.height()];
+        wasInFov = new boolean[map.width()][map.height()];
     }
 
     private void clearFOV(int top, int bottom, int left, int right) {
@@ -32,8 +35,9 @@ public class FOV {
     public void updateFOV(int top, int bottom, int left, int right) {
         clearFOV(top, bottom, left, right);
 
+        // sends a ray trace line every degree
         for (int i = 0; i < 360; i++) {
-            float x = MathUtils.cos(i * .01745f);
+            float x = MathUtils.cos(i * .01745f); // in radians, that's why there is a .175.. const
             float y = MathUtils.sin(i * .01745f);
 
             updateOneLine(x, y);
@@ -50,6 +54,9 @@ public class FOV {
             }
 
             visibility[(int) posx][(int) posy] = true;
+            wasInFov[(int) posx][(int) posy] = true;
+
+            // if this tile is a border, the hero does not see through that tile
             if (!map.isPassable((int) posx, (int) posy)) {
                 return;
             }
@@ -59,7 +66,17 @@ public class FOV {
         }
     }
 
+    /**
+     * Returns whether an object at given position is in current fov.
+     */
     public boolean inFOV(int x, int y) {
         return visibility[x][y];
+    }
+
+    /**
+     * Returns whether an object at given position has even been in any fov.
+     */
+    public boolean wasInFovInThePast(int x, int y) {
+        return wasInFov[x][y];
     }
 }

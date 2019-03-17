@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Affine2;
-import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.ericc.the.game.Mappers;
@@ -21,6 +20,7 @@ import com.ericc.the.game.components.SpriteSheetComponent;
 import com.ericc.the.game.entities.Player;
 import com.ericc.the.game.helpers.FOV;
 import com.ericc.the.game.map.Map;
+import com.ericc.the.game.shaders.GrayscaleShader;
 
 import java.util.ArrayList;
 
@@ -37,6 +37,7 @@ public class RenderSystem extends EntitySystem {
     private final Affine2 transform = new Affine2();
 
     private SpriteBatch batch = new SpriteBatch();
+    private SpriteBatch tilesSeen = new SpriteBatch();
     private ImmutableArray<Entity> entities; // Renderable entities.
     private FOV fov;
 
@@ -57,10 +58,6 @@ public class RenderSystem extends EntitySystem {
         Gdx.gl.glClearColor(.145f, .075f, .102f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        batch.setProjectionMatrix(viewport.getCamera().combined);
-        batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-        batch.begin();
-
         // Compute the visible map area.
         Vector2 topLeft = viewport.unproject(new Vector2(0, 0));
         int top = clamp(0, (int) topLeft.y, map.height() - 1);
@@ -71,6 +68,19 @@ public class RenderSystem extends EntitySystem {
         int right = clamp(0, (int) bottomRight.x, map.width() - 1);
 
         fov.updateFOV(top, bottom, left, right);
+
+        initBatch(tilesSeen);
+        tilesSeen.setShader(GrayscaleShader.grayscaleShader);
+        for (int y = top; y >= bottom; --y) {
+            for (int x = left; x <= right; ++x) {
+                if (fov.wasInFovInThePast(x, y)) {
+                    drawTile(tilesSeen, x, y, true);
+                }
+            }
+        }
+        tilesSeen.end();
+
+        initBatch(batch);
 
         /*
         If we could access entities standing on a given position,
@@ -106,7 +116,9 @@ public class RenderSystem extends EntitySystem {
         int entityIndex = 0;
         for (int y = top; y >= bottom; --y) {
             for (int x = left; x <= right; ++x) {
-                drawTile(x, y);
+                if (fov.inFOV(x, y)) {
+                    drawTile(batch, x, y, false);
+                }
             }
             while (entityIndex < visibleEntities.size() && Mappers.position.get(visibleEntities.get(entityIndex)).y >= y) {
                 drawEntity(visibleEntities.get(entityIndex));
@@ -139,10 +151,7 @@ public class RenderSystem extends EntitySystem {
         batch.draw(render.sprite, render.sprite.getWidth(), render.sprite.getWidth(), transform);
     }
 
-    private void drawTile(int x, int y) {
-        if (!fov.inFOV(x, y)) {
-            return;
-        }
+    private void drawTile(SpriteBatch batch, int x, int y, boolean isStatic) {
 
         /*
         The nine-digit tile code describes the neighbourhood of the tile.
@@ -171,8 +180,9 @@ public class RenderSystem extends EntitySystem {
 
         if ((code & 0b000010000) != 0) {
             // Floor tile.
-            batch.draw(Media.getRandomFloorTile(x, y, map.getRandomNumber(x, y, TileTextureIndicator.FLOOR.getValue())),
-                    x, y, 1, 1);
+            batch.draw(Media.getRandomFloorTile(
+                    x, y, map.getRandomNumber(x, y, TileTextureIndicator.FLOOR.getValue()), isStatic
+                    ), x, y, 1, 1);
 
             // Drawing decorations on the floor.
             int clutterType = map.getRandomClutter(x, y, TileTextureIndicator.FLOOR.getValue());
@@ -276,5 +286,15 @@ public class RenderSystem extends EntitySystem {
         v = t.getV2() * v + t.getV() * (1 - v);
         v2 = t.getV2() * v2 + t.getV() * (1 - v2);
         batch.draw(t.getTexture(), x, y, width, height, u, v, u2, v2);
+    }
+
+    /**
+     * Custom function that does the sprite batch initialisation.
+     * @param batch a sprite batch to be initialised
+     */
+    private void initBatch(SpriteBatch batch) {
+        batch.setProjectionMatrix(viewport.getCamera().combined);
+        batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        batch.begin();
     }
 }

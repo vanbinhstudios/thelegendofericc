@@ -8,7 +8,8 @@ import java.util.ArrayList;
 
 public class Media {
     public static TextureRegion dunVoid;
-    public static ArrayList<TextureRegion> floors, wallUp, wallDown, wallLeft, wallRight, clutter, wallClutter, floorsRev;
+    public static ArrayList<TextureRegion> wallUp, wallDown, wallLeft, wallRight, clutter, wallClutter;
+    public static ArrayList<TextureRegion> floors, floorsRev;
     public static TextureRegion wallLU, wallRU, wallLD, wallRD;
     public static TextureRegion playerFront, playerLeft, playerRight, playerBack;
     public static TextureRegion mobFront, mobLeft, mobRight, mobBack;
@@ -103,8 +104,16 @@ public class Media {
         atlas.dispose();
     }
 
-    public static TextureRegion getRandomFloorTile(int x, int y, int index) {
-        if (floorsConfiguration == 0) {
+    /**
+     * Return a random floor tile.
+     * @param x coords of a tile
+     * @param y coords of a tile
+     * @param index which floor tile to return
+     * @param isStatic indicates whether the tile should dynamically change the texture
+     * @return
+     */
+    public static TextureRegion getRandomFloorTile(int x, int y, int index, boolean isStatic) {
+        if (floorsConfiguration == 0 || isStatic) {
             return ((x + y) % 2 == 0) ? floors.get(index) : floorsRev.get(0);
         } else {
             return ((x + y) % 2 == 0) ? floorsRev.get(0) : floors.get(index);
