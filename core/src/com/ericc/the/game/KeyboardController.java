@@ -18,6 +18,7 @@ public class KeyboardController extends InputAdapter {
 
     @Override
     public boolean keyDown(int keycode) {
+        boolean action = true;
         switch (keycode) {
             case Input.Keys.S:
             case Input.Keys.DOWN:
@@ -37,11 +38,15 @@ public class KeyboardController extends InputAdapter {
                 break;
             case Input.Keys.SPACE:
                 player.currentAction.action = Actions.NOTHING;
+                break;
             default:
+                player.currentAction.action = Actions.NOTHING;
+                action = false;
                 break;
         }
-
-        logicEngine.update(1);
-        return false;
+        if (action) {
+            logicEngine.update(1);
+        }
+        return true;
     }
 }
