@@ -1,18 +1,12 @@
 package com.ericc.the.game.systems.realtime;
 
 import com.badlogic.ashley.core.Engine;
-import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
-import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.ericc.the.game.Mappers;
-import com.ericc.the.game.components.PositionComponent;
 import com.ericc.the.game.components.ScreenBoundariesComponent;
-import com.ericc.the.game.components.SpriteSheetComponent;
 import com.ericc.the.game.entities.Screen;
-import com.ericc.the.game.helpers.ScreenBoundsGetter;
 import com.ericc.the.game.map.Map;
 
 import static java.lang.Integer.max;

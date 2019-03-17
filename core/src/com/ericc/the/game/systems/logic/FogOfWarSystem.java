@@ -7,7 +7,6 @@ import com.ericc.the.game.components.FieldOfViewComponent;
 import com.ericc.the.game.components.ScreenBoundariesComponent;
 import com.ericc.the.game.entities.Player;
 import com.ericc.the.game.entities.Screen;
-import com.ericc.the.game.helpers.ScreenBoundsGetter;
 import com.ericc.the.game.map.Map;
 
 public class FogOfWarSystem extends EntitySystem {
