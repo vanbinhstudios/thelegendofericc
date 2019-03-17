@@ -16,8 +16,10 @@ import com.ericc.the.game.Media;
 import com.ericc.the.game.TileTextureIndicator;
 import com.ericc.the.game.components.FieldOfViewComponent;
 import com.ericc.the.game.components.PositionComponent;
+import com.ericc.the.game.components.ScreenBoundariesComponent;
 import com.ericc.the.game.components.SpriteSheetComponent;
 import com.ericc.the.game.entities.Player;
+import com.ericc.the.game.entities.Screen;
 import com.ericc.the.game.helpers.ScreenBoundsGetter;
 import com.ericc.the.game.map.Map;
 import com.ericc.the.game.shaders.GrayscaleShader;
@@ -31,7 +33,7 @@ import java.util.ArrayList;
 public class RenderSystem extends EntitySystem {
     private Map map;
     private Viewport viewport;
-    private ScreenBoundsGetter sbh;
+    private ScreenBoundariesComponent visibleMapArea;
     private final Affine2 transform = new Affine2();
 
     private SpriteBatch batch = new SpriteBatch();
@@ -39,12 +41,12 @@ public class RenderSystem extends EntitySystem {
     private ImmutableArray<Entity> entities; // Renderable entities.
     private FieldOfViewComponent playersFieldOfView;
 
-    public RenderSystem(Map map, Viewport viewport, Player player, ScreenBoundsGetter sbh) {
+    public RenderSystem(Map map, Viewport viewport, Player player, Screen screen) {
         super(9999); // Rendering should be the last system in effect.
         this.map = map;
         this.viewport = viewport;
         this.playersFieldOfView = Mappers.fov.get(player);
-        this.sbh = sbh;
+        this.visibleMapArea = Mappers.boundaries.get(screen);
     }
 
     @Override
@@ -57,14 +59,11 @@ public class RenderSystem extends EntitySystem {
         Gdx.gl.glClearColor(.145f, .075f, .102f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        // Compute the visible map area.
-        sbh.update();
-
         initBatch(tilesSeen);
         tilesSeen.setShader(GrayscaleShader.grayscaleShader);
-        for (int y = sbh.top; y >= sbh.bottom; --y) {
-            for (int x = sbh.left; x <= sbh.right; ++x) {
-                if (map.hasBeenRegistered(x, y)) {
+        for (int y = visibleMapArea.top; y >= visibleMapArea.bottom; --y) {
+            for (int x = visibleMapArea.left; x <= visibleMapArea.right; ++x) {
+                if (map.hasBeenSeenByPlayer(x, y)) {
                     drawTile(tilesSeen, x, y, true);
                 }
             }
@@ -85,10 +84,10 @@ public class RenderSystem extends EntitySystem {
         final int margin = 5; // Assume that no sprite is more than 5 tiles away from it's logical position.
         for (Entity entity : entities) {
             PositionComponent pos = Mappers.position.get(entity);
-            if (sbh.left - margin <= pos.x
-                    && pos.x <= sbh.right + margin
-                    && sbh.bottom - margin <= pos.y
-                    && pos.y <= sbh.top + margin
+            if (visibleMapArea.left - margin <= pos.x
+                    && pos.x <= visibleMapArea.right + margin
+                    && visibleMapArea.bottom - margin <= pos.y
+                    && pos.y <= visibleMapArea.top + margin
                     && playersFieldOfView.visibility[pos.x][pos.y]) {
                 visibleEntities.add(entity);
             }
@@ -105,8 +104,8 @@ public class RenderSystem extends EntitySystem {
         Perform the drawing.
          */
         int entityIndex = 0;
-        for (int y = sbh.top; y >= sbh.bottom; --y) {
-            for (int x = sbh.left; x <= sbh.right; ++x) {
+        for (int y = visibleMapArea.top; y >= visibleMapArea.bottom; --y) {
+            for (int x = visibleMapArea.left; x <= visibleMapArea.right; ++x) {
                 if (playersFieldOfView.visibility[x][y]) {
                     drawTile(batch, x, y, false);
                 }

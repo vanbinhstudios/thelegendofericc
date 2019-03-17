@@ -7,14 +7,18 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.ericc.the.game.components.FieldOfViewComponent;
 import com.ericc.the.game.entities.Mob;
 import com.ericc.the.game.entities.Player;
+import com.ericc.the.game.entities.Screen;
 import com.ericc.the.game.helpers.ScreenBoundsGetter;
 import com.ericc.the.game.map.Generator;
 import com.ericc.the.game.map.Map;
 import com.ericc.the.game.systems.logic.AiSystem;
 import com.ericc.the.game.systems.logic.FieldOfViewSystem;
+import com.ericc.the.game.systems.logic.FogOfWarSystem;
 import com.ericc.the.game.systems.logic.MovementSystem;
+import com.ericc.the.game.systems.realtime.ScreenBoundariesGetterSystem;
 import com.ericc.the.game.systems.realtime.AnimationSystem;
 import com.ericc.the.game.systems.realtime.RenderSystem;
 import com.ericc.the.game.systems.realtime.TileChanger;
@@ -45,28 +49,34 @@ public class MainGame extends Game {
         viewport.apply();
 
         map = new Generator(30, 30, 9).generateMap();
-        player = new Player(map.getRandomPassableTile(), map.width(), map.height());
+        player = new Player(map.getRandomPassableTile(), new FieldOfViewComponent(map.width(), map.height()));
+        Screen screen = new Screen();
 
         controls = new KeyboardController(engines.getLogicEngine(), player, camera);
         Gdx.input.setInputProcessor(controls);
 
         engines.addEntityToBothEngines(player);
+        engines.addEntityToBothEngines(screen);
 
         for (int i = 0; i < 10; i++) {
             engines.addEntityToBothEngines(new Mob(map.getRandomPassableTile()));
         }
-
-        ScreenBoundsGetter sbh = new ScreenBoundsGetter(viewport, map);
-        engines.getRealtimeEngine().addSystem(new RenderSystem(map, viewport, player, sbh));
+        ScreenBoundariesGetterSystem visibleMapAreaSystem = new ScreenBoundariesGetterSystem(viewport, map, screen);
+        engines.getRealtimeEngine().addSystem(new RenderSystem(map, viewport, player, screen));
         engines.getRealtimeEngine().addSystem(new AnimationSystem());
         engines.getRealtimeEngine().addSystem(new TileChanger(.75f));
+        engines.getRealtimeEngine().addSystem(visibleMapAreaSystem);
 
-        FieldOfViewSystem fieldOfViewSystem = new FieldOfViewSystem(map, sbh);
+        FieldOfViewSystem fieldOfViewSystem = new FieldOfViewSystem(map, screen);
+        FogOfWarSystem fogOfWArSystem = new FogOfWarSystem(player, map, screen);
         engines.getLogicEngine().addSystem(new AiSystem());
         engines.getLogicEngine().addSystem(new MovementSystem(map));
         engines.getLogicEngine().addSystem(fieldOfViewSystem);
+        engines.getLogicEngine().addSystem(fogOfWArSystem);
 
+        visibleMapAreaSystem.update(0);
         fieldOfViewSystem.update(0); // update to calculate the initial fov
+        fogOfWArSystem.update(0);
 
         if (MUSIC) {
             Sound sound = Gdx.audio.newSound(Gdx.files.internal("music/8bitAdventure.mp3"));

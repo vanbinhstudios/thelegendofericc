@@ -9,20 +9,21 @@ import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.MathUtils;
 import com.ericc.the.game.Mappers;
 import com.ericc.the.game.components.FieldOfViewComponent;
-import com.ericc.the.game.components.PlayerComponent;
 import com.ericc.the.game.components.PositionComponent;
+import com.ericc.the.game.components.ScreenBoundariesComponent;
+import com.ericc.the.game.entities.Screen;
 import com.ericc.the.game.helpers.ScreenBoundsGetter;
 import com.ericc.the.game.map.Map;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class FieldOfViewSystem extends EntitySystem {
 
     private Map map;
-    private ImmutableArray<Entity> otherMobs;
-    private ImmutableArray<Entity> heroes;
-    private ScreenBoundsGetter sbh;
+    private ImmutableArray<Entity> entities;
+    private ScreenBoundariesComponent visibleMapArea;
 
     // a helper data structure with possible moves from one tile in horizontal and vertical directions
     private static ArrayList<GridPoint2> moves =
@@ -34,7 +35,7 @@ public class FieldOfViewSystem extends EntitySystem {
             ));
 
     // stores moves on diagonals
-    private static ArrayList<GridPoint2> cornerMoves =
+    private static ArrayList<GridPoint2> diagonalMoves =
             new ArrayList<>(Arrays.asList(
                     new GridPoint2(1, 1),
                     new GridPoint2(-1, -1),
@@ -42,66 +43,55 @@ public class FieldOfViewSystem extends EntitySystem {
                     new GridPoint2(1, -1)
             ));
 
-    private static ArrayList<ArrayList<GridPoint2>> corners =
-            new ArrayList<>(
-                    Arrays.asList(
-                            new ArrayList<>(
-                                    Arrays.asList(
-                                            new GridPoint2(-1, 0),
-                                            new GridPoint2(0, 1)
-                                    )
-                            ),
-                            new ArrayList<>(
-                                    Arrays.asList(
-                                            new GridPoint2(0, 1),
-                                            new GridPoint2(1, 0)
-                                    )
-                            ),
-                            new ArrayList<>(
-                                    Arrays.asList(
-                                            new GridPoint2(1, 0),
-                                            new GridPoint2(0, -1)
-                                    )
-                            ),
-                            new ArrayList<>(
-                                    Arrays.asList(
-                                            new GridPoint2(0, -1),
-                                            new GridPoint2(-1, 0)
-                                    )
-                            )
-                    )
-            );
+    private static List<ArrayList<GridPoint2>> corners =
+                Arrays.asList(
+                        new ArrayList<>(
+                                Arrays.asList(
+                                        new GridPoint2(-1, 0),
+                                        new GridPoint2(0, 1)
+                                )
+                        ),
+                        new ArrayList<>(
+                                Arrays.asList(
+                                        new GridPoint2(0, 1),
+                                        new GridPoint2(1, 0)
+                                )
+                        ),
+                        new ArrayList<>(
+                                Arrays.asList(
+                                        new GridPoint2(1, 0),
+                                        new GridPoint2(0, -1)
+                                )
+                        ),
+                        new ArrayList<>(
+                                Arrays.asList(
+                                        new GridPoint2(0, -1),
+                                        new GridPoint2(-1, 0)
+                                )
+                        )
+                );
 
-    public FieldOfViewSystem(Map map, ScreenBoundsGetter sbh) {
+    public FieldOfViewSystem(Map map, Screen screen) {
+        super(9997);
+
         this.map = map;
-        this.sbh = sbh;
+        this.visibleMapArea = Mappers.boundaries.get(screen);
     }
 
     @Override
     public void addedToEngine(Engine engine) {
-        otherMobs = engine.getEntitiesFor(
-                Family.all(PositionComponent.class, FieldOfViewComponent.class).exclude(PlayerComponent.class).get()
-        );
-        heroes = engine.getEntitiesFor(
-                Family.all(PositionComponent.class, FieldOfViewComponent.class, PlayerComponent.class).get()
-        );
+        entities = engine.getEntitiesFor(Family.all(PositionComponent.class, FieldOfViewComponent.class).get());
     }
 
     @Override
     public void update(float deltaTime) {
-        sbh.update();
-
-        for (Entity entity : heroes) {
-            processEntity(Mappers.position.get(entity), Mappers.fov.get(entity), true);
-        }
-
-        for (Entity entity : otherMobs) {
-            processEntity(Mappers.position.get(entity), Mappers.fov.get(entity), false);
+        for (Entity entity : entities) {
+            processEntity(Mappers.position.get(entity), Mappers.fov.get(entity));
         }
     }
 
-    private void processEntity(PositionComponent pos, FieldOfViewComponent fov, boolean isHero) {
-        updateFOV(sbh.top, sbh.bottom, sbh.left, sbh.right, pos.x, pos.y, fov, isHero);
+    private void processEntity(PositionComponent pos, FieldOfViewComponent fov) {
+        updateFOV(visibleMapArea.top, visibleMapArea.bottom, visibleMapArea.left, visibleMapArea.right, pos.x, pos.y, fov);
     }
 
     private void clearFOV(int top, int bottom, int left, int right, FieldOfViewComponent fov) {
@@ -117,7 +107,7 @@ public class FieldOfViewSystem extends EntitySystem {
     private void updateFOV(int top, int bottom,
                           int left, int right,
                           int posXentity, int posYentity,
-                          FieldOfViewComponent fov, boolean isHero) {
+                          FieldOfViewComponent fov) {
         clearFOV(top, bottom, left, right, fov);
 
         // sends a ray trace line every degree
@@ -125,12 +115,12 @@ public class FieldOfViewSystem extends EntitySystem {
             float x = MathUtils.cos(i * .01745f); // in radians, that's why there is a .175.. const
             float y = MathUtils.sin(i * .01745f);
 
-            updateOneLine(x, y, fov, posXentity, posYentity, isHero);
+            updateOneLine(x, y, fov, posXentity, posYentity);
         }
     }
 
     private void updateOneLine(float x, float y, FieldOfViewComponent fov,
-                               int posXEntity, int posYEntity, boolean isHero) {
+                               int posXEntity, int posYEntity) {
         float posx = posXEntity + .5f;
         float posy = posYEntity + .5f;
 
@@ -144,15 +134,11 @@ public class FieldOfViewSystem extends EntitySystem {
 
             fov.visibility[castedX][castedY] = true;
 
-            if (isHero) {
-                map.registerTile(castedX, castedY);
-            }
-
             // this piece of code was written to ensure that corners and walls are
             // rendered properly -> id does render them sometimes even though they are not in view range
             if (map.isPassable(castedX, castedY)) {
-                checkMoves(moves, true, castedX, castedY, fov, isHero);
-                checkMoves(cornerMoves, false, castedX, castedY, fov, isHero);
+                checkMoves(moves, true, castedX, castedY, fov);
+                checkMoves(diagonalMoves, false, castedX, castedY, fov);
             } else {
                 // if this tile is a border, the hero does not see through that tile
                 return;
@@ -164,7 +150,7 @@ public class FieldOfViewSystem extends EntitySystem {
     }
 
     private void checkMoves(ArrayList<GridPoint2> moves, boolean regularMoves,
-                            int castedX, int castedY, FieldOfViewComponent fov, boolean isHero) {
+                            int castedX, int castedY, FieldOfViewComponent fov) {
         for (GridPoint2 move : moves) {
             int posxTemp = castedX + move.x;
             int posyTemp = castedY + move.y;
@@ -173,10 +159,6 @@ public class FieldOfViewSystem extends EntitySystem {
                     && !map.isPassable(posxTemp, posyTemp)
                     && (regularMoves || isCorner(posxTemp, posyTemp, fov))) {
                 fov.visibility[posxTemp][posyTemp] = true;
-
-                if (isHero) {
-                    map.registerTile(posxTemp, posyTemp);
-                }
             }
         }
     }

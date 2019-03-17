@@ -119,14 +119,14 @@ public class Map {
     /**
      * Registers a tile in a fog of war structure, marks it as seen.
      */
-    public void registerTile(int x, int y) {
-        fogOfWar.registerTile(x, y);
+    public void markAsSeenByPlayer(int x, int y) {
+        fogOfWar.markAsSeenByPlayer(x, y);
     }
 
     /**
      * Returns whether an object at given position has even been in any fov.
      */
-    public boolean hasBeenRegistered(int x, int y) {
-        return fogOfWar.hasBeenRegistered(x, y);
+    public boolean hasBeenSeenByPlayer(int x, int y) {
+        return fogOfWar.hasBeenSeenByPlayer(x, y);
     }
 }

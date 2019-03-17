@@ -16,7 +16,7 @@ public class Player extends Entity {
     private SpriteSheetComponent renderable;
     public CurrentActionComponent currentAction;
 
-    public Player(int x, int y, int width, int height) {
+    public Player(int x, int y, FieldOfViewComponent fov) {
         pos = new PositionComponent(x, y);
         dir = new DirectionComponent(Direction.DOWN);
         renderable = new SpriteSheetComponent(Media.playerBack, Media.playerRight, Media.playerFront, Media.playerLeft);
@@ -26,11 +26,11 @@ public class Player extends Entity {
         add(renderable);
         add(dir);
         add(currentAction);
-        add(new FieldOfViewComponent(width, height));
+        add(fov);
         add(new PlayerComponent());
     }
 
-    public Player(GridPoint2 pos, int width, int height) {
-        this(pos.x, pos.y, width, height);
+    public Player(GridPoint2 pos, FieldOfViewComponent fov) {
+        this(pos.x, pos.y, fov);
     }
 }
