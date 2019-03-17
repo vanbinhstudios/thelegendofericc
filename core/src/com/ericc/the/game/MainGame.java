@@ -42,7 +42,7 @@ public class MainGame extends Game {
         viewport = new FillViewport(viewportWidth, viewportHeight, camera);
         viewport.apply();
 
-        map = new Generator(30, 30, 8).generateMap();
+        map = new Generator(30, 30, 9).generateMap();
         player = new Player(map.getRandomPassableTile());
 
         controls = new KeyboardController(engines.getLogicEngine(), player, camera);
