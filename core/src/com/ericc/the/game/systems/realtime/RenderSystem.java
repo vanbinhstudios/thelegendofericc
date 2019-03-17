@@ -18,6 +18,7 @@ import com.ericc.the.game.TileTextureIndicator;
 import com.ericc.the.game.components.PositionComponent;
 import com.ericc.the.game.components.SpriteSheetComponent;
 import com.ericc.the.game.entities.Player;
+import com.ericc.the.game.helpers.FOG;
 import com.ericc.the.game.helpers.FOV;
 import com.ericc.the.game.map.Map;
 import com.ericc.the.game.shaders.GrayscaleShader;
@@ -40,12 +41,14 @@ public class RenderSystem extends EntitySystem {
     private SpriteBatch tilesSeen = new SpriteBatch();
     private ImmutableArray<Entity> entities; // Renderable entities.
     private FOV fov;
+    private FOG fogOfWar;
 
     public RenderSystem(Map map, Viewport viewport, Player player) {
         super(9999); // Rendering should be the last system in effect.
         this.map = map;
         this.viewport = viewport;
-        this.fov = new FOV(player, map);
+        this.fogOfWar = new FOG(map.width(), map.height());
+        this.fov = new FOV(player, map, fogOfWar);
     }
 
     @Override
@@ -73,7 +76,7 @@ public class RenderSystem extends EntitySystem {
         tilesSeen.setShader(GrayscaleShader.grayscaleShader);
         for (int y = top; y >= bottom; --y) {
             for (int x = left; x <= right; ++x) {
-                if (fov.wasInFovInThePast(x, y)) {
+                if (fogOfWar.hasBeenRegistered(x, y)) {
                     drawTile(tilesSeen, x, y, true);
                 }
             }

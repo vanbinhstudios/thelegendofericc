@@ -13,15 +13,15 @@ public class FOV {
     private Player player;
     private static final int VIEW_RADIUS = 6;
     private boolean[][] visibility; ///< calculated every render, tiles that are visible atm
-    private boolean[][] wasInFov; ///< any tile that was seen by the hero from the start
     private Map map;
+    private FOG fog;
 
-    public FOV(Player player, Map map) {
+    public FOV(Player player, Map map, FOG fog) {
         this.player = player;
         this.map = map;
+        this.fog = fog;
 
         visibility = new boolean[map.width()][map.height()];
-        wasInFov = new boolean[map.width()][map.height()];
     }
 
     private void clearFOV(int top, int bottom, int left, int right) {
@@ -54,7 +54,7 @@ public class FOV {
             }
 
             visibility[(int) posx][(int) posy] = true;
-            wasInFov[(int) posx][(int) posy] = true;
+            fog.registerTile((int) posx, (int) posy);
 
             // if this tile is a border, the hero does not see through that tile
             if (!map.isPassable((int) posx, (int) posy)) {
@@ -71,12 +71,5 @@ public class FOV {
      */
     public boolean inFOV(int x, int y) {
         return visibility[x][y];
-    }
-
-    /**
-     * Returns whether an object at given position has even been in any fov.
-     */
-    public boolean wasInFovInThePast(int x, int y) {
-        return wasInFov[x][y];
     }
 }
