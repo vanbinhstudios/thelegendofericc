@@ -9,6 +9,11 @@ The Legend of Ericc is a turn-based single player rogue-like game made in Java w
 
 ## Log
 
+We decided to implement FOV and fog of war, this is the result (there are some animations that we need to add in later sprits),
+we based our fov algorithm on raytracing
+
+![Alt Text](https://media.giphy.com/media/9AIXNkGQFPCtiQTh1p/giphy.gif)
+
 After the first sprint we ended up with some stupid mobs (rendering is done real time, the mobs can turn only after the player makes a move, there are no mobs collision yet)
 
 ![Alt Text](https://media.giphy.com/media/Zy9k0cvt6piTgrtTrl/giphy.gif)
