@@ -170,7 +170,7 @@ public class RenderSystem extends EntitySystem {
             // Drawing decorations on the floor.
             int clutterType = map.getRandomClutter(x, y, TileTextureIndicator.FLOOR.getValue());
 
-            if (clutterType < Media.clutter.size()) {
+            if (clutterType < Media.clutter.size) {
                 batch.draw(Media.clutter.get(clutterType),
                         x, y, 1, 1);
             }
@@ -236,7 +236,7 @@ public class RenderSystem extends EntitySystem {
         if ((code & 0b010000000) != 0) {
             int clutterType = map.getRandomClutter(x, y, TileTextureIndicator.UP.getValue());
 
-            if (clutterType < Media.wallClutter.size()) {
+            if (clutterType < Media.wallClutter.size) {
                 batch.draw(Media.wallClutter.get(clutterType),
                         x, y, 1, 1);
             }
