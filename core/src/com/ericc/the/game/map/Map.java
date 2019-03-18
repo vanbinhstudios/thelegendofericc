@@ -66,7 +66,7 @@ public class Map {
     public int getRandomClutter(int x, int y, int direction) { return randomClutterNumber[x][y][direction]; }
 
     /**
-     * Checks whether the given point in 2D grid is in screenBoundaries of a map.
+     * Checks whether the given point in 2D grid is in boundaries of a map.
      *
      * @param x x coordinate of a given point in the 2D grid
      * @param y y coordinate of a given point in the 2D grid
