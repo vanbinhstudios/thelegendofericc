@@ -114,11 +114,11 @@ public class FieldOfViewSystem extends EntitySystem {
 
     /**
      * Updates the given fov component.
-     * @param posXentity x position of an Entity
-     * @param posYentity y position of the same Entity
+     * @param entityXPos x position of an Entity
+     * @param entityYPos y position of the same Entity
      * @param fov a Field of Component of the same Entity
      */
-    private void updateFOV(int posXentity, int posYentity, FieldOfViewComponent fov) {
+    private void updateFOV(int entityXPos, int entityYPos, FieldOfViewComponent fov) {
         clearFOV(fov);
 
         // sends a ray trace line every degree
@@ -127,7 +127,7 @@ public class FieldOfViewSystem extends EntitySystem {
             float y = MathUtils.sin(i * .01745f);
 
             // calls update for that ray trace line
-            updateOneLine(x, y, fov, posXentity, posYentity);
+            updateOneLine(x, y, fov, entityXPos, entityYPos);
         }
     }
 
