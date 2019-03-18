@@ -24,7 +24,6 @@ public class Media {
         floorsRev = atlas.findRegions("map/floors/floor_reversed"); // for now lets stick with only one reversed texture
 
         wallUp = atlas.findRegions("map/walls/wall_up");
-        wallUp = atlas.findRegions("map/walls/wall_up");
         wallDown = atlas.findRegions("map/walls/wall_down");
         wallLeft = atlas.findRegions("map/walls/wall_left");
         wallRight = atlas.findRegions("map/walls/wall_right");
