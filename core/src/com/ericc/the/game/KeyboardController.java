@@ -26,6 +26,8 @@ public class KeyboardController extends InputAdapter {
             return false;
         }
 
+        boolean action = true;
+      
         switch (keycode) {
             case Input.Keys.S:
             case Input.Keys.DOWN:
@@ -47,15 +49,18 @@ public class KeyboardController extends InputAdapter {
                 player.currentAction.action = Actions.NOTHING;
                 break;
             default:
+                player.currentAction.action = Actions.NOTHING;
+                action = false;
                 break;
         }
-
-        logicEngine.update(1);
-        return false;
+        if (action) {
+            logicEngine.update(1);
+        }
+        return true;
     }
 
     /**
-     * Actions that player takes and should not affect the turn counter.
+     * Actions that player takes (in GUI) and should not affect the turn counter.
      * @return true if the action that should be taken should not update the turn counter
      */
     private boolean playersGUIActions(int keycode) {
