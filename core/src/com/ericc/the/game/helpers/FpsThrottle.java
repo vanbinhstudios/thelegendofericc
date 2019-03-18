@@ -2,28 +2,41 @@ package com.ericc.the.game.helpers;
 
 import com.badlogic.gdx.utils.TimeUtils;
 
-public class FpsThrottle {
-    private long frameTimeMs;
-    private long nextFrameTimestamp;
+// All units used here are milliseconds.
 
-    public FpsThrottle(int fps) {
-        frameTimeMs = 1000/fps + 1;
-        nextFrameTimestamp = TimeUtils.millis() + frameTimeMs;
+/**
+ * An FPS limiter.
+ */
+public class FpsThrottle {
+    private final long frameDuration; // The desired time to be spent on every frame (total of working and sleeping)
+    private long currentFrameStart; // The moment in which the current frame has begun
+
+    public FpsThrottle(int maxFps) {
+        frameDuration = 1000/maxFps + 1;
+        currentFrameStart = TimeUtils.millis();
     }
 
+    /**
+     * Called one per frame, adjusts the maximum FPS to the chosen value.
+     */
     public void sleepToNextFrame() {
         long currentTimeMs = TimeUtils.millis();
 
-        if (currentTimeMs < nextFrameTimestamp) {
+        if (currentTimeMs - currentFrameStart < frameDuration) {
+            // If rendering took less than the target frame duration,
+            // sleep to extend the frame to that duration.
             try {
-                System.out.println(nextFrameTimestamp - currentTimeMs);
-                Thread.sleep(nextFrameTimestamp - currentTimeMs);
+                Thread.sleep(frameDuration - (currentTimeMs - currentFrameStart));
             } catch (InterruptedException e) {
                 System.err.println("Unexpected interruption of fps throttling sleep");
             }
-            nextFrameTimestamp += frameTimeMs;
+            // We don't take TimeUtils.millis() as the new frame start here,
+            // because Thread.sleep() could have slept longer than asked,
+            // and the next frame would have already begun in that case.
+            currentFrameStart = currentFrameStart + frameDuration;
         } else {
-            nextFrameTimestamp = currentTimeMs + frameTimeMs;
+            // Rendering time exceeded the target duration. We begin the next frame immediately.
+            currentFrameStart = currentTimeMs;
         }
     }
 }
