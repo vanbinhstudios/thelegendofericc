@@ -29,7 +29,7 @@ public class ScreenBoundariesGetterSystem extends EntitySystem {
     private Screen screen;
 
     public ScreenBoundariesGetterSystem(Viewport viewport, Map map, Screen screen) {
-        super(1); // its priority is the lowest cause it needs to be updated before anything else
+        super(-1); // its priority is the lowest cause it needs to be updated before anything else
 
         this.viewport = viewport;
         this.map = map;

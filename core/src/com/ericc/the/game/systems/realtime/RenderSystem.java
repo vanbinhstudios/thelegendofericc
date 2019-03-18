@@ -6,6 +6,7 @@ import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -17,11 +18,9 @@ import com.ericc.the.game.TileTextureIndicator;
 import com.ericc.the.game.components.FieldOfViewComponent;
 import com.ericc.the.game.components.PositionComponent;
 import com.ericc.the.game.components.ScreenBoundariesComponent;
-import com.ericc.the.game.components.SpriteSheetComponent;
-import com.ericc.the.game.entities.Player;
+import com.ericc.the.game.components.RenderableComponent;
 import com.ericc.the.game.entities.Screen;
 import com.ericc.the.game.map.Map;
-import com.ericc.the.game.shaders.GrayscaleShader;
 
 import java.util.ArrayList;
 
@@ -31,18 +30,20 @@ import java.util.ArrayList;
  */
 public class RenderSystem extends EntitySystem {
     private Map map;
+    private float[][] lightMap;
     private Viewport viewport;
     private ScreenBoundariesComponent visibleMapArea;
     private final Affine2 transform = new Affine2();
+    private final Color color = new Color();
 
     private SpriteBatch batch = new SpriteBatch();
-    private SpriteBatch tilesSeen = new SpriteBatch();
     private ImmutableArray<Entity> entities; // Renderable entities.
     private FieldOfViewComponent playersFieldOfView;
 
     public RenderSystem(Map map, Viewport viewport, FieldOfViewComponent playersFieldOfView, Screen screen) {
         super(9999); // Rendering should be the last system in effect.
         this.map = map;
+
         this.viewport = viewport;
         this.playersFieldOfView = playersFieldOfView;
         this.visibleMapArea = Mappers.screenBoundaries.get(screen);
@@ -50,24 +51,13 @@ public class RenderSystem extends EntitySystem {
 
     @Override
     public void addedToEngine(Engine engine) {
-        entities = engine.getEntitiesFor(Family.all(PositionComponent.class, SpriteSheetComponent.class).get());
+        entities = engine.getEntitiesFor(Family.all(PositionComponent.class, RenderableComponent.class).get());
     }
 
     @Override
     public void update(float deltaTime) {
-        Gdx.gl.glClearColor(.145f, .075f, .102f, 1);
+        Gdx.gl.glClearColor(.025f, .059f, .05f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        initBatch(tilesSeen);
-        tilesSeen.setShader(GrayscaleShader.grayscaleShader);
-        for (int y = visibleMapArea.top; y >= visibleMapArea.bottom; --y) {
-            for (int x = visibleMapArea.left; x <= visibleMapArea.right; ++x) {
-                if (map.hasBeenSeenByPlayer(x, y)) {
-                    drawTile(tilesSeen, x, y, true);
-                }
-            }
-        }
-        tilesSeen.end();
 
         initBatch(batch);
 
@@ -86,8 +76,7 @@ public class RenderSystem extends EntitySystem {
             if (visibleMapArea.left - margin <= pos.x
                     && pos.x <= visibleMapArea.right + margin
                     && visibleMapArea.bottom - margin <= pos.y
-                    && pos.y <= visibleMapArea.top + margin
-                    && playersFieldOfView.visibility[pos.x][pos.y]) {
+                    && pos.y <= visibleMapArea.top + margin) {
                 visibleEntities.add(entity);
             }
         }
@@ -107,6 +96,10 @@ public class RenderSystem extends EntitySystem {
             for (int x = visibleMapArea.left; x <= visibleMapArea.right; ++x) {
                 if (playersFieldOfView.visibility[x][y]) {
                     drawTile(batch, x, y, false);
+                } else if (map.hasBeenSeenByPlayer(x, y)) {
+                    batch.setColor(0.2f, 0.2f, 0.2f, 1.0f);
+                    drawTile(batch, x, y, true);
+                    batch.setColor(Color.WHITE);
                 }
             }
             while (entityIndex < visibleEntities.size() && Mappers.position.get(visibleEntities.get(entityIndex)).y >= y) {
@@ -124,17 +117,26 @@ public class RenderSystem extends EntitySystem {
 
     private void drawEntity(Entity entity) {
         PositionComponent pos = Mappers.position.get(entity);
-        SpriteSheetComponent render = Mappers.spriteSheet.get(entity);
+        RenderableComponent render = Mappers.renderable.get(entity);
 
+        float lightLevel = render.lightLevel;
+        if (lightLevel == 0.0f) {
+            return;
+        }
         transform.idt();
-        transform.translate(-render.sprite.getOriginX(), -render.sprite.getOriginY()); // From bottom-left-corner space to origin space.
+        transform.mul(render.model.defaultTransform); // From bottom-left-corner space to origin space.
         transform.mul(render.transform); // Apply affine animations.
         transform.translate(pos.x, pos.y); // Move to logical position.
 
-        batch.draw(render.sprite, render.sprite.getWidth(), render.sprite.getWidth(), transform);
+        batch.setColor(color.set(Color.WHITE).mul(lightLevel, lightLevel, lightLevel, 1.0f));
+        batch.draw(render.region, render.model.width, render.model.height, transform);
     }
 
     private void drawTile(SpriteBatch batch, int x, int y, boolean isStatic) {
+
+        float lightLevel = map.light[x][y];
+        lightLevel = (lightLevel - 1) * 0.8f + 1;
+        batch.setColor(color.set(Color.WHITE).mul(lightLevel, lightLevel, lightLevel, 1.0f));
 
         /*
         The nine-digit tile code describes the neighbourhood of the tile.

@@ -18,10 +18,7 @@ import com.ericc.the.game.systems.logic.AiSystem;
 import com.ericc.the.game.systems.logic.FieldOfViewSystem;
 import com.ericc.the.game.systems.logic.FogOfWarSystem;
 import com.ericc.the.game.systems.logic.MovementSystem;
-import com.ericc.the.game.systems.realtime.ScreenBoundariesGetterSystem;
-import com.ericc.the.game.systems.realtime.AnimationSystem;
-import com.ericc.the.game.systems.realtime.RenderSystem;
-import com.ericc.the.game.systems.realtime.TileChanger;
+import com.ericc.the.game.systems.realtime.*;
 
 public class MainGame extends Game {
 
@@ -70,6 +67,7 @@ public class MainGame extends Game {
         engines.getRealtimeEngine().addSystem(new AnimationSystem());
         engines.getRealtimeEngine().addSystem(new TileChanger(.75f));
         engines.getRealtimeEngine().addSystem(visibleMapAreaSystem);
+        engines.getRealtimeEngine().addSystem(new LightSystem(playersFieldOfView, map, screen));
 
         FieldOfViewSystem fieldOfViewSystem = new FieldOfViewSystem(map, screen);
         FogOfWarSystem fogOfWarSystem = new FogOfWarSystem(player, map, screen);
