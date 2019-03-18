@@ -16,7 +16,7 @@ public class FogOfWarSystem extends EntitySystem {
     private ScreenBoundariesComponent visibleMapArea;
 
     public FogOfWarSystem(Player player, Map map, Screen screen) {
-        super(9998);
+        super(9998); // remember to change it so it is larger than FOV priority
 
         this.player = player;
         this.map = map;

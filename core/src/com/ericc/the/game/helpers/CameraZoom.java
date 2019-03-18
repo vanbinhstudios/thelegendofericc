@@ -3,17 +3,19 @@ package com.ericc.the.game.helpers;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.ericc.the.game.MainGame;
 
+/**
+ * A Class to manipulate the camera's zoom.
+ */
 public class CameraZoom {
 
     private OrthographicCamera camera;
     private float initialCameraZoom;
     private final float cameraZoomMaxDeviation = .3f;
-    private final float cameraChange = .05f;
+    private final float cameraChange = .05f; // a single step by which we can affect the camera
 
     public CameraZoom(OrthographicCamera camera) {
         this.camera = camera;
         this.initialCameraZoom = this.camera.zoom;
-        this.camera = camera;
     }
 
     /**
@@ -34,6 +36,9 @@ public class CameraZoom {
         zoomCamera((-1) * this.cameraChange);
     }
 
+    /**
+     * Zooms the camera in any direction, multiplying the given parameter with a single step.
+     */
     public void zoomAnyCamera(float multiplier) {
         zoomCamera(multiplier * this.cameraChange);
     }

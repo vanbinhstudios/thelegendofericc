@@ -12,14 +12,24 @@ import com.ericc.the.game.map.Map;
 import static java.lang.Integer.max;
 import static java.lang.Integer.min;
 
+/**
+ * This system is responsible for updating the screen boundaries
+ * in real time, it updates the Screen Entity, which holds
+ * four variables - top bottom left right, which indicate
+ * the position of a tile which is visible and is on the screen boundary.
+ *
+ * DISCLAIMER:
+ * The position of that tiles are given in a custom coordinates which
+ * are explained in a Map, they are not in pixels.
+ */
 public class ScreenBoundariesGetterSystem extends EntitySystem {
 
     private Viewport viewport;
     private Map map;
-    private Screen screen; // Renderable entities.
+    private Screen screen;
 
     public ScreenBoundariesGetterSystem(Viewport viewport, Map map, Screen screen) {
-        super(1);
+        super(1); // its priority is the lowest cause it needs to be updated before anything else
 
         this.viewport = viewport;
         this.map = map;

@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.ericc.the.game.components.FieldOfViewComponent;
+import com.ericc.the.game.components.ScreenBoundariesComponent;
 import com.ericc.the.game.entities.Mob;
 import com.ericc.the.game.entities.Player;
 import com.ericc.the.game.entities.Screen;
@@ -61,6 +62,7 @@ public class MainGame extends Game {
         for (int i = 0; i < 10; i++) {
             engines.addEntityToBothEngines(new Mob(map.getRandomPassableTile()));
         }
+
         ScreenBoundariesGetterSystem visibleMapAreaSystem = new ScreenBoundariesGetterSystem(viewport, map, screen);
         engines.getRealtimeEngine().addSystem(new RenderSystem(map, viewport, playersFieldOfView, screen));
         engines.getRealtimeEngine().addSystem(new AnimationSystem());
@@ -74,9 +76,7 @@ public class MainGame extends Game {
         engines.getLogicEngine().addSystem(fieldOfViewSystem);
         engines.getLogicEngine().addSystem(fogOfWarSystem);
 
-        visibleMapAreaSystem.update(0);
-        fieldOfViewSystem.update(0); // update to calculate the initial fov
-        fogOfWarSystem.update(0);
+        initialisePlayersComponents(visibleMapAreaSystem, fieldOfViewSystem, fogOfWarSystem);
 
         if (MUSIC) {
             Sound sound = Gdx.audio.newSound(Gdx.files.internal("music/8bitAdventure.mp3"));
@@ -111,5 +111,21 @@ public class MainGame extends Game {
         viewport.getCamera().position.lerp(new Vector3(player.pos.x, player.pos.y, 0),
                 1 - (float) Math.pow(.1f, Gdx.graphics.getDeltaTime()));
         viewport.getCamera().update();
+    }
+
+    /**
+     * Before any turn is taken by a player, there are some values that should be initialised like:
+     * - player's fov
+     * - player's fog of war
+     * - initial screen boundaries
+     *
+     * And that is exactly what this function is meant to do.
+     */
+    private void initialisePlayersComponents(ScreenBoundariesGetterSystem visibleMapAreaSystem,
+                                             FieldOfViewSystem fieldOfViewSystem,
+                                             FogOfWarSystem fogOfWarSystem) {
+        visibleMapAreaSystem.update(0);
+        fieldOfViewSystem.update(0); // update to calculate the initial fov
+        fogOfWarSystem.update(0);
     }
 }
