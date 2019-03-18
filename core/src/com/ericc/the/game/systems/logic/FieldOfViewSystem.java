@@ -25,48 +25,40 @@ public class FieldOfViewSystem extends EntitySystem {
     private ScreenBoundariesComponent visibleMapArea;
 
     // a helper data structure with possible moves from one tile in horizontal and vertical directions
-    private static ArrayList<GridPoint2> moves =
-            new ArrayList<>(Arrays.asList(
+    private static List<GridPoint2> moves =
+            Arrays.asList(
                     new GridPoint2(1, 0),
                     new GridPoint2(0, 1),
                     new GridPoint2(-1, 0),
                     new GridPoint2(0, -1)
-            ));
+            );
 
     // stores moves on diagonals
-    private static ArrayList<GridPoint2> diagonalMoves =
-            new ArrayList<>(Arrays.asList(
+    private static List<GridPoint2> diagonalMoves =
+            Arrays.asList(
                     new GridPoint2(1, 1),
                     new GridPoint2(-1, -1),
                     new GridPoint2(-1, 1),
                     new GridPoint2(1, -1)
-            ));
+            );
 
-    private static List<ArrayList<GridPoint2>> corners =
+    private static List<List<GridPoint2>> corners =
                 Arrays.asList(
-                        new ArrayList<>(
-                                Arrays.asList(
-                                        new GridPoint2(-1, 0),
-                                        new GridPoint2(0, 1)
-                                )
+                        Arrays.asList(
+                                new GridPoint2(-1, 0),
+                                new GridPoint2(0, 1)
                         ),
-                        new ArrayList<>(
-                                Arrays.asList(
-                                        new GridPoint2(0, 1),
-                                        new GridPoint2(1, 0)
-                                )
+                        Arrays.asList(
+                                new GridPoint2(0, 1),
+                                new GridPoint2(1, 0)
                         ),
-                        new ArrayList<>(
-                                Arrays.asList(
-                                        new GridPoint2(1, 0),
-                                        new GridPoint2(0, -1)
-                                )
+                        Arrays.asList(
+                                new GridPoint2(1, 0),
+                                new GridPoint2(0, -1)
                         ),
-                        new ArrayList<>(
-                                Arrays.asList(
-                                        new GridPoint2(0, -1),
-                                        new GridPoint2(-1, 0)
-                                )
+                        Arrays.asList(
+                                new GridPoint2(0, -1),
+                                new GridPoint2(-1, 0)
                         )
                 );
 
@@ -74,7 +66,7 @@ public class FieldOfViewSystem extends EntitySystem {
         super(9997);
 
         this.map = map;
-        this.visibleMapArea = Mappers.boundaries.get(screen);
+        this.visibleMapArea = Mappers.screenBoundaries.get(screen);
     }
 
     @Override
@@ -148,7 +140,7 @@ public class FieldOfViewSystem extends EntitySystem {
         }
     }
 
-    private void checkMoves(ArrayList<GridPoint2> moves, boolean regularMoves,
+    private void checkMoves(List<GridPoint2> moves, boolean regularMoves,
                             int castedX, int castedY, FieldOfViewComponent fov) {
         for (GridPoint2 move : moves) {
             int posxTemp = castedX + move.x;
@@ -166,7 +158,7 @@ public class FieldOfViewSystem extends EntitySystem {
      * Checks whether the given tile is a  (VISIBLE!) corner.
      */
     private boolean isCorner(int x, int y, FieldOfViewComponent fov) {
-        for (ArrayList<GridPoint2> corner : corners) {
+        for (List<GridPoint2> corner : corners) {
             GridPoint2 firstMove = corner.get(0);
             GridPoint2 secondMove = corner.get(1);
 

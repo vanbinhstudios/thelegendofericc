@@ -40,12 +40,12 @@ public class RenderSystem extends EntitySystem {
     private ImmutableArray<Entity> entities; // Renderable entities.
     private FieldOfViewComponent playersFieldOfView;
 
-    public RenderSystem(Map map, Viewport viewport, Player player, Screen screen) {
+    public RenderSystem(Map map, Viewport viewport, FieldOfViewComponent playersFieldOfView, Screen screen) {
         super(9999); // Rendering should be the last system in effect.
         this.map = map;
         this.viewport = viewport;
-        this.playersFieldOfView = Mappers.fov.get(player);
-        this.visibleMapArea = Mappers.boundaries.get(screen);
+        this.playersFieldOfView = playersFieldOfView;
+        this.visibleMapArea = Mappers.screenBoundaries.get(screen);
     }
 
     @Override

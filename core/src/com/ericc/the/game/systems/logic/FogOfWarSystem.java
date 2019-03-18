@@ -20,7 +20,7 @@ public class FogOfWarSystem extends EntitySystem {
 
         this.player = player;
         this.map = map;
-        this.visibleMapArea = Mappers.boundaries.get(screen);
+        this.visibleMapArea = Mappers.screenBoundaries.get(screen);
     }
 
     @Override

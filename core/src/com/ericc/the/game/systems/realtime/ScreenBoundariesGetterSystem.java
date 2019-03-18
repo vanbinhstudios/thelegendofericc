@@ -32,7 +32,7 @@ public class ScreenBoundariesGetterSystem extends EntitySystem {
 
     @Override
     public void update(float deltaTime) {
-        ScreenBoundariesComponent boundaries = Mappers.boundaries.get(screen);
+        ScreenBoundariesComponent boundaries = Mappers.screenBoundaries.get(screen);
 
         Vector2 topLeft = viewport.unproject(new Vector2(0, 0));
         boundaries.top = clamp(0, (int) topLeft.y, map.height() - 1);

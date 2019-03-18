@@ -49,6 +49,7 @@ public class MainGame extends Game {
 
         map = new Generator(30, 30, 9).generateMap();
         player = new Player(map.getRandomPassableTile(), new FieldOfViewComponent(map.width(), map.height()));
+        FieldOfViewComponent playersFieldOfView = Mappers.fov.get(player);
         Screen screen = new Screen();
 
         controls = new KeyboardController(engines.getLogicEngine(), player, camera);
@@ -61,21 +62,21 @@ public class MainGame extends Game {
             engines.addEntityToBothEngines(new Mob(map.getRandomPassableTile()));
         }
         ScreenBoundariesGetterSystem visibleMapAreaSystem = new ScreenBoundariesGetterSystem(viewport, map, screen);
-        engines.getRealtimeEngine().addSystem(new RenderSystem(map, viewport, player, screen));
+        engines.getRealtimeEngine().addSystem(new RenderSystem(map, viewport, playersFieldOfView, screen));
         engines.getRealtimeEngine().addSystem(new AnimationSystem());
         engines.getRealtimeEngine().addSystem(new TileChanger(.75f));
         engines.getRealtimeEngine().addSystem(visibleMapAreaSystem);
 
         FieldOfViewSystem fieldOfViewSystem = new FieldOfViewSystem(map, screen);
-        FogOfWarSystem fogOfWArSystem = new FogOfWarSystem(player, map, screen);
+        FogOfWarSystem fogOfWarSystem = new FogOfWarSystem(player, map, screen);
         engines.getLogicEngine().addSystem(new AiSystem());
         engines.getLogicEngine().addSystem(new MovementSystem(map));
         engines.getLogicEngine().addSystem(fieldOfViewSystem);
-        engines.getLogicEngine().addSystem(fogOfWArSystem);
+        engines.getLogicEngine().addSystem(fogOfWarSystem);
 
         visibleMapAreaSystem.update(0);
         fieldOfViewSystem.update(0); // update to calculate the initial fov
-        fogOfWArSystem.update(0);
+        fogOfWarSystem.update(0);
 
         if (MUSIC) {
             Sound sound = Gdx.audio.newSound(Gdx.files.internal("music/8bitAdventure.mp3"));
