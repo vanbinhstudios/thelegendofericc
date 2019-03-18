@@ -10,19 +10,20 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Affine2;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.ericc.the.game.Mappers;
 import com.ericc.the.game.Media;
 import com.ericc.the.game.TileTextureIndicator;
+import com.ericc.the.game.components.FieldOfViewComponent;
 import com.ericc.the.game.components.PositionComponent;
+import com.ericc.the.game.components.ScreenBoundariesComponent;
 import com.ericc.the.game.components.SpriteSheetComponent;
+import com.ericc.the.game.entities.Player;
+import com.ericc.the.game.entities.Screen;
 import com.ericc.the.game.map.Map;
+import com.ericc.the.game.shaders.GrayscaleShader;
 
 import java.util.ArrayList;
-
-import static java.lang.Integer.max;
-import static java.lang.Integer.min;
 
 /**
  * The system responsible for drawing the map and the entities on the screen.
@@ -31,15 +32,20 @@ import static java.lang.Integer.min;
 public class RenderSystem extends EntitySystem {
     private Map map;
     private Viewport viewport;
+    private ScreenBoundariesComponent visibleMapArea;
     private final Affine2 transform = new Affine2();
 
     private SpriteBatch batch = new SpriteBatch();
+    private SpriteBatch tilesSeen = new SpriteBatch();
     private ImmutableArray<Entity> entities; // Renderable entities.
+    private FieldOfViewComponent playersFieldOfView;
 
-    public RenderSystem(Map map, Viewport viewport) {
+    public RenderSystem(Map map, Viewport viewport, FieldOfViewComponent playersFieldOfView, Screen screen) {
         super(9999); // Rendering should be the last system in effect.
         this.map = map;
         this.viewport = viewport;
+        this.playersFieldOfView = playersFieldOfView;
+        this.visibleMapArea = Mappers.screenBoundaries.get(screen);
     }
 
     @Override
@@ -52,18 +58,18 @@ public class RenderSystem extends EntitySystem {
         Gdx.gl.glClearColor(.145f, .075f, .102f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        batch.setProjectionMatrix(viewport.getCamera().combined);
-        batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-        batch.begin();
+        initBatch(tilesSeen);
+        tilesSeen.setShader(GrayscaleShader.grayscaleShader);
+        for (int y = visibleMapArea.top; y >= visibleMapArea.bottom; --y) {
+            for (int x = visibleMapArea.left; x <= visibleMapArea.right; ++x) {
+                if (map.hasBeenSeenByPlayer(x, y)) {
+                    drawTile(tilesSeen, x, y, true);
+                }
+            }
+        }
+        tilesSeen.end();
 
-        // Compute the visible map area.
-        Vector2 topLeft = viewport.unproject(new Vector2(0, 0));
-        int top = clamp(0, (int) topLeft.y, map.height() - 1);
-        int left = clamp(0, (int) topLeft.x, map.width() - 1);
-
-        Vector2 bottomRight = viewport.unproject(new Vector2(viewport.getScreenWidth(), viewport.getScreenHeight()));
-        int bottom = clamp(0, (int) bottomRight.y - 1, map.height() - 1);
-        int right = clamp(0, (int) bottomRight.x, map.width() - 1);
+        initBatch(batch);
 
         /*
         If we could access entities standing on a given position,
@@ -77,7 +83,11 @@ public class RenderSystem extends EntitySystem {
         final int margin = 5; // Assume that no sprite is more than 5 tiles away from it's logical position.
         for (Entity entity : entities) {
             PositionComponent pos = Mappers.position.get(entity);
-            if (left - margin <= pos.x && pos.x <= right + margin && bottom - margin <= pos.y && pos.y <= top + margin) {
+            if (visibleMapArea.left - margin <= pos.x
+                    && pos.x <= visibleMapArea.right + margin
+                    && visibleMapArea.bottom - margin <= pos.y
+                    && pos.y <= visibleMapArea.top + margin
+                    && playersFieldOfView.visibility[pos.x][pos.y]) {
                 visibleEntities.add(entity);
             }
         }
@@ -93,9 +103,11 @@ public class RenderSystem extends EntitySystem {
         Perform the drawing.
          */
         int entityIndex = 0;
-        for (int y = top; y >= bottom; --y) {
-            for (int x = left; x <= right; ++x) {
-                drawTile(x, y);
+        for (int y = visibleMapArea.top; y >= visibleMapArea.bottom; --y) {
+            for (int x = visibleMapArea.left; x <= visibleMapArea.right; ++x) {
+                if (playersFieldOfView.visibility[x][y]) {
+                    drawTile(batch, x, y, false);
+                }
             }
             while (entityIndex < visibleEntities.size() && Mappers.position.get(visibleEntities.get(entityIndex)).y >= y) {
                 drawEntity(visibleEntities.get(entityIndex));
@@ -110,12 +122,6 @@ public class RenderSystem extends EntitySystem {
         batch.end();
     }
 
-    private int clamp(int lowerBound, int x, int upperBound) {
-        x = min(x, upperBound);
-        x = max(x, lowerBound);
-        return x;
-    }
-
     private void drawEntity(Entity entity) {
         PositionComponent pos = Mappers.position.get(entity);
         SpriteSheetComponent render = Mappers.spriteSheet.get(entity);
@@ -128,7 +134,8 @@ public class RenderSystem extends EntitySystem {
         batch.draw(render.sprite, render.sprite.getWidth(), render.sprite.getWidth(), transform);
     }
 
-    private void drawTile(int x, int y) {
+    private void drawTile(SpriteBatch batch, int x, int y, boolean isStatic) {
+
         /*
         The nine-digit tile code describes the neighbourhood of the tile.
         1 - passable / floor
@@ -156,8 +163,9 @@ public class RenderSystem extends EntitySystem {
 
         if ((code & 0b000010000) != 0) {
             // Floor tile.
-            batch.draw(Media.getRandomFloorTile(x, y, map.getRandomNumber(x, y, TileTextureIndicator.FLOOR.getValue())),
-                    x, y, 1, 1);
+            batch.draw(Media.getRandomFloorTile(
+                    x, y, map.getRandomNumber(x, y, TileTextureIndicator.FLOOR.getValue()), isStatic
+                    ), x, y, 1, 1);
 
             // Drawing decorations on the floor.
             int clutterType = map.getRandomClutter(x, y, TileTextureIndicator.FLOOR.getValue());
@@ -261,5 +269,15 @@ public class RenderSystem extends EntitySystem {
         v = t.getV2() * v + t.getV() * (1 - v);
         v2 = t.getV2() * v2 + t.getV() * (1 - v2);
         batch.draw(t.getTexture(), x, y, width, height, u, v, u2, v2);
+    }
+
+    /**
+     * Custom function that does the sprite batch initialisation.
+     * @param batch a sprite batch to be initialised
+     */
+    private void initBatch(SpriteBatch batch) {
+        batch.setProjectionMatrix(viewport.getCamera().combined);
+        batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        batch.begin();
     }
 }

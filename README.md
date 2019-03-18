@@ -9,10 +9,18 @@ The Legend of Ericc is a turn-based single player rogue-like game made in Java w
 
 ## Log
 
+### 17.03.19
+We decided to implement FOV and fog of war, this is the result (there are some animations that we need to add in later sprints),
+we based our fov algorithm on raytracing
+
+![Alt Text](https://media.giphy.com/media/9AIXNkGQFPCtiQTh1p/giphy.gif)
+
+### 16.03.19
 After the first sprint we ended up with some stupid mobs (rendering is done real time, the mobs can turn only after the player makes a move, there are no mobs collision yet)
 
 ![Alt Text](https://media.giphy.com/media/Zy9k0cvt6piTgrtTrl/giphy.gif)
 
+### 10.03.19
 For our first procedural map generation we implemented BSP algorithm, we do consider chaning it to tunelling one.
 
 ![alt text](https://sites.google.com/site/jicenospam/dungeon_bsp2.png "BSP2")
