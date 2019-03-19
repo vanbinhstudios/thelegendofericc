@@ -4,12 +4,14 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.ericc.the.game.components.FieldOfViewComponent;
 import com.ericc.the.game.entities.Mob;
 import com.ericc.the.game.entities.Player;
+import com.ericc.the.game.entities.PushableObject;
 import com.ericc.the.game.entities.Screen;
 import com.ericc.the.game.helpers.FpsThrottle;
 import com.ericc.the.game.map.Generator;
@@ -18,6 +20,7 @@ import com.ericc.the.game.systems.logic.AiSystem;
 import com.ericc.the.game.systems.logic.FieldOfViewSystem;
 import com.ericc.the.game.systems.logic.FogOfWarSystem;
 import com.ericc.the.game.systems.logic.MovementSystem;
+import com.ericc.the.game.systems.logic.ActionHandlingSystem;
 import com.ericc.the.game.systems.realtime.ScreenBoundariesGetterSystem;
 import com.ericc.the.game.systems.realtime.AnimationSystem;
 import com.ericc.the.game.systems.realtime.RenderSystem;
@@ -65,6 +68,11 @@ public class MainGame extends Game {
             engines.addEntityToBothEngines(new Mob(map.getRandomPassableTile()));
         }
 
+        for (int i = 0; i < 10; i++) {
+            GridPoint2 spawn = map.getRandomPassableTile();
+            engines.addEntityToBothEngines(new PushableObject(spawn.x, spawn.y, Media.crate));
+        }
+
         ScreenBoundariesGetterSystem visibleMapAreaSystem = new ScreenBoundariesGetterSystem(viewport, map, screen);
         engines.getRealtimeEngine().addSystem(new RenderSystem(map, viewport, playersFieldOfView, screen));
         engines.getRealtimeEngine().addSystem(new AnimationSystem());
@@ -75,6 +83,7 @@ public class MainGame extends Game {
         FogOfWarSystem fogOfWarSystem = new FogOfWarSystem(player, map, screen);
         engines.getLogicEngine().addSystem(new AiSystem());
         engines.getLogicEngine().addSystem(new MovementSystem(map));
+        engines.getLogicEngine().addSystem(new ActionHandlingSystem(map));
         engines.getLogicEngine().addSystem(fieldOfViewSystem);
         engines.getLogicEngine().addSystem(fogOfWarSystem);
 

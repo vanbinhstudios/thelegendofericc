@@ -8,6 +8,7 @@ import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.Vector2;
 import com.ericc.the.game.Direction;
 import com.ericc.the.game.Mappers;
+import com.ericc.the.game.actions.Actions;
 import com.ericc.the.game.actions.MovementAction;
 import com.ericc.the.game.animations.JumpAnimation;
 import com.ericc.the.game.components.AffineAnimationComponent;
@@ -22,6 +23,7 @@ public class MovementSystem extends EntitySystem {
     private Map map;
 
     public MovementSystem(Map map) {
+        super(10002);
         this.map = map;
     }
 
@@ -63,6 +65,8 @@ public class MovementSystem extends EntitySystem {
                 }
 
                 dir.direction = move.direction;
+
+                action.action = Actions.NOTHING;
 
                 if (dy != 0 || dx != 0) {
                     entity.add(new AffineAnimationComponent(new JumpAnimation(new Vector2(dx, dy), 0.6f, 0.15f)));
