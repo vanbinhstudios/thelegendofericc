@@ -3,64 +3,68 @@ package com.ericc.the.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-
-import java.util.ArrayList;
+import com.badlogic.gdx.utils.Array;
 
 public class Media {
     public static TextureRegion dunVoid;
-    public static ArrayList<TextureRegion> floors, wallUp, wallDown, wallLeft, wallRight;
+    public static Array<TextureAtlas.AtlasRegion> wallUp, wallDown, wallLeft, wallRight, clutter, wallClutter;
+    public static Array<TextureAtlas.AtlasRegion> floors, floorsRev;
     public static TextureRegion wallLU, wallRU, wallLD, wallRD;
     public static TextureRegion playerFront, playerLeft, playerRight, playerBack;
+    public static TextureRegion mobFront, mobLeft, mobRight, mobBack;
     public static TextureAtlas atlas;
-
-    static {
-        floors = new ArrayList<>();
-        wallUp = new ArrayList<>();
-        wallDown = new ArrayList<>();
-        wallLeft = new ArrayList<>();
-        wallRight = new ArrayList<>();
-    }
+    public static int floorsConfiguration = 0;
 
     public static void loadAssets() {
         atlas = new TextureAtlas(Gdx.files.internal("pack.atlas"));
 
-        dunVoid = atlas.findRegion("void");
+        dunVoid = atlas.findRegion("map/void");
 
-        floors.add(atlas.findRegion("mid_dun_flr1"));
-        floors.add(atlas.findRegion("mid_dun_flr2"));
-        floors.add(atlas.findRegion("mid_dun_flr3"));
-        floors.add(atlas.findRegion("mid_dun_flr4"));
-        floors.add(atlas.findRegion("mid_dun_flr5"));
-        floors.add(atlas.findRegion("mid_dun_flr6"));
+        floors = atlas.findRegions("map/floors/floor");
+        floorsRev = atlas.findRegions("map/floors/floor_reversed"); // for now lets stick with only one reversed texture
 
-        wallUp.add(atlas.findRegion("u_dun_wall1"));
-        wallUp.add(atlas.findRegion("u_dun_wall2"));
-        wallUp.add(atlas.findRegion("u_dun_wall3"));
-        wallUp.add(atlas.findRegion("u_dun_wall4"));
+        wallUp = atlas.findRegions("map/walls/wall_up");
+        wallDown = atlas.findRegions("map/walls/wall_down");
+        wallLeft = atlas.findRegions("map/walls/wall_left");
+        wallRight = atlas.findRegions("map/walls/wall_right");
 
-        wallDown.add(atlas.findRegion("d_dun_wall1"));
-        wallDown.add(atlas.findRegion("d_dun_wall2"));
+        wallLD = atlas.findRegion("map/walls/wall_corner_left_down");
+        wallRD = atlas.findRegion("map/walls/wall_corner_right_down");
+        wallLU = atlas.findRegion("map/walls/wall_corner_left_up");
+        wallRU = atlas.findRegion("map/walls/wall_corner_right_up");
 
-        wallLeft.add(atlas.findRegion("l_dun_wall1"));
-        wallLeft.add(atlas.findRegion("l_dun_wall2"));
-        wallLeft.add(atlas.findRegion("l_dun_wall3"));
+        clutter = atlas.findRegions("map/clutter/clutter");
 
-        wallRight.add(atlas.findRegion("r_dun_wall1"));
-        wallRight.add(atlas.findRegion("r_dun_wall2"));
-        wallRight.add(atlas.findRegion("r_dun_wall3"));
+        wallClutter = atlas.findRegions("map/clutter/wallClutter");
 
-        wallLD = atlas.findRegion("ld_dun_wall");
-        wallRD = atlas.findRegion("rd_dun_wall");
-        wallLU = atlas.findRegion("lu_dun_wall");
-        wallRU = atlas.findRegion("ru_dun_wall");
+        playerFront = atlas.findRegion("entity/hero/hero_front");
+        playerBack = atlas.findRegion("entity/hero/hero_back");
+        playerLeft = atlas.findRegion("entity/hero/hero_left");
+        playerRight = atlas.findRegion("entity/hero/hero_right");
 
-        playerFront = atlas.findRegion("testhero_front");
-        playerBack = atlas.findRegion("testhero_back");
-        playerLeft = atlas.findRegion("testhero_left");
-        playerRight = atlas.findRegion("testhero_right");
+        mobFront = atlas.findRegion("entity/mage/mage_front");
+        mobBack = atlas.findRegion("entity/mage/mage_back");
+        mobLeft = atlas.findRegion("entity/mage/mage_left");
+        mobRight = atlas.findRegion("entity/mage/mage_right");
     }
 
     public static void dispose() {
         atlas.dispose();
+    }
+
+    /**
+     * Return a random floor tile.
+     * @param x coords of a tile
+     * @param y coords of a tile
+     * @param index which floor tile to return
+     * @param isStatic indicates whether the tile should dynamically change the texture
+     * @return
+     */
+    public static TextureRegion getRandomFloorTile(int x, int y, int index, boolean isStatic) {
+        if (floorsConfiguration == 0 || isStatic) {
+            return ((x + y) % 2 == 0) ? floors.get(index) : floorsRev.get(0);
+        } else {
+            return ((x + y) % 2 == 0) ? floorsRev.get(0) : floors.get(index);
+        }
     }
 }
