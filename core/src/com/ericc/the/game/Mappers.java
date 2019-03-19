@@ -15,6 +15,8 @@ public class Mappers {
     public static final ComponentMapper<AffineAnimationComponent> affineAnimation = ComponentMapper.getFor(AffineAnimationComponent.class);
     public static final ComponentMapper<SpriteSheetComponent> spriteSheet = ComponentMapper.getFor(SpriteSheetComponent.class);
     public static final ComponentMapper<CurrentActionComponent> currentAction = ComponentMapper.getFor(CurrentActionComponent.class);
+    public static final ComponentMapper<IntentionComponent> intention = ComponentMapper.getFor(IntentionComponent.class);
     public static final ComponentMapper<FieldOfViewComponent> fov = ComponentMapper.getFor(FieldOfViewComponent.class);
     public static final ComponentMapper<ScreenBoundariesComponent> boundaries = ComponentMapper.getFor(ScreenBoundariesComponent.class);
+    public static final ComponentMapper<StatisticsComponent> statistics = ComponentMapper.getFor(StatisticsComponent.class);
 }

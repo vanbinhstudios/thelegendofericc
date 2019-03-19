@@ -29,24 +29,23 @@ public class KeyboardController extends InputAdapter {
         switch (keycode) {
             case Input.Keys.S:
             case Input.Keys.DOWN:
-                player.currentAction.action = Actions.MOVE_DOWN;
+                player.intention.currentIntent = Actions.MOVE_DOWN;
                 break;
             case Input.Keys.W:
             case Input.Keys.UP:
-                player.currentAction.action = Actions.MOVE_UP;
+                player.intention.currentIntent = Actions.MOVE_UP;
                 break;
             case Input.Keys.A:
             case Input.Keys.LEFT:
-                player.currentAction.action = Actions.MOVE_LEFT;
+                player.intention.currentIntent = Actions.MOVE_LEFT;
                 break;
             case Input.Keys.D:
             case Input.Keys.RIGHT:
-                player.currentAction.action = Actions.MOVE_RIGHT;
+                player.intention.currentIntent = Actions.MOVE_RIGHT;
                 break;
             case Input.Keys.SPACE:
-                player.currentAction.action = Actions.NOTHING;
-                break;
             default:
+                player.intention.currentIntent = Actions.NOTHING;
                 break;
         }
 
