@@ -42,12 +42,12 @@ public class Generator {
     private GridPoint2 fillRoomReturnCenter(int x, int y, int width, int height) {
         int roomX = random.nextInt(width / 8 + 1);
         int roomY = random.nextInt(height / 8 + 1);
-        int roomWidth = Math.max(4, width / 8 + random.nextInt(Math.max(1 + width - roomX, 1)));
-        int roomHeight = Math.max(4, height / 8 + random.nextInt(Math.max(1 + height - roomY, 1)));
+        int roomWidth = Math.max(6, width / 8 + random.nextInt(Math.max(1 + width - roomX, 1)));
+        int roomHeight = Math.max(6, height / 8 + random.nextInt(Math.max(1 + height - roomY, 1)));
         GridPoint2 center = new GridPoint2(0, 0);
 
-        for (int i = x + roomX; i < x + roomWidth && i < this.width && i < x + width - 1; ++i) {
-            for (int j = y + roomY; j < y + roomHeight && j < this.height && j < y + height - 1; ++j) {
+        for (int i = x + roomX + 1; i < x + roomWidth && i < this.width && i < x + width - 2; ++i) {
+            for (int j = y + roomY + 1; j < y + roomHeight && j < this.height && j < y + height - 2; ++j) {
                 map.setTile(i, j, true);
 
                 if (center.x == 0) {
@@ -77,8 +77,8 @@ public class Generator {
      */
     private GridPoint2 generateMap(int x, int y, int width, int height) {
         // this preserves the ratio (width:height and height:width) of every room (max ratio is 3:1)
-        if ((width < this.maximalRoomSize && height < 3 * this.maximalRoomSize)
-                || (height < this.maximalRoomSize && width < 3 * this.maximalRoomSize)) {
+        if ((width < this.maximalRoomSize && height < 2 * this.maximalRoomSize)
+                || (height < this.maximalRoomSize && width < 2 * this.maximalRoomSize)) {
             return fillRoomReturnCenter(x, y, width, height);
         }
 
@@ -115,7 +115,6 @@ public class Generator {
      */
     public Map generateMap() {
         generateMap(1, 1, width - 1, height - 1);
-        connectRandomRooms();
 
         return map;
     }
