@@ -22,33 +22,38 @@ import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class ActionHandlingSystem extends EntitySystem {
+public class ActionHandlerSystem extends EntitySystem {
 
     private ImmutableArray<Entity> movables;
     private ArrayList<AbstractMap.SimpleEntry<Integer, Entity>> movableInitiatives;
     private HashMap<GridPoint2, Entity> interactives;
+    private static PairComparator comparator;
     private Map map;
 
-    public ActionHandlingSystem(Map map) {
+    public ActionHandlerSystem(Map map) {
         super(10001);
+        this.comparator = new PairComparator();
         this.map = map;
     }
 
     // Comparator for the AbstractMap.SimpleEntry<> class
     // The List will be sorted in descending order
-    public class pairComparator implements Comparator<AbstractMap.SimpleEntry<Integer, Entity>> {
+    public class PairComparator implements Comparator<AbstractMap.SimpleEntry<Integer, Entity>> {
         @Override
-        public int compare(AbstractMap.SimpleEntry<Integer, Entity> integerEntitySimpleEntry,
-                           AbstractMap.SimpleEntry<Integer, Entity> t1) {
-            return Integer.compare(t1.getKey(), integerEntitySimpleEntry.getKey());
+        public int compare(AbstractMap.SimpleEntry<Integer, Entity> myself,
+                           AbstractMap.SimpleEntry<Integer, Entity> other) {
+            return Integer.compare(other.getKey(), myself.getKey());
         }
     }
 
     @Override
     public void addedToEngine(Engine engine) {
-        movables = engine.getEntitiesFor(Family.all(DirectionComponent.class,
-                PositionComponent.class, CurrentActionComponent.class,
-                StatisticsComponent.class, SentienceComponent.class).get());
+        // Movables contains entities capable of independent movement and decision-making
+        // MovableInitiatives contains entity-initiative pair for the current turn
+        // Interactives contains a map of all interactive entities and their positions
+        movables = engine.getEntitiesFor(Family.all(PositionComponent.class,
+                CurrentActionComponent.class, StatisticsComponent.class,
+                SentienceComponent.class).get());
         movableInitiatives = new ArrayList<>();
         interactives = new HashMap<>();
 
@@ -69,23 +74,24 @@ public class ActionHandlingSystem extends EntitySystem {
         for (Entity entity : movables) {
             StatisticsComponent entityStats = Mappers.statistics.get(entity);
             Integer initiative = (entityStats.agility + entityStats.intelligence) / 4
-                                    + ThreadLocalRandom.current().nextInt(1, 20);
+                    + ThreadLocalRandom.current().nextInt(1, 20);
             movableInitiatives.add(new AbstractMap.SimpleEntry<>(initiative, entity));
         }
 
         // Sorting the collection to prioritize entities with high initiative values
-        movableInitiatives.sort(new pairComparator());
+        movableInitiatives.sort(comparator);
 
         // Analyzing the entity's intention
         for (AbstractMap.SimpleEntry<Integer, Entity> pair : movableInitiatives) {
             Entity currentEntity = pair.getValue();
             boolean canProceed = analyzeMove(currentEntity);
-            // If the entity can proceed with it's intent can be put into action
+            // If the entity can proceed it's intent can be put into action
             if (canProceed) {
                 Mappers.currentAction.get(currentEntity).action = Mappers.intention.get(currentEntity).currentIntent;
                 updatePosition(currentEntity);
             }
 
+            // Reset intention after the move is made
             Mappers.intention.get(currentEntity).currentIntent = Actions.NOTHING;
         }
 
@@ -121,10 +127,14 @@ public class ActionHandlingSystem extends EntitySystem {
 
         GridPoint2 targetPos = new GridPoint2(targetX, targetY);
 
+        // Searching for entities which could collide with current entity's move
         Entity collidingEntity = interactives.get(targetPos);
 
         if (collidingEntity != null) {
             if (collidingEntity instanceof PushableObject) {
+                // If the colliding entity is a pushable world object we recursively check if it will
+                // push other pushable world objects along it's way and whether the target tile is
+                // obstructed or not
                 boolean canBePushed = analyzeMovementAction(collidingEntity, intent);
 
                 if (canBePushed) {
@@ -154,8 +164,11 @@ public class ActionHandlingSystem extends EntitySystem {
         PositionComponent pos = Mappers.position.get(entity);
         CurrentActionComponent action = Mappers.currentAction.get(entity);
 
+        // If the position has changed we need to update the information
+        // about the current entity's position mid-turn for upcoming entities
+        // to see - we would be risking moving two entities to the same spot otherwise
         if (action.action instanceof MovementAction) {
-            Direction dir = ((MovementAction)action.action).direction;
+            Direction dir = ((MovementAction) action.action).direction;
             int targetX, targetY;
 
             targetX = ((dir == Direction.RIGHT) ? 1 : 0)

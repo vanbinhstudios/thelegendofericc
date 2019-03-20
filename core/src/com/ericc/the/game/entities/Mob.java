@@ -19,7 +19,6 @@ public class Mob extends Entity {
         add(new IntentionComponent(Actions.NOTHING));
         add(new InteractivityComponent());
         add(new SentienceComponent());
-        add(new AnimationComponent());
         add(new StatisticsComponent(100, 100, 30, 20, 45));
     }
 
