@@ -7,7 +7,6 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.ericc.the.game.Mappers;
 import com.ericc.the.game.components.AffineAnimationComponent;
-import com.ericc.the.game.components.AnimationComponent;
 import com.ericc.the.game.components.DirectionComponent;
 import com.ericc.the.game.components.SpriteSheetComponent;
 
@@ -25,7 +24,7 @@ public class AnimationSystem extends EntitySystem {
         affineAnimated = engine.getEntitiesFor(Family.all(SpriteSheetComponent.class,
                             AffineAnimationComponent.class).get());
         directed = engine.getEntitiesFor(Family.all(SpriteSheetComponent.class,
-                    DirectionComponent.class, AnimationComponent.class).get());
+                    DirectionComponent.class).get());
     }
 
     @Override
