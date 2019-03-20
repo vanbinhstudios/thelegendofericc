@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class ActionHandlerSystem extends EntitySystem {
+public class ActionHandlingSystem extends EntitySystem {
 
     private ImmutableArray<Entity> movables;
     private ArrayList<AbstractMap.SimpleEntry<Integer, Entity>> movableInitiatives;
@@ -30,7 +30,7 @@ public class ActionHandlerSystem extends EntitySystem {
     private static PairComparator comparator;
     private Map map;
 
-    public ActionHandlerSystem(Map map) {
+    public ActionHandlingSystem(Map map) {
         super(10001);
         this.comparator = new PairComparator();
         this.map = map;

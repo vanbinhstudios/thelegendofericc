@@ -4,7 +4,6 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -19,7 +18,7 @@ import com.ericc.the.game.systems.logic.AiSystem;
 import com.ericc.the.game.systems.logic.FieldOfViewSystem;
 import com.ericc.the.game.systems.logic.FogOfWarSystem;
 import com.ericc.the.game.systems.logic.MovementSystem;
-import com.ericc.the.game.systems.logic.ActionHandlerSystem;
+import com.ericc.the.game.systems.logic.ActionHandlingSystem;
 import com.ericc.the.game.systems.realtime.ScreenBoundariesGetterSystem;
 import com.ericc.the.game.systems.realtime.AnimationSystem;
 import com.ericc.the.game.systems.realtime.RenderSystem;
@@ -78,7 +77,7 @@ public class MainGame extends Game {
         FogOfWarSystem fogOfWArSystem = new FogOfWarSystem(player, map, screen);
         engines.getLogicEngine().addSystem(new AiSystem());
         engines.getLogicEngine().addSystem(new MovementSystem(map));
-        engines.getLogicEngine().addSystem(new ActionHandlerSystem(map));
+        engines.getLogicEngine().addSystem(new ActionHandlingSystem(map));
         engines.getLogicEngine().addSystem(fieldOfViewSystem);
         engines.getLogicEngine().addSystem(fogOfWArSystem);
 
