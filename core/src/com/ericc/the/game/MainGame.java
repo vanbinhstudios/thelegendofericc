@@ -110,6 +110,7 @@ public class MainGame extends Game {
         centerCamera();
     }
 
+    // TODO: Use PositionComponent instead of the pos attribute and remove Player's attributes.
     private void centerCamera() {
         viewport.getCamera().position.lerp(new Vector3(player.pos.x, player.pos.y, 0),
                 1 - (float) Math.pow(.1f, Gdx.graphics.getDeltaTime()));
