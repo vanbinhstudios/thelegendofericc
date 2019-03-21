@@ -57,12 +57,12 @@ public class ActionHandlingSystem extends EntitySystem {
         movableInitiatives = new ArrayList<>();
         interactives = new HashMap<>();
 
-        ImmutableArray<Entity> temp;
+        ImmutableArray<Entity> initiativeEntitiesArray;
 
-        temp = engine.getEntitiesFor(Family.all(PositionComponent.class,
+        initiativeEntitiesArray = engine.getEntitiesFor(Family.all(PositionComponent.class,
                 InteractivityComponent.class, CurrentActionComponent.class).get());
 
-        for (Entity entity : temp) {
+        for (Entity entity : initiativeEntitiesArray) {
             PositionComponent pos = Mappers.position.get(entity);
             interactives.put(new GridPoint2(pos.x, pos.y), entity);
         }
