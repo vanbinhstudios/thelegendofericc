@@ -52,8 +52,8 @@ public class ActionHandlingSystem extends EntitySystem {
         // MovableInitiatives contains entity-initiative pair for the current turn
         // Interactives contains a map of all interactive entities and their positions
         movables = engine.getEntitiesFor(Family.all(PositionComponent.class,
-                CurrentActionComponent.class, StatisticsComponent.class,
-                SentienceComponent.class).get());
+                CurrentActionComponent.class, AgilityComponent.class,
+                IntelligenceComponent.class, SentienceComponent.class).get());
         movableInitiatives = new ArrayList<>();
         interactives = new HashMap<>();
 
@@ -72,8 +72,9 @@ public class ActionHandlingSystem extends EntitySystem {
     public void update(float deltaTime) {
         // Rolling for initiative for every entity that is capable of independent decision-making
         for (Entity entity : movables) {
-            StatisticsComponent entityStats = Mappers.statistics.get(entity);
-            Integer initiative = (entityStats.agility + entityStats.intelligence) / 4
+            AgilityComponent entityAgility = Mappers.agility.get(entity);
+            IntelligenceComponent entityIntelligence = Mappers.intelligence.get(entity);
+            Integer initiative = (entityAgility.value + entityIntelligence.value) / 4
                     + ThreadLocalRandom.current().nextInt(1, 20);
             movableInitiatives.add(new AbstractMap.SimpleEntry<>(initiative, entity));
         }

@@ -19,7 +19,12 @@ public class Mob extends Entity {
         add(new IntentionComponent(Actions.NOTHING));
         add(new InteractivityComponent());
         add(new SentienceComponent());
-        add(new StatisticsComponent(100, 100, 30, 20, 45));
+        add(new AgilityComponent(30));
+        add(new HealthComponent(50));
+        add(new IntelligenceComponent(45));
+        add(new MovementPointsComponent(100));
+        add(new StrengthComponent(20));
+
     }
 
     public Mob(GridPoint2 pos) {

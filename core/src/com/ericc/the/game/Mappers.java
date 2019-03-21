@@ -17,6 +17,10 @@ public class Mappers {
     public static final ComponentMapper<CurrentActionComponent> currentAction = ComponentMapper.getFor(CurrentActionComponent.class);
     public static final ComponentMapper<IntentionComponent> intention = ComponentMapper.getFor(IntentionComponent.class);
     public static final ComponentMapper<FieldOfViewComponent> fov = ComponentMapper.getFor(FieldOfViewComponent.class);
-    public static final ComponentMapper<StatisticsComponent> statistics = ComponentMapper.getFor(StatisticsComponent.class);
+    public static final ComponentMapper<AgilityComponent> agility = ComponentMapper.getFor(AgilityComponent.class);
+    public static final ComponentMapper<HealthComponent> health = ComponentMapper.getFor(HealthComponent.class);
+    public static final ComponentMapper<IntelligenceComponent> intelligence = ComponentMapper.getFor(IntelligenceComponent.class);
+    public static final ComponentMapper<MovementPointsComponent> movementPoints = ComponentMapper.getFor(MovementPointsComponent.class);
+    public static final ComponentMapper<StrengthComponent> strength = ComponentMapper.getFor(StrengthComponent.class);
     public static final ComponentMapper<ScreenBoundariesComponent> screenBoundaries = ComponentMapper.getFor(ScreenBoundariesComponent.class);
 }

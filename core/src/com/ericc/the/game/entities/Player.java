@@ -33,7 +33,11 @@ public class Player extends Entity {
         add(new PlayerComponent());
         add(new InteractivityComponent());
         add(new SentienceComponent());
-        add(new StatisticsComponent(100, 100, 30, 20, 45));
+        add(new AgilityComponent(50));
+        add(new HealthComponent(100));
+        add(new IntelligenceComponent(50));
+        add(new MovementPointsComponent(100));
+        add(new StrengthComponent(40));
     }
 
     public Player(GridPoint2 pos, FieldOfViewComponent fov) {
