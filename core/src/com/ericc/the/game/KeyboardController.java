@@ -1,6 +1,5 @@
 package com.ericc.the.game;
 
-import com.badlogic.ashley.core.Engine;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -9,6 +8,8 @@ import com.ericc.the.game.entities.Player;
 import com.ericc.the.game.helpers.CameraZoom;
 import com.ericc.the.game.map.CurrentMap;
 import com.ericc.the.game.map.Dungeon;
+
+import static com.ericc.the.game.MainGame.DEBUG;
 
 public class KeyboardController extends InputAdapter {
 
@@ -52,6 +53,18 @@ public class KeyboardController extends InputAdapter {
             case Input.Keys.SPACE:
                 player.currentAction.action = Actions.NOTHING;
                 break;
+            case Input.Keys.N: // like NEXT -> changes the map to the next one
+                player.currentAction.action = Actions.NOTHING;
+                if (DEBUG) {
+                    CurrentMap.setMap(dungeon.goToNext(), engines);
+                }
+                break;
+            case Input.Keys.P: // like PREVIOUS -> changes the map to the previous one
+                player.currentAction.action = Actions.NOTHING;
+                if (DEBUG) {
+                    CurrentMap.setMap(dungeon.goToPrevious(), engines);
+                }
+                break;
             default:
                 player.currentAction.action = Actions.NOTHING;
                 action = false;
@@ -74,9 +87,6 @@ public class KeyboardController extends InputAdapter {
                 break;
             case Input.Keys.PLUS:
                 zoom.zoomInCamera();
-                break;
-            case Input.Keys.P:
-                CurrentMap.setMap(dungeon.goToNext());
                 break;
             default:
                 return false;

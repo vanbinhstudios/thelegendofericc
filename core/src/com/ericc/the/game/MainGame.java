@@ -55,7 +55,8 @@ public class MainGame extends Game {
         this.dungeon = new Dungeon(engines);
         CurrentMap.setMap(dungeon.goToNext());
 
-        player = new Player(CurrentMap.map.getRandomPassableTile(), new FieldOfViewComponent(CurrentMap.map.width(), CurrentMap.map.height()));
+        player = new Player(CurrentMap.map.getRandomPassableTile(),
+                new FieldOfViewComponent(CurrentMap.map.width(), CurrentMap.map.height()));
         FieldOfViewComponent playersFieldOfView = Mappers.fov.get(player);
         Screen screen = new Screen();
 
@@ -98,7 +99,7 @@ public class MainGame extends Game {
         engines.updateRealtimeEngine();
         fpsThrottle.sleepToNextFrame();
 
-//        System.out.print(Gdx.graphics.getFramesPerSecond() + "\n");
+        System.out.print(Gdx.graphics.getFramesPerSecond() + "\n");
     }
 
     @Override
@@ -124,7 +125,6 @@ public class MainGame extends Game {
     private void initialisePlayersComponents(ScreenBoundariesGetterSystem visibleMapAreaSystem,
                                              FieldOfViewSystem fieldOfViewSystem,
                                              FogOfWarSystem fogOfWarSystem) {
-        System.out.println("Ticking");
         visibleMapAreaSystem.update(0);
         fieldOfViewSystem.update(0); // update to calculate the initial fov
         fogOfWarSystem.update(0);

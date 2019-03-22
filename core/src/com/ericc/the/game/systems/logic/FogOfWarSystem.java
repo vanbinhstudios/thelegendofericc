@@ -6,7 +6,6 @@ import com.ericc.the.game.Mappers;
 import com.ericc.the.game.components.FieldOfViewComponent;
 import com.ericc.the.game.components.PositionComponent;
 import com.ericc.the.game.entities.Player;
-import com.ericc.the.game.entities.Screen;
 import com.ericc.the.game.map.CurrentMap;
 
 
@@ -28,6 +27,8 @@ public class FogOfWarSystem extends EntitySystem {
     public void update(float deltaTime) {
         FieldOfViewComponent playersFov = Mappers.fov.get(player);
         PositionComponent playersPos = Mappers.position.get(player);
+
+        // Fog is updated in a matrix, where the player's position is the center of it
         int top = Math.min(playersPos.y + FieldOfViewComponent.VIEW_RADIUS, CurrentMap.map.height());
         int bottom = Math.max(playersPos.y - FieldOfViewComponent.VIEW_RADIUS, 0);
         int left = Math.max(playersPos.x - FieldOfViewComponent.VIEW_RADIUS, 0);
