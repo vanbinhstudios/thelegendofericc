@@ -7,17 +7,21 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.ericc.the.game.actions.Actions;
 import com.ericc.the.game.entities.Player;
 import com.ericc.the.game.helpers.CameraZoom;
+import com.ericc.the.game.map.CurrentMap;
+import com.ericc.the.game.map.Dungeon;
 
 public class KeyboardController extends InputAdapter {
 
     private Engine logicEngine;
     private Player player;
     private CameraZoom zoom;
+    private Dungeon dungeon;
 
-    public KeyboardController(Engine logicEngine, Player player, OrthographicCamera camera) {
+    public KeyboardController(Engine logicEngine, Player player, OrthographicCamera camera, Dungeon dungeon) {
         this.logicEngine = logicEngine;
         this.player = player;
         this.zoom = new CameraZoom(camera);
+        this.dungeon = dungeon;
     }
 
     @Override
@@ -27,7 +31,7 @@ public class KeyboardController extends InputAdapter {
         }
 
         boolean action = true;
-      
+
         switch (keycode) {
             case Input.Keys.S:
             case Input.Keys.DOWN:
@@ -70,6 +74,9 @@ public class KeyboardController extends InputAdapter {
                 break;
             case Input.Keys.PLUS:
                 zoom.zoomInCamera();
+                break;
+            case Input.Keys.P:
+                CurrentMap.setMap(dungeon.goToNext());
                 break;
             default:
                 return false;

@@ -12,6 +12,8 @@ import com.ericc.the.game.entities.Mob;
 import com.ericc.the.game.entities.Player;
 import com.ericc.the.game.entities.Screen;
 import com.ericc.the.game.helpers.FpsThrottle;
+import com.ericc.the.game.map.CurrentMap;
+import com.ericc.the.game.map.Dungeon;
 import com.ericc.the.game.map.Generator;
 import com.ericc.the.game.map.Map;
 import com.ericc.the.game.systems.logic.AiSystem;
@@ -31,7 +33,7 @@ public class MainGame extends Game {
     private final static int viewportWidth = 24;
     private final static int viewportHeight = 18;
 
-    private Map map;
+    private Dungeon dungeon;
     private Player player;
 
     private Engines engines = new Engines();
@@ -50,31 +52,33 @@ public class MainGame extends Game {
         viewport = new FillViewport(viewportWidth, viewportHeight, camera);
         viewport.apply();
 
-        map = new Generator(30, 30, 9).generateMap();
-        player = new Player(map.getRandomPassableTile(), new FieldOfViewComponent(map.width(), map.height()));
+        this.dungeon = new Dungeon(engines);
+        CurrentMap.setMap(dungeon.goToNext());
+
+        player = new Player(CurrentMap.map.getRandomPassableTile(), new FieldOfViewComponent(CurrentMap.map.width(), CurrentMap.map.height()));
         FieldOfViewComponent playersFieldOfView = Mappers.fov.get(player);
         Screen screen = new Screen();
 
-        controls = new KeyboardController(engines.getLogicEngine(), player, camera);
+        controls = new KeyboardController(engines.getLogicEngine(), player, camera, dungeon);
         Gdx.input.setInputProcessor(controls);
 
         engines.addEntityToBothEngines(player);
         engines.addEntityToBothEngines(screen);
 
         for (int i = 0; i < 10; i++) {
-            engines.addEntityToBothEngines(new Mob(map.getRandomPassableTile()));
+            engines.addEntityToBothEngines(new Mob(CurrentMap.map.getRandomPassableTile()));
         }
 
-        ScreenBoundariesGetterSystem visibleMapAreaSystem = new ScreenBoundariesGetterSystem(viewport, map, screen);
-        engines.getRealtimeEngine().addSystem(new RenderSystem(map, viewport, playersFieldOfView, screen));
+        ScreenBoundariesGetterSystem visibleMapAreaSystem = new ScreenBoundariesGetterSystem(viewport, screen);
+        engines.getRealtimeEngine().addSystem(new RenderSystem(viewport, playersFieldOfView, screen));
         engines.getRealtimeEngine().addSystem(new AnimationSystem());
         engines.getRealtimeEngine().addSystem(new TileChanger(.75f));
         engines.getRealtimeEngine().addSystem(visibleMapAreaSystem);
 
-        FieldOfViewSystem fieldOfViewSystem = new FieldOfViewSystem(map, screen);
-        FogOfWarSystem fogOfWarSystem = new FogOfWarSystem(player, map, screen);
+        FieldOfViewSystem fieldOfViewSystem = new FieldOfViewSystem(screen);
+        FogOfWarSystem fogOfWarSystem = new FogOfWarSystem(player, screen);
         engines.getLogicEngine().addSystem(new AiSystem());
-        engines.getLogicEngine().addSystem(new MovementSystem(map));
+        engines.getLogicEngine().addSystem(new MovementSystem());
         engines.getLogicEngine().addSystem(fieldOfViewSystem);
         engines.getLogicEngine().addSystem(fogOfWarSystem);
 
@@ -94,7 +98,7 @@ public class MainGame extends Game {
         engines.updateRealtimeEngine();
         fpsThrottle.sleepToNextFrame();
 
-        System.out.print(Gdx.graphics.getFramesPerSecond() + "\n");
+//        System.out.print(Gdx.graphics.getFramesPerSecond() + "\n");
     }
 
     @Override
@@ -123,5 +127,9 @@ public class MainGame extends Game {
         visibleMapAreaSystem.update(0);
         fieldOfViewSystem.update(0); // update to calculate the initial fov
         fogOfWarSystem.update(0);
+    }
+
+    private void reload() {
+
     }
 }

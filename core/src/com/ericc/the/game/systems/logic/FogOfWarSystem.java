@@ -7,19 +7,18 @@ import com.ericc.the.game.components.FieldOfViewComponent;
 import com.ericc.the.game.components.ScreenBoundariesComponent;
 import com.ericc.the.game.entities.Player;
 import com.ericc.the.game.entities.Screen;
+import com.ericc.the.game.map.CurrentMap;
 import com.ericc.the.game.map.Map;
 
 public class FogOfWarSystem extends EntitySystem {
 
     private Player player;
-    private Map map;
     private ScreenBoundariesComponent visibleMapArea;
 
-    public FogOfWarSystem(Player player, Map map, Screen screen) {
+    public FogOfWarSystem(Player player, Screen screen) {
         super(9998); // remember to change it so it is larger than FOV priority
 
         this.player = player;
-        this.map = map;
         this.visibleMapArea = Mappers.screenBoundaries.get(screen);
     }
 
@@ -32,8 +31,8 @@ public class FogOfWarSystem extends EntitySystem {
 
         for (int y = visibleMapArea.top; y >= visibleMapArea.bottom; --y) {
             for (int x = visibleMapArea.left; x <= visibleMapArea.right; ++x) {
-                if (map.inBoundaries(x, y) && playersFov.visibility.get(x, y)) {
-                   map.markAsSeenByPlayer(x, y);
+                if (CurrentMap.map.inBoundaries(x, y) && playersFov.visibility.get(x, y)) {
+                    CurrentMap.map.markAsSeenByPlayer(x, y);
                 }
             }
         }

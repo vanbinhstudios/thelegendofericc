@@ -14,15 +14,14 @@ import com.ericc.the.game.components.AffineAnimationComponent;
 import com.ericc.the.game.components.CurrentActionComponent;
 import com.ericc.the.game.components.DirectionComponent;
 import com.ericc.the.game.components.PositionComponent;
+import com.ericc.the.game.map.CurrentMap;
 import com.ericc.the.game.map.Map;
 
 public class MovementSystem extends EntitySystem {
 
     private ImmutableArray<Entity> movables;
-    private Map map;
 
-    public MovementSystem(Map map) {
-        this.map = map;
+    public MovementSystem() {
     }
 
     @Override
@@ -45,19 +44,19 @@ public class MovementSystem extends EntitySystem {
                 MovementAction move = (MovementAction) action.action;
 
                 if (move.direction == Direction.LEFT) {
-                    if (map.isPassable(pos.x - 1, pos.y)) {
+                    if (CurrentMap.map.isPassable(pos.x - 1, pos.y)) {
                         dx = -1;
                     }
                 } else if (move.direction == Direction.RIGHT) {
-                    if (map.isPassable(pos.x + 1, pos.y)) {
+                    if (CurrentMap.map.isPassable(pos.x + 1, pos.y)) {
                         dx = 1;
                     }
                 } else if (move.direction == Direction.UP) {
-                    if (map.isPassable(pos.x, pos.y + 1)) {
+                    if (CurrentMap.map.isPassable(pos.x, pos.y + 1)) {
                         dy = 1;
                     }
                 } else { // if (move.direction == Direction.DOWN)
-                    if (map.isPassable(pos.x, pos.y - 1)) {
+                    if (CurrentMap.map.isPassable(pos.x, pos.y - 1)) {
                         dy = -1;
                     }
                 }
