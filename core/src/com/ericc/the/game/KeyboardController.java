@@ -10,12 +10,12 @@ import com.ericc.the.game.helpers.CameraZoom;
 
 public class KeyboardController extends InputAdapter {
 
-    private Engine logicEngine;
+    private Engines engines;
     private Player player;
     private CameraZoom zoom;
 
-    public KeyboardController(Engine logicEngine, Player player, OrthographicCamera camera) {
-        this.logicEngine = logicEngine;
+    public KeyboardController(Engines engines, Player player, OrthographicCamera camera) {
+        this.engines = engines;
         this.player = player;
         this.zoom = new CameraZoom(camera);
     }
@@ -54,7 +54,7 @@ public class KeyboardController extends InputAdapter {
                 break;
         }
         if (action) {
-            logicEngine.update(1);
+            engines.updateLogicEngine();
         }
         return true;
     }

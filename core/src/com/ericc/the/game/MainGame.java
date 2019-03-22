@@ -55,28 +55,28 @@ public class MainGame extends Game {
         FieldOfViewComponent playersFieldOfView = Mappers.fov.get(player);
         Screen screen = new Screen();
 
-        controls = new KeyboardController(engines.getLogicEngine(), player, camera);
+        controls = new KeyboardController(engines, player, camera);
         Gdx.input.setInputProcessor(controls);
 
-        engines.addEntityToBothEngines(player);
-        engines.addEntityToBothEngines(screen);
+        engines.addEntity(player);
+        engines.addEntity(screen);
 
         for (int i = 0; i < 10; i++) {
-            engines.addEntityToBothEngines(new Mob(map.getRandomPassableTile()));
+            engines.addEntity(new Mob(map.getRandomPassableTile()));
         }
 
         ScreenBoundariesGetterSystem visibleMapAreaSystem = new ScreenBoundariesGetterSystem(viewport, map, screen);
-        engines.getRealtimeEngine().addSystem(new RenderSystem(map, viewport, playersFieldOfView, screen));
-        engines.getRealtimeEngine().addSystem(new AnimationSystem());
-        engines.getRealtimeEngine().addSystem(new TileChanger(.75f));
-        engines.getRealtimeEngine().addSystem(visibleMapAreaSystem);
+        engines.addRealtimeSystem(new RenderSystem(map, viewport, playersFieldOfView, screen));
+        engines.addRealtimeSystem(new AnimationSystem());
+        engines.addRealtimeSystem(new TileChanger(.75f));
+        engines.addRealtimeSystem(visibleMapAreaSystem);
 
         FieldOfViewSystem fieldOfViewSystem = new FieldOfViewSystem(map, screen);
         FogOfWarSystem fogOfWarSystem = new FogOfWarSystem(player, map, screen);
-        engines.getLogicEngine().addSystem(new AiSystem());
-        engines.getLogicEngine().addSystem(new MovementSystem(map));
-        engines.getLogicEngine().addSystem(fieldOfViewSystem);
-        engines.getLogicEngine().addSystem(fogOfWarSystem);
+        engines.addLogicSystem(new AiSystem());
+        engines.addLogicSystem(new MovementSystem(map));
+        engines.addLogicSystem(fieldOfViewSystem);
+        engines.addLogicSystem(fogOfWarSystem);
 
         initialisePlayersComponents(visibleMapAreaSystem, fieldOfViewSystem, fogOfWarSystem);
 
