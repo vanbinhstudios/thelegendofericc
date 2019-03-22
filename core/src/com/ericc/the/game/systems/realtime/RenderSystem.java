@@ -87,7 +87,7 @@ public class RenderSystem extends EntitySystem {
                     && pos.x <= visibleMapArea.right + margin
                     && visibleMapArea.bottom - margin <= pos.y
                     && pos.y <= visibleMapArea.top + margin
-                    && playersFieldOfView.visibility[pos.x][pos.y]) {
+                    && playersFieldOfView.visibility.get(pos.x, pos.y)) {
                 visibleEntities.add(entity);
             }
         }
@@ -105,7 +105,7 @@ public class RenderSystem extends EntitySystem {
         int entityIndex = 0;
         for (int y = visibleMapArea.top; y >= visibleMapArea.bottom; --y) {
             for (int x = visibleMapArea.left; x <= visibleMapArea.right; ++x) {
-                if (playersFieldOfView.visibility[x][y]) {
+                if (playersFieldOfView.visibility.get(x, y)) {
                     drawTile(batch, x, y, false);
                 }
             }
