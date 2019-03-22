@@ -106,7 +106,7 @@ public class FieldOfViewSystem extends EntitySystem {
         for (int y = visibleMapArea.top; y >= visibleMapArea.bottom; --y) {
             for (int x = visibleMapArea.left; x <= visibleMapArea.right; ++x) {
                 if (map.inBoundaries(x, y)) {
-                    fov.visibility[x][y] = false;
+                    fov.visibility.clear(x, y);
                 }
             }
         }
@@ -154,7 +154,7 @@ public class FieldOfViewSystem extends EntitySystem {
                 continue;
             }
 
-            fov.visibility[castedX][castedY] = true;
+            fov.visibility.set(castedX, castedY);
 
             // this piece of code was written to ensure that corners and walls are
             // rendered properly -> id does render them sometimes even though they are not in view range
@@ -184,7 +184,7 @@ public class FieldOfViewSystem extends EntitySystem {
             if (map.inBoundaries(posxTemp, posyTemp)
                     && !map.isPassable(posxTemp, posyTemp)
                     && (regularMoves || isCorner(posxTemp, posyTemp, fov))) {
-                fov.visibility[posxTemp][posyTemp] = true;
+                fov.visibility.set(posxTemp, posyTemp);
             }
         }
     }
@@ -201,8 +201,8 @@ public class FieldOfViewSystem extends EntitySystem {
                     && map.inBoundaries(x + secondMove.x, y + secondMove.y)
                     && !map.isPassable(x + firstMove.x, y + firstMove.y)
                     && !map.isPassable(x + secondMove.x, y + secondMove.y)
-                    && fov.visibility[x + firstMove.x][y + firstMove.y]
-                    && fov.visibility[x + secondMove.x][y + secondMove.y]) {
+                    && fov.visibility.get(x + firstMove.x, y + firstMove.y)
+                    && fov.visibility.get(x + secondMove.x, y + secondMove.y)) {
                 return true;
             }
         }
