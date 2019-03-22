@@ -22,5 +22,6 @@ public class Mappers {
     public static final ComponentMapper<IntelligenceComponent> intelligence = ComponentMapper.getFor(IntelligenceComponent.class);
     public static final ComponentMapper<MovementPointsComponent> movementPoints = ComponentMapper.getFor(MovementPointsComponent.class);
     public static final ComponentMapper<StrengthComponent> strength = ComponentMapper.getFor(StrengthComponent.class);
+    public static final ComponentMapper<InitiativeComponent> initiative = ComponentMapper.getFor(InitiativeComponent.class);
     public static final ComponentMapper<ScreenBoundariesComponent> screenBoundaries = ComponentMapper.getFor(ScreenBoundariesComponent.class);
 }

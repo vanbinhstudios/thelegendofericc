@@ -2,8 +2,8 @@ package com.ericc.the.game.systems.logic;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
+import com.badlogic.ashley.systems.SortedIteratingSystem;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.GridPoint2;
 import com.ericc.the.game.Direction;
@@ -16,33 +16,28 @@ import com.ericc.the.game.entities.Player;
 import com.ericc.the.game.entities.PushableObject;
 import com.ericc.the.game.map.Map;
 
-import java.util.AbstractMap;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.ArrayList;
-import java.util.concurrent.ThreadLocalRandom;
 
-public class ActionHandlingSystem extends EntitySystem {
+public class ActionHandlingSystem extends SortedIteratingSystem {
 
-    private ImmutableArray<Entity> movables;
-    private ArrayList<AbstractMap.SimpleEntry<Integer, Entity>> movableInitiatives;
     private HashMap<GridPoint2, Entity> interactives;
-    private static PairComparator comparator;
     private Map map;
 
     public ActionHandlingSystem(Map map) {
-        super(10001);
-        this.comparator = new PairComparator();
+        super(Family.all(PositionComponent.class,
+                CurrentActionComponent.class, AgilityComponent.class,
+                IntelligenceComponent.class, SentienceComponent.class,
+                InitiativeComponent.class).get(), new EntityComparator(),
+                10002);
         this.map = map;
     }
 
-    // Comparator for the AbstractMap.SimpleEntry<> class
-    // The List will be sorted in descending order
-    public class PairComparator implements Comparator<AbstractMap.SimpleEntry<Integer, Entity>> {
+    // Entity comparator based on initiative value in the current turn
+    private static class EntityComparator implements Comparator<Entity> {
         @Override
-        public int compare(AbstractMap.SimpleEntry<Integer, Entity> myself,
-                           AbstractMap.SimpleEntry<Integer, Entity> other) {
-            return Integer.compare(other.getKey(), myself.getKey());
+        public int compare(Entity myself, Entity other) {
+            return Integer.compare(Mappers.initiative.get(other).value, Mappers.initiative.get(myself).value);
         }
     }
 
@@ -51,10 +46,7 @@ public class ActionHandlingSystem extends EntitySystem {
         // Movables contains entities capable of independent movement and decision-making
         // MovableInitiatives contains entity-initiative pair for the current turn
         // Interactives contains a map of all interactive entities and their positions
-        movables = engine.getEntitiesFor(Family.all(PositionComponent.class,
-                CurrentActionComponent.class, AgilityComponent.class,
-                IntelligenceComponent.class, SentienceComponent.class).get());
-        movableInitiatives = new ArrayList<>();
+        super.addedToEngine(engine);
         interactives = new HashMap<>();
 
         ImmutableArray<Entity> initiativeEntitiesArray;
@@ -69,34 +61,16 @@ public class ActionHandlingSystem extends EntitySystem {
     }
 
     @Override
-    public void update(float deltaTime) {
-        // Rolling for initiative for every entity that is capable of independent decision-making
-        for (Entity entity : movables) {
-            AgilityComponent entityAgility = Mappers.agility.get(entity);
-            IntelligenceComponent entityIntelligence = Mappers.intelligence.get(entity);
-            Integer initiative = (entityAgility.value + entityIntelligence.value) / 4
-                    + ThreadLocalRandom.current().nextInt(1, 20);
-            movableInitiatives.add(new AbstractMap.SimpleEntry<>(initiative, entity));
+    public void processEntity(Entity currentEntity, float deltaTime) {
+        boolean canProceed = analyzeMove(currentEntity);
+        // If the entity can proceed it's intent can be put into action
+        if (canProceed) {
+            Mappers.currentAction.get(currentEntity).action = Mappers.intention.get(currentEntity).currentIntent;
+            updateHashMapData(currentEntity);
         }
 
-        // Sorting the collection to prioritize entities with high initiative values
-        movableInitiatives.sort(comparator);
-
-        // Analyzing the entity's intention
-        for (AbstractMap.SimpleEntry<Integer, Entity> pair : movableInitiatives) {
-            Entity currentEntity = pair.getValue();
-            boolean canProceed = analyzeMove(currentEntity);
-            // If the entity can proceed it's intent can be put into action
-            if (canProceed) {
-                Mappers.currentAction.get(currentEntity).action = Mappers.intention.get(currentEntity).currentIntent;
-                updatePosition(currentEntity);
-            }
-
-            // Reset intention after the move is made
-            Mappers.intention.get(currentEntity).currentIntent = Actions.NOTHING;
-        }
-
-        movableInitiatives.clear();
+        // Reset intention after the move is made
+        Mappers.intention.get(currentEntity).currentIntent = Actions.NOTHING;
     }
 
     private boolean analyzeMove(Entity entity) {
@@ -140,7 +114,7 @@ public class ActionHandlingSystem extends EntitySystem {
 
                 if (canBePushed) {
                     Mappers.currentAction.get(collidingEntity).action = new MovementAction(move.direction);
-                    updatePosition(collidingEntity);
+                    updateHashMapData(collidingEntity);
                     return true;
                 } else {
                     return false;
@@ -161,7 +135,7 @@ public class ActionHandlingSystem extends EntitySystem {
         return true;
     }
 
-    private void updatePosition(Entity entity) {
+    private void updateHashMapData(Entity entity) {
         PositionComponent pos = Mappers.position.get(entity);
         CurrentActionComponent action = Mappers.currentAction.get(entity);
 

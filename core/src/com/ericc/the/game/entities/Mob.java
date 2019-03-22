@@ -24,6 +24,7 @@ public class Mob extends Entity {
         add(new IntelligenceComponent(45));
         add(new MovementPointsComponent(100));
         add(new StrengthComponent(20));
+        add(new InitiativeComponent(0));
 
     }
 

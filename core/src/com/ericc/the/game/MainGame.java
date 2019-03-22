@@ -15,11 +15,7 @@ import com.ericc.the.game.entities.Screen;
 import com.ericc.the.game.helpers.FpsThrottle;
 import com.ericc.the.game.map.Generator;
 import com.ericc.the.game.map.Map;
-import com.ericc.the.game.systems.logic.AiSystem;
-import com.ericc.the.game.systems.logic.FieldOfViewSystem;
-import com.ericc.the.game.systems.logic.FogOfWarSystem;
-import com.ericc.the.game.systems.logic.MovementSystem;
-import com.ericc.the.game.systems.logic.ActionHandlingSystem;
+import com.ericc.the.game.systems.logic.*;
 import com.ericc.the.game.systems.realtime.ScreenBoundariesGetterSystem;
 import com.ericc.the.game.systems.realtime.AnimationSystem;
 import com.ericc.the.game.systems.realtime.RenderSystem;
@@ -80,8 +76,9 @@ public class MainGame extends Game {
         FieldOfViewSystem fieldOfViewSystem = new FieldOfViewSystem(map, screen);
         FogOfWarSystem fogOfWarSystem = new FogOfWarSystem(player, map, screen);
         engines.getLogicEngine().addSystem(new AiSystem());
-        engines.getLogicEngine().addSystem(new MovementSystem(map));
+        engines.getLogicEngine().addSystem(new InitiativeSystem());
         engines.getLogicEngine().addSystem(new ActionHandlingSystem(map));
+        engines.getLogicEngine().addSystem(new MovementSystem(map));
         engines.getLogicEngine().addSystem(fieldOfViewSystem);
         engines.getLogicEngine().addSystem(fogOfWarSystem);
 
