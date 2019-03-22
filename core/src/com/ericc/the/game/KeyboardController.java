@@ -12,13 +12,13 @@ import com.ericc.the.game.map.Dungeon;
 
 public class KeyboardController extends InputAdapter {
 
-    private Engine logicEngine;
+    private Engines engines;
     private Player player;
     private CameraZoom zoom;
     private Dungeon dungeon;
 
-    public KeyboardController(Engine logicEngine, Player player, OrthographicCamera camera, Dungeon dungeon) {
-        this.logicEngine = logicEngine;
+    public KeyboardController(Engines engines, Player player, OrthographicCamera camera, Dungeon dungeon) {
+        this.engines = engines;
         this.player = player;
         this.zoom = new CameraZoom(camera);
         this.dungeon = dungeon;
@@ -58,7 +58,7 @@ public class KeyboardController extends InputAdapter {
                 break;
         }
         if (action) {
-            logicEngine.update(1);
+            engines.updateLogicEngine();
         }
         return true;
     }

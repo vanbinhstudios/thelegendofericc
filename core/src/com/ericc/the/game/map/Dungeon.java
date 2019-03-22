@@ -46,6 +46,6 @@ public class Dungeon {
 
     private void saveLastProgress() {
         System.out.println("COS");
-        engines.removeEntitiesFromRealtimeEngine(Family.all(MobComponent.class).get());
+        engines.removeFamily(Family.all(MobComponent.class).get());
     }
 }

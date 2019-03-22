@@ -14,6 +14,7 @@ public class FogOfWarSystem extends EntitySystem {
 
     private Player player;
     private ScreenBoundariesComponent visibleMapArea;
+    private boolean firstTick = true;
 
     public FogOfWarSystem(Player player, Screen screen) {
         super(9998); // remember to change it so it is larger than FOV priority
@@ -23,14 +24,24 @@ public class FogOfWarSystem extends EntitySystem {
     }
 
     @Override
-    public void addedToEngine(Engine engine) {}
+    public void addedToEngine(Engine engine) {
+    }
 
     @Override
     public void update(float deltaTime) {
         FieldOfViewComponent playersFov = Mappers.fov.get(player);
 
-        for (int y = visibleMapArea.top; y >= visibleMapArea.bottom; --y) {
-            for (int x = visibleMapArea.left; x <= visibleMapArea.right; ++x) {
+        if (firstTick) {
+            updateFogOfWar(playersFov, CurrentMap.map.height(), 0, 0, CurrentMap.map.width());
+            firstTick = false;
+        } else {
+            updateFogOfWar(playersFov, visibleMapArea.top, visibleMapArea.bottom, visibleMapArea.left, visibleMapArea.right);
+        }
+    }
+
+    private void updateFogOfWar(FieldOfViewComponent playersFov, int top, int bottom, int left, int right) {
+        for (int y = top; y >= bottom; --y) {
+            for (int x = left; x <= right; ++x) {
                 if (CurrentMap.map.inBoundaries(x, y) && playersFov.visibility.get(x, y)) {
                     CurrentMap.map.markAsSeenByPlayer(x, y);
                 }
