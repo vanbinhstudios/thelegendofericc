@@ -76,7 +76,7 @@ public class MainGame extends Game {
         engines.addRealtimeSystem(visibleMapAreaSystem);
 
         FieldOfViewSystem fieldOfViewSystem = new FieldOfViewSystem(screen);
-        FogOfWarSystem fogOfWarSystem = new FogOfWarSystem(player, screen);
+        FogOfWarSystem fogOfWarSystem = new FogOfWarSystem(player);
         engines.addLogicSystem(new AiSystem());
         engines.addLogicSystem(new MovementSystem());
         engines.addLogicSystem(fieldOfViewSystem);
