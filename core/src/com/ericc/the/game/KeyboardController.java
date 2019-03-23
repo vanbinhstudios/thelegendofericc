@@ -73,16 +73,6 @@ public class KeyboardController extends InputAdapter {
             case Input.Keys.PLUS:
                 zoom.zoomInCamera();
                 break;
-            case Input.Keys.N: // like NEXT -> changes the map to the next one
-                if (DEBUG) {
-                    CurrentMap.setMap(dungeon.goToNext(), engines);
-                }
-                break;
-            case Input.Keys.P: // like PREVIOUS -> changes the map to the previous one
-                if (DEBUG) {
-                    CurrentMap.setMap(dungeon.goToPrevious(), engines);
-                }
-                break;
             default:
                 return false;
         }

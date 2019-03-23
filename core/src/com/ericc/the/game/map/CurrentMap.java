@@ -7,7 +7,7 @@ public class CurrentMap {
 
     public static void setMap(Map anotherMap, Engines engines) {
         CurrentMap.map = anotherMap;
-        engines.updateLogicEngine();
+        engines.updatePlayersVision();
     }
 
     public static void setMap(Map anotherMap) {

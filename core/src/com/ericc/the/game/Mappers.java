@@ -24,4 +24,6 @@ public class Mappers {
     public static final ComponentMapper<StrengthComponent> strength = ComponentMapper.getFor(StrengthComponent.class);
     public static final ComponentMapper<InitiativeComponent> initiative = ComponentMapper.getFor(InitiativeComponent.class);
     public static final ComponentMapper<ScreenBoundariesComponent> screenBoundaries = ComponentMapper.getFor(ScreenBoundariesComponent.class);
+    public static final ComponentMapper<DescendingComponent> stairsComponent = ComponentMapper.getFor(DescendingComponent.class);
+    public static final ComponentMapper<TeleportScheduledComponent> teleports = ComponentMapper.getFor(TeleportScheduledComponent.class);
 }

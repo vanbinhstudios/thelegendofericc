@@ -2,8 +2,10 @@ package com.ericc.the.game.map;
 
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.MathUtils;
+import com.ericc.the.game.Engines;
 import com.ericc.the.game.Media;
 import com.ericc.the.game.TileTextureIndicator;
+import com.ericc.the.game.entities.Stairs;
 import com.ericc.the.game.helpers.FogOfWar;
 import com.ericc.the.game.utils.RectangularBitset;
 
@@ -19,6 +21,8 @@ public class Map {
     // the above is NOT AN INVARIANT, this changes after spawning some entities on some tiles from this collection
     private HashSet<Room> rooms; ///< stores every room made while generating (without corridors)
     private FogOfWar fogOfWar;
+    GridPoint2 entrance;
+    GridPoint2 exit;
 
     Map(int width, int height) {
         this.width = width;
@@ -107,6 +111,16 @@ public class Map {
         GridPoint2 ret = passableTiles.iterator().next();
         passableTiles.remove(ret);
         return ret;
+    }
+
+    public GridPoint2 makeStairs(boolean descending) {
+        if (descending) {
+            this.exit = getRandomPassableTile();
+        } else {
+            this.entrance = getRandomPassableTile();
+        }
+
+        return descending ? this.exit : this.entrance;
     }
 
     public void addRoom(Room room) {

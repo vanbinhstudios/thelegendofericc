@@ -12,6 +12,7 @@ import com.ericc.the.game.components.FieldOfViewComponent;
 import com.ericc.the.game.components.PositionComponent;
 import com.ericc.the.game.components.ScreenBoundariesComponent;
 import com.ericc.the.game.entities.Screen;
+import com.ericc.the.game.helpers.Moves;
 import com.ericc.the.game.map.CurrentMap;
 import com.ericc.the.game.map.Map;
 
@@ -28,45 +29,6 @@ public class FieldOfViewSystem extends EntitySystem {
     private ImmutableArray<Entity> entities; ///< all entities with fov available
     private ScreenBoundariesComponent visibleMapArea; ///< explained in a ScreeBoundariesGetterSystem
 
-    // a helper data structure with possible moves from one tile in horizontal and vertical directions
-    private static List<GridPoint2> moves =
-            Arrays.asList(
-                    new GridPoint2(1, 0),
-                    new GridPoint2(0, 1),
-                    new GridPoint2(-1, 0),
-                    new GridPoint2(0, -1)
-            );
-
-    // stores moves on diagonals
-    private static List<GridPoint2> diagonalMoves =
-            Arrays.asList(
-                    new GridPoint2(1, 1),
-                    new GridPoint2(-1, -1),
-                    new GridPoint2(-1, 1),
-                    new GridPoint2(1, -1)
-            );
-
-    // a helper data structure which reduces the code lines to check whether the given
-    // position is a visible corner
-    private static List<List<GridPoint2>> corners =
-                Arrays.asList( // there are 4 cases here
-                        Arrays.asList(
-                                new GridPoint2(-1, 0), // each one of them has two coordinates
-                                new GridPoint2(0, 1) // that should be checked for visible walls
-                        ),
-                        Arrays.asList(
-                                new GridPoint2(0, 1),
-                                new GridPoint2(1, 0)
-                        ),
-                        Arrays.asList(
-                                new GridPoint2(1, 0),
-                                new GridPoint2(0, -1)
-                        ),
-                        Arrays.asList(
-                                new GridPoint2(0, -1),
-                                new GridPoint2(-1, 0)
-                        )
-                );
 
     public FieldOfViewSystem(Screen screen) {
         super(9997);
@@ -158,8 +120,8 @@ public class FieldOfViewSystem extends EntitySystem {
             // this piece of code was written to ensure that corners and walls are
             // rendered properly -> id does render them sometimes even though they are not in view range
             if (CurrentMap.map.isPassable(castedX, castedY)) {
-                checkMoves(moves, true, castedX, castedY, fov);
-                checkMoves(diagonalMoves, false, castedX, castedY, fov);
+                checkMoves(Moves.moves, true, castedX, castedY, fov);
+                checkMoves(Moves.diagonalMoves, false, castedX, castedY, fov);
             } else {
                 // if this tile is a border, the hero does not see through that tile
                 return;
@@ -192,7 +154,7 @@ public class FieldOfViewSystem extends EntitySystem {
      * Checks whether the given tile is a (VISIBLE!) corner.
      */
     private boolean isCorner(int x, int y, FieldOfViewComponent fov) {
-        for (List<GridPoint2> corner : corners) {
+        for (List<GridPoint2> corner : Moves.corners) {
             GridPoint2 firstMove = corner.get(0);
             GridPoint2 secondMove = corner.get(1);
 

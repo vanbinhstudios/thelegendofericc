@@ -7,6 +7,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.SortedIteratingSystem;
 import com.badlogic.gdx.math.GridPoint2;
 import com.ericc.the.game.Direction;
+import com.ericc.the.game.Engines;
 import com.ericc.the.game.Mappers;
 import com.ericc.the.game.actions.Actions;
 import com.ericc.the.game.actions.MovementAction;
@@ -14,7 +15,9 @@ import com.ericc.the.game.components.*;
 import com.ericc.the.game.entities.Mob;
 import com.ericc.the.game.entities.Player;
 import com.ericc.the.game.entities.PushableObject;
+import com.ericc.the.game.entities.Stairs;
 import com.ericc.the.game.map.CurrentMap;
+import com.ericc.the.game.map.Dungeon;
 
 import java.util.Comparator;
 import java.util.HashMap;
@@ -115,12 +118,22 @@ public class ActionHandlingSystem extends SortedIteratingSystem {
             if (collidingEntity instanceof Player) {
                 // Damage system will apply damage to the Player here
                 // if the entity is an agressive mob
+                System.out.println("colliding with");
+                System.out.println(interactives.size());
                 return false;
             }
             if (collidingEntity instanceof Mob) {
                 // Damage system will apply damage to the Mob here if the entity
                 // is a player, or will not move if it is a mob or some other object
                 if (entity instanceof Player) System.out.print("Player tried running into a mob.\n");
+                return false;
+            }
+            if (collidingEntity instanceof Stairs) {
+                if (entity instanceof Player) {
+                    entity.add(new TeleportScheduledComponent(collidingEntity));
+                    interactives.remove(new GridPoint2(pos.x, pos.y));
+                }
+
                 return false;
             }
         }
@@ -161,6 +174,7 @@ public class ActionHandlingSystem extends SortedIteratingSystem {
 
         @Override
         public void entityAdded(Entity entity) {
+            System.out.println("ENTITY ADDED");
             PositionComponent pos = Mappers.position.get(entity);
             interactives.put(new GridPoint2(pos.x, pos.y), entity);
         }

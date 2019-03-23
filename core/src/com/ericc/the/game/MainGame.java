@@ -78,6 +78,7 @@ public class MainGame extends Game {
         engines.addLogicSystem(new MovementSystem());
         engines.addLogicSystem(fieldOfViewSystem);
         engines.addLogicSystem(fogOfWarSystem);
+        engines.addLogicSystem(new TeleportPlayerSystem(dungeon, engines));
 
         initialisePlayersComponents(visibleMapAreaSystem, fieldOfViewSystem, fogOfWarSystem);
         dungeon.generateLevel(CurrentMap.map);
@@ -124,9 +125,5 @@ public class MainGame extends Game {
         visibleMapAreaSystem.update(0);
         fieldOfViewSystem.update(0); // update to calculate the initial fov
         fogOfWarSystem.update(0);
-    }
-
-    private void reload() {
-
     }
 }
