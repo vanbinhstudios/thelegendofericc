@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Affine2;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.ericc.the.game.Mappers;
 import com.ericc.the.game.Media;
@@ -21,6 +22,7 @@ import com.ericc.the.game.components.ScreenBoundariesComponent;
 import com.ericc.the.game.components.RenderableComponent;
 import com.ericc.the.game.entities.Screen;
 import com.ericc.the.game.map.Map;
+import com.ericc.the.game.shaders.Shaders;
 
 import java.util.ArrayList;
 
@@ -45,6 +47,9 @@ public class RenderSystem extends EntitySystem {
         this.viewport = viewport;
         this.playersFieldOfView = playersFieldOfView;
         this.visibleMapArea = Mappers.screenBoundaries.get(screen);
+        if (!Shaders.hsl.isCompiled()) throw new GdxRuntimeException("Couldn't compile shader: " + Shaders.hsl.getLog());
+
+        batch.setShader(Shaders.hsl);
     }
 
     @Override
@@ -121,15 +126,13 @@ public class RenderSystem extends EntitySystem {
         transformTmp.mul(render.transform); // Apply affine animations.
         transformTmp.translate(pos.x, pos.y); // Move to logical position.
 
-        float brightness = render.brightness;
-        batch.setColor(colorTmp.set(Color.WHITE).mul(brightness, brightness, brightness, 1.0f));
+        batch.setColor(0, render.brightness, render.brightness, 1);
         batch.draw(render.region, render.model.width, render.model.height, transformTmp);
     }
 
     private void drawTile(SpriteBatch batch, int x, int y, boolean isStatic) {
 
-        float brightness = map.brightness[x][y];
-        batch.setColor(colorTmp.set(Color.WHITE).mul(brightness, brightness, brightness, 1.0f));
+        batch.setColor(0.0f, map.saturation[x][y], map.brightness[x][y], 1.0f);
 
         /*
         The nine-digit tile code describes the neighbourhood of the tile.
