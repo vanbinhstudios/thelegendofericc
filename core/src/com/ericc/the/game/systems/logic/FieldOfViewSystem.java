@@ -10,8 +10,6 @@ import com.badlogic.gdx.math.MathUtils;
 import com.ericc.the.game.Mappers;
 import com.ericc.the.game.components.FieldOfViewComponent;
 import com.ericc.the.game.components.PositionComponent;
-import com.ericc.the.game.components.ScreenBoundariesComponent;
-import com.ericc.the.game.entities.Screen;
 import com.ericc.the.game.map.Map;
 
 import java.util.Arrays;
@@ -26,7 +24,6 @@ public class FieldOfViewSystem extends EntitySystem {
 
     private Map map;
     private ImmutableArray<Entity> entities; ///< all entities with fov available
-    private ScreenBoundariesComponent visibleMapArea; ///< explained in a ScreeBoundariesGetterSystem
 
     // a helper data structure with possible moves from one tile in horizontal and vertical directions
     private static List<GridPoint2> moves =
@@ -68,11 +65,10 @@ public class FieldOfViewSystem extends EntitySystem {
                         )
                 );
 
-    public FieldOfViewSystem(Map map, Screen screen) {
+    public FieldOfViewSystem(Map map) {
         super(9997);
 
         this.map = map;
-        this.visibleMapArea = Mappers.screenBoundaries.get(screen);
     }
 
     @Override
@@ -102,9 +98,10 @@ public class FieldOfViewSystem extends EntitySystem {
      * to improve performance.
      * @param fov a Field of View Component of any Entity
      */
-    private void clearFOV(FieldOfViewComponent fov) {
-        for (int y = visibleMapArea.top; y >= visibleMapArea.bottom; --y) {
-            for (int x = visibleMapArea.left; x <= visibleMapArea.right; ++x) {
+    private void clearFOV(int entityXPos, int entityYPos, FieldOfViewComponent fov) {
+        int updateMargin = FieldOfViewComponent.VIEW_RADIUS + 4;
+        for (int y = entityYPos + updateMargin; y >= entityYPos - updateMargin; --y) {
+            for (int x = entityXPos - updateMargin; x < entityXPos + updateMargin; ++x) {
                 if (map.inBoundaries(x, y)) {
                     fov.visibility[x][y] = false;
                 }
@@ -119,7 +116,7 @@ public class FieldOfViewSystem extends EntitySystem {
      * @param fov a Field of Component of the same Entity
      */
     private void updateFOV(int entityXPos, int entityYPos, FieldOfViewComponent fov) {
-        clearFOV(fov);
+        clearFOV(entityXPos, entityYPos, fov);
 
         // sends a ray trace line every degree
         for (int i = 0; i < 360; i++) {
