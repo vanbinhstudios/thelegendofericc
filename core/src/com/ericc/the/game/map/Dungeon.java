@@ -3,6 +3,8 @@ package com.ericc.the.game.map;
 import com.badlogic.ashley.core.Family;
 import com.ericc.the.game.Engines;
 import com.ericc.the.game.components.MobComponent;
+import com.ericc.the.game.components.PlayerComponent;
+import com.ericc.the.game.components.PositionComponent;
 
 import java.util.ArrayList;
 
@@ -68,6 +70,6 @@ public class Dungeon {
      */
     private void saveLastProgress() {
         System.out.println("COS");
-        engines.removeFamily(Family.all(MobComponent.class).get());
+        engines.removeFamily(Family.all(PositionComponent.class).exclude(PlayerComponent.class).get());
     }
 }

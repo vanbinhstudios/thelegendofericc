@@ -10,16 +10,14 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.ericc.the.game.components.FieldOfViewComponent;
 import com.ericc.the.game.entities.Mob;
 import com.ericc.the.game.entities.Player;
+import com.ericc.the.game.entities.PushableObject;
 import com.ericc.the.game.entities.Screen;
 import com.ericc.the.game.helpers.FpsThrottle;
 import com.ericc.the.game.map.CurrentMap;
 import com.ericc.the.game.map.Dungeon;
 import com.ericc.the.game.map.Generator;
 import com.ericc.the.game.map.Map;
-import com.ericc.the.game.systems.logic.AiSystem;
-import com.ericc.the.game.systems.logic.FieldOfViewSystem;
-import com.ericc.the.game.systems.logic.FogOfWarSystem;
-import com.ericc.the.game.systems.logic.MovementSystem;
+import com.ericc.the.game.systems.logic.*;
 import com.ericc.the.game.systems.realtime.ScreenBoundariesGetterSystem;
 import com.ericc.the.game.systems.realtime.AnimationSystem;
 import com.ericc.the.game.systems.realtime.RenderSystem;
@@ -70,6 +68,10 @@ public class MainGame extends Game {
             engines.addEntity(new Mob(CurrentMap.map.getRandomPassableTile()));
         }
 
+        for (int i = 0; i < 10; i++) {
+            engines.addEntity(new PushableObject(CurrentMap.map.getRandomPassableTile(), Media.crate));
+        }
+
         ScreenBoundariesGetterSystem visibleMapAreaSystem = new ScreenBoundariesGetterSystem(viewport, screen);
         engines.addRealtimeSystem(new RenderSystem(viewport, playersFieldOfView, screen));
         engines.addRealtimeSystem(new AnimationSystem());
@@ -79,6 +81,8 @@ public class MainGame extends Game {
         FieldOfViewSystem fieldOfViewSystem = new FieldOfViewSystem(screen);
         FogOfWarSystem fogOfWarSystem = new FogOfWarSystem(player);
         engines.addLogicSystem(new AiSystem());
+        engines.addLogicSystem(new InitiativeSystem());
+        engines.addLogicSystem(new ActionHandlingSystem());
         engines.addLogicSystem(new MovementSystem());
         engines.addLogicSystem(fieldOfViewSystem);
         engines.addLogicSystem(fogOfWarSystem);
@@ -108,6 +112,7 @@ public class MainGame extends Game {
         centerCamera();
     }
 
+    // TODO: Use PositionComponent instead of the pos attribute and remove Player's attributes.
     private void centerCamera() {
         viewport.getCamera().position.lerp(new Vector3(player.pos.x, player.pos.y, 0),
                 1 - (float) Math.pow(.1f, Gdx.graphics.getDeltaTime()));
