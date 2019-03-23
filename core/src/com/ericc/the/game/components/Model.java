@@ -18,9 +18,4 @@ public class Model {
         this.sheet[Direction.LEFT.getValue()] = left;
         this.sheet[Direction.RIGHT.getValue()] = right;
     }
-
-    public Model(TextureRegion region) {
-        this.sheet = new TextureRegion[1];
-        this.sheet[0] = region;
-    }
 }

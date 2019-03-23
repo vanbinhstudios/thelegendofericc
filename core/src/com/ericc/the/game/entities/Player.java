@@ -16,18 +16,29 @@ public class Player extends Entity {
     private DirectionComponent dir;
     private RenderableComponent renderable;
     public CurrentActionComponent currentAction;
+    public IntentionComponent intention;
 
     public Player(int x, int y, FieldOfViewComponent fov) {
         pos = new PositionComponent(x, y);
         dir = new DirectionComponent(Direction.DOWN);
         renderable = new RenderableComponent(Models.hero);
         currentAction = new CurrentActionComponent(new NoAction());
+        intention = new IntentionComponent(new NoAction());
         add(pos);
         add(renderable);
         add(dir);
         add(currentAction);
+        add(intention);
         add(fov);
         add(new PlayerComponent());
+        add(new InteractivityComponent());
+        add(new SentienceComponent());
+        add(new AgilityComponent(50));
+        add(new HealthComponent(100));
+        add(new IntelligenceComponent(50));
+        add(new MovementPointsComponent(100));
+        add(new StrengthComponent(40));
+        add(new InitiativeComponent(10));
     }
 
     public Player(GridPoint2 pos, FieldOfViewComponent fov) {

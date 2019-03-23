@@ -42,7 +42,6 @@ public class RenderSystem extends EntitySystem {
     public RenderSystem(Map map, Viewport viewport, FieldOfViewComponent playersFieldOfView, Screen screen) {
         super(9999); // Rendering should be the last system in effect.
         this.map = map;
-
         this.viewport = viewport;
         this.playersFieldOfView = playersFieldOfView;
         this.visibleMapArea = Mappers.screenBoundaries.get(screen);

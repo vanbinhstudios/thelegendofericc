@@ -43,7 +43,7 @@ public class LightSystem extends EntitySystem {
             RenderableComponent render = Mappers.renderable.get(entity);
             PositionComponent pos = Mappers.position.get(entity);
 
-            if (fov.visibility[pos.x][pos.y]) {
+            if (fov.visibility.get(pos.x, pos.y)) {
                 render.lightLevel += deltaTime * fadingSpeed;
             } else {
                 render.lightLevel -= deltaTime * fadingSpeed;
@@ -55,7 +55,7 @@ public class LightSystem extends EntitySystem {
             for (int x = visibleArea.left - updateMargin; x <= visibleArea.right + updateMargin; ++x) {
                 if (!map.inBoundaries(x, y)) continue;
 
-                if (fov.visibility[x][y]) {
+                if (fov.visibility.get(x, y)) {
                     map.light[x][y] += deltaTime * fadingSpeed;
                 } else {
                     map.light[x][y] -= deltaTime * fadingSpeed;

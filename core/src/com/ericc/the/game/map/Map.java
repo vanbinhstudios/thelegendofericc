@@ -5,13 +5,14 @@ import com.badlogic.gdx.math.MathUtils;
 import com.ericc.the.game.Media;
 import com.ericc.the.game.TileTextureIndicator;
 import com.ericc.the.game.helpers.FogOfWar;
+import com.ericc.the.game.utils.RectangularBitset;
 
 import java.util.HashSet;
 
 public class Map {
 
     private int width, height;
-    private boolean[][] map;
+    private RectangularBitset map;
     public float[][] light;
     private int[][][] randomTileNumber;
     private int[][][] randomClutterNumber;
@@ -27,7 +28,7 @@ public class Map {
         this.passableTiles = new HashSet<>();
         this.rooms = new HashSet<>();
         this.fogOfWar = new FogOfWar(width, height);
-        map = new boolean[width][height];
+        map = new RectangularBitset(width, height);
         randomTileNumber = new int[width][height][TileTextureIndicator.countValues()];
         randomClutterNumber = new int[width][height][TileTextureIndicator.countValues()];
 
@@ -37,7 +38,7 @@ public class Map {
     protected void clearMap() {
         for (int x = 0; x < width; ++x) {
             for (int y = 0; y < height; ++y) {
-                map[x][y] = false;
+                map.clear(x, y);
 
                 // generated to preserve the same tile's texture across every render
                 randomTileNumber[x][y][TileTextureIndicator.UP.getValue()] = MathUtils.random(0, Media.wallUp.size - 1);
@@ -54,7 +55,7 @@ public class Map {
     }
 
     void setTile(int x, int y, boolean passable) {
-        map[x][y] = passable;
+        map.set(x, y);
 
         if (passable) {
             passableTiles.add(new GridPoint2(x, y));
@@ -87,7 +88,7 @@ public class Map {
             return false;
         }
 
-        return map[x][y];
+        return map.get(x, y);
     }
 
     public int width() {

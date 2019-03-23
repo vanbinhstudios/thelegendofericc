@@ -26,41 +26,35 @@ public class KeyboardController extends InputAdapter {
             return false;
         }
 
-        boolean action = true;
-      
         switch (keycode) {
             case Input.Keys.S:
             case Input.Keys.DOWN:
-                player.currentAction.action = Actions.MOVE_DOWN;
+                player.intention.currentIntent = Actions.MOVE_DOWN;
                 break;
             case Input.Keys.W:
             case Input.Keys.UP:
-                player.currentAction.action = Actions.MOVE_UP;
+                player.intention.currentIntent = Actions.MOVE_UP;
                 break;
             case Input.Keys.A:
             case Input.Keys.LEFT:
-                player.currentAction.action = Actions.MOVE_LEFT;
+                player.intention.currentIntent = Actions.MOVE_LEFT;
                 break;
             case Input.Keys.D:
             case Input.Keys.RIGHT:
-                player.currentAction.action = Actions.MOVE_RIGHT;
+                player.intention.currentIntent = Actions.MOVE_RIGHT;
                 break;
             case Input.Keys.SPACE:
-                player.currentAction.action = Actions.NOTHING;
-                break;
             default:
-                player.currentAction.action = Actions.NOTHING;
-                action = false;
+                player.intention.currentIntent = Actions.NOTHING;
                 break;
         }
-        if (action) {
-            logicEngine.update(1);
-        }
-        return true;
+
+        logicEngine.update(1);
+        return false;
     }
 
     /**
-     * Actions that player takes (in GUI) and should not affect the turn counter.
+     * Actions that player takes and should not affect the turn counter.
      * @return true if the action that should be taken should not update the turn counter
      */
     private boolean playersGUIActions(int keycode) {

@@ -12,8 +12,6 @@ import com.ericc.the.game.components.PositionComponent;
 import com.ericc.the.game.entities.Player;
 import com.ericc.the.game.map.Map;
 
-import javax.swing.text.Position;
-
 public class FogOfWarSystem extends EntitySystem {
     private Map map;
     private ImmutableArray<Entity> entities; ///< all entities able to discover new tiles
@@ -39,7 +37,7 @@ public class FogOfWarSystem extends EntitySystem {
 
             for (int y = position.y + updateMargin; y >= position.y - updateMargin; --y) {
                 for (int x = position.x - updateMargin; x < position.x + updateMargin; ++x) {
-                    if (map.inBoundaries(x, y) && fov.visibility[x][y]) {
+                    if (map.inBoundaries(x, y) && fov.visibility.get(x, y)) {
                         map.markAsSeenByPlayer(x, y);
                     }
                 }
