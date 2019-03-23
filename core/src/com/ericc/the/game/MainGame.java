@@ -95,8 +95,6 @@ public class MainGame extends Game {
 
         engines.updateRealtimeEngine();
         fpsThrottle.sleepToNextFrame();
-
-        System.out.print(Gdx.graphics.getFramesPerSecond() + "\n");
     }
 
     @Override
