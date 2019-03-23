@@ -49,15 +49,12 @@ public class Engines {
     }
 
     public void removeFamily(Family family) {
-        ImmutableArray<Entity> arr = engine.getEntitiesFor(family);
-        System.out.println(arr.size());
+        engine.removeAllEntities(family);
 
-        while (arr.size() > 0) {
-            arr = engine.getEntitiesFor(family);
+        System.out.println(getEntitiesFor(family).size());
+    }
 
-            for (Entity entity : arr) {
-                engine.removeEntity(entity);
-            }
-        }
+    public ImmutableArray<Entity> getEntitiesFor(Family family) {
+        return engine.getEntitiesFor(family);
     }
 }

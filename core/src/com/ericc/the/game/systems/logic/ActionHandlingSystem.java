@@ -60,6 +60,13 @@ public class ActionHandlingSystem extends SortedIteratingSystem {
     }
 
     @Override
+    public void entityRemoved(Entity entity) {
+        System.out.println("REM");
+        PositionComponent pos = Mappers.position.get(entity);
+        interactives.remove(new GridPoint2(pos.x, pos.y));
+    }
+
+    @Override
     public void processEntity(Entity currentEntity, float deltaTime) {
         boolean canProceed = analyzeMove(currentEntity);
         // If the entity can proceed it's intent can be put into action
