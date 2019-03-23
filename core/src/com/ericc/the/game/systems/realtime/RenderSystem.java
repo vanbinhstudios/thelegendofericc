@@ -94,12 +94,8 @@ public class RenderSystem extends EntitySystem {
         int entityIndex = 0;
         for (int y = visibleMapArea.top; y >= visibleMapArea.bottom; --y) {
             for (int x = visibleMapArea.left; x <= visibleMapArea.right; ++x) {
-                if (playersFieldOfView.visibility[x][y]) {
-                    drawTile(batch, x, y, false);
-                } else if (map.hasBeenSeenByPlayer(x, y)) {
-                    batch.setColor(0.2f, 0.2f, 0.2f, 1.0f);
+                if (map.hasBeenSeenByPlayer(x, y)) {
                     drawTile(batch, x, y, true);
-                    batch.setColor(Color.WHITE);
                 }
             }
             while (entityIndex < visibleEntities.size() && Mappers.position.get(visibleEntities.get(entityIndex)).y >= y) {
