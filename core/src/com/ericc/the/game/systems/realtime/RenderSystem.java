@@ -56,7 +56,7 @@ public class RenderSystem extends EntitySystem {
 
     @Override
     public void update(float deltaTime) {
-        Gdx.gl.glClearColor(.025f, .059f, .05f, 1);
+        Gdx.gl.glClearColor(.09019f, .05882f, .08627f, 1); // in hex: 170f16
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         initBatch(batch);
@@ -123,11 +123,13 @@ public class RenderSystem extends EntitySystem {
         if (lightLevel == 0.0f) {
             return;
         }
+
         transform.idt();
         transform.mul(render.model.defaultTransform); // From bottom-left-corner space to origin space.
         transform.mul(render.transform); // Apply affine animations.
         transform.translate(pos.x, pos.y); // Move to logical position.
 
+        lightLevel = returnLightLevel(lightLevel);
         batch.setColor(color.set(Color.WHITE).mul(lightLevel, lightLevel, lightLevel, 1.0f));
         batch.draw(render.region, render.model.width, render.model.height, transform);
     }
@@ -135,7 +137,7 @@ public class RenderSystem extends EntitySystem {
     private void drawTile(SpriteBatch batch, int x, int y, boolean isStatic) {
 
         float lightLevel = map.light[x][y];
-        lightLevel = (lightLevel - 1) * 0.8f + 1;
+        lightLevel = returnLightLevel(lightLevel);
         batch.setColor(color.set(Color.WHITE).mul(lightLevel, lightLevel, lightLevel, 1.0f));
 
         /*
@@ -281,5 +283,9 @@ public class RenderSystem extends EntitySystem {
         batch.setProjectionMatrix(viewport.getCamera().combined);
         batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         batch.begin();
+    }
+
+    private float returnLightLevel(float lightLevel) {
+        return (lightLevel - 1) * 0.5f + 1;
     }
 }
