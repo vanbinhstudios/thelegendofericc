@@ -12,6 +12,7 @@ public class Media {
     public static TextureRegion wallLU, wallRU, wallLD, wallRD;
     public static TextureRegion playerFront, playerLeft, playerRight, playerBack;
     public static TextureRegion mobFront, mobLeft, mobRight, mobBack;
+    public static TextureRegion crate;
     public static TextureAtlas atlas;
     public static int floorsConfiguration = 0;
 
@@ -46,6 +47,8 @@ public class Media {
         mobBack = atlas.findRegion("entity/mage/mage_back");
         mobLeft = atlas.findRegion("entity/mage/mage_left");
         mobRight = atlas.findRegion("entity/mage/mage_right");
+
+        crate = atlas.findRegion("entity/crate/crate");
     }
 
     public static void dispose() {

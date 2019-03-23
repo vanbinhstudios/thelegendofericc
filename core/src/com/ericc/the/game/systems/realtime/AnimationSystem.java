@@ -21,8 +21,10 @@ public class AnimationSystem extends EntitySystem {
 
     @Override
     public void addedToEngine(Engine engine) {
-        affineAnimated = engine.getEntitiesFor(Family.all(SpriteSheetComponent.class, AffineAnimationComponent.class).get());
-        directed = engine.getEntitiesFor(Family.all(SpriteSheetComponent.class, DirectionComponent.class).get());
+        affineAnimated = engine.getEntitiesFor(Family.all(SpriteSheetComponent.class,
+                            AffineAnimationComponent.class).get());
+        directed = engine.getEntitiesFor(Family.all(SpriteSheetComponent.class,
+                    DirectionComponent.class).get());
     }
 
     @Override
