@@ -30,11 +30,10 @@ import java.util.ArrayList;
  */
 public class RenderSystem extends EntitySystem {
     private Map map;
-    private float[][] lightMap;
     private Viewport viewport;
     private ScreenBoundariesComponent visibleMapArea;
-    private final Affine2 transform = new Affine2();
-    private final Color color = new Color();
+    private final Affine2 transformTmp = new Affine2();
+    private final Color colorTmp = new Color();
 
     private SpriteBatch batch = new SpriteBatch();
     private ImmutableArray<Entity> entities; // Renderable entities.
@@ -56,7 +55,7 @@ public class RenderSystem extends EntitySystem {
 
     @Override
     public void update(float deltaTime) {
-        Gdx.gl.glClearColor(.09019f, .05882f, .08627f, 1); // in hex: 170f16
+        Gdx.gl.glClearColor(.09019f, .05882f, .08627f, 1); // Background color (hex: 170f16)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         initBatch(batch);
@@ -120,21 +119,21 @@ public class RenderSystem extends EntitySystem {
             return;
         }
 
-        transform.idt();
-        transform.mul(render.model.defaultTransform); // From bottom-left-corner space to origin space.
-        transform.mul(render.transform); // Apply affine animations.
-        transform.translate(pos.x, pos.y); // Move to logical position.
+        transformTmp.idt();
+        transformTmp.mul(render.model.defaultTransform); // From bottom-left-corner space to origin space.
+        transformTmp.mul(render.transform); // Apply affine animations.
+        transformTmp.translate(pos.x, pos.y); // Move to logical position.
 
-        lightLevel = returnLightLevel(lightLevel);
-        batch.setColor(color.set(Color.WHITE).mul(lightLevel, lightLevel, lightLevel, 1.0f));
-        batch.draw(render.region, render.model.width, render.model.height, transform);
+        float brightness = getBrightness(lightLevel);
+        batch.setColor(colorTmp.set(Color.WHITE).mul(brightness, brightness, brightness, 1.0f));
+        batch.draw(render.region, render.model.width, render.model.height, transformTmp);
     }
 
     private void drawTile(SpriteBatch batch, int x, int y, boolean isStatic) {
 
         float lightLevel = map.light[x][y];
-        lightLevel = returnLightLevel(lightLevel);
-        batch.setColor(color.set(Color.WHITE).mul(lightLevel, lightLevel, lightLevel, 1.0f));
+        float brightness = getBrightness(lightLevel);
+        batch.setColor(colorTmp.set(Color.WHITE).mul(brightness, brightness, brightness, 1.0f));
 
         /*
         The nine-digit tile code describes the neighbourhood of the tile.
@@ -281,7 +280,8 @@ public class RenderSystem extends EntitySystem {
         batch.begin();
     }
 
-    private float returnLightLevel(float lightLevel) {
-        return (lightLevel - 1) * 0.5f + 1;
+    private float getBrightness(float lightLevel) {
+        final float minimumBrightness = 0.5f;
+        return (lightLevel - 1) * (1 - minimumBrightness) + 1; // Linear scaling from [0, 1] to [minimumBrightness, 1]
     }
 }

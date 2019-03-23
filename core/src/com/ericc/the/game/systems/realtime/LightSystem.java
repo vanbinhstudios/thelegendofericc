@@ -17,16 +17,16 @@ import static java.lang.Float.max;
 import static java.lang.Float.min;
 
 public class LightSystem extends EntitySystem {
-    private ImmutableArray<Entity> lightable; // Entities with affine animation currently attached.
+    private ImmutableArray<Entity> lightable;
 
     private FieldOfViewComponent fov;
     private Map map;
-    private ScreenBoundariesComponent visibleMapArea;
+    private ScreenBoundariesComponent visibleArea;
 
     public LightSystem(FieldOfViewComponent fov, Map map, Screen screen) {
         this.fov = fov;
         this.map = map;
-        this.visibleMapArea = Mappers.screenBoundaries.get(screen);
+        this.visibleArea = Mappers.screenBoundaries.get(screen);
     }
 
     @Override
@@ -36,33 +36,38 @@ public class LightSystem extends EntitySystem {
 
     @Override
     public void update(float deltaTime) {
-        // Update sprites according to orientation (face direction) of the Entity.
+        final float fadingSpeed = 1 / 0.5f; // Full transition takes (1 / fadingSpeed) seconds.
+        final int updateMargin = 5;
+
         for (Entity entity : lightable) {
             RenderableComponent render = Mappers.renderable.get(entity);
             PositionComponent pos = Mappers.position.get(entity);
 
             if (fov.visibility[pos.x][pos.y]) {
-                render.lightLevel += (deltaTime) / 0.5f;
-                render.lightLevel = min(render.lightLevel, 1f);
+                render.lightLevel += deltaTime * fadingSpeed;
             } else {
-                render.lightLevel -= (deltaTime) / 0.5f;
-                render.lightLevel = max(render.lightLevel, 0f);
+                render.lightLevel -= deltaTime * fadingSpeed;
             }
+            render.lightLevel = clamp(0, render.lightLevel, 1);
         }
 
-        for (int y = visibleMapArea.top + 5; y >= visibleMapArea.bottom - 5; --y) {
-            for (int x = visibleMapArea.left - 5; x <= visibleMapArea.right + 5; ++x) {
+        for (int y = visibleArea.top + updateMargin; y >= visibleArea.bottom - updateMargin; --y) {
+            for (int x = visibleArea.left - updateMargin; x <= visibleArea.right + updateMargin; ++x) {
                 if (!map.inBoundaries(x, y)) continue;
+
                 if (fov.visibility[x][y]) {
-                    map.light[x][y] += (deltaTime) / 0.5f;
-                    map.light[x][y] = min(map.light[x][y], 1f);
+                    map.light[x][y] += deltaTime * fadingSpeed;
                 } else {
-                    map.light[x][y] -= (deltaTime) / 0.5f;
-                    map.light[x][y] = max(map.light[x][y], 0f);
+                    map.light[x][y] -= deltaTime * fadingSpeed;
                 }
+                map.light[x][y] = clamp(0, map.light[x][y], 1);
             }
         }
+    }
 
-
+    private float clamp(float lowerBound, float x, float upperBound) {
+        x = min(x, upperBound);
+        x = max(x, lowerBound);
+        return x;
     }
 }
