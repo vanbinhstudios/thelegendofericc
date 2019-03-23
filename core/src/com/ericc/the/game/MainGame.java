@@ -64,14 +64,6 @@ public class MainGame extends Game {
         engines.addEntity(player);
         engines.addEntity(screen);
 
-        for (int i = 0; i < 10; i++) {
-            engines.addEntity(new Mob(CurrentMap.map.getRandomPassableTile()));
-        }
-
-        for (int i = 0; i < 10; i++) {
-            engines.addEntity(new PushableObject(CurrentMap.map.getRandomPassableTile(), Media.crate));
-        }
-
         ScreenBoundariesGetterSystem visibleMapAreaSystem = new ScreenBoundariesGetterSystem(viewport, screen);
         engines.addRealtimeSystem(new RenderSystem(viewport, playersFieldOfView, screen));
         engines.addRealtimeSystem(new AnimationSystem());
@@ -88,6 +80,7 @@ public class MainGame extends Game {
         engines.addLogicSystem(fogOfWarSystem);
 
         initialisePlayersComponents(visibleMapAreaSystem, fieldOfViewSystem, fogOfWarSystem);
+        dungeon.generateLevel(CurrentMap.map);
 
         if (MUSIC) {
             Sound sound = Gdx.audio.newSound(Gdx.files.internal("music/8bitAdventure.mp3"));

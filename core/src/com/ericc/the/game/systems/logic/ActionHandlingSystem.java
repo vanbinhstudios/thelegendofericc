@@ -2,9 +2,9 @@ package com.ericc.the.game.systems.logic;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.EntityListener;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.SortedIteratingSystem;
-import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.GridPoint2;
 import com.ericc.the.game.Direction;
 import com.ericc.the.game.Mappers;
@@ -15,7 +15,6 @@ import com.ericc.the.game.entities.Mob;
 import com.ericc.the.game.entities.Player;
 import com.ericc.the.game.entities.PushableObject;
 import com.ericc.the.game.map.CurrentMap;
-import com.ericc.the.game.map.Map;
 
 import java.util.Comparator;
 import java.util.HashMap;
@@ -29,7 +28,7 @@ public class ActionHandlingSystem extends SortedIteratingSystem {
                 CurrentActionComponent.class, AgilityComponent.class,
                 IntelligenceComponent.class, SentienceComponent.class,
                 InitiativeComponent.class).get(), new EntityComparator(),
-                10002);
+                102);
     }
 
     // Entity comparator based on initiative value in the current turn
@@ -47,23 +46,10 @@ public class ActionHandlingSystem extends SortedIteratingSystem {
         // Interactives contains a map of all interactive entities and their positions
         super.addedToEngine(engine);
         interactives = new HashMap<>();
-
-        ImmutableArray<Entity> initiativeEntitiesArray;
-
-        initiativeEntitiesArray = engine.getEntitiesFor(Family.all(PositionComponent.class,
-                InteractivityComponent.class, CurrentActionComponent.class).get());
-
-        for (Entity entity : initiativeEntitiesArray) {
-            PositionComponent pos = Mappers.position.get(entity);
-            interactives.put(new GridPoint2(pos.x, pos.y), entity);
-        }
-    }
-
-    @Override
-    public void entityRemoved(Entity entity) {
-        System.out.println("REM");
-        PositionComponent pos = Mappers.position.get(entity);
-        interactives.remove(new GridPoint2(pos.x, pos.y));
+        Family family = Family.all(PositionComponent.class,
+                InteractivityComponent.class,
+                CurrentActionComponent.class).get();
+        engine.addEntityListener(family, new HandledEntities());
     }
 
     @Override
@@ -163,6 +149,20 @@ public class ActionHandlingSystem extends SortedIteratingSystem {
 
             interactives.remove(new GridPoint2(pos.x, pos.y), entity);
             interactives.put(targetPos, entity);
+        }
+    }
+
+    public class HandledEntities implements EntityListener {
+        @Override
+        public void entityRemoved(Entity entity) {
+            PositionComponent pos = Mappers.position.get(entity);
+            interactives.remove(new GridPoint2(pos.x, pos.y), entity);
+        }
+
+        @Override
+        public void entityAdded(Entity entity) {
+            PositionComponent pos = Mappers.position.get(entity);
+            interactives.put(new GridPoint2(pos.x, pos.y), entity);
         }
     }
 }

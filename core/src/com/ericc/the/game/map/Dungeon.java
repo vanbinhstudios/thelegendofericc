@@ -2,6 +2,7 @@ package com.ericc.the.game.map;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
+import com.badlogic.ashley.utils.ImmutableArray;
 import com.ericc.the.game.Engines;
 import com.ericc.the.game.Media;
 import com.ericc.the.game.components.MobComponent;
@@ -19,14 +20,16 @@ import java.util.List;
  */
 public class Dungeon {
     private ArrayList<Map> levels;
+    private ArrayList<ArrayList<Entity>> entities;
     private int currentLevel;
     private Engines engines;
 
     public Dungeon(Engines engines) {
         this.engines = engines;
+        this.entities = new ArrayList<>();
 
         levels = new ArrayList<>();
-        currentLevel = 0;
+        currentLevel = -1;
     }
 
     public void addMap(Map map) {
@@ -42,13 +45,19 @@ public class Dungeon {
             addNewMap();
         }
 
-        if (levels.size() == 1) {
-            return levels.get(0);
+        if (currentLevel >= 0) {
+            saveLastProgress();
         }
 
-        saveLastProgress();
+        ++currentLevel;
 
-        return levels.get(++currentLevel);
+        if (entities.size() < currentLevel) {
+            loadProgress();
+        } else if (currentLevel > 0) {
+            generateLevel(levels.get(currentLevel));
+        }
+
+        return levels.get(currentLevel);
     }
 
     /**
@@ -56,11 +65,15 @@ public class Dungeon {
      * if it does not, we stay on the first level.
      */
     public Map goToPrevious() {
-        if (currentLevel == 0) {
+        if (currentLevel <= 0) {
             return levels.get(0);
         }
 
-        return levels.get(--currentLevel);
+        saveLastProgress();
+        --currentLevel;
+        loadProgress();
+
+        return levels.get(currentLevel);
     }
 
     /**
@@ -70,11 +83,40 @@ public class Dungeon {
         levels.add(new Generator(30, 30, 9).generateMap());
     }
 
+    private void loadProgress() {
+        for (Entity entity : entities.get(currentLevel)) {
+            engines.addEntity(entity);
+        }
+    }
+
     /**
      * TODO Saves the last map's progress / entities [.get(currentLevel)]]
      */
     private void saveLastProgress() {
         System.out.println("COS");
-        engines.removeFamily(Family.all(PositionComponent.class).exclude(PlayerComponent.class).get());
+        if (entities.isEmpty() || entities.size() == currentLevel) {
+            entities.add(new ArrayList<>());
+        }
+
+        entities.get(currentLevel).clear();
+
+        Family family = Family.all(PositionComponent.class).exclude(PlayerComponent.class).get();
+        ImmutableArray<Entity> arr = engines.getEntitiesFor(family);
+
+        for (Entity entity : arr) {
+            entities.get(currentLevel).add(entity);
+        }
+
+        engines.removeFamily(family);
+    }
+
+    public void generateLevel(Map map) {
+        for (int i = 0; i < 15; i++) {
+            engines.addEntity(new Mob(map.getRandomPassableTile()));
+        }
+
+        for (int i = 0; i < 10; i++) {
+            engines.addEntity(new PushableObject(map.getRandomPassableTile(), Media.crate));
+        }
     }
 }

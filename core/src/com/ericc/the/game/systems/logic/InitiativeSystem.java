@@ -16,7 +16,7 @@ public class InitiativeSystem extends IteratingSystem {
                 CurrentActionComponent.class, AgilityComponent.class,
                 IntelligenceComponent.class, SentienceComponent.class,
                 InitiativeComponent.class).get(),
-                10001);
+                101);
     }
 
     @Override

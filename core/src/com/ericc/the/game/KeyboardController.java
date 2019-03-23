@@ -52,18 +52,6 @@ public class KeyboardController extends InputAdapter {
             case Input.Keys.SPACE:
                 player.intention.currentIntent = Actions.NOTHING;
                 break;
-            case Input.Keys.N: // like NEXT -> changes the map to the next one
-                player.intention.currentIntent = Actions.NOTHING;
-                if (DEBUG) {
-                    CurrentMap.setMap(dungeon.goToNext(), engines);
-                }
-                break;
-            case Input.Keys.P: // like PREVIOUS -> changes the map to the previous one
-                player.intention.currentIntent = Actions.NOTHING;
-                if (DEBUG) {
-                    CurrentMap.setMap(dungeon.goToPrevious(), engines);
-                }
-                break;
             default:
                 player.intention.currentIntent = Actions.NOTHING;
                 break;
@@ -84,6 +72,16 @@ public class KeyboardController extends InputAdapter {
                 break;
             case Input.Keys.PLUS:
                 zoom.zoomInCamera();
+                break;
+            case Input.Keys.N: // like NEXT -> changes the map to the next one
+                if (DEBUG) {
+                    CurrentMap.setMap(dungeon.goToNext(), engines);
+                }
+                break;
+            case Input.Keys.P: // like PREVIOUS -> changes the map to the previous one
+                if (DEBUG) {
+                    CurrentMap.setMap(dungeon.goToPrevious(), engines);
+                }
                 break;
             default:
                 return false;

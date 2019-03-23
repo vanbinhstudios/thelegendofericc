@@ -49,6 +49,8 @@ public class Engines {
     }
 
     public void removeFamily(Family family) {
+        System.out.println(getEntitiesFor(family).size());
+
         engine.removeAllEntities(family);
 
         System.out.println(getEntitiesFor(family).size());
