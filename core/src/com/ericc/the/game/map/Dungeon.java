@@ -20,6 +20,7 @@ import com.ericc.the.game.helpers.Moves;
 import com.sun.istack.internal.NotNull;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -95,13 +96,11 @@ public class Dungeon {
 
     private void loadProgress() {
         for (Entity entity : entities.get(currentLevel)) {
-            System.out.println("Loading");
             engines.addEntity(entity);
         }
     }
 
     private void saveLastProgress() {
-        System.out.println("COS");
         if (entities.isEmpty() || entities.size() == currentLevel) {
             entities.add(new ArrayList<>());
         }
@@ -119,12 +118,11 @@ public class Dungeon {
     }
 
     public void generateLevel(Map map) {
-        System.out.println("call");
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < 5; i++) {
             engines.addEntity(new Mob(map.getRandomPassableTile()));
         }
 
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < 2; i++) {
             engines.addEntity(new PushableObject(map.getRandomPassableTile(), Media.crate));
         }
 
@@ -134,7 +132,6 @@ public class Dungeon {
 
     private void placePlayersNextToStairs(GridPoint2 stairsPosition) {
         ImmutableArray<Entity> players = engines.getEntitiesFor(Family.all(PlayerComponent.class).get());
-        System.out.println("Placing player on");
 
         for (Entity player : players) {
             PositionComponent playersPosition = Mappers.position.get(player);

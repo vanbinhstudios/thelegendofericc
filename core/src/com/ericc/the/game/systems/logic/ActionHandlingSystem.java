@@ -118,8 +118,6 @@ public class ActionHandlingSystem extends SortedIteratingSystem {
             if (collidingEntity instanceof Player) {
                 // Damage system will apply damage to the Player here
                 // if the entity is an agressive mob
-                System.out.println("colliding with");
-                System.out.println(interactives.size());
                 return false;
             }
             if (collidingEntity instanceof Mob) {
@@ -169,12 +167,11 @@ public class ActionHandlingSystem extends SortedIteratingSystem {
         @Override
         public void entityRemoved(Entity entity) {
             PositionComponent pos = Mappers.position.get(entity);
-            interactives.remove(new GridPoint2(pos.x, pos.y), entity);
+            interactives.remove(new GridPoint2(pos.x, pos.y));
         }
 
         @Override
         public void entityAdded(Entity entity) {
-            System.out.println("ENTITY ADDED");
             PositionComponent pos = Mappers.position.get(entity);
             interactives.put(new GridPoint2(pos.x, pos.y), entity);
         }

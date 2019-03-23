@@ -1,5 +1,6 @@
 package com.ericc.the.game.map;
 
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.MathUtils;
 import com.ericc.the.game.Engines;
@@ -9,6 +10,8 @@ import com.ericc.the.game.entities.Stairs;
 import com.ericc.the.game.helpers.FogOfWar;
 import com.ericc.the.game.utils.RectangularBitset;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 
 public class Map {
@@ -21,8 +24,8 @@ public class Map {
     // the above is NOT AN INVARIANT, this changes after spawning some entities on some tiles from this collection
     private HashSet<Room> rooms; ///< stores every room made while generating (without corridors)
     private FogOfWar fogOfWar;
-    GridPoint2 entrance;
-    GridPoint2 exit;
+    public GridPoint2 entrance;
+    public GridPoint2 exit;
 
     Map(int width, int height) {
         this.width = width;
@@ -113,11 +116,25 @@ public class Map {
         return ret;
     }
 
+    public GridPoint2 getRandomPassableTileFromRooms() {
+        ArrayList<Room> roomsListed = new ArrayList<>(rooms);
+        Room randomRoom = roomsListed.get(MathUtils.random(roomsListed.size() - 1));
+
+        while (!(passableTiles.contains(randomRoom.getRightUpperCorner()) || randomRoom.getMinimalSize() < 2)) {
+            Collections.shuffle(roomsListed);
+            randomRoom = roomsListed.get(MathUtils.random(roomsListed.size() - 1));
+        }
+
+        passableTiles.remove(randomRoom.getRightUpperCorner());
+
+        return randomRoom.getRightUpperCorner();
+    }
+
     public GridPoint2 makeStairs(boolean descending) {
         if (descending) {
-            this.exit = getRandomPassableTile();
+            this.exit = getRandomPassableTileFromRooms();
         } else {
-            this.entrance = getRandomPassableTile();
+            this.entrance = getRandomPassableTileFromRooms();
         }
 
         return descending ? this.exit : this.entrance;

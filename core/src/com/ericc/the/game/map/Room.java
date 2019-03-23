@@ -26,6 +26,14 @@ public class Room {
                 (leftDownCorner.y + rightUpperCorner.y) / 2);
     }
 
+    public GridPoint2 getLeftDownCorner() {
+        return leftDownCorner;
+    }
+
+    public GridPoint2 getRightUpperCorner() {
+        return rightUpperCorner;
+    }
+
     @Override
     public int hashCode() {
         return id;
@@ -38,5 +46,10 @@ public class Room {
         }
 
         return false;
+    }
+
+    public int getMinimalSize() {
+        return Math.min(Math.abs(rightUpperCorner.x - leftDownCorner.x),
+                Math.abs(rightUpperCorner.y - leftDownCorner.y));
     }
 }

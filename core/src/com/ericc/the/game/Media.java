@@ -50,8 +50,8 @@ public class Media {
         mobRight = atlas.findRegion("entity/mage/mage_right");
 
         crate = atlas.findRegion("entity/crate/crate");
-        stairsUp = atlas.findRegion("map/floors/stairs_up");
-        stairsDown = atlas.findRegion("map/floors/stairs_down");
+        stairsUp = atlas.findRegion("map/stairs/stairs_up");
+        stairsDown = atlas.findRegion("map/stairs/stairs_down");
     }
 
     public static void dispose() {
