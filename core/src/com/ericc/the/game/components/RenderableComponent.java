@@ -8,7 +8,8 @@ public class RenderableComponent implements Component {
     public Model model;
     public TextureRegion region;
     public Affine2 transform = new Affine2();
-    public float lightLevel = 0.0f;
+    public float brightness = 0.0f;
+    public boolean visible = false;
 
     public RenderableComponent(Model model) {
         this.model = model;

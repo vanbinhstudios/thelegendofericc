@@ -66,7 +66,7 @@ public class FieldOfViewSystem extends EntitySystem {
                 );
 
     public FieldOfViewSystem(Map map) {
-        super(9997);
+        super(100); // Depends on MovementSystem
 
         this.map = map;
     }

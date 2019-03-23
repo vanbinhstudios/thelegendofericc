@@ -40,7 +40,7 @@ public class RenderSystem extends EntitySystem {
     private FieldOfViewComponent playersFieldOfView;
 
     public RenderSystem(Map map, Viewport viewport, FieldOfViewComponent playersFieldOfView, Screen screen) {
-        super(9999); // Rendering should be the last system in effect.
+        super(10001); // Should be the last system to run.
         this.map = map;
         this.viewport = viewport;
         this.playersFieldOfView = playersFieldOfView;
@@ -113,25 +113,22 @@ public class RenderSystem extends EntitySystem {
         PositionComponent pos = Mappers.position.get(entity);
         RenderableComponent render = Mappers.renderable.get(entity);
 
-        float lightLevel = render.lightLevel;
-        if (lightLevel == 0.0f) {
+        if (!render.visible)
             return;
-        }
 
         transformTmp.idt();
         transformTmp.mul(render.model.defaultTransform); // From bottom-left-corner space to origin space.
         transformTmp.mul(render.transform); // Apply affine animations.
         transformTmp.translate(pos.x, pos.y); // Move to logical position.
 
-        float brightness = getBrightness(lightLevel);
+        float brightness = render.brightness;
         batch.setColor(colorTmp.set(Color.WHITE).mul(brightness, brightness, brightness, 1.0f));
         batch.draw(render.region, render.model.width, render.model.height, transformTmp);
     }
 
     private void drawTile(SpriteBatch batch, int x, int y, boolean isStatic) {
 
-        float lightLevel = map.light[x][y];
-        float brightness = getBrightness(lightLevel);
+        float brightness = map.brightness[x][y];
         batch.setColor(colorTmp.set(Color.WHITE).mul(brightness, brightness, brightness, 1.0f));
 
         /*
@@ -277,10 +274,5 @@ public class RenderSystem extends EntitySystem {
         batch.setProjectionMatrix(viewport.getCamera().combined);
         batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         batch.begin();
-    }
-
-    private float getBrightness(float lightLevel) {
-        final float minimumBrightness = 0.5f;
-        return (lightLevel - 1) * (1 - minimumBrightness) + 1; // Linear scaling from [0, 1] to [minimumBrightness, 1]
     }
 }

@@ -29,7 +29,7 @@ public class ActionHandlingSystem extends SortedIteratingSystem {
                 CurrentActionComponent.class, AgilityComponent.class,
                 IntelligenceComponent.class, SentienceComponent.class,
                 InitiativeComponent.class).get(), new EntityComparator(),
-                10002);
+                1); // Depends on InitiativeSystem and AiSystem
         this.map = map;
     }
 

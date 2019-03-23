@@ -17,7 +17,7 @@ public class FogOfWarSystem extends EntitySystem {
     private ImmutableArray<Entity> entities; ///< all entities able to discover new tiles
 
     public FogOfWarSystem(Map map) {
-        super(9998); // remember to change it so it is larger than FOV priority
+        super(101); // Depends on FieldOfViewSystem
 
         this.map = map;
     }
