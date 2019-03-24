@@ -92,6 +92,9 @@ public class Dungeon {
                     break;
                 case RANDOM_PASSABLE:
                     position = levels.get(currentLevelNumber).getMap().getRandomPassableTileFromRooms();
+                    break;
+                default:
+                    throw new IllegalArgumentException("Not a proper positionType was given");
             }
             placeEntity(entity, position);
         }

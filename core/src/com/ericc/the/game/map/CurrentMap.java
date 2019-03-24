@@ -1,7 +1,5 @@
 package com.ericc.the.game.map;
 
-import com.ericc.the.game.Engines;
-
 public class CurrentMap {
     public static Map map;
 

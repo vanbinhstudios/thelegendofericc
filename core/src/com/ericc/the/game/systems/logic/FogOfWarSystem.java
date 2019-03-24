@@ -1,6 +1,5 @@
 package com.ericc.the.game.systems.logic;
 
-import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.EntitySystem;
 import com.ericc.the.game.Mappers;
 import com.ericc.the.game.components.FieldOfViewComponent;
@@ -17,10 +16,6 @@ public class FogOfWarSystem extends EntitySystem {
         super(9998); // remember to change it so it is larger than FOV priority
 
         this.player = player;
-    }
-
-    @Override
-    public void addedToEngine(Engine engine) {
     }
 
     @Override
