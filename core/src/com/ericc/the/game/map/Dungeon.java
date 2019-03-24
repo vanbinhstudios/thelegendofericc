@@ -57,7 +57,6 @@ public class Dungeon {
         ++currentLevel;
 
         if (currentLevel < entities.size()) {
-            System.out.println(levels.isEmpty());
             loadProgress();
         } else if (currentLevel > 0) {
             generateLevel(levels.get(currentLevel));
@@ -118,11 +117,11 @@ public class Dungeon {
     }
 
     public void generateLevel(Map map) {
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 0; i++) {
             engines.addEntity(new Mob(map.getRandomPassableTile()));
         }
 
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 0; i++) {
             engines.addEntity(new PushableObject(map.getRandomPassableTile(), Media.crate));
         }
 

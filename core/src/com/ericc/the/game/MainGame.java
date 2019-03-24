@@ -78,7 +78,7 @@ public class MainGame extends Game {
         engines.addLogicSystem(new MovementSystem());
         engines.addLogicSystem(fieldOfViewSystem);
         engines.addLogicSystem(fogOfWarSystem);
-        engines.addLogicSystem(new TeleportPlayerSystem(dungeon, engines));
+        engines.addLogicSystem(new TeleportPlayerSystem(dungeon, engines, player));
 
         initialisePlayersComponents(visibleMapAreaSystem, fieldOfViewSystem, fogOfWarSystem);
         dungeon.generateLevel(CurrentMap.map);

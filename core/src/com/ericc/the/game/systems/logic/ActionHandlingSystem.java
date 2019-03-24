@@ -11,6 +11,7 @@ import com.ericc.the.game.Engines;
 import com.ericc.the.game.Mappers;
 import com.ericc.the.game.actions.Actions;
 import com.ericc.the.game.actions.MovementAction;
+import com.ericc.the.game.actions.TeleportAction;
 import com.ericc.the.game.components.*;
 import com.ericc.the.game.entities.Mob;
 import com.ericc.the.game.entities.Player;
@@ -25,6 +26,7 @@ import java.util.HashMap;
 public class ActionHandlingSystem extends SortedIteratingSystem {
 
     private HashMap<GridPoint2, Entity> interactives;
+    private boolean shouldResetIntention = false;
 
     public ActionHandlingSystem() {
         super(Family.all(PositionComponent.class,
@@ -57,6 +59,7 @@ public class ActionHandlingSystem extends SortedIteratingSystem {
 
     @Override
     public void processEntity(Entity currentEntity, float deltaTime) {
+        this.shouldResetIntention = true;
         boolean canProceed = analyzeMove(currentEntity);
         // If the entity can proceed it's intent can be put into action
         if (canProceed) {
@@ -65,7 +68,9 @@ public class ActionHandlingSystem extends SortedIteratingSystem {
         }
 
         // Reset intention after the move is made
-        Mappers.intention.get(currentEntity).currentIntent = Actions.NOTHING;
+        if (shouldResetIntention) {
+            Mappers.intention.get(currentEntity).currentIntent = Actions.NOTHING;
+        }
     }
 
     private boolean analyzeMove(Entity entity) {
@@ -128,8 +133,9 @@ public class ActionHandlingSystem extends SortedIteratingSystem {
             }
             if (collidingEntity instanceof Stairs) {
                 if (entity instanceof Player) {
-                    entity.add(new TeleportScheduledComponent(collidingEntity));
+                    intent.currentIntent = new TeleportAction(collidingEntity);
                     interactives.remove(new GridPoint2(pos.x, pos.y));
+                    this.shouldResetIntention = false;
                 }
 
                 return false;
