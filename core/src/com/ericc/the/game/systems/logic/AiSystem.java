@@ -36,6 +36,6 @@ public class AiSystem extends EntitySystem {
     }
 
     public AiSystem () {
-        super(100);
+        super(0); // Depends on nothing.
     }
 }

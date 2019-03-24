@@ -19,6 +19,8 @@ public class Map {
 
     private int width, height;
     private RectangularBitset map;
+    public float[][] brightness;
+    public float[][] saturation;
     private int[][][] randomTileNumber;
     private int[][][] randomClutterNumber;
     private HashSet<GridPoint2> passableTiles; ///< stores every passable tile in a map (AFTER THE FIRST GENERATION)
@@ -31,6 +33,8 @@ public class Map {
     Map(int width, int height) {
         this.width = width;
         this.height = height;
+        brightness = new float[width][height];
+        saturation = new float[width][height];
         this.passableTiles = new HashSet<>();
         this.rooms = new HashSet<>();
         this.fogOfWar = new FogOfWar(width, height);

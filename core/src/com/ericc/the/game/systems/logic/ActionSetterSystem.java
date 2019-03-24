@@ -30,9 +30,17 @@ public class ActionSetterSystem extends SortedIteratingSystem {
         super(Family.all(PositionComponent.class,
                 CurrentActionComponent.class, AgilityComponent.class,
                 IntelligenceComponent.class, SentienceComponent.class,
-                InitiativeComponent.class).get(), new EntityInitiativeComparator(),
-                102);
+                InitiativeComponent.class).get(), new EntityComparator(),
+                1); // Depends on InitiativeSystem and AiSystem
         interactives = new HashMap<>();
+    }
+
+    // Entity comparator based on initiative value in the current turn
+    private static class EntityComparator implements Comparator<Entity> {
+        @Override
+        public int compare(Entity myself, Entity other) {
+            return Integer.compare(Mappers.initiative.get(other).value, Mappers.initiative.get(myself).value);
+        }
     }
 
     @Override
@@ -50,14 +58,6 @@ public class ActionSetterSystem extends SortedIteratingSystem {
         for (Entity entity : engine.getEntitiesFor(family)) {
             PositionComponent pos = Mappers.position.get(entity);
             interactives.put(new GridPoint2(pos.x, pos.y), entity);
-        }
-    }
-
-    // Entity comparator based on initiative value in the current turn
-    private static class EntityInitiativeComparator implements Comparator<Entity> {
-        @Override
-        public int compare(Entity myself, Entity other) {
-            return Integer.compare(Mappers.initiative.get(other).value, Mappers.initiative.get(myself).value);
         }
     }
 

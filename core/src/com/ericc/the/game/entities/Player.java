@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.GridPoint2;
 import com.ericc.the.game.Direction;
 import com.ericc.the.game.Media;
+import com.ericc.the.game.Models;
 import com.ericc.the.game.actions.NoAction;
 import com.ericc.the.game.components.*;
 
@@ -13,15 +14,14 @@ import com.ericc.the.game.components.*;
 public class Player extends Entity {
     public PositionComponent pos;
     private DirectionComponent dir;
-    private SpriteSheetComponent renderable;
+    private RenderableComponent renderable;
     public CurrentActionComponent currentAction;
     public IntentionComponent intention;
 
     public Player(int x, int y, FieldOfViewComponent fov) {
         pos = new PositionComponent(x, y);
         dir = new DirectionComponent(Direction.DOWN);
-        renderable = new SpriteSheetComponent(Media.playerBack, Media.playerRight, Media.playerFront, Media.playerLeft);
-        renderable.sprite.setOrigin(0, -0.35f);
+        renderable = new RenderableComponent(Models.hero);
         currentAction = new CurrentActionComponent(new NoAction());
         intention = new IntentionComponent(new NoAction());
         add(pos);

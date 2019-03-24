@@ -28,12 +28,10 @@ public class LevelFactory {
         }
 
         Stairs entrance = new Stairs(map.getRandomPassableTileFromRooms(),
-                Media.stairsUp,
                 StaircaseDestination.ASCENDING
         );
 
         Stairs exit = new Stairs(map.getRandomPassableTileFromRooms(),
-                Media.stairsDown,
                 StaircaseDestination.DESCENDING
         );
 

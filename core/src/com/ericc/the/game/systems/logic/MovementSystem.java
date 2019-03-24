@@ -20,7 +20,7 @@ public class MovementSystem extends EntitySystem {
     private ImmutableArray<Entity> nonDirectableMovables;
 
     public MovementSystem() {
-        super(103);
+        super(2); // Depends on ActionHandlingSystem
     }
 
     @Override

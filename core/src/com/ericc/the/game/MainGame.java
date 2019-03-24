@@ -14,10 +14,7 @@ import com.ericc.the.game.helpers.FpsThrottle;
 import com.ericc.the.game.map.CurrentMap;
 import com.ericc.the.game.map.Dungeon;
 import com.ericc.the.game.systems.logic.*;
-import com.ericc.the.game.systems.realtime.AnimationSystem;
-import com.ericc.the.game.systems.realtime.RenderSystem;
-import com.ericc.the.game.systems.realtime.ScreenBoundariesGetterSystem;
-import com.ericc.the.game.systems.realtime.TileChanger;
+import com.ericc.the.game.systems.realtime.*;
 
 public class MainGame extends Game {
 
@@ -65,9 +62,10 @@ public class MainGame extends Game {
         engines.addRealtimeSystem(new AnimationSystem());
         engines.addRealtimeSystem(new TileChanger(.75f));
         engines.addRealtimeSystem(visibleMapAreaSystem);
+        engines.addRealtimeSystem(new FadeSystem(playersFieldOfView, screen));
 
-        FieldOfViewSystem fieldOfViewSystem = new FieldOfViewSystem(screen);
-        FogOfWarSystem fogOfWarSystem = new FogOfWarSystem(player);
+        FieldOfViewSystem fieldOfViewSystem = new FieldOfViewSystem();
+        FogOfWarSystem fogOfWarSystem = new FogOfWarSystem();
         engines.addLogicSystem(new AiSystem());
         engines.addLogicSystem(new InitiativeSystem());
         engines.addLogicSystem(new ActionSetterSystem());
