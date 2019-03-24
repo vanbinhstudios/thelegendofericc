@@ -8,16 +8,14 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.ericc.the.game.components.FieldOfViewComponent;
-import com.ericc.the.game.components.ScreenBoundariesComponent;
 import com.ericc.the.game.entities.Mob;
 import com.ericc.the.game.entities.Player;
+import com.ericc.the.game.entities.PushableObject;
 import com.ericc.the.game.entities.Screen;
+import com.ericc.the.game.helpers.FpsThrottle;
 import com.ericc.the.game.map.Generator;
 import com.ericc.the.game.map.Map;
-import com.ericc.the.game.systems.logic.AiSystem;
-import com.ericc.the.game.systems.logic.FieldOfViewSystem;
-import com.ericc.the.game.systems.logic.FogOfWarSystem;
-import com.ericc.the.game.systems.logic.MovementSystem;
+import com.ericc.the.game.systems.logic.*;
 import com.ericc.the.game.systems.realtime.ScreenBoundariesGetterSystem;
 import com.ericc.the.game.systems.realtime.AnimationSystem;
 import com.ericc.the.game.systems.realtime.RenderSystem;
@@ -38,6 +36,8 @@ public class MainGame extends Game {
 
     public final static boolean DEBUG = true; ///< turns the debug mode on and off
     private final static boolean MUSIC = false; ///< turns the music on and off
+
+    private FpsThrottle fpsThrottle = new FpsThrottle(60);
 
     @Override
     public void create() {
@@ -63,6 +63,10 @@ public class MainGame extends Game {
             engines.addEntityToBothEngines(new Mob(map.getRandomPassableTile()));
         }
 
+        for (int i = 0; i < 10; i++) {
+            engines.addEntityToBothEngines(new PushableObject(map.getRandomPassableTile(), Media.crate));
+        }
+
         ScreenBoundariesGetterSystem visibleMapAreaSystem = new ScreenBoundariesGetterSystem(viewport, map, screen);
         engines.getRealtimeEngine().addSystem(new RenderSystem(map, viewport, playersFieldOfView, screen));
         engines.getRealtimeEngine().addSystem(new AnimationSystem());
@@ -72,6 +76,8 @@ public class MainGame extends Game {
         FieldOfViewSystem fieldOfViewSystem = new FieldOfViewSystem(map, screen);
         FogOfWarSystem fogOfWarSystem = new FogOfWarSystem(player, map, screen);
         engines.getLogicEngine().addSystem(new AiSystem());
+        engines.getLogicEngine().addSystem(new InitiativeSystem());
+        engines.getLogicEngine().addSystem(new ActionHandlingSystem(map));
         engines.getLogicEngine().addSystem(new MovementSystem(map));
         engines.getLogicEngine().addSystem(fieldOfViewSystem);
         engines.getLogicEngine().addSystem(fogOfWarSystem);
@@ -90,13 +96,7 @@ public class MainGame extends Game {
         centerCamera();
 
         engines.updateRealtimeEngine();
-
-        // TODO: Make FPS cap more resistant against extreme framerate drops
-        try {
-            Thread.sleep(16);
-        } catch(Exception e) {
-            System.out.print("Unexpected sleep interruption\n");
-        }
+        fpsThrottle.sleepToNextFrame();
 
         System.out.print(Gdx.graphics.getFramesPerSecond() + "\n");
     }
@@ -107,6 +107,7 @@ public class MainGame extends Game {
         centerCamera();
     }
 
+    // TODO: Use PositionComponent instead of the pos attribute and remove Player's attributes.
     private void centerCamera() {
         viewport.getCamera().position.lerp(new Vector3(player.pos.x, player.pos.y, 0),
                 1 - (float) Math.pow(.1f, Gdx.graphics.getDeltaTime()));

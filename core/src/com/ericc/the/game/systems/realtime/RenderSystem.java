@@ -37,11 +37,11 @@ public class RenderSystem extends EntitySystem {
 
     private SpriteBatch batch = new SpriteBatch();
     private SpriteBatch tilesSeen = new SpriteBatch();
-    private ImmutableArray<Entity> entities; // Renderable entities.
+    private ImmutableArray<Entity> entities; // Renderable entities
     private FieldOfViewComponent playersFieldOfView;
 
     public RenderSystem(Map map, Viewport viewport, FieldOfViewComponent playersFieldOfView, Screen screen) {
-        super(9999); // Rendering should be the last system in effect.
+        super(9999); // Rendering should be the last system in effect
         this.map = map;
         this.viewport = viewport;
         this.playersFieldOfView = playersFieldOfView;
@@ -75,27 +75,27 @@ public class RenderSystem extends EntitySystem {
         If we could access entities standing on a given position,
         there would be no need to perform the culling and sorting.
         If such caching is implemented at some point,
-        rendering should be redone to take advantage of it.
+        rendering should be redone to take advantage of it
          */
 
-        // Get a list of visible entities.
+        // Get a list of visible entities
         ArrayList<Entity> visibleEntities = new ArrayList<>();
-        final int margin = 5; // Assume that no sprite is more than 5 tiles away from it's logical position.
+        final int margin = 5; // Assume that no sprite is more than 5 tiles away from it's logical position
         for (Entity entity : entities) {
             PositionComponent pos = Mappers.position.get(entity);
             if (visibleMapArea.left - margin <= pos.x
                     && pos.x <= visibleMapArea.right + margin
                     && visibleMapArea.bottom - margin <= pos.y
                     && pos.y <= visibleMapArea.top + margin
-                    && playersFieldOfView.visibility[pos.x][pos.y]) {
+                    && playersFieldOfView.visibility.get(pos.x, pos.y)) {
                 visibleEntities.add(entity);
             }
         }
 
         /*
         Depth-order the entities.
-        The ordering here is based on the logical position.
-        This might need to change in the future.
+        The ordering here is based on the logical position
+        This might need to change in the future
         */
         visibleEntities.sort((a, b) -> Mappers.position.get(b).y - Mappers.position.get(a).y);
 
@@ -105,7 +105,7 @@ public class RenderSystem extends EntitySystem {
         int entityIndex = 0;
         for (int y = visibleMapArea.top; y >= visibleMapArea.bottom; --y) {
             for (int x = visibleMapArea.left; x <= visibleMapArea.right; ++x) {
-                if (playersFieldOfView.visibility[x][y]) {
+                if (playersFieldOfView.visibility.get(x, y)) {
                     drawTile(batch, x, y, false);
                 }
             }
@@ -137,7 +137,7 @@ public class RenderSystem extends EntitySystem {
     private void drawTile(SpriteBatch batch, int x, int y, boolean isStatic) {
 
         /*
-        The nine-digit tile code describes the neighbourhood of the tile.
+        The nine-digit tile code describes the neighbourhood of the tile
         1 - passable / floor
         0 - impassable / wall / void / out of map bounds
 
@@ -149,15 +149,15 @@ public class RenderSystem extends EntitySystem {
 
         /*
         This complicated algorithm attempts to paint convincing walls with a tileset representing (half-tile)-wide
-        walls.
+        walls
         Assumptions:
         - every texture used is square
         - corner and side-wall textures are half-width and are padded with "void" to the side on which they
-        should appear on the tile: left wall is aligned to right side, etc.
+        should appear on the tile: left wall is aligned to right side, etc
         */
 
         if (code == 0) {
-            // Void.
+            // Void
             return;
         }
 
@@ -205,13 +205,13 @@ public class RenderSystem extends EntitySystem {
         }
 
         if ((code & 0b010100010) == 0b000100000 || (code & 0b010101010) == 0b010100010) {
-            // (A proper right-facing wall) || (the ending of a horizontal double-wall - special case for aesthetics).
+            // (A proper right-facing wall) || (the ending of a horizontal double-wall - special case for aesthetics)
             draw(batch, Media.wallRight.get(map.getRandomNumber(x, y, TileTextureIndicator.RIGHT.getValue())),
                     x, y + 0.5f, 0.5f, 1, 0, 0, 0.5f, 1);
         } else if ((code & 0b010100010) == 0b000100010) {
             // A right-and-up-facing wall. The up-facing part is already drawn. It looks better if the up-facing
             // part is drawn on top, so let's "draw the left part underneath". This meaning, we will only draw
-            // the lower half of the left-facing wall.
+            // the lower half of the left-facing wall
             draw(batch, Media.wallRight.get(map.getRandomNumber(x, y, TileTextureIndicator.RIGHT.getValue())),
                     x, y + 0.5f, 0.5f, 0.5f, 0, 0.5f, 0.5f, 1);
         } else if ((code & 0b010100010) == 0b010100000) {
@@ -220,7 +220,7 @@ public class RenderSystem extends EntitySystem {
                     x, y + 0.5f + 0.5f, 0.5f, 0.5f, 0, 0, 0.5f, 0.5f);
         }
 
-        // Symmetrical (right-left) to code above.
+        // Symmetrical (right-left) to code above
         if ((code & 0b010001010) == 0b000001000 || (code & 0b010101010) == 0b010001010) {
             draw(batch, Media.wallLeft.get(map.getRandomNumber(x, y, TileTextureIndicator.LEFT.getValue())),
                     x + 0.5f, y + 0.5f, 0.5f, 1, 0.5f, 0, 1, 1);
@@ -232,7 +232,7 @@ public class RenderSystem extends EntitySystem {
                     x + 0.5f, y + 0.5f + 0.5f, 0.5f, 0.5f, 0.5f, 0, 1, 0.5f);
         }
 
-        // Drawing decorations on the upper walls.
+        // Drawing decorations on the upper walls
         if ((code & 0b010000000) != 0) {
             int clutterType = map.getRandomClutter(x, y, TileTextureIndicator.UP.getValue());
 
@@ -259,7 +259,7 @@ public class RenderSystem extends EntitySystem {
      * Draw a part of a texture region.
      * Similar to SpriteBatch.draw(texture, x, y, w, h, u, v, u2, v2), except
      * u, v, u2, v2 describe a fraction of the given region,
-     * not a fraction of the entire texture.
+     * not a fraction of the entire texture
      */
     private void draw(SpriteBatch batch, TextureRegion t,
                       float x, float y, float width, float height,
