@@ -1,6 +1,7 @@
 package com.ericc.the.game.systems.logic;
 
 import com.badlogic.ashley.core.EntitySystem;
+import com.ericc.the.game.Engines;
 import com.ericc.the.game.Mappers;
 import com.ericc.the.game.actions.Actions;
 import com.ericc.the.game.actions.TeleportAction;
@@ -14,10 +15,13 @@ public class TeleportPlayerSystem extends EntitySystem {
 
     private Dungeon dungeon;
     private Player player;
+    private Engines engines;
 
-    public TeleportPlayerSystem(Dungeon dungeon, Player player) {
+    public TeleportPlayerSystem(Dungeon dungeon, Engines engines, Player player) {
         super(10000);
+
         this.dungeon = dungeon;
+        this.engines = engines;
         this.player = player;
     }
 
@@ -39,6 +43,8 @@ public class TeleportPlayerSystem extends EntitySystem {
                 dungeon.changeLevel(dungeon.getCurrentLevelNumber() - 1,
                         InitialPlayerPosition.LEVEL_EXIT);
             }
+
+            engines.updatePlayersVision();
         }
     }
 }
