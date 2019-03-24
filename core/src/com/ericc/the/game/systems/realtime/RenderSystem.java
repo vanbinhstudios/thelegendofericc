@@ -18,11 +18,10 @@ import com.ericc.the.game.Media;
 import com.ericc.the.game.TileTextureIndicator;
 import com.ericc.the.game.components.FieldOfViewComponent;
 import com.ericc.the.game.components.PositionComponent;
-import com.ericc.the.game.components.ScreenBoundariesComponent;
 import com.ericc.the.game.components.RenderableComponent;
+import com.ericc.the.game.components.ScreenBoundariesComponent;
 import com.ericc.the.game.entities.Screen;
 import com.ericc.the.game.map.CurrentMap;
-import com.ericc.the.game.map.Map;
 import com.ericc.the.game.shaders.Shaders;
 
 import java.util.ArrayList;
@@ -48,7 +47,8 @@ public class RenderSystem extends EntitySystem {
         this.viewport = viewport;
         this.playersFieldOfView = playersFieldOfView;
         this.visibleMapArea = Mappers.screenBoundaries.get(screen);
-        if (!Shaders.hsl.isCompiled()) throw new GdxRuntimeException("Couldn't compile shader: " + Shaders.hsl.getLog());
+        if (!Shaders.hsl.isCompiled())
+            throw new GdxRuntimeException("Couldn't compile shader: " + Shaders.hsl.getLog());
 
         batch.setShader(Shaders.hsl);
     }

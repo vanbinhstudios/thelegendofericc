@@ -1,7 +1,6 @@
 package com.ericc.the.game.entities;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.GridPoint2;
 import com.ericc.the.game.Models;
 import com.ericc.the.game.actions.Actions;
