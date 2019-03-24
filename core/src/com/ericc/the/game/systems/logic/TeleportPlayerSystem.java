@@ -5,11 +5,12 @@ import com.ericc.the.game.Engines;
 import com.ericc.the.game.Mappers;
 import com.ericc.the.game.actions.Actions;
 import com.ericc.the.game.actions.TeleportAction;
-import com.ericc.the.game.components.DescendingComponent;
+import com.ericc.the.game.components.StaircaseDestinationComponent;
 import com.ericc.the.game.components.IntentionComponent;
 import com.ericc.the.game.entities.Player;
 import com.ericc.the.game.map.Dungeon;
 import com.ericc.the.game.map.InitialPlayerPosition;
+import com.ericc.the.game.map.StaircaseDestination;
 
 public class TeleportPlayerSystem extends EntitySystem {
 
@@ -32,11 +33,11 @@ public class TeleportPlayerSystem extends EntitySystem {
 
         if (intention.currentIntent instanceof TeleportAction) {
             TeleportAction teleportAction = (TeleportAction) intention.currentIntent;
-            DescendingComponent stairs = Mappers.stairsComponent.get(teleportAction.stairs);
+            StaircaseDestinationComponent stairs = Mappers.stairsComponent.get(teleportAction.stairs);
 
             Mappers.intention.get(player).currentIntent = Actions.NOTHING;
 
-            if (stairs.descending) {
+            if (stairs.destination == StaircaseDestination.DESCENDING) {
                 dungeon.changeLevel(dungeon.getCurrentLevelNumber() + 1,
                         InitialPlayerPosition.LEVEL_ENTRANCE);
             } else {

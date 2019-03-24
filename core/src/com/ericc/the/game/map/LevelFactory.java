@@ -27,10 +27,16 @@ public class LevelFactory {
             entities.add(new PushableObject(map.getRandomPassableTile(), Media.crate));
         }
 
-        entities.add(new Stairs(map.makeStairs(true), Media.stairsDown, true));
+        entities.add(new Stairs(map.makeStairs(StaircaseDestination.DESCENDING),
+                Media.stairsDown,
+                StaircaseDestination.DESCENDING)
+        );
 
         if (levelNumber > 0) {
-            entities.add(new Stairs(map.makeStairs(false), Media.stairsUp, false));
+            entities.add(new Stairs(map.makeStairs(StaircaseDestination.ASCENDING),
+                    Media.stairsUp,
+                    StaircaseDestination.ASCENDING)
+            );
         }
 
         return new Level(map, entities);

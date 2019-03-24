@@ -38,12 +38,16 @@ public class Engines {
         logicSystems.add(system);
         system.setProcessing(false);
         engine.addSystem(system);
+    }
 
-        if (system instanceof FieldOfViewSystem) {
-            this.fov = system;
-        } else if (system instanceof FogOfWarSystem) {
-            this.fog = system;
-        }
+    public void addLogicSystem(FieldOfViewSystem system) {
+        this.fov = system;
+        addLogicSystem((EntitySystem) system);
+    }
+
+    public void addLogicSystem(FogOfWarSystem system) {
+        this.fog = system;
+        addLogicSystem((EntitySystem) system);
     }
 
     public void addRealtimeSystem(EntitySystem system) {
@@ -74,5 +78,14 @@ public class Engines {
 
     public ImmutableArray<Entity> getEntitiesFor(Family family) {
         return engine.getEntitiesFor(family);
+    }
+
+    public void disableFieldOfViewSystem() {
+        this.engine.removeSystem(this.fov);
+    }
+
+    public void enableFieldOfViewSystem() {
+        this.engine.addSystem(this.fov);
+        this.fov.update(0);
     }
 }

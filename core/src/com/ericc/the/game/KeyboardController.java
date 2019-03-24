@@ -72,14 +72,21 @@ public class KeyboardController extends InputAdapter {
                 break;
             case Input.Keys.O:
                 if (DEBUG) {
-                    CurrentMap.map.makeEntireMapVisibleOnFog();
+                    CurrentMap.map.makeFogCoverTheEntireMap();
                 }
                 break;
             case Input.Keys.I:
                 if (DEBUG) {
                     FieldOfViewComponent playersFov = Mappers.fov.get(player);
                     playersFov.visibility.setAll();
+                    engines.disableFieldOfViewSystem();
                 }
+                break;
+            case Input.Keys.U:
+                if (DEBUG) {
+                    engines.enableFieldOfViewSystem();
+                }
+                break;
             default:
                 return false;
         }

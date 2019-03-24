@@ -86,7 +86,7 @@ public class MovementSystem extends EntitySystem {
             if (CurrentMap.map.isPassable(pos.x, pos.y + 1)) {
                 dy = 1;
             }
-        } else { // if (move.direction == Direction.DOWN)
+        } else { // if (move.direction == Direction.DESCENDING)
             if (CurrentMap.map.isPassable(pos.x, pos.y - 1)) {
                 dy = -1;
             }

@@ -1,12 +1,9 @@
 package com.ericc.the.game.map;
 
-import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.MathUtils;
-import com.ericc.the.game.Engines;
 import com.ericc.the.game.Media;
 import com.ericc.the.game.TileTextureIndicator;
-import com.ericc.the.game.entities.Stairs;
 import com.ericc.the.game.helpers.FogOfWar;
 import com.ericc.the.game.utils.RectangularBitset;
 
@@ -120,7 +117,7 @@ public class Map {
         ArrayList<Room> roomsListed = new ArrayList<>(rooms);
         Room randomRoom = roomsListed.get(MathUtils.random(roomsListed.size() - 1));
 
-        while (!(passableTiles.contains(randomRoom.getRightUpperCorner()) || randomRoom.getMinimalSize() < 2)) {
+        while (!(passableTiles.contains(randomRoom.getRightUpperCorner()) || randomRoom.getMinDimension() < 2)) {
             Collections.shuffle(roomsListed);
             randomRoom = roomsListed.get(MathUtils.random(roomsListed.size() - 1));
         }
@@ -130,14 +127,14 @@ public class Map {
         return randomRoom.getRightUpperCorner();
     }
 
-    public GridPoint2 makeStairs(boolean descending) {
-        if (descending) {
+    public GridPoint2 makeStairs(StaircaseDestination destination) {
+        if (destination == StaircaseDestination.DESCENDING) {
             this.exit = getRandomPassableTileFromRooms();
         } else {
             this.entrance = getRandomPassableTileFromRooms();
         }
 
-        return descending ? this.exit : this.entrance;
+        return destination == StaircaseDestination.DESCENDING ? this.exit : this.entrance;
     }
 
     public void addRoom(Room room) {
@@ -162,7 +159,7 @@ public class Map {
         return fogOfWar.hasBeenSeenByPlayer(x, y);
     }
 
-    public void makeEntireMapVisibleOnFog() {
+    public void makeFogCoverTheEntireMap() {
         for (int i = 0; i < width; ++i) {
             for (int j = 0; j < height; ++j) {
                 if (inBoundaries(i, j)) {

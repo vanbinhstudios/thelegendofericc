@@ -14,7 +14,6 @@ import com.ericc.the.game.components.ScreenBoundariesComponent;
 import com.ericc.the.game.entities.Screen;
 import com.ericc.the.game.helpers.Moves;
 import com.ericc.the.game.map.CurrentMap;
-import com.ericc.the.game.map.Map;
 
 import java.util.Arrays;
 import java.util.List;
@@ -29,6 +28,27 @@ public class FieldOfViewSystem extends EntitySystem {
     private ImmutableArray<Entity> entities; ///< all entities with fov available
     private ScreenBoundariesComponent visibleMapArea; ///< explained in a ScreeBoundariesGetterSystem
 
+    // a helper data structure which reduces the code lines to check whether the given
+    // position is a visible corner
+    public static List<List<GridPoint2>> corners =
+            Arrays.asList( // there are 4 cases here
+                    Arrays.asList(
+                            new GridPoint2(-1, 0), // each one of them has two coordinates
+                            new GridPoint2(0, 1) // that should be checked for visible walls
+                    ),
+                    Arrays.asList(
+                            new GridPoint2(0, 1),
+                            new GridPoint2(1, 0)
+                    ),
+                    Arrays.asList(
+                            new GridPoint2(1, 0),
+                            new GridPoint2(0, -1)
+                    ),
+                    Arrays.asList(
+                            new GridPoint2(0, -1),
+                            new GridPoint2(-1, 0)
+                    )
+            );
 
     public FieldOfViewSystem(Screen screen) {
         super(9997);
@@ -154,7 +174,7 @@ public class FieldOfViewSystem extends EntitySystem {
      * Checks whether the given tile is a (VISIBLE!) corner.
      */
     private boolean isCorner(int x, int y, FieldOfViewComponent fov) {
-        for (List<GridPoint2> corner : Moves.corners) {
+        for (List<GridPoint2> corner : corners) {
             GridPoint2 firstMove = corner.get(0);
             GridPoint2 secondMove = corner.get(1);
 

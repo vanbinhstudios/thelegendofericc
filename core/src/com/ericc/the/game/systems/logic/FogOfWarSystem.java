@@ -36,7 +36,7 @@ public class FogOfWarSystem extends EntitySystem {
 
         for (int y = top; y >= bottom; --y) {
             for (int x = left; x <= right; ++x) {
-                if (CurrentMap.map.inBoundaries(x, y) && playersFov.visibility.get(x, y)) {
+                if (playersFov.visibility.get(x, y)) {
                     CurrentMap.map.markAsSeenByPlayer(x, y);
                 }
             }

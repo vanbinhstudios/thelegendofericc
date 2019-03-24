@@ -48,7 +48,10 @@ public class Room {
         return false;
     }
 
-    public int getMinimalSize() {
+    /**
+     * @return an integer - the minimal dimension of this room
+     */
+    public int getMinDimension() {
         return Math.min(Math.abs(rightUpperCorner.x - leftDownCorner.x),
                 Math.abs(rightUpperCorner.y - leftDownCorner.y));
     }

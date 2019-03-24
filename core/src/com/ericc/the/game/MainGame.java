@@ -70,7 +70,7 @@ public class MainGame extends Game {
         FogOfWarSystem fogOfWarSystem = new FogOfWarSystem(player);
         engines.addLogicSystem(new AiSystem());
         engines.addLogicSystem(new InitiativeSystem());
-        engines.addLogicSystem(new ActionHandlingSystem());
+        engines.addLogicSystem(new ActionSetterSystem());
         engines.addLogicSystem(new MovementSystem());
         engines.addLogicSystem(fieldOfViewSystem);
         engines.addLogicSystem(fogOfWarSystem);

@@ -21,12 +21,12 @@ import com.ericc.the.game.map.CurrentMap;
 import java.util.Comparator;
 import java.util.HashMap;
 
-public class ActionHandlingSystem extends SortedIteratingSystem {
+public class ActionSetterSystem extends SortedIteratingSystem {
 
     private final HashMap<GridPoint2, Entity> interactives;
     private boolean shouldResetIntention = false;
 
-    public ActionHandlingSystem() {
+    public ActionSetterSystem() {
         super(Family.all(PositionComponent.class,
                 CurrentActionComponent.class, AgilityComponent.class,
                 IntelligenceComponent.class, SentienceComponent.class,

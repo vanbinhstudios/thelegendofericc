@@ -35,26 +35,4 @@ public class Moves {
                     new GridPoint2(-1, 1),
                     new GridPoint2(1, -1)
             );
-
-    // a helper data structure which reduces the code lines to check whether the given
-    // position is a visible corner
-    public static List<List<GridPoint2>> corners =
-            Arrays.asList( // there are 4 cases here
-                    Arrays.asList(
-                            new GridPoint2(-1, 0), // each one of them has two coordinates
-                            new GridPoint2(0, 1) // that should be checked for visible walls
-                    ),
-                    Arrays.asList(
-                            new GridPoint2(0, 1),
-                            new GridPoint2(1, 0)
-                    ),
-                    Arrays.asList(
-                            new GridPoint2(1, 0),
-                            new GridPoint2(0, -1)
-                    ),
-                    Arrays.asList(
-                            new GridPoint2(0, -1),
-                            new GridPoint2(-1, 0)
-                    )
-            );
 }
