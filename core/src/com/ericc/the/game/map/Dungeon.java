@@ -1,152 +1,105 @@
 package com.ericc.the.game.map;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.EntityListener;
 import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.GridPoint2;
 import com.ericc.the.game.Engines;
 import com.ericc.the.game.Mappers;
-import com.ericc.the.game.Media;
-import com.ericc.the.game.components.DescendingComponent;
-import com.ericc.the.game.components.MobComponent;
 import com.ericc.the.game.components.PlayerComponent;
 import com.ericc.the.game.components.PositionComponent;
-import com.ericc.the.game.entities.Mob;
-import com.ericc.the.game.entities.Player;
-import com.ericc.the.game.entities.PushableObject;
-import com.ericc.the.game.entities.Stairs;
 import com.ericc.the.game.helpers.Moves;
-import com.sun.istack.internal.NotNull;
+import com.ericc.the.game.utils.ImmutableArrayUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * This class stores the entire dungeon, level by level.
  * By level here we mean the map.
  */
 public class Dungeon {
-    private ArrayList<Map> levels;
-    private ArrayList<ArrayList<Entity>> entities;
-    private int currentLevel;
-    private Engines engines;
+    private final HashMap<Integer, Level> levels;
+    private final Engines engines;
+    private int currentLevelNumber;
 
     public Dungeon(Engines engines) {
+        levels = new HashMap<>();
+        currentLevelNumber = 0;
         this.engines = engines;
-        this.entities = new ArrayList<>();
-
-        levels = new ArrayList<>();
-        currentLevel = -1;
     }
 
-    /**
-     * Changes the current Map to the next one if it exists,
-     * if not it does create one.
-     */
-    public Map goToNext() {
-        if (levels.isEmpty() || currentLevel + 1 == levels.size()) {
-            addNewMap();
-        }
-
-        if (currentLevel >= 0) {
-            saveLastProgress();
-        }
-
-        ++currentLevel;
-
-        if (currentLevel < entities.size()) {
-            System.out.println(levels.isEmpty());
-            loadProgress();
-        } else if (currentLevel > 0) {
-            generateLevel(levels.get(currentLevel));
-        }
-
-        if (currentLevel > 0) {
-            placePlayersNextToStairs(levels.get(currentLevel).entrance);
-        }
-
-        return levels.get(currentLevel);
+    public int getCurrentLevelNumber() {
+        return currentLevelNumber;
     }
 
-    /**
-     * Changes the current Map to the previous one if it exists,
-     * if it does not, we stay on the first level.
-     */
-    public Map goToPrevious() {
-        if (currentLevel <= 0) {
-            return levels.get(0);
+    public void changeLevel(int levelNumber, InitialPlayerPosition initialPlayerPosition) {
+        saveProgress();
+        Level newLevel;
+        if (!levels.containsKey(levelNumber)) {
+            newLevel = LevelFactory.generate();
+            levels.put(levelNumber, newLevel);
+        } else {
+            newLevel = levels.get(levelNumber);
         }
-
-        saveLastProgress();
-        --currentLevel;
-        loadProgress();
-
-        placePlayersNextToStairs(levels.get(currentLevel).exit);
-        return levels.get(currentLevel);
+        currentLevelNumber = levelNumber;
+        loadProgress(newLevel);
+        placePlayer(initialPlayerPosition);
     }
 
-    /**
-     * Creates a new map, abstraction is for future references.
-     */
-    private void addNewMap() {
-        levels.add(new Generator(30, 30, 9).generateMap());
-    }
-
-    private void loadProgress() {
-        for (Entity entity : entities.get(currentLevel)) {
+    private void loadProgress(Level level) {
+        CurrentMap.setMap(level.getMap());
+        for (Entity entity : level.getEntities()) {
             engines.addEntity(entity);
         }
     }
 
-    private void saveLastProgress() {
-        if (entities.isEmpty() || entities.size() == currentLevel) {
-            entities.add(new ArrayList<>());
-        }
-
-        entities.get(currentLevel).clear();
-
+    private void saveProgress() {
         Family family = Family.all(PositionComponent.class).exclude(PlayerComponent.class).get();
-        ImmutableArray<Entity> arr = engines.getEntitiesFor(family);
-
-        for (Entity entity : arr) {
-            entities.get(currentLevel).add(entity);
-        }
+        ArrayList<Entity> entities = ImmutableArrayUtils.toArrayList(engines.getEntitiesFor(family));
+        levels.put(currentLevelNumber, new Level(CurrentMap.map, entities));
 
         engines.removeFamily(family);
     }
 
-    public void generateLevel(Map map) {
-        for (int i = 0; i < 5; i++) {
-            engines.addEntity(new Mob(map.getRandomPassableTile()));
-        }
+    private void placeEntity(Entity entity, GridPoint2 desiredPosition) {
+        PositionComponent entityPosition = Mappers.position.get(entity);
 
-        for (int i = 0; i < 2; i++) {
-            engines.addEntity(new PushableObject(map.getRandomPassableTile(), Media.crate));
-        }
+        for (GridPoint2 move : Moves.moves) {
+            int x = desiredPosition.x + move.x;
+            int y = desiredPosition.y + move.y;
 
-        engines.addEntity(new Stairs(map.makeStairs(true), Media.stairsDown, true));
-        engines.addEntity(new Stairs(map.makeStairs(false), Media.stairsUp, false));
-    }
-
-    private void placePlayersNextToStairs(GridPoint2 stairsPosition) {
-        ImmutableArray<Entity> players = engines.getEntitiesFor(Family.all(PlayerComponent.class).get());
-
-        for (Entity player : players) {
-            PositionComponent playersPosition = Mappers.position.get(player);
-
-            for (GridPoint2 move : Moves.moves) {
-                int x = stairsPosition.x + move.x;
-                int y = stairsPosition.y + move.y;
-
-                if (levels.get(currentLevel).isPassable(x, y)) {
-                    System.out.println("Placing player on : [" + x + ", " + y + "]");
-                    playersPosition.x = x;
-                    playersPosition.y = y;
-                    return;
-                }
+            if (levels.get(currentLevelNumber).getMap().isPassable(x, y)) {
+                entityPosition.x = x;
+                entityPosition.y = y;
+                return;
             }
         }
+
+        throw new AssertionError("Entity could not be placed at ("
+                + desiredPosition.x + ", " + desiredPosition.y + ")");
+    }
+
+    private void placePlayer(InitialPlayerPosition positionType) {
+        Family family = Family.all(PlayerComponent.class).get();
+        for (Entity entity : engines.getEntitiesFor(family)) {
+            GridPoint2 position = null;
+            switch (positionType) {
+                case LEVEL_EXIT:
+                    position = levels.get(currentLevelNumber).getMap().exit;
+                    break;
+                case LEVEL_ENTRANCE:
+                    position = levels.get(currentLevelNumber).getMap().entrance;
+                    break;
+                case RANDOM_PASSABLE:
+                    position = levels.get(currentLevelNumber).getMap().getRandomPassableTileFromRooms();
+            }
+            placeEntity(entity, position);
+        }
+    }
+
+    public void generateFirstLevel() {
+        Level firstLevel = LevelFactory.generateFirstLevel();
+        levels.put(0, firstLevel);
+        loadProgress(firstLevel);
     }
 }

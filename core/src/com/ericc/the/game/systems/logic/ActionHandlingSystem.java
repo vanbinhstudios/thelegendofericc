@@ -7,7 +7,6 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.SortedIteratingSystem;
 import com.badlogic.gdx.math.GridPoint2;
 import com.ericc.the.game.Direction;
-import com.ericc.the.game.Engines;
 import com.ericc.the.game.Mappers;
 import com.ericc.the.game.actions.Actions;
 import com.ericc.the.game.actions.MovementAction;
@@ -17,29 +16,21 @@ import com.ericc.the.game.entities.Player;
 import com.ericc.the.game.entities.PushableObject;
 import com.ericc.the.game.entities.Stairs;
 import com.ericc.the.game.map.CurrentMap;
-import com.ericc.the.game.map.Dungeon;
 
 import java.util.Comparator;
 import java.util.HashMap;
 
 public class ActionHandlingSystem extends SortedIteratingSystem {
 
-    private HashMap<GridPoint2, Entity> interactives;
+    private final HashMap<GridPoint2, Entity> interactives;
 
     public ActionHandlingSystem() {
         super(Family.all(PositionComponent.class,
                 CurrentActionComponent.class, AgilityComponent.class,
                 IntelligenceComponent.class, SentienceComponent.class,
-                InitiativeComponent.class).get(), new EntityComparator(),
+                InitiativeComponent.class).get(), new EntityInitiativeComparator(),
                 102);
-    }
-
-    // Entity comparator based on initiative value in the current turn
-    private static class EntityComparator implements Comparator<Entity> {
-        @Override
-        public int compare(Entity myself, Entity other) {
-            return Integer.compare(Mappers.initiative.get(other).value, Mappers.initiative.get(myself).value);
-        }
+        interactives = new HashMap<>();
     }
 
     @Override
@@ -48,11 +39,24 @@ public class ActionHandlingSystem extends SortedIteratingSystem {
         // MovableInitiatives contains entity-initiative pair for the current turn
         // Interactives contains a map of all interactive entities and their positions
         super.addedToEngine(engine);
-        interactives = new HashMap<>();
+
         Family family = Family.all(PositionComponent.class,
                 InteractivityComponent.class,
                 CurrentActionComponent.class).get();
-        engine.addEntityListener(family, new HandledEntities());
+        engine.addEntityListener(family, new InteractivesHandler());
+
+        for (Entity entity : engine.getEntitiesFor(family)) {
+            PositionComponent pos = Mappers.position.get(entity);
+            interactives.put(new GridPoint2(pos.x, pos.y), entity);
+        }
+    }
+
+    // Entity comparator based on initiative value in the current turn
+    private static class EntityInitiativeComparator implements Comparator<Entity> {
+        @Override
+        public int compare(Entity myself, Entity other) {
+            return Integer.compare(Mappers.initiative.get(other).value, Mappers.initiative.get(myself).value);
+        }
     }
 
     @Override
@@ -163,7 +167,7 @@ public class ActionHandlingSystem extends SortedIteratingSystem {
         }
     }
 
-    public class HandledEntities implements EntityListener {
+    public class InteractivesHandler implements EntityListener {
         @Override
         public void entityRemoved(Entity entity) {
             PositionComponent pos = Mappers.position.get(entity);

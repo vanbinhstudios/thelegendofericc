@@ -10,8 +10,8 @@ import com.ericc.the.game.Mappers;
 import com.ericc.the.game.components.DescendingComponent;
 import com.ericc.the.game.components.PlayerComponent;
 import com.ericc.the.game.components.TeleportScheduledComponent;
-import com.ericc.the.game.map.CurrentMap;
 import com.ericc.the.game.map.Dungeon;
+import com.ericc.the.game.map.InitialPlayerPosition;
 
 public class TeleportPlayerSystem extends EntitySystem {
 
@@ -41,9 +41,11 @@ public class TeleportPlayerSystem extends EntitySystem {
             player.remove(TeleportScheduledComponent.class);
 
             if (stairs.descending) {
-                CurrentMap.setMap(dungeon.goToNext(), engines);
+                dungeon.changeLevel(dungeon.getCurrentLevelNumber() + 1,
+                        InitialPlayerPosition.LEVEL_ENTRANCE);
             } else {
-                CurrentMap.setMap(dungeon.goToPrevious(), engines);
+                dungeon.changeLevel(dungeon.getCurrentLevelNumber() - 1,
+                        InitialPlayerPosition.LEVEL_EXIT);
             }
         }
     }
