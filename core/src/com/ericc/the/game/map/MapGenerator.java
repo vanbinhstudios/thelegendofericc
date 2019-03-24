@@ -1,11 +1,10 @@
 package com.ericc.the.game.map;
 
 import com.badlogic.gdx.math.GridPoint2;
-import com.ericc.the.game.Engines;
 
 import java.util.*;
 
-public class Generator {
+public class MapGenerator {
 
     private int width, height;
     private Map map;
@@ -13,7 +12,7 @@ public class Generator {
     private int maximalRoomSize;
 
     /**
-     * Generator class.
+     * MapGenerator class.
      *
      * @param width           dimension of a map to generate, must be > 1 (NOT IN PIXELS, IT IS A CUSTOM METRIC)
      * @param height          same as above
@@ -23,9 +22,9 @@ public class Generator {
      *                        <p>
      *                        Disclaimer:
      *                        Note that it uses O(width * height) memory, so time complexity is also bound by that value.
-     *                        Keep that in mind when calling the Generator methods.
+     *                        Keep that in mind when calling the MapGenerator methods.
      */
-    public Generator(int width, int height, int maximalRoomSize) {
+    public MapGenerator(int width, int height, int maximalRoomSize) {
         assert width > 1 && height > 1;
 
         this.width = width;
