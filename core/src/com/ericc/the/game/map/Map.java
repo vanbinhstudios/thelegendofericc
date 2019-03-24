@@ -108,7 +108,14 @@ public class Map {
      * It does REMOVE the passable tile it is going to return from the passableTiles collection!
      */
     public GridPoint2 getRandomPassableTile() {
-        GridPoint2 ret = passableTiles.iterator().next();
+        GridPoint2 ret;
+
+        try {
+            ret = passableTiles.iterator().next();
+        } catch (Exception e) {
+            throw new IllegalStateException("Can't find room for more entities, check the map size.");
+        }
+
         passableTiles.remove(ret);
         return ret;
     }
@@ -116,10 +123,16 @@ public class Map {
     public GridPoint2 getRandomPassableTileFromRooms() {
         ArrayList<Room> roomsListed = new ArrayList<>(rooms);
         Room randomRoom = roomsListed.get(MathUtils.random(roomsListed.size() - 1));
+        int ctr = 0;
 
         while (!(passableTiles.contains(randomRoom.getRightUpperCorner()) || randomRoom.getMinDimension() < 2)) {
             Collections.shuffle(roomsListed);
             randomRoom = roomsListed.get(MathUtils.random(roomsListed.size() - 1));
+            ++ctr;
+
+            if (ctr > 50) {
+                throw new IllegalStateException("Cant find a room with width or length greater than 2.");
+            }
         }
 
         passableTiles.remove(randomRoom.getRightUpperCorner());
