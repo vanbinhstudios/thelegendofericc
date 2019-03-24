@@ -21,7 +21,7 @@ public class MovementSystem extends EntitySystem {
     private Map map;
 
     public MovementSystem(Map map) {
-        super(10003);
+        super(2); // Depends on ActionHandlingSystem
         this.map = map;
     }
 

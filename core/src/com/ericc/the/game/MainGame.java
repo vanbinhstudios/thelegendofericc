@@ -16,10 +16,7 @@ import com.ericc.the.game.helpers.FpsThrottle;
 import com.ericc.the.game.map.Generator;
 import com.ericc.the.game.map.Map;
 import com.ericc.the.game.systems.logic.*;
-import com.ericc.the.game.systems.realtime.ScreenBoundariesGetterSystem;
-import com.ericc.the.game.systems.realtime.AnimationSystem;
-import com.ericc.the.game.systems.realtime.RenderSystem;
-import com.ericc.the.game.systems.realtime.TileChanger;
+import com.ericc.the.game.systems.realtime.*;
 
 public class MainGame extends Game {
 
@@ -72,9 +69,10 @@ public class MainGame extends Game {
         engines.getRealtimeEngine().addSystem(new AnimationSystem());
         engines.getRealtimeEngine().addSystem(new TileChanger(.75f));
         engines.getRealtimeEngine().addSystem(visibleMapAreaSystem);
+        engines.getRealtimeEngine().addSystem(new FadeSystem(playersFieldOfView, map, screen));
 
-        FieldOfViewSystem fieldOfViewSystem = new FieldOfViewSystem(map, screen);
-        FogOfWarSystem fogOfWarSystem = new FogOfWarSystem(player, map, screen);
+        FieldOfViewSystem fieldOfViewSystem = new FieldOfViewSystem(map);
+        FogOfWarSystem fogOfWarSystem = new FogOfWarSystem(map);
         engines.getLogicEngine().addSystem(new AiSystem());
         engines.getLogicEngine().addSystem(new InitiativeSystem());
         engines.getLogicEngine().addSystem(new ActionHandlingSystem(map));
@@ -97,8 +95,6 @@ public class MainGame extends Game {
 
         engines.updateRealtimeEngine();
         fpsThrottle.sleepToNextFrame();
-
-        System.out.print(Gdx.graphics.getFramesPerSecond() + "\n");
     }
 
     @Override

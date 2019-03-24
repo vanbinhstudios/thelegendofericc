@@ -15,7 +15,7 @@ public class TileChanger extends IntervalSystem {
     private int ctr; ///< counter - counts the number of updateInterval calls
 
     public TileChanger(float interval) {
-        super(interval);
+        super(interval, 10000);
         ctr = 0;
     }
 
