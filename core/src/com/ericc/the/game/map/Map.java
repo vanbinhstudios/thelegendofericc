@@ -161,4 +161,14 @@ public class Map {
     public boolean hasBeenSeenByPlayer(int x, int y) {
         return fogOfWar.hasBeenSeenByPlayer(x, y);
     }
+
+    public void makeEntireMapVisibleOnFog() {
+        for (int i = 0; i < width; ++i) {
+            for (int j = 0; j < height; ++j) {
+                if (inBoundaries(i, j)) {
+                    fogOfWar.markAsSeenByPlayer(i, j);
+                }
+            }
+        }
+    }
 }

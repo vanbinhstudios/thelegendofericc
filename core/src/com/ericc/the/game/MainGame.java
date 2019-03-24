@@ -58,7 +58,7 @@ public class MainGame extends Game {
         FieldOfViewComponent playersFieldOfView = Mappers.fov.get(player);
         Screen screen = new Screen();
 
-        controls = new KeyboardController(engines, player, camera, dungeon);
+        controls = new KeyboardController(engines, player, camera);
         Gdx.input.setInputProcessor(controls);
 
         engines.addEntity(player);

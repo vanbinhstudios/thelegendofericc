@@ -1,14 +1,13 @@
 package com.ericc.the.game;
 
-import com.badlogic.ashley.core.Engine;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.ericc.the.game.actions.Actions;
+import com.ericc.the.game.components.FieldOfViewComponent;
 import com.ericc.the.game.entities.Player;
 import com.ericc.the.game.helpers.CameraZoom;
 import com.ericc.the.game.map.CurrentMap;
-import com.ericc.the.game.map.Dungeon;
 
 import static com.ericc.the.game.MainGame.DEBUG;
 
@@ -17,13 +16,11 @@ public class KeyboardController extends InputAdapter {
     private Engines engines;
     private Player player;
     private CameraZoom zoom;
-    private Dungeon dungeon;
 
-    public KeyboardController(Engines engines, Player player, OrthographicCamera camera, Dungeon dungeon) {
+    public KeyboardController(Engines engines, Player player, OrthographicCamera camera) {
         this.engines = engines;
         this.player = player;
         this.zoom = new CameraZoom(camera);
-        this.dungeon = dungeon;
     }
 
     @Override
@@ -73,6 +70,16 @@ public class KeyboardController extends InputAdapter {
             case Input.Keys.PLUS:
                 zoom.zoomInCamera();
                 break;
+            case Input.Keys.O:
+                if (DEBUG) {
+                    CurrentMap.map.makeEntireMapVisibleOnFog();
+                }
+                break;
+            case Input.Keys.I:
+                if (DEBUG) {
+                    FieldOfViewComponent playersFov = Mappers.fov.get(player);
+                    playersFov.visibility.setAll();
+                }
             default:
                 return false;
         }

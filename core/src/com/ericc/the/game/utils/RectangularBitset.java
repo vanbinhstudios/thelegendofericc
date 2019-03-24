@@ -100,4 +100,12 @@ public class RectangularBitset {
         checkAssertionsForSize(other);
         this.backingBitset.xor(backingBitset);
     }
+
+    public void setAll() {
+        for (int i = 0; i < width; ++i) {
+            for (int j = 0; j < height; ++j) {
+                set(i, j);
+            }
+        }
+    }
 }
