@@ -8,19 +8,15 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.ericc.the.game.components.FieldOfViewComponent;
-import com.ericc.the.game.entities.Mob;
 import com.ericc.the.game.entities.Player;
-import com.ericc.the.game.entities.PushableObject;
 import com.ericc.the.game.entities.Screen;
 import com.ericc.the.game.helpers.FpsThrottle;
 import com.ericc.the.game.map.CurrentMap;
 import com.ericc.the.game.map.Dungeon;
-import com.ericc.the.game.map.Generator;
-import com.ericc.the.game.map.Map;
 import com.ericc.the.game.systems.logic.*;
-import com.ericc.the.game.systems.realtime.ScreenBoundariesGetterSystem;
 import com.ericc.the.game.systems.realtime.AnimationSystem;
 import com.ericc.the.game.systems.realtime.RenderSystem;
+import com.ericc.the.game.systems.realtime.ScreenBoundariesGetterSystem;
 import com.ericc.the.game.systems.realtime.TileChanger;
 
 public class MainGame extends Game {
@@ -51,7 +47,7 @@ public class MainGame extends Game {
         viewport.apply();
 
         this.dungeon = new Dungeon(engines);
-        CurrentMap.setMap(dungeon.goToNext());
+        dungeon.generateFirstLevel();
 
         player = new Player(CurrentMap.map.getRandomPassableTile(),
                 new FieldOfViewComponent(CurrentMap.map.width(), CurrentMap.map.height()));
@@ -81,7 +77,6 @@ public class MainGame extends Game {
         engines.addLogicSystem(new TeleportPlayerSystem(dungeon, engines, player));
 
         initialisePlayersComponents(visibleMapAreaSystem, fieldOfViewSystem, fogOfWarSystem);
-        dungeon.generateLevel(CurrentMap.map);
 
         if (MUSIC) {
             Sound sound = Gdx.audio.newSound(Gdx.files.internal("music/8bitAdventure.mp3"));

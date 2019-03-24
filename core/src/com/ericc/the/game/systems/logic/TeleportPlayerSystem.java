@@ -8,14 +8,14 @@ import com.ericc.the.game.actions.TeleportAction;
 import com.ericc.the.game.components.DescendingComponent;
 import com.ericc.the.game.components.IntentionComponent;
 import com.ericc.the.game.entities.Player;
-import com.ericc.the.game.map.CurrentMap;
 import com.ericc.the.game.map.Dungeon;
+import com.ericc.the.game.map.InitialPlayerPosition;
 
 public class TeleportPlayerSystem extends EntitySystem {
 
     private Dungeon dungeon;
-    private Engines engines;
     private Player player;
+    private Engines engines;
 
     public TeleportPlayerSystem(Dungeon dungeon, Engines engines, Player player) {
         super(10000);
@@ -37,10 +37,14 @@ public class TeleportPlayerSystem extends EntitySystem {
             Mappers.intention.get(player).currentIntent = Actions.NOTHING;
 
             if (stairs.descending) {
-                CurrentMap.setMap(dungeon.goToNext(), engines);
+                dungeon.changeLevel(dungeon.getCurrentLevelNumber() + 1,
+                        InitialPlayerPosition.LEVEL_ENTRANCE);
             } else {
-                CurrentMap.setMap(dungeon.goToPrevious(), engines);
+                dungeon.changeLevel(dungeon.getCurrentLevelNumber() - 1,
+                        InitialPlayerPosition.LEVEL_EXIT);
             }
+
+            engines.updatePlayersVision();
         }
     }
 }
