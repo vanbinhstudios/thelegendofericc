@@ -2,8 +2,12 @@ package com.ericc.the.game.map;
 
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.MathUtils;
+import com.ericc.the.game.Mappers;
 import com.ericc.the.game.Media;
 import com.ericc.the.game.TileTextureIndicator;
+import com.ericc.the.game.components.PositionComponent;
+import com.ericc.the.game.components.StaircaseDestinationComponent;
+import com.ericc.the.game.entities.Stairs;
 import com.ericc.the.game.helpers.FogOfWar;
 import com.ericc.the.game.utils.RectangularBitset;
 
@@ -113,6 +117,7 @@ public class Map {
         try {
             ret = passableTiles.iterator().next();
         } catch (Exception e) {
+            // TODO Instead of throwing an exception here, we would like to generate another map f.e.
             throw new IllegalStateException("Can't find room for more entities, check the map size.");
         }
 
@@ -120,6 +125,10 @@ public class Map {
         return ret;
     }
 
+    /**
+     * Returns random passable tile from any room which minimal dimension is
+     * greater than 2. (This random passable tile for now is the right upper corner)
+     */
     public GridPoint2 getRandomPassableTileFromRooms() {
         ArrayList<Room> roomsListed = new ArrayList<>(rooms);
         Room randomRoom = roomsListed.get(MathUtils.random(roomsListed.size() - 1));
@@ -131,6 +140,7 @@ public class Map {
             ++ctr;
 
             if (ctr > 50) {
+                // TODO Instead of throwing an exception here, we would like to generate another map f.e.
                 throw new IllegalStateException("Cant find a room with width or length greater than 2.");
             }
         }
@@ -140,14 +150,19 @@ public class Map {
         return randomRoom.getRightUpperCorner();
     }
 
-    public GridPoint2 makeStairs(StaircaseDestination destination) {
-        if (destination == StaircaseDestination.DESCENDING) {
-            this.exit = getRandomPassableTileFromRooms();
-        } else {
-            this.entrance = getRandomPassableTileFromRooms();
-        }
+    /**
+     * Registers stairs in this map, determines whether that stairs are ascending or descending
+     * and puts the entrance / exit in that position.
+     */
+    public void registerStairs(Stairs stairs) {
+        StaircaseDestinationComponent destinationComponent = Mappers.stairsComponent.get(stairs);
+        PositionComponent positionComponent = Mappers.position.get(stairs);
 
-        return destination == StaircaseDestination.DESCENDING ? this.exit : this.entrance;
+        if (destinationComponent.destination == StaircaseDestination.DESCENDING) {
+            this.exit = new GridPoint2(positionComponent.x, positionComponent.y);
+        } else {
+            this.entrance = new GridPoint2(positionComponent.x, positionComponent.y);
+        }
     }
 
     public void addRoom(Room room) {

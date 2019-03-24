@@ -27,16 +27,22 @@ public class LevelFactory {
             entities.add(new PushableObject(map.getRandomPassableTile(), Media.crate));
         }
 
-        entities.add(new Stairs(map.makeStairs(StaircaseDestination.DESCENDING),
-                Media.stairsDown,
-                StaircaseDestination.DESCENDING)
+        Stairs entrance = new Stairs(map.getRandomPassableTileFromRooms(),
+                Media.stairsUp,
+                StaircaseDestination.ASCENDING
         );
 
+        Stairs exit = new Stairs(map.getRandomPassableTileFromRooms(),
+                Media.stairsDown,
+                StaircaseDestination.DESCENDING
+        );
+
+        entities.add(exit);
+        map.registerStairs(exit);
+
         if (levelNumber > 0) {
-            entities.add(new Stairs(map.makeStairs(StaircaseDestination.ASCENDING),
-                    Media.stairsUp,
-                    StaircaseDestination.ASCENDING)
-            );
+            entities.add(entrance);
+            map.registerStairs(entrance);
         }
 
         return new Level(map, entities);
