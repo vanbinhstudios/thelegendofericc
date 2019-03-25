@@ -11,21 +11,21 @@ import com.ericc.the.game.components.PositionComponent;
 import com.ericc.the.game.components.RenderableComponent;
 import com.ericc.the.game.components.ScreenBoundariesComponent;
 import com.ericc.the.game.entities.Screen;
-import com.ericc.the.game.map.Map;
+import com.ericc.the.game.map.CurrentMap;
 
-import static java.lang.Float.*;
+import static java.lang.Float.max;
+import static java.lang.Float.min;
 
 public class FadeSystem extends EntitySystem {
     private ImmutableArray<Entity> entities;
 
     private FieldOfViewComponent fov;
-    private Map map;
     private ScreenBoundariesComponent visibleArea;
 
-    public FadeSystem(FieldOfViewComponent fov, Map map, Screen screen) {
+    public FadeSystem(FieldOfViewComponent fov, Screen screen) {
         super(10000);
+
         this.fov = fov;
-        this.map = map;
         this.visibleArea = Mappers.screenBoundaries.get(screen);
     }
 
@@ -51,15 +51,15 @@ public class FadeSystem extends EntitySystem {
         for (int y = visibleArea.top + updateMargin; y >= visibleArea.bottom - updateMargin; --y) {
             for (int x = visibleArea.left - updateMargin; x <= visibleArea.right + updateMargin; ++x) {
                 final float fadingSpeed = 1 / 0.7f; // Full transition takes (1 / fadingSpeed) seconds.
-                if (!map.inBoundaries(x, y)) continue;
-                if (!map.hasBeenSeenByPlayer(x, y)) continue;
+                if (!CurrentMap.map.inBoundaries(x, y)) continue;
+                if (!CurrentMap.map.hasBeenSeenByPlayer(x, y)) continue;
 
                 float targetBrightness = fov.visibility.get(x, y) ? 1.0f : 0.5f;
                 float targetSaturation = fov.visibility.get(x, y) ? 1.0f : 0.0f;
-                map.brightness[x][y] = converge(map.brightness[x][y], targetBrightness, deltaTime * fadingSpeed);
+                CurrentMap.map.brightness[x][y] = converge(CurrentMap.map.brightness[x][y], targetBrightness, deltaTime * fadingSpeed);
                 // Tune the minimum possible brightness up, because it looks weird when tiles are darker than the background.
-                map.brightness[x][y] = max(map.brightness[x][y], 0.3f);
-                map.saturation[x][y] = converge(map.saturation[x][y], targetSaturation, deltaTime * fadingSpeed);
+                CurrentMap.map.brightness[x][y] = max(CurrentMap.map.brightness[x][y], 0.3f);
+                CurrentMap.map.saturation[x][y] = converge(CurrentMap.map.saturation[x][y], targetSaturation, deltaTime * fadingSpeed);
             }
         }
     }

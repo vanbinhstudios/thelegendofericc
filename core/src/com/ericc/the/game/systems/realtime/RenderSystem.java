@@ -18,10 +18,10 @@ import com.ericc.the.game.Media;
 import com.ericc.the.game.TileTextureIndicator;
 import com.ericc.the.game.components.FieldOfViewComponent;
 import com.ericc.the.game.components.PositionComponent;
-import com.ericc.the.game.components.ScreenBoundariesComponent;
 import com.ericc.the.game.components.RenderableComponent;
+import com.ericc.the.game.components.ScreenBoundariesComponent;
 import com.ericc.the.game.entities.Screen;
-import com.ericc.the.game.map.Map;
+import com.ericc.the.game.map.CurrentMap;
 import com.ericc.the.game.shaders.Shaders;
 
 import java.util.ArrayList;
@@ -31,7 +31,7 @@ import java.util.ArrayList;
  * It is desirable to concentrate and contain graphics-related code here.
  */
 public class RenderSystem extends EntitySystem {
-    private Map map;
+
     private Viewport viewport;
     private ScreenBoundariesComponent visibleMapArea;
     private final Affine2 transformTmp = new Affine2();
@@ -41,13 +41,14 @@ public class RenderSystem extends EntitySystem {
     private ImmutableArray<Entity> entities; // Renderable entities.
     private FieldOfViewComponent playersFieldOfView;
 
-    public RenderSystem(Map map, Viewport viewport, FieldOfViewComponent playersFieldOfView, Screen screen) {
+    public RenderSystem(Viewport viewport, FieldOfViewComponent playersFieldOfView, Screen screen) {
         super(10001); // Should be the last system to run.
-        this.map = map;
+
         this.viewport = viewport;
         this.playersFieldOfView = playersFieldOfView;
         this.visibleMapArea = Mappers.screenBoundaries.get(screen);
-        if (!Shaders.hsl.isCompiled()) throw new GdxRuntimeException("Couldn't compile shader: " + Shaders.hsl.getLog());
+        if (!Shaders.hsl.isCompiled())
+            throw new GdxRuntimeException("Couldn't compile shader: " + Shaders.hsl.getLog());
 
         batch.setShader(Shaders.hsl);
     }
@@ -97,7 +98,7 @@ public class RenderSystem extends EntitySystem {
         int entityIndex = 0;
         for (int y = visibleMapArea.top; y >= visibleMapArea.bottom; --y) {
             for (int x = visibleMapArea.left; x <= visibleMapArea.right; ++x) {
-                if (map.hasBeenSeenByPlayer(x, y)) {
+                if (CurrentMap.map.hasBeenSeenByPlayer(x, y)) {
                     drawTile(batch, x, y, true);
                 }
             }
@@ -132,7 +133,7 @@ public class RenderSystem extends EntitySystem {
 
     private void drawTile(SpriteBatch batch, int x, int y, boolean isStatic) {
 
-        batch.setColor(0.0f, map.saturation[x][y], map.brightness[x][y], 1.0f);
+        batch.setColor(0.0f, CurrentMap.map.saturation[x][y], CurrentMap.map.brightness[x][y], 1.0f);
 
         /*
         The nine-digit tile code describes the neighbourhood of the tile.
@@ -162,11 +163,11 @@ public class RenderSystem extends EntitySystem {
         if ((code & 0b000010000) != 0) {
             // Floor tile.
             batch.draw(Media.getRandomFloorTile(
-                    x, y, map.getRandomNumber(x, y, TileTextureIndicator.FLOOR.getValue()), isStatic
+                    x, y, CurrentMap.map.getRandomNumber(x, y, TileTextureIndicator.FLOOR.getValue()), isStatic
                     ), x, y, 1, 1);
 
             // Drawing decorations on the floor.
-            int clutterType = map.getRandomClutter(x, y, TileTextureIndicator.FLOOR.getValue());
+            int clutterType = CurrentMap.map.getRandomClutter(x, y, TileTextureIndicator.FLOOR.getValue());
 
             if (clutterType < Media.clutter.size) {
                 batch.draw(Media.clutter.get(clutterType),
@@ -177,7 +178,7 @@ public class RenderSystem extends EntitySystem {
 
         if ((code & 0b000000010) != 0) {
             // A down-facing wall.
-            batch.draw(Media.wallDown.get(map.getRandomNumber(x, y, TileTextureIndicator.DOWN.getValue())),
+            batch.draw(Media.wallDown.get(CurrentMap.map.getRandomNumber(x, y, TileTextureIndicator.DOWN.getValue())),
                     x, y + 0.5f, 1, 1);
         } else {
             // Maybe down-facing corners?
@@ -191,7 +192,7 @@ public class RenderSystem extends EntitySystem {
 
         // Symmetrical (down-up) to the code above.
         if ((code & 0b010000000) != 0) {
-            batch.draw(Media.wallUp.get(map.getRandomNumber(x, y, TileTextureIndicator.UP.getValue())),
+            batch.draw(Media.wallUp.get(CurrentMap.map.getRandomNumber(x, y, TileTextureIndicator.UP.getValue())),
                     x, y, 1, 1);
         } else {
             if ((code & 0b010100000) == 0 && (code & 0b100000000) != 0) {
@@ -204,35 +205,35 @@ public class RenderSystem extends EntitySystem {
 
         if ((code & 0b010100010) == 0b000100000 || (code & 0b010101010) == 0b010100010) {
             // (A proper right-facing wall) || (the ending of a horizontal double-wall - special case for aesthetics).
-            draw(batch, Media.wallRight.get(map.getRandomNumber(x, y, TileTextureIndicator.RIGHT.getValue())),
+            draw(batch, Media.wallRight.get(CurrentMap.map.getRandomNumber(x, y, TileTextureIndicator.RIGHT.getValue())),
                     x, y + 0.5f, 0.5f, 1, 0, 0, 0.5f, 1);
         } else if ((code & 0b010100010) == 0b000100010) {
             // A right-and-up-facing wall. The up-facing part is already drawn. It looks better if the up-facing
             // part is drawn on top, so let's "draw the left part underneath". This meaning, we will only draw
             // the lower half of the left-facing wall.
-            draw(batch, Media.wallRight.get(map.getRandomNumber(x, y, TileTextureIndicator.RIGHT.getValue())),
+            draw(batch, Media.wallRight.get(CurrentMap.map.getRandomNumber(x, y, TileTextureIndicator.RIGHT.getValue())),
                     x, y + 0.5f, 0.5f, 0.5f, 0, 0.5f, 0.5f, 1);
         } else if ((code & 0b010100010) == 0b010100000) {
             // A right-and-down facing wall. See above.
-            draw(batch, Media.wallRight.get(map.getRandomNumber(x, y, TileTextureIndicator.RIGHT.getValue())),
+            draw(batch, Media.wallRight.get(CurrentMap.map.getRandomNumber(x, y, TileTextureIndicator.RIGHT.getValue())),
                     x, y + 0.5f + 0.5f, 0.5f, 0.5f, 0, 0, 0.5f, 0.5f);
         }
 
         // Symmetrical (right-left) to code above.
         if ((code & 0b010001010) == 0b000001000 || (code & 0b010101010) == 0b010001010) {
-            draw(batch, Media.wallLeft.get(map.getRandomNumber(x, y, TileTextureIndicator.LEFT.getValue())),
+            draw(batch, Media.wallLeft.get(CurrentMap.map.getRandomNumber(x, y, TileTextureIndicator.LEFT.getValue())),
                     x + 0.5f, y + 0.5f, 0.5f, 1, 0.5f, 0, 1, 1);
         } else if ((code & 0b010001010) == 0b000001010) {
-            draw(batch, Media.wallLeft.get(map.getRandomNumber(x, y, TileTextureIndicator.LEFT.getValue())),
+            draw(batch, Media.wallLeft.get(CurrentMap.map.getRandomNumber(x, y, TileTextureIndicator.LEFT.getValue())),
                     x + 0.5f, y + 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 1, 1);
         } else if ((code & 0b010001010) == 0b010001000) {
-            draw(batch, Media.wallLeft.get(map.getRandomNumber(x, y, TileTextureIndicator.LEFT.getValue())),
+            draw(batch, Media.wallLeft.get(CurrentMap.map.getRandomNumber(x, y, TileTextureIndicator.LEFT.getValue())),
                     x + 0.5f, y + 0.5f + 0.5f, 0.5f, 0.5f, 0.5f, 0, 1, 0.5f);
         }
 
         // Drawing decorations on the upper walls.
         if ((code & 0b010000000) != 0) {
-            int clutterType = map.getRandomClutter(x, y, TileTextureIndicator.UP.getValue());
+            int clutterType = CurrentMap.map.getRandomClutter(x, y, TileTextureIndicator.UP.getValue());
 
             if (clutterType < Media.wallClutter.size) {
                 batch.draw(Media.wallClutter.get(clutterType),
@@ -246,7 +247,7 @@ public class RenderSystem extends EntitySystem {
         int cnt = 8;
         for (int j = y - 1; j <= y + 1; ++j) {
             for (int i = x - 1; i <= x + 1; ++i) {
-                ans |= (map.isPassable(i, j) ? 1 : 0) << cnt;
+                ans |= (CurrentMap.map.isPassable(i, j) ? 1 : 0) << cnt;
                 --cnt;
             }
         }

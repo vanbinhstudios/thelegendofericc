@@ -1,21 +1,24 @@
 package com.ericc.the.game;
 
-import com.badlogic.ashley.core.Engine;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.ericc.the.game.actions.Actions;
+import com.ericc.the.game.components.FieldOfViewComponent;
 import com.ericc.the.game.entities.Player;
 import com.ericc.the.game.helpers.CameraZoom;
+import com.ericc.the.game.map.CurrentMap;
+
+import static com.ericc.the.game.MainGame.DEBUG;
 
 public class KeyboardController extends InputAdapter {
 
-    private Engine logicEngine;
+    private Engines engines;
     private Player player;
     private CameraZoom zoom;
 
-    public KeyboardController(Engine logicEngine, Player player, OrthographicCamera camera) {
-        this.logicEngine = logicEngine;
+    public KeyboardController(Engines engines, Player player, OrthographicCamera camera) {
+        this.engines = engines;
         this.player = player;
         this.zoom = new CameraZoom(camera);
     }
@@ -44,12 +47,14 @@ public class KeyboardController extends InputAdapter {
                 player.intention.currentIntent = Actions.MOVE_RIGHT;
                 break;
             case Input.Keys.SPACE:
+                player.intention.currentIntent = Actions.NOTHING;
+                break;
             default:
                 player.intention.currentIntent = Actions.NOTHING;
                 break;
         }
 
-        logicEngine.update(1);
+        engines.updateLogicEngine();
         return false;
     }
 
@@ -64,6 +69,23 @@ public class KeyboardController extends InputAdapter {
                 break;
             case Input.Keys.PLUS:
                 zoom.zoomInCamera();
+                break;
+            case Input.Keys.O:
+                if (DEBUG) {
+                    CurrentMap.map.makeFogCoverTheEntireMap();
+                }
+                break;
+            case Input.Keys.I:
+                if (DEBUG) {
+                    FieldOfViewComponent playersFov = Mappers.fov.get(player);
+                    playersFov.visibility.setAll();
+                    engines.disableFieldOfViewSystem();
+                }
+                break;
+            case Input.Keys.U:
+                if (DEBUG) {
+                    engines.enableFieldOfViewSystem();
+                }
                 break;
             default:
                 return false;

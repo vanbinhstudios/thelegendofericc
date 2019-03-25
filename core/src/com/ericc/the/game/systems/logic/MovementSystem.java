@@ -12,17 +12,15 @@ import com.ericc.the.game.actions.Actions;
 import com.ericc.the.game.actions.MovementAction;
 import com.ericc.the.game.animations.JumpAnimation;
 import com.ericc.the.game.components.*;
-import com.ericc.the.game.map.Map;
+import com.ericc.the.game.map.CurrentMap;
 
 public class MovementSystem extends EntitySystem {
 
     private ImmutableArray<Entity> directableMovables;
     private ImmutableArray<Entity> nonDirectableMovables;
-    private Map map;
 
-    public MovementSystem(Map map) {
+    public MovementSystem() {
         super(2); // Depends on ActionHandlingSystem
-        this.map = map;
     }
 
     @Override
@@ -77,19 +75,19 @@ public class MovementSystem extends EntitySystem {
 
 
         if (move.direction == Direction.LEFT) {
-            if (map.isPassable(pos.x - 1, pos.y)) {
+            if (CurrentMap.map.isPassable(pos.x - 1, pos.y)) {
                 dx = -1;
             }
         } else if (move.direction == Direction.RIGHT) {
-            if (map.isPassable(pos.x + 1, pos.y)) {
+            if (CurrentMap.map.isPassable(pos.x + 1, pos.y)) {
                 dx = 1;
             }
         } else if (move.direction == Direction.UP) {
-            if (map.isPassable(pos.x, pos.y + 1)) {
+            if (CurrentMap.map.isPassable(pos.x, pos.y + 1)) {
                 dy = 1;
             }
-        } else { // if (move.direction == Direction.DOWN)
-            if (map.isPassable(pos.x, pos.y - 1)) {
+        } else { // if (move.direction == Direction.DESCENDING)
+            if (CurrentMap.map.isPassable(pos.x, pos.y - 1)) {
                 dy = -1;
             }
         }
