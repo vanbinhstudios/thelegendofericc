@@ -27,10 +27,6 @@ public class LevelFactory {
             entities.add(new PushableObject(map.getRandomPassableTile(), Media.crate));
         }
 
-        Stairs entrance = new Stairs(map.getRandomPassableTileFromRooms(),
-                StaircaseDestination.ASCENDING
-        );
-
         Stairs exit = new Stairs(map.getRandomPassableTileFromRooms(),
                 StaircaseDestination.DESCENDING
         );
@@ -39,6 +35,10 @@ public class LevelFactory {
         map.registerStairs(exit);
 
         if (levelNumber > 0) {
+            Stairs entrance = new Stairs(map.getRandomPassableTileFromRooms(),
+                    StaircaseDestination.ASCENDING
+            );
+
             entities.add(entrance);
             map.registerStairs(entrance);
         }
