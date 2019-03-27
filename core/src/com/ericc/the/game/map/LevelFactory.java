@@ -20,14 +20,14 @@ public class LevelFactory {
 
         ArrayList<Entity> entities = new ArrayList<>();
         for (int i = 0; i < MOBS_COUNT; i++) {
-            entities.add(new Mob(map.getRandomPassableTile()));
+            entities.add(new Mob(map.getRandomPassableTile(), map));
         }
 
         for (int i = 0; i < CRATES_COUNT; i++) {
-            entities.add(new PushableObject(map.getRandomPassableTile(), Media.crate));
+            entities.add(new PushableObject(map.getRandomPassableTile(), map));
         }
 
-        Stairs exit = new Stairs(map.getRandomPassableTileFromRooms(),
+        Stairs exit = new Stairs(map.getRandomPassableTileFromRooms(), map,
                 StaircaseDestination.DESCENDING
         );
 
@@ -35,7 +35,7 @@ public class LevelFactory {
         map.registerStairs(exit);
 
         if (levelNumber > 0) {
-            Stairs entrance = new Stairs(map.getRandomPassableTileFromRooms(),
+            Stairs entrance = new Stairs(map.getRandomPassableTileFromRooms(), map,
                     StaircaseDestination.ASCENDING
             );
 

@@ -16,7 +16,6 @@ import com.ericc.the.game.entities.Mob;
 import com.ericc.the.game.entities.Player;
 import com.ericc.the.game.entities.PushableObject;
 import com.ericc.the.game.entities.Stairs;
-import com.ericc.the.game.map.CurrentMap;
 
 import java.util.Comparator;
 import java.util.HashMap;
@@ -99,7 +98,7 @@ public class ActionSetterSystem extends SortedIteratingSystem {
                 + pos.y;
 
         // If the target field is not passable movement is not possible
-        if (!CurrentMap.map.isPassable(targetX, targetY)) {
+        if (!pos.map.isPassable(targetX, targetY)) {
             if (entity instanceof Player) System.out.print("Player tried running into the wall.\n");
             return false;
         }

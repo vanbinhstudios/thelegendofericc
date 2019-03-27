@@ -2,6 +2,7 @@ package com.ericc.the.game.map;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
+import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.GridPoint2;
 import com.ericc.the.game.Engines;
 import com.ericc.the.game.Mappers;
@@ -43,25 +44,27 @@ public class Dungeon {
         }
         currentLevelNumber = levelNumber;
         loadProgress(newLevel);
-        placePlayer(initialPlayerPosition);
+        placePlayer(initialPlayerPosition, newLevel.getMap());
     }
 
     private void loadProgress(Level level) {
-        CurrentMap.setMap(level.getMap());
         for (Entity entity : level.getEntities()) {
             engines.addEntity(entity);
         }
     }
 
     private void saveProgress() {
-        Family family = Family.all(PositionComponent.class).exclude(PlayerComponent.class).get();
-        ArrayList<Entity> entities = ImmutableArrayUtils.toArrayList(engines.getEntitiesFor(family));
-        levels.put(currentLevelNumber, new Level(CurrentMap.map, entities));
+        Family notPlayersFamily = Family.all(PositionComponent.class).exclude(PlayerComponent.class).get();
+        Family playersFamily = Family.all(PlayerComponent.class).get();
+        ArrayList<Entity> notPlayers = ImmutableArrayUtils.toArrayList(engines.getEntitiesFor(notPlayersFamily));
+        ImmutableArray<Entity> players = engines.getEntitiesFor(playersFamily);
+        Map currentMap = players.get(0).getComponent(PositionComponent.class).map;
+        levels.put(currentLevelNumber, new Level(currentMap, notPlayers));
 
-        engines.removeFamily(family);
+        engines.removeFamily(notPlayersFamily);
     }
 
-    private void placeEntity(Entity entity, GridPoint2 desiredPosition) {
+    private void placeEntity(Entity entity, GridPoint2 desiredPosition, Map map) {
         PositionComponent entityPosition = Mappers.position.get(entity);
 
         for (GridPoint2 move : Moves.moves) {
@@ -71,6 +74,7 @@ public class Dungeon {
             if (levels.get(currentLevelNumber).getMap().isPassable(x, y)) {
                 entityPosition.x = x;
                 entityPosition.y = y;
+                entityPosition.map = map;
                 return;
             }
         }
@@ -79,7 +83,7 @@ public class Dungeon {
                 + desiredPosition.x + ", " + desiredPosition.y + ")");
     }
 
-    private void placePlayer(InitialPlayerPosition positionType) {
+    private void placePlayer(InitialPlayerPosition positionType, Map map) {
         Family family = Family.all(PlayerComponent.class).get();
         for (Entity entity : engines.getEntitiesFor(family)) {
             GridPoint2 position = null;
@@ -96,7 +100,7 @@ public class Dungeon {
                 default:
                     throw new IllegalArgumentException("Not a proper positionType was given");
             }
-            placeEntity(entity, position);
+            placeEntity(entity, position, map);
         }
     }
 
@@ -105,5 +109,9 @@ public class Dungeon {
         levels.put(0, firstLevel);
         loadProgress(firstLevel);
         // Player will be manually placed in MainGame
+    }
+
+    public Map getCurrentMap() {
+        return levels.get(getCurrentLevelNumber()).getMap();
     }
 }

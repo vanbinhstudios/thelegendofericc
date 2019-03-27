@@ -7,7 +7,6 @@ import com.ericc.the.game.actions.Actions;
 import com.ericc.the.game.components.FieldOfViewComponent;
 import com.ericc.the.game.entities.Player;
 import com.ericc.the.game.helpers.CameraZoom;
-import com.ericc.the.game.map.CurrentMap;
 
 import static com.ericc.the.game.MainGame.DEBUG;
 
@@ -72,7 +71,7 @@ public class KeyboardController extends InputAdapter {
                 break;
             case Input.Keys.O:
                 if (DEBUG) {
-                    CurrentMap.map.makeFogCoverTheEntireMap();
+                    player.pos.map.makeFogCoverTheEntireMap();
                 }
                 break;
             case Input.Keys.I:

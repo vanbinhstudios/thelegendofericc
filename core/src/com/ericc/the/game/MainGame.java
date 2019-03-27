@@ -7,11 +7,10 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.ericc.the.game.components.CameraComponent;
 import com.ericc.the.game.components.FieldOfViewComponent;
 import com.ericc.the.game.entities.Player;
-import com.ericc.the.game.entities.Screen;
 import com.ericc.the.game.helpers.FpsThrottle;
-import com.ericc.the.game.map.CurrentMap;
 import com.ericc.the.game.map.Dungeon;
 import com.ericc.the.game.systems.logic.*;
 import com.ericc.the.game.systems.realtime.*;
@@ -46,23 +45,23 @@ public class MainGame extends Game {
         this.dungeon = new Dungeon(engines);
         dungeon.generateFirstLevel();
 
-        player = new Player(CurrentMap.map.getRandomPassableTile(),
-                new FieldOfViewComponent(CurrentMap.map.width(), CurrentMap.map.height()));
+        player = new Player(
+                dungeon.getCurrentMap().getRandomPassableTile(),
+                dungeon.getCurrentMap(),
+                new FieldOfViewComponent(dungeon.getCurrentMap().width(), dungeon.getCurrentMap().height()),
+                new CameraComponent(viewport));
         FieldOfViewComponent playersFieldOfView = Mappers.fov.get(player);
-        Screen screen = new Screen();
 
         controls = new KeyboardController(engines, player, camera);
         Gdx.input.setInputProcessor(controls);
 
         engines.addEntity(player);
-        engines.addEntity(screen);
 
-        ScreenBoundariesGetterSystem visibleMapAreaSystem = new ScreenBoundariesGetterSystem(viewport, screen);
-        engines.addRealtimeSystem(new RenderSystem(viewport, playersFieldOfView, screen));
+        engines.addRealtimeSystem(new RenderSystem());
         engines.addRealtimeSystem(new AnimationSystem());
         engines.addRealtimeSystem(new TileChanger(.75f));
-        engines.addRealtimeSystem(visibleMapAreaSystem);
-        engines.addRealtimeSystem(new FadeSystem(playersFieldOfView, screen));
+        engines.addRealtimeSystem(new FadeSystem());
+        engines.addRealtimeSystem(new CameraSystem());
 
         FieldOfViewSystem fieldOfViewSystem = new FieldOfViewSystem();
         FogOfWarSystem fogOfWarSystem = new FogOfWarSystem();
@@ -74,7 +73,7 @@ public class MainGame extends Game {
         engines.addLogicSystem(fogOfWarSystem);
         engines.addLogicSystem(new TeleportPlayerSystem(dungeon, engines, player));
 
-        initialisePlayersComponents(visibleMapAreaSystem, fieldOfViewSystem, fogOfWarSystem);
+        initialisePlayersComponents(fieldOfViewSystem, fogOfWarSystem);
 
         if (MUSIC) {
             Sound sound = Gdx.audio.newSound(Gdx.files.internal("music/8bitAdventure.mp3"));
@@ -85,8 +84,6 @@ public class MainGame extends Game {
 
     @Override
     public void render() {
-        centerCamera();
-
         engines.updateRealtimeEngine();
         fpsThrottle.sleepToNextFrame();
     }
@@ -94,14 +91,6 @@ public class MainGame extends Game {
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height);
-        centerCamera();
-    }
-
-    // TODO: Use PositionComponent instead of the pos attribute and remove Player's attributes.
-    private void centerCamera() {
-        viewport.getCamera().position.lerp(new Vector3(player.pos.x, player.pos.y, 0),
-                1 - (float) Math.pow(.1f, Gdx.graphics.getDeltaTime()));
-        viewport.getCamera().update();
     }
 
     /**
@@ -112,10 +101,8 @@ public class MainGame extends Game {
      *
      * And that is exactly what this function is meant to do.
      */
-    private void initialisePlayersComponents(ScreenBoundariesGetterSystem visibleMapAreaSystem,
-                                             FieldOfViewSystem fieldOfViewSystem,
+    private void initialisePlayersComponents(FieldOfViewSystem fieldOfViewSystem,
                                              FogOfWarSystem fogOfWarSystem) {
-        visibleMapAreaSystem.update(0);
         fieldOfViewSystem.update(0); // update to calculate the initial fov
         fogOfWarSystem.update(0);
     }

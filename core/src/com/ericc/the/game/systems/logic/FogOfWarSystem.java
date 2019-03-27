@@ -9,7 +9,6 @@ import com.ericc.the.game.Mappers;
 import com.ericc.the.game.components.FieldOfViewComponent;
 import com.ericc.the.game.components.PlayerComponent;
 import com.ericc.the.game.components.PositionComponent;
-import com.ericc.the.game.map.CurrentMap;
 
 public class FogOfWarSystem extends EntitySystem {
 
@@ -34,8 +33,8 @@ public class FogOfWarSystem extends EntitySystem {
 
             for (int y = position.y + updateMargin; y >= position.y - updateMargin; --y) {
                 for (int x = position.x - updateMargin; x < position.x + updateMargin; ++x) {
-                    if (CurrentMap.map.inBoundaries(x, y) && fov.visibility.get(x, y)) {
-                        CurrentMap.map.markAsSeenByPlayer(x, y);
+                    if (position.map.inBoundaries(x, y) && fov.visibility.get(x, y)) {
+                        position.map.markAsSeenByPlayer(x, y);
                     }
                 }
             }

@@ -6,10 +6,11 @@ import com.ericc.the.game.Direction;
 import com.ericc.the.game.Models;
 import com.ericc.the.game.actions.Actions;
 import com.ericc.the.game.components.*;
+import com.ericc.the.game.map.Map;
 
 public class Mob extends Entity {
-    public Mob(int x, int y) {
-        add(new PositionComponent(x, y));
+    public Mob(int x, int y, Map map) {
+        add(new PositionComponent(x, y, map));
         add(new RenderableComponent(Models.mage));
         add(new DirectionComponent(Direction.DOWN));
         add(new MobComponent());
@@ -26,7 +27,7 @@ public class Mob extends Entity {
 
     }
 
-    public Mob(GridPoint2 pos) {
-        this(pos.x, pos.y);
+    public Mob(GridPoint2 pos, Map map) {
+        this(pos.x, pos.y, map);
     }
 }

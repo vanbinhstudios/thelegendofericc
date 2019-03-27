@@ -6,6 +6,7 @@ import com.ericc.the.game.Direction;
 import com.ericc.the.game.Models;
 import com.ericc.the.game.actions.NoAction;
 import com.ericc.the.game.components.*;
+import com.ericc.the.game.map.Map;
 
 /**
  * A mishmash for prototyping. This class should be broken down as soon as proper Actor systems are introduced.
@@ -17,8 +18,8 @@ public class Player extends Entity {
     public CurrentActionComponent currentAction;
     public IntentionComponent intention;
 
-    public Player(int x, int y, FieldOfViewComponent fov) {
-        pos = new PositionComponent(x, y);
+    public Player(int x, int y, Map map, FieldOfViewComponent fov, CameraComponent camera) {
+        pos = new PositionComponent(x, y, map);
         dir = new DirectionComponent(Direction.DOWN);
         renderable = new RenderableComponent(Models.hero);
         currentAction = new CurrentActionComponent(new NoAction());
@@ -38,9 +39,10 @@ public class Player extends Entity {
         add(new MovementPointsComponent(100));
         add(new StrengthComponent(40));
         add(new InitiativeComponent(10));
+        add(camera);
     }
 
-    public Player(GridPoint2 pos, FieldOfViewComponent fov) {
-        this(pos.x, pos.y, fov);
+    public Player(GridPoint2 pos, Map map, FieldOfViewComponent fov, CameraComponent camera) {
+        this(pos.x, pos.y, map, fov, camera);
     }
 }

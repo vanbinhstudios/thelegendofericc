@@ -12,7 +12,6 @@ import com.ericc.the.game.actions.Actions;
 import com.ericc.the.game.actions.MovementAction;
 import com.ericc.the.game.animations.JumpAnimation;
 import com.ericc.the.game.components.*;
-import com.ericc.the.game.map.CurrentMap;
 
 public class MovementSystem extends EntitySystem {
 
@@ -75,19 +74,19 @@ public class MovementSystem extends EntitySystem {
 
 
         if (move.direction == Direction.LEFT) {
-            if (CurrentMap.map.isPassable(pos.x - 1, pos.y)) {
+            if (pos.map.isPassable(pos.x - 1, pos.y)) {
                 dx = -1;
             }
         } else if (move.direction == Direction.RIGHT) {
-            if (CurrentMap.map.isPassable(pos.x + 1, pos.y)) {
+            if (pos.map.isPassable(pos.x + 1, pos.y)) {
                 dx = 1;
             }
         } else if (move.direction == Direction.UP) {
-            if (CurrentMap.map.isPassable(pos.x, pos.y + 1)) {
+            if (pos.map.isPassable(pos.x, pos.y + 1)) {
                 dy = 1;
             }
         } else { // if (move.direction == Direction.DESCENDING)
-            if (CurrentMap.map.isPassable(pos.x, pos.y - 1)) {
+            if (pos.map.isPassable(pos.x, pos.y - 1)) {
                 dy = -1;
             }
         }
