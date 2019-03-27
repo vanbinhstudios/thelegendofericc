@@ -8,11 +8,9 @@ import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import com.ericc.the.game.Mappers;
 import com.ericc.the.game.components.CameraComponent;
 import com.ericc.the.game.components.PositionComponent;
-import com.ericc.the.game.components.ScreenBoundariesComponent;
 
 import static java.lang.Integer.max;
 import static java.lang.Integer.min;
@@ -22,7 +20,7 @@ import static java.lang.Integer.min;
  * in real time, it updates the Screen Entity, which holds
  * four variables - top bottom left right, which indicate
  * the position of a tile which is visible and is on the screen boundary.
- *
+ * <p>
  * DISCLAIMER:
  * The position of that tiles are given in a custom coordinates which
  * are explained in a Map, they are not in pixels.

@@ -7,8 +7,6 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.ericc.the.game.Mappers;
 import com.ericc.the.game.components.*;
-import com.ericc.the.game.entities.Player;
-import com.ericc.the.game.map.Map;
 
 import static java.lang.Float.max;
 import static java.lang.Float.min;

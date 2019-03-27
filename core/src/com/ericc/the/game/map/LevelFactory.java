@@ -1,7 +1,6 @@
 package com.ericc.the.game.map;
 
 import com.badlogic.ashley.core.Entity;
-import com.ericc.the.game.Media;
 import com.ericc.the.game.entities.Mob;
 import com.ericc.the.game.entities.PushableObject;
 import com.ericc.the.game.entities.Stairs;

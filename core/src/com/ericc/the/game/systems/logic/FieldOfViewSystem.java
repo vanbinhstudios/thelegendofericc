@@ -64,6 +64,7 @@ public class FieldOfViewSystem extends EntitySystem {
 
     /**
      * A decorator-like function to call with less arguments.
+     *
      * @param pos a Position Component of an Entity
      * @param fov a Field of View Component of the same Entity
      */
@@ -75,6 +76,7 @@ public class FieldOfViewSystem extends EntitySystem {
      * Clears the given fov of any Entity but restricts clearing
      * only to visible map area (by player)
      * to improve performance.
+     *
      * @param fov a Field of View Component of any Entity
      */
     private void clearFOV(PositionComponent pos, FieldOfViewComponent fov) {
@@ -90,6 +92,7 @@ public class FieldOfViewSystem extends EntitySystem {
 
     /**
      * Updates the given fov component.
+     *
      * @param pos a PositionComponent of the same Entity
      * @param fov a Field of Component of the same Entity
      */
@@ -108,8 +111,9 @@ public class FieldOfViewSystem extends EntitySystem {
 
     /**
      * Updates all tiles which are on the ray trace line, starting from the Entity's position.
-     * @param x a float value indicating in which direction the ray trace line goes (x axis)
-     * @param y a float value indicating in which direction the ray trace line goes (y axis)
+     *
+     * @param x   a float value indicating in which direction the ray trace line goes (x axis)
+     * @param y   a float value indicating in which direction the ray trace line goes (y axis)
      * @param fov a Field of View Component of a given Entity
      * @param pos a PositionComponent of the same Entity
      */

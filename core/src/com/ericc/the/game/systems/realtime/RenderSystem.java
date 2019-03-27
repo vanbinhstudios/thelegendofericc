@@ -12,11 +12,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Affine2;
 import com.badlogic.gdx.utils.GdxRuntimeException;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import com.ericc.the.game.Mappers;
 import com.ericc.the.game.Media;
 import com.ericc.the.game.TileTextureIndicator;
-import com.ericc.the.game.components.*;
+import com.ericc.the.game.components.CameraComponent;
+import com.ericc.the.game.components.PositionComponent;
+import com.ericc.the.game.components.RenderableComponent;
 import com.ericc.the.game.map.Map;
 import com.ericc.the.game.shaders.Shaders;
 
@@ -28,7 +29,6 @@ import java.util.ArrayList;
  */
 public class RenderSystem extends EntitySystem {
     private final Affine2 transformTmp = new Affine2();
-    private final Color colorTmp = new Color();
 
     private SpriteBatch batch = new SpriteBatch();
     private ImmutableArray<Entity> entities; // Renderable entities.
@@ -88,7 +88,7 @@ public class RenderSystem extends EntitySystem {
             The ordering here is based on the logical position.
             This might need to change in the future.
             */
-                visibleEntities.sort((a, b) -> Mappers.position.get(b).y - Mappers.position.get(a).y);
+            visibleEntities.sort((a, b) -> Mappers.position.get(b).y - Mappers.position.get(a).y);
 
             /*
             Perform the drawing.
@@ -168,7 +168,7 @@ public class RenderSystem extends EntitySystem {
             // Floor tile.
             batch.draw(Media.getRandomFloorTile(
                     x, y, map.getRandomNumber(x, y, TileTextureIndicator.FLOOR.getValue()), isStatic
-                    ), x, y, 1, 1);
+            ), x, y, 1, 1);
 
             // Drawing decorations on the floor.
             int clutterType = map.getRandomClutter(x, y, TileTextureIndicator.FLOOR.getValue());
@@ -272,13 +272,5 @@ public class RenderSystem extends EntitySystem {
         v = t.getV2() * v + t.getV() * (1 - v);
         v2 = t.getV2() * v2 + t.getV() * (1 - v2);
         batch.draw(t.getTexture(), x, y, width, height, u, v, u2, v2);
-    }
-
-    /**
-     * Custom function that does the sprite batch initialisation.
-     * @param batch a sprite batch to be initialised
-     */
-    private void initBatch(SpriteBatch batch) {
-
     }
 }

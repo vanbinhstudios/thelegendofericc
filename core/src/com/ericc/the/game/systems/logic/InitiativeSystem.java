@@ -25,7 +25,7 @@ public class InitiativeSystem extends IteratingSystem {
         AgilityComponent entityAgility = Mappers.agility.get(entity);
         IntelligenceComponent entityIntelligence = Mappers.intelligence.get(entity);
         Integer initiative = (entityAgility.value + entityIntelligence.value) / 4
-                                + ThreadLocalRandom.current().nextInt(1, 20);
+                + ThreadLocalRandom.current().nextInt(1, 20);
         Mappers.initiative.get(entity).value = initiative;
     }
 }

@@ -59,6 +59,7 @@ public class KeyboardController extends InputAdapter {
 
     /**
      * Actions that player takes and should not affect the turn counter.
+     *
      * @return true if the action that should be taken should not update the turn counter
      */
     private boolean playersGUIActions(int keycode) {

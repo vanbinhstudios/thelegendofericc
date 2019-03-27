@@ -60,9 +60,10 @@ public class Media {
 
     /**
      * Return a random floor tile.
-     * @param x coords of a tile
-     * @param y coords of a tile
-     * @param index which floor tile to return
+     *
+     * @param x        coords of a tile
+     * @param y        coords of a tile
+     * @param index    which floor tile to return
      * @param isStatic indicates whether the tile should dynamically change the texture
      * @return
      */

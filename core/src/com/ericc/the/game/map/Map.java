@@ -58,8 +58,8 @@ public class Map {
                 randomTileNumber[x][y][TileTextureIndicator.FLOOR.getValue()] = MathUtils.random(0, Media.floors.size - 1);
 
                 // table for terrain clutter generation
-                randomClutterNumber[x][y][TileTextureIndicator.UP.getValue()] = MathUtils.random(0, 30*Media.wallClutter.size);
-                randomClutterNumber[x][y][TileTextureIndicator.FLOOR.getValue()] = MathUtils.random(0, 30*Media.clutter.size);
+                randomClutterNumber[x][y][TileTextureIndicator.UP.getValue()] = MathUtils.random(0, 30 * Media.wallClutter.size);
+                randomClutterNumber[x][y][TileTextureIndicator.FLOOR.getValue()] = MathUtils.random(0, 30 * Media.clutter.size);
             }
         }
     }
@@ -76,7 +76,9 @@ public class Map {
         return randomTileNumber[x][y][direction];
     }
 
-    public int getRandomClutter(int x, int y, int direction) { return randomClutterNumber[x][y][direction]; }
+    public int getRandomClutter(int x, int y, int direction) {
+        return randomClutterNumber[x][y][direction];
+    }
 
     /**
      * Checks whether the given point in 2D grid is in boundaries of a map.
@@ -111,7 +113,7 @@ public class Map {
 
     /**
      * @return random passable point in the 2D grid of this map
-     *
+     * <p>
      * DISCLAIMER:
      * It does REMOVE the passable tile it is going to return from the passableTiles collection!
      */

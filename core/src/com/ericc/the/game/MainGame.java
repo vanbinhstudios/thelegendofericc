@@ -4,7 +4,6 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.ericc.the.game.components.CameraComponent;
@@ -50,7 +49,6 @@ public class MainGame extends Game {
                 dungeon.getCurrentMap(),
                 new FieldOfViewComponent(dungeon.getCurrentMap().width(), dungeon.getCurrentMap().height()),
                 new CameraComponent(viewport));
-        FieldOfViewComponent playersFieldOfView = Mappers.fov.get(player);
 
         controls = new KeyboardController(engines, player, camera);
         Gdx.input.setInputProcessor(controls);
@@ -98,7 +96,7 @@ public class MainGame extends Game {
      * - player's fov
      * - player's fog of war
      * - initial screen boundaries
-     *
+     * <p>
      * And that is exactly what this function is meant to do.
      */
     private void initialisePlayersComponents(FieldOfViewSystem fieldOfViewSystem,

@@ -7,9 +7,9 @@ buildscript {
         jcenter()
         google()
     }
-    
+
     dependencies {
-        
+
     }
 }
 
@@ -18,7 +18,7 @@ allprojects {
     apply plugin: "idea"
 
     version = '1.0'
-    
+
     ext {
         appName = "The Legend Of Eric"
         gdxVersion = '1.9.9'
@@ -40,7 +40,7 @@ allprojects {
 
 project(":desktop") {
     apply plugin: "java"
-    
+
     dependencies {
         compile project(":core")
         compile "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
@@ -54,7 +54,7 @@ project(":desktop") {
 
 project(":core") {
     apply plugin: "java"
-    
+
     dependencies {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         implementation 'com.github.libgdx:ashley:master-SNAPSHOT'
