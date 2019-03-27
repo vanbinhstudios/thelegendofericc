@@ -2,35 +2,37 @@ package com.ericc.the.game.systems.logic;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.EntityListener;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.SortedIteratingSystem;
-import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.GridPoint2;
 import com.ericc.the.game.Direction;
 import com.ericc.the.game.Mappers;
 import com.ericc.the.game.actions.Actions;
 import com.ericc.the.game.actions.MovementAction;
+import com.ericc.the.game.actions.TeleportAction;
 import com.ericc.the.game.components.*;
 import com.ericc.the.game.entities.Mob;
 import com.ericc.the.game.entities.Player;
 import com.ericc.the.game.entities.PushableObject;
-import com.ericc.the.game.map.Map;
+import com.ericc.the.game.entities.Stairs;
+import com.ericc.the.game.map.CurrentMap;
 
 import java.util.Comparator;
 import java.util.HashMap;
 
-public class ActionHandlingSystem extends SortedIteratingSystem {
+public class ActionSetterSystem extends SortedIteratingSystem {
 
-    private HashMap<GridPoint2, Entity> interactives;
-    private Map map;
+    private final HashMap<GridPoint2, Entity> interactives;
+    private boolean shouldResetIntention = false;
 
-    public ActionHandlingSystem(Map map) {
+    public ActionSetterSystem() {
         super(Family.all(PositionComponent.class,
                 CurrentActionComponent.class, AgilityComponent.class,
                 IntelligenceComponent.class, SentienceComponent.class,
                 InitiativeComponent.class).get(), new EntityComparator(),
-                10002);
-        this.map = map;
+                1); // Depends on InitiativeSystem and AiSystem
+        interactives = new HashMap<>();
     }
 
     // Entity comparator based on initiative value in the current turn
@@ -47,14 +49,13 @@ public class ActionHandlingSystem extends SortedIteratingSystem {
         // MovableInitiatives contains entity-initiative pair for the current turn
         // Interactives contains a map of all interactive entities and their positions
         super.addedToEngine(engine);
-        interactives = new HashMap<>();
 
-        ImmutableArray<Entity> initiativeEntitiesArray;
+        Family family = Family.all(PositionComponent.class,
+                InteractivityComponent.class,
+                CurrentActionComponent.class).get();
+        engine.addEntityListener(family, new InteractivesHandler());
 
-        initiativeEntitiesArray = engine.getEntitiesFor(Family.all(PositionComponent.class,
-                InteractivityComponent.class, CurrentActionComponent.class).get());
-
-        for (Entity entity : initiativeEntitiesArray) {
+        for (Entity entity : engine.getEntitiesFor(family)) {
             PositionComponent pos = Mappers.position.get(entity);
             interactives.put(new GridPoint2(pos.x, pos.y), entity);
         }
@@ -62,6 +63,7 @@ public class ActionHandlingSystem extends SortedIteratingSystem {
 
     @Override
     public void processEntity(Entity currentEntity, float deltaTime) {
+        this.shouldResetIntention = true;
         boolean canProceed = analyzeMove(currentEntity);
         // If the entity can proceed it's intent can be put into action
         if (canProceed) {
@@ -70,7 +72,9 @@ public class ActionHandlingSystem extends SortedIteratingSystem {
         }
 
         // Reset intention after the move is made
-        Mappers.intention.get(currentEntity).currentIntent = Actions.NOTHING;
+        if (shouldResetIntention) {
+            Mappers.intention.get(currentEntity).currentIntent = Actions.NOTHING;
+        }
     }
 
     private boolean analyzeMove(Entity entity) {
@@ -95,7 +99,7 @@ public class ActionHandlingSystem extends SortedIteratingSystem {
                 + pos.y;
 
         // If the target field is not passable movement is not possible
-        if (!map.isPassable(targetX, targetY)) {
+        if (!CurrentMap.map.isPassable(targetX, targetY)) {
             if (entity instanceof Player) System.out.print("Player tried running into the wall.\n");
             return false;
         }
@@ -131,6 +135,15 @@ public class ActionHandlingSystem extends SortedIteratingSystem {
                 if (entity instanceof Player) System.out.print("Player tried running into a mob.\n");
                 return false;
             }
+            if (collidingEntity instanceof Stairs) {
+                if (entity instanceof Player) {
+                    intent.currentIntent = new TeleportAction(collidingEntity);
+                    interactives.remove(new GridPoint2(pos.x, pos.y));
+                    this.shouldResetIntention = false;
+                }
+
+                return false;
+            }
         }
         return true;
     }
@@ -157,6 +170,20 @@ public class ActionHandlingSystem extends SortedIteratingSystem {
 
             interactives.remove(new GridPoint2(pos.x, pos.y), entity);
             interactives.put(targetPos, entity);
+        }
+    }
+
+    public class InteractivesHandler implements EntityListener {
+        @Override
+        public void entityRemoved(Entity entity) {
+            PositionComponent pos = Mappers.position.get(entity);
+            interactives.remove(new GridPoint2(pos.x, pos.y));
+        }
+
+        @Override
+        public void entityAdded(Entity entity) {
+            PositionComponent pos = Mappers.position.get(entity);
+            interactives.put(new GridPoint2(pos.x, pos.y), entity);
         }
     }
 }

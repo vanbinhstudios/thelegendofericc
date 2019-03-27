@@ -10,9 +10,8 @@ import com.badlogic.gdx.math.MathUtils;
 import com.ericc.the.game.Mappers;
 import com.ericc.the.game.components.FieldOfViewComponent;
 import com.ericc.the.game.components.PositionComponent;
-import com.ericc.the.game.components.ScreenBoundariesComponent;
-import com.ericc.the.game.entities.Screen;
-import com.ericc.the.game.map.Map;
+import com.ericc.the.game.helpers.Moves;
+import com.ericc.the.game.map.CurrentMap;
 
 import java.util.Arrays;
 import java.util.List;
@@ -24,55 +23,32 @@ import java.util.List;
  */
 public class FieldOfViewSystem extends EntitySystem {
 
-    private Map map;
     private ImmutableArray<Entity> entities; ///< all entities with fov available
-    private ScreenBoundariesComponent visibleMapArea; ///< explained in a ScreeBoundariesGetterSystem
-
-    // a helper data structure with possible moves from one tile in horizontal and vertical directions
-    private static List<GridPoint2> moves =
-            Arrays.asList(
-                    new GridPoint2(1, 0),
-                    new GridPoint2(0, 1),
-                    new GridPoint2(-1, 0),
-                    new GridPoint2(0, -1)
-            );
-
-    // stores moves on diagonals
-    private static List<GridPoint2> diagonalMoves =
-            Arrays.asList(
-                    new GridPoint2(1, 1),
-                    new GridPoint2(-1, -1),
-                    new GridPoint2(-1, 1),
-                    new GridPoint2(1, -1)
-            );
 
     // a helper data structure which reduces the code lines to check whether the given
     // position is a visible corner
-    private static List<List<GridPoint2>> corners =
-                Arrays.asList( // there are 4 cases here
-                        Arrays.asList(
-                                new GridPoint2(-1, 0), // each one of them has two coordinates
-                                new GridPoint2(0, 1) // that should be checked for visible walls
-                        ),
-                        Arrays.asList(
-                                new GridPoint2(0, 1),
-                                new GridPoint2(1, 0)
-                        ),
-                        Arrays.asList(
-                                new GridPoint2(1, 0),
-                                new GridPoint2(0, -1)
-                        ),
-                        Arrays.asList(
-                                new GridPoint2(0, -1),
-                                new GridPoint2(-1, 0)
-                        )
-                );
+    public static List<List<GridPoint2>> corners =
+            Arrays.asList( // there are 4 cases here
+                    Arrays.asList(
+                            new GridPoint2(-1, 0), // each one of them has two coordinates
+                            new GridPoint2(0, 1) // that should be checked for visible walls
+                    ),
+                    Arrays.asList(
+                            new GridPoint2(0, 1),
+                            new GridPoint2(1, 0)
+                    ),
+                    Arrays.asList(
+                            new GridPoint2(1, 0),
+                            new GridPoint2(0, -1)
+                    ),
+                    Arrays.asList(
+                            new GridPoint2(0, -1),
+                            new GridPoint2(-1, 0)
+                    )
+            );
 
-    public FieldOfViewSystem(Map map, Screen screen) {
-        super(9997);
-
-        this.map = map;
-        this.visibleMapArea = Mappers.screenBoundaries.get(screen);
+    public FieldOfViewSystem() {
+        super(100); // Depends on MovementSystem
     }
 
     @Override
@@ -102,10 +78,11 @@ public class FieldOfViewSystem extends EntitySystem {
      * to improve performance.
      * @param fov a Field of View Component of any Entity
      */
-    private void clearFOV(FieldOfViewComponent fov) {
-        for (int y = visibleMapArea.top; y >= visibleMapArea.bottom; --y) {
-            for (int x = visibleMapArea.left; x <= visibleMapArea.right; ++x) {
-                if (map.inBoundaries(x, y)) {
+    private void clearFOV(int entityXPos, int entityYPos, FieldOfViewComponent fov) {
+        int updateMargin = FieldOfViewComponent.VIEW_RADIUS + 4;
+        for (int y = entityYPos + updateMargin; y >= entityYPos - updateMargin; --y) {
+            for (int x = entityXPos - updateMargin; x < entityXPos + updateMargin; ++x) {
+                if (CurrentMap.map.inBoundaries(x, y)) {
                     fov.visibility.clear(x, y);
                 }
             }
@@ -119,7 +96,7 @@ public class FieldOfViewSystem extends EntitySystem {
      * @param fov a Field of Component of the same Entity
      */
     private void updateFOV(int entityXPos, int entityYPos, FieldOfViewComponent fov) {
-        clearFOV(fov);
+        clearFOV(entityXPos, entityYPos, fov);
 
         // sends a ray trace line every degree
         for (int i = 0; i < 360; i++) {
@@ -150,7 +127,7 @@ public class FieldOfViewSystem extends EntitySystem {
             int castedY = (int) posy;
 
             // if any of the coordinate is outside the map we should omit it
-            if (!(map.inBoundaries(castedX, castedY))) {
+            if (!(CurrentMap.map.inBoundaries(castedX, castedY))) {
                 continue;
             }
 
@@ -158,9 +135,9 @@ public class FieldOfViewSystem extends EntitySystem {
 
             // this piece of code was written to ensure that corners and walls are
             // rendered properly -> id does render them sometimes even though they are not in view range
-            if (map.isPassable(castedX, castedY)) {
-                checkMoves(moves, true, castedX, castedY, fov);
-                checkMoves(diagonalMoves, false, castedX, castedY, fov);
+            if (CurrentMap.map.isPassable(castedX, castedY)) {
+                checkMoves(Moves.moves, true, castedX, castedY, fov);
+                checkMoves(Moves.diagonalMoves, false, castedX, castedY, fov);
             } else {
                 // if this tile is a border, the hero does not see through that tile
                 return;
@@ -181,8 +158,8 @@ public class FieldOfViewSystem extends EntitySystem {
             int posxTemp = castedX + move.x;
             int posyTemp = castedY + move.y;
 
-            if (map.inBoundaries(posxTemp, posyTemp)
-                    && !map.isPassable(posxTemp, posyTemp)
+            if (CurrentMap.map.inBoundaries(posxTemp, posyTemp)
+                    && !CurrentMap.map.isPassable(posxTemp, posyTemp)
                     && (regularMoves || isCorner(posxTemp, posyTemp, fov))) {
                 fov.visibility.set(posxTemp, posyTemp);
             }
@@ -197,10 +174,10 @@ public class FieldOfViewSystem extends EntitySystem {
             GridPoint2 firstMove = corner.get(0);
             GridPoint2 secondMove = corner.get(1);
 
-            if (map.inBoundaries(x + firstMove.x, y + firstMove.y)
-                    && map.inBoundaries(x + secondMove.x, y + secondMove.y)
-                    && !map.isPassable(x + firstMove.x, y + firstMove.y)
-                    && !map.isPassable(x + secondMove.x, y + secondMove.y)
+            if (CurrentMap.map.inBoundaries(x + firstMove.x, y + firstMove.y)
+                    && CurrentMap.map.inBoundaries(x + secondMove.x, y + secondMove.y)
+                    && !CurrentMap.map.isPassable(x + firstMove.x, y + firstMove.y)
+                    && !CurrentMap.map.isPassable(x + secondMove.x, y + secondMove.y)
                     && fov.visibility.get(x + firstMove.x, y + firstMove.y)
                     && fov.visibility.get(x + secondMove.x, y + secondMove.y)) {
                 return true;

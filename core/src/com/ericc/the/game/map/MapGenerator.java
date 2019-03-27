@@ -4,7 +4,7 @@ import com.badlogic.gdx.math.GridPoint2;
 
 import java.util.*;
 
-public class Generator {
+public class MapGenerator {
 
     private int width, height;
     private Map map;
@@ -12,7 +12,7 @@ public class Generator {
     private int maximalRoomSize;
 
     /**
-     * Generator class.
+     * MapGenerator class.
      *
      * @param width           dimension of a map to generate, must be > 1 (NOT IN PIXELS, IT IS A CUSTOM METRIC)
      * @param height          same as above
@@ -22,9 +22,9 @@ public class Generator {
      *                        <p>
      *                        Disclaimer:
      *                        Note that it uses O(width * height) memory, so time complexity is also bound by that value.
-     *                        Keep that in mind when calling the Generator methods.
+     *                        Keep that in mind when calling the MapGenerator methods.
      */
-    public Generator(int width, int height, int maximalRoomSize) {
+    public MapGenerator(int width, int height, int maximalRoomSize) {
         assert width > 1 && height > 1;
 
         this.width = width;
@@ -46,8 +46,15 @@ public class Generator {
         int roomHeight = Math.max(6, height / 8 + random.nextInt(Math.max(1 + height - roomY, 1)));
         GridPoint2 center = new GridPoint2(0, 0);
 
-        for (int i = x + roomX + 1; i < x + roomWidth && i < this.width && i < x + width - 2; ++i) {
-            for (int j = y + roomY + 1; j < y + roomHeight && j < this.height && j < y + height - 2; ++j) {
+        int widthBoundary = Math.min(x + roomWidth, Math.min(this.width, x + width - 2));
+        int heightBoundary = Math.min(y + roomHeight, Math.min(this.height, y + height - 2));
+
+        if (Math.min(heightBoundary - (y + roomY + 1), widthBoundary - (x + roomX + 1)) <= 2) {
+            return new GridPoint2(x, y);
+        }
+
+        for (int i = x + roomX + 1; i < widthBoundary; ++i) {
+            for (int j = y + roomY + 1; j < heightBoundary; ++j) {
                 map.setTile(i, j, true);
 
                 if (center.x == 0) {
@@ -76,7 +83,7 @@ public class Generator {
      * @param height the height of a rectangle (from y till y + height (excluded))
      */
     private GridPoint2 generateMap(int x, int y, int width, int height) {
-        // this preserves the ratio (width:height and height:width) of every room (max ratio is 3:1)
+        // this preserves the ratio (width:height and height:width) of every room (max ratio is 2:1)
         if ((width < this.maximalRoomSize && height < 2 * this.maximalRoomSize)
                 || (height < this.maximalRoomSize && width < 2 * this.maximalRoomSize)) {
             return fillRoomReturnCenter(x, y, width, height);
@@ -115,6 +122,7 @@ public class Generator {
      */
     public Map generateMap() {
         generateMap(1, 1, width - 1, height - 1);
+        connectRandomRooms();
 
         return map;
     }
@@ -125,7 +133,7 @@ public class Generator {
         Collections.shuffle(roomsListed);
         ArrayList<Room> roomsArray = new ArrayList<>(roomsListed);
 
-        for (int i = 0; i < roomsArray.size() - 1; i = i + 2) {
+        for (int i = 0; i < roomsArray.size() - 1; i = i + 3) {
             connectRooms(roomsArray.get(i).getCentre(), roomsArray.get(i + 1).getCentre());
         }
     }

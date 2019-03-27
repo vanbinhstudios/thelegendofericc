@@ -8,18 +8,13 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.ericc.the.game.components.FieldOfViewComponent;
-import com.ericc.the.game.entities.Mob;
 import com.ericc.the.game.entities.Player;
-import com.ericc.the.game.entities.PushableObject;
 import com.ericc.the.game.entities.Screen;
 import com.ericc.the.game.helpers.FpsThrottle;
-import com.ericc.the.game.map.Generator;
-import com.ericc.the.game.map.Map;
+import com.ericc.the.game.map.CurrentMap;
+import com.ericc.the.game.map.Dungeon;
 import com.ericc.the.game.systems.logic.*;
-import com.ericc.the.game.systems.realtime.ScreenBoundariesGetterSystem;
-import com.ericc.the.game.systems.realtime.AnimationSystem;
-import com.ericc.the.game.systems.realtime.RenderSystem;
-import com.ericc.the.game.systems.realtime.TileChanger;
+import com.ericc.the.game.systems.realtime.*;
 
 public class MainGame extends Game {
 
@@ -29,7 +24,7 @@ public class MainGame extends Game {
     private final static int viewportWidth = 24;
     private final static int viewportHeight = 18;
 
-    private Map map;
+    private Dungeon dungeon;
     private Player player;
 
     private Engines engines = new Engines();
@@ -48,39 +43,36 @@ public class MainGame extends Game {
         viewport = new FillViewport(viewportWidth, viewportHeight, camera);
         viewport.apply();
 
-        map = new Generator(30, 30, 9).generateMap();
-        player = new Player(map.getRandomPassableTile(), new FieldOfViewComponent(map.width(), map.height()));
+        this.dungeon = new Dungeon(engines);
+        dungeon.generateFirstLevel();
+
+        player = new Player(CurrentMap.map.getRandomPassableTile(),
+                new FieldOfViewComponent(CurrentMap.map.width(), CurrentMap.map.height()));
         FieldOfViewComponent playersFieldOfView = Mappers.fov.get(player);
         Screen screen = new Screen();
 
-        controls = new KeyboardController(engines.getLogicEngine(), player, camera);
+        controls = new KeyboardController(engines, player, camera);
         Gdx.input.setInputProcessor(controls);
 
-        engines.addEntityToBothEngines(player);
-        engines.addEntityToBothEngines(screen);
+        engines.addEntity(player);
+        engines.addEntity(screen);
 
-        for (int i = 0; i < 10; i++) {
-            engines.addEntityToBothEngines(new Mob(map.getRandomPassableTile()));
-        }
+        ScreenBoundariesGetterSystem visibleMapAreaSystem = new ScreenBoundariesGetterSystem(viewport, screen);
+        engines.addRealtimeSystem(new RenderSystem(viewport, playersFieldOfView, screen));
+        engines.addRealtimeSystem(new AnimationSystem());
+        engines.addRealtimeSystem(new TileChanger(.75f));
+        engines.addRealtimeSystem(visibleMapAreaSystem);
+        engines.addRealtimeSystem(new FadeSystem(playersFieldOfView, screen));
 
-        for (int i = 0; i < 10; i++) {
-            engines.addEntityToBothEngines(new PushableObject(map.getRandomPassableTile(), Media.crate));
-        }
-
-        ScreenBoundariesGetterSystem visibleMapAreaSystem = new ScreenBoundariesGetterSystem(viewport, map, screen);
-        engines.getRealtimeEngine().addSystem(new RenderSystem(map, viewport, playersFieldOfView, screen));
-        engines.getRealtimeEngine().addSystem(new AnimationSystem());
-        engines.getRealtimeEngine().addSystem(new TileChanger(.75f));
-        engines.getRealtimeEngine().addSystem(visibleMapAreaSystem);
-
-        FieldOfViewSystem fieldOfViewSystem = new FieldOfViewSystem(map, screen);
-        FogOfWarSystem fogOfWarSystem = new FogOfWarSystem(player, map, screen);
-        engines.getLogicEngine().addSystem(new AiSystem());
-        engines.getLogicEngine().addSystem(new InitiativeSystem());
-        engines.getLogicEngine().addSystem(new ActionHandlingSystem(map));
-        engines.getLogicEngine().addSystem(new MovementSystem(map));
-        engines.getLogicEngine().addSystem(fieldOfViewSystem);
-        engines.getLogicEngine().addSystem(fogOfWarSystem);
+        FieldOfViewSystem fieldOfViewSystem = new FieldOfViewSystem();
+        FogOfWarSystem fogOfWarSystem = new FogOfWarSystem();
+        engines.addLogicSystem(new AiSystem());
+        engines.addLogicSystem(new InitiativeSystem());
+        engines.addLogicSystem(new ActionSetterSystem());
+        engines.addLogicSystem(new MovementSystem());
+        engines.addLogicSystem(fieldOfViewSystem);
+        engines.addLogicSystem(fogOfWarSystem);
+        engines.addLogicSystem(new TeleportPlayerSystem(dungeon, engines, player));
 
         initialisePlayersComponents(visibleMapAreaSystem, fieldOfViewSystem, fogOfWarSystem);
 
@@ -97,8 +89,6 @@ public class MainGame extends Game {
 
         engines.updateRealtimeEngine();
         fpsThrottle.sleepToNextFrame();
-
-        System.out.print(Gdx.graphics.getFramesPerSecond() + "\n");
     }
 
     @Override

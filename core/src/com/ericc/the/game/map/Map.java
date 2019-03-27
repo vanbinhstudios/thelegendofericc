@@ -2,27 +2,39 @@ package com.ericc.the.game.map;
 
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.MathUtils;
+import com.ericc.the.game.Mappers;
 import com.ericc.the.game.Media;
 import com.ericc.the.game.TileTextureIndicator;
+import com.ericc.the.game.components.PositionComponent;
+import com.ericc.the.game.components.StaircaseDestinationComponent;
+import com.ericc.the.game.entities.Stairs;
 import com.ericc.the.game.helpers.FogOfWar;
 import com.ericc.the.game.utils.RectangularBitset;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 
 public class Map {
 
     private int width, height;
     private RectangularBitset map;
+    public float[][] brightness;
+    public float[][] saturation;
     private int[][][] randomTileNumber;
     private int[][][] randomClutterNumber;
     private HashSet<GridPoint2> passableTiles; ///< stores every passable tile in a map (AFTER THE FIRST GENERATION)
     // the above is NOT AN INVARIANT, this changes after spawning some entities on some tiles from this collection
     private HashSet<Room> rooms; ///< stores every room made while generating (without corridors)
     private FogOfWar fogOfWar;
+    public GridPoint2 entrance;
+    public GridPoint2 exit;
 
     Map(int width, int height) {
         this.width = width;
         this.height = height;
+        brightness = new float[width][height];
+        saturation = new float[width][height];
         this.passableTiles = new HashSet<>();
         this.rooms = new HashSet<>();
         this.fogOfWar = new FogOfWar(width, height);
@@ -104,9 +116,57 @@ public class Map {
      * It does REMOVE the passable tile it is going to return from the passableTiles collection!
      */
     public GridPoint2 getRandomPassableTile() {
-        GridPoint2 ret = passableTiles.iterator().next();
+        GridPoint2 ret;
+
+        try {
+            ret = passableTiles.iterator().next();
+        } catch (Exception e) {
+            // TODO Instead of throwing an exception here, we would like to generate another map f.e.
+            throw new IllegalStateException("Can't find room for more entities, check the map size.");
+        }
+
         passableTiles.remove(ret);
         return ret;
+    }
+
+    /**
+     * Returns random passable tile from any room which minimal dimension is
+     * greater than 2. (This random passable tile for now is the right upper corner)
+     */
+    public GridPoint2 getRandomPassableTileFromRooms() {
+        ArrayList<Room> roomsListed = new ArrayList<>(rooms);
+        Room randomRoom = roomsListed.get(MathUtils.random(roomsListed.size() - 1));
+        int ctr = 0;
+
+        while (!(passableTiles.contains(randomRoom.getRightUpperCorner()) || randomRoom.getMinDimension() < 2)) {
+            Collections.shuffle(roomsListed);
+            randomRoom = roomsListed.get(MathUtils.random(roomsListed.size() - 1));
+            ++ctr;
+
+            if (ctr > 50) {
+                // TODO Instead of throwing an exception here, we would like to generate another map f.e.
+                throw new IllegalStateException("Cant find a room with width or length greater than 2.");
+            }
+        }
+
+        passableTiles.remove(randomRoom.getRightUpperCorner());
+
+        return randomRoom.getRightUpperCorner();
+    }
+
+    /**
+     * Registers stairs in this map, determines whether that stairs are ascending or descending
+     * and puts the entrance / exit in that position.
+     */
+    public void registerStairs(Stairs stairs) {
+        StaircaseDestinationComponent destinationComponent = Mappers.stairsComponent.get(stairs);
+        PositionComponent positionComponent = Mappers.position.get(stairs);
+
+        if (destinationComponent.destination == StaircaseDestination.DESCENDING) {
+            this.exit = new GridPoint2(positionComponent.x, positionComponent.y);
+        } else {
+            this.entrance = new GridPoint2(positionComponent.x, positionComponent.y);
+        }
     }
 
     public void addRoom(Room room) {
@@ -129,5 +189,15 @@ public class Map {
      */
     public boolean hasBeenSeenByPlayer(int x, int y) {
         return fogOfWar.hasBeenSeenByPlayer(x, y);
+    }
+
+    public void makeFogCoverTheEntireMap() {
+        for (int i = 0; i < width; ++i) {
+            for (int j = 0; j < height; ++j) {
+                if (inBoundaries(i, j)) {
+                    fogOfWar.markAsSeenByPlayer(i, j);
+                }
+            }
+        }
     }
 }

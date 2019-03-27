@@ -1,39 +1,42 @@
 package com.ericc.the.game.systems.logic;
 
 import com.badlogic.ashley.core.Engine;
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
+import com.badlogic.ashley.core.Family;
+import com.badlogic.ashley.utils.ImmutableArray;
 import com.ericc.the.game.Mappers;
 import com.ericc.the.game.components.FieldOfViewComponent;
-import com.ericc.the.game.components.ScreenBoundariesComponent;
-import com.ericc.the.game.entities.Player;
-import com.ericc.the.game.entities.Screen;
-import com.ericc.the.game.map.Map;
+import com.ericc.the.game.components.PlayerComponent;
+import com.ericc.the.game.components.PositionComponent;
+import com.ericc.the.game.map.CurrentMap;
 
 public class FogOfWarSystem extends EntitySystem {
 
-    private Player player;
-    private Map map;
-    private ScreenBoundariesComponent visibleMapArea;
+    private ImmutableArray<Entity> entities; ///< all entities able to discover new tiles
 
-    public FogOfWarSystem(Player player, Map map, Screen screen) {
-        super(9998); // remember to change it so it is larger than FOV priority
-
-        this.player = player;
-        this.map = map;
-        this.visibleMapArea = Mappers.screenBoundaries.get(screen);
+    public FogOfWarSystem() {
+        super(101); // Depends on FieldOfViewSystem
     }
 
     @Override
-    public void addedToEngine(Engine engine) {}
+    public void addedToEngine(Engine engine) {
+        entities = engine.getEntitiesFor(Family.all(PositionComponent.class, PlayerComponent.class, FieldOfViewComponent.class).get());
+    }
 
     @Override
     public void update(float deltaTime) {
-        FieldOfViewComponent playersFov = Mappers.fov.get(player);
+        for (Entity entity : entities) {
+            FieldOfViewComponent fov = Mappers.fov.get(entity);
+            PositionComponent position = Mappers.position.get(entity);
 
-        for (int y = visibleMapArea.top; y >= visibleMapArea.bottom; --y) {
-            for (int x = visibleMapArea.left; x <= visibleMapArea.right; ++x) {
-                if (map.inBoundaries(x, y) && playersFov.visibility.get(x, y)) {
-                   map.markAsSeenByPlayer(x, y);
+            int updateMargin = FieldOfViewComponent.VIEW_RADIUS + 3;
+
+            for (int y = position.y + updateMargin; y >= position.y - updateMargin; --y) {
+                for (int x = position.x - updateMargin; x < position.x + updateMargin; ++x) {
+                    if (CurrentMap.map.inBoundaries(x, y) && fov.visibility.get(x, y)) {
+                        CurrentMap.map.markAsSeenByPlayer(x, y);
+                    }
                 }
             }
         }

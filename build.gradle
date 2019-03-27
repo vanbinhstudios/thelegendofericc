@@ -24,7 +24,7 @@ allprojects {
         gdxVersion = '1.9.9'
         roboVMVersion = '2.3.5'
         box2DLightsVersion = '1.4'
-        ashleyVersion = '1.7.0'
+        ashleyVersion = '1.7.3'
         aiVersion = '1.8.0'
     }
 
@@ -34,6 +34,7 @@ allprojects {
         google()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }
+        maven { url 'https://jitpack.io' }
     }
 }
 
@@ -56,7 +57,7 @@ project(":core") {
     
     dependencies {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
-        compile "com.badlogicgames.ashley:ashley:$ashleyVersion"
+        implementation 'com.github.libgdx:ashley:master-SNAPSHOT'
         compile "com.badlogicgames.gdx:gdx-controllers:$gdxVersion"
     }
 }
