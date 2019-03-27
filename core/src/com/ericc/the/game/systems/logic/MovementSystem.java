@@ -11,12 +11,13 @@ import com.ericc.the.game.Mappers;
 import com.ericc.the.game.actions.Actions;
 import com.ericc.the.game.actions.MovementAction;
 import com.ericc.the.game.animations.JumpAnimation;
-import com.ericc.the.game.components.*;
+import com.ericc.the.game.components.AffineAnimationComponent;
+import com.ericc.the.game.components.CurrentActionComponent;
+import com.ericc.the.game.components.PositionComponent;
 
 public class MovementSystem extends EntitySystem {
 
-    private ImmutableArray<Entity> directableMovables;
-    private ImmutableArray<Entity> nonDirectableMovables;
+    private ImmutableArray<Entity> movable;
 
     public MovementSystem() {
         super(2); // Depends on ActionHandlingSystem
@@ -24,43 +25,19 @@ public class MovementSystem extends EntitySystem {
 
     @Override
     public void addedToEngine(Engine engine) {
-        directableMovables = engine.getEntitiesFor(Family.all(PositionComponent.class,
-                CurrentActionComponent.class, DirectionComponent.class).get());
-        nonDirectableMovables = engine.getEntitiesFor(Family.all(PositionComponent.class,
-                CurrentActionComponent.class, OneSidedComponent.class).get());
-
+        movable = engine.getEntitiesFor(Family.all(PositionComponent.class,
+                CurrentActionComponent.class).get());
     }
 
     @Override
     public void update(float deltaTime) {
-        moveDirectables();
-        moveNonDirectables();
-    }
-
-    private void moveDirectables() {
-        for (Entity entity : directableMovables) {
+        for (Entity entity : movable) {
             CurrentActionComponent action = Mappers.currentAction.get(entity);
 
             if (action.action instanceof MovementAction) {
                 PositionComponent pos = Mappers.position.get(entity);
                 MovementAction move = (MovementAction) action.action;
-
-                DirectionComponent dir = Mappers.direction.get(entity);
-                dir.direction = move.direction;
-
-                setCoordinates(entity, pos, action, move);
-                action.action = Actions.NOTHING;
-            }
-        }
-    }
-
-    private void moveNonDirectables() {
-        for (Entity entity : nonDirectableMovables) {
-            CurrentActionComponent action = Mappers.currentAction.get(entity);
-
-            if (action.action instanceof MovementAction) {
-                PositionComponent pos = Mappers.position.get(entity);
-                MovementAction move = (MovementAction) action.action;
+                pos.direction = move.direction;
 
                 setCoordinates(entity, pos, action, move);
                 action.action = Actions.NOTHING;

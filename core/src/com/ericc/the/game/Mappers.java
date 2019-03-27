@@ -11,17 +11,12 @@ import com.ericc.the.game.components.*;
  */
 public class Mappers {
     public static final ComponentMapper<PositionComponent> position = ComponentMapper.getFor(PositionComponent.class);
-    public static final ComponentMapper<DirectionComponent> direction = ComponentMapper.getFor(DirectionComponent.class);
     public static final ComponentMapper<AffineAnimationComponent> affineAnimation = ComponentMapper.getFor(AffineAnimationComponent.class);
     public static final ComponentMapper<RenderableComponent> renderable = ComponentMapper.getFor(RenderableComponent.class);
     public static final ComponentMapper<CurrentActionComponent> currentAction = ComponentMapper.getFor(CurrentActionComponent.class);
     public static final ComponentMapper<IntentionComponent> intention = ComponentMapper.getFor(IntentionComponent.class);
     public static final ComponentMapper<FieldOfViewComponent> fov = ComponentMapper.getFor(FieldOfViewComponent.class);
-    public static final ComponentMapper<AgilityComponent> agility = ComponentMapper.getFor(AgilityComponent.class);
-    public static final ComponentMapper<HealthComponent> health = ComponentMapper.getFor(HealthComponent.class);
-    public static final ComponentMapper<IntelligenceComponent> intelligence = ComponentMapper.getFor(IntelligenceComponent.class);
-    public static final ComponentMapper<MovementPointsComponent> movementPoints = ComponentMapper.getFor(MovementPointsComponent.class);
-    public static final ComponentMapper<StrengthComponent> strength = ComponentMapper.getFor(StrengthComponent.class);
+    public static final ComponentMapper<StatsComponent> stats = ComponentMapper.getFor(StatsComponent.class);
     public static final ComponentMapper<InitiativeComponent> initiative = ComponentMapper.getFor(InitiativeComponent.class);
     public static final ComponentMapper<StaircaseDestinationComponent> stairsComponent = ComponentMapper.getFor(StaircaseDestinationComponent.class);
     public static final ComponentMapper<CameraComponent> camera = ComponentMapper.getFor(CameraComponent.class);

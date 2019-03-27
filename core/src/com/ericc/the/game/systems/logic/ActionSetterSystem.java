@@ -11,7 +11,10 @@ import com.ericc.the.game.Mappers;
 import com.ericc.the.game.actions.Actions;
 import com.ericc.the.game.actions.MovementAction;
 import com.ericc.the.game.actions.TeleportAction;
-import com.ericc.the.game.components.*;
+import com.ericc.the.game.components.CurrentActionComponent;
+import com.ericc.the.game.components.InitiativeComponent;
+import com.ericc.the.game.components.IntentionComponent;
+import com.ericc.the.game.components.PositionComponent;
 import com.ericc.the.game.entities.Mob;
 import com.ericc.the.game.entities.Player;
 import com.ericc.the.game.entities.PushableObject;
@@ -26,15 +29,12 @@ public class ActionSetterSystem extends SortedIteratingSystem {
     private boolean shouldResetIntention = false;
 
     public ActionSetterSystem() {
-        super(Family.all(PositionComponent.class,
-                CurrentActionComponent.class, AgilityComponent.class,
-                IntelligenceComponent.class, SentienceComponent.class,
-                InitiativeComponent.class).get(), new EntityComparator(),
-                1); // Depends on InitiativeSystem and AiSystem
+        super(Family.all(PositionComponent.class, CurrentActionComponent.class, InitiativeComponent.class).get(),
+                new EntityComparator(), 1); // Depends on InitiativeSystem and AiSystem
         interactives = new HashMap<>();
     }
 
-    // Entity comparator based on initiative value in the current turn
+    // Entity comparator based on value value in the current turn
     private static class EntityComparator implements Comparator<Entity> {
         @Override
         public int compare(Entity myself, Entity other) {
@@ -45,12 +45,11 @@ public class ActionSetterSystem extends SortedIteratingSystem {
     @Override
     public void addedToEngine(Engine engine) {
         // Movables contains entities capable of independent movement and decision-making
-        // MovableInitiatives contains entity-initiative pair for the current turn
+        // MovableInitiatives contains entity-value pair for the current turn
         // Interactives contains a map of all interactive entities and their positions
         super.addedToEngine(engine);
 
         Family family = Family.all(PositionComponent.class,
-                InteractivityComponent.class,
                 CurrentActionComponent.class).get();
         engine.addEntityListener(family, new InteractivesHandler());
 
