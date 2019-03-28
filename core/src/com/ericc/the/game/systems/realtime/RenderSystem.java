@@ -6,7 +6,6 @@ import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -34,8 +33,8 @@ public class RenderSystem extends EntitySystem {
     private ImmutableArray<Entity> entities; // Renderable entities.
     private ImmutableArray<Entity> viewers;
 
-    public RenderSystem() {
-        super(10001); // Should be the last system to run.
+    public RenderSystem(int priority) {
+        super(priority); // Should be the last system to run.
 
         if (!Shaders.hsl.isCompiled())
             throw new GdxRuntimeException("Couldn't compile shader: " + Shaders.hsl.getLog());
@@ -131,7 +130,7 @@ public class RenderSystem extends EntitySystem {
         transformTmp.mul(render.transform); // Apply affine animations.
         transformTmp.translate(pos.x, pos.y); // Move to logical position.
 
-        batch.setColor(0, render.brightness, render.brightness, 1);
+        batch.setColor(0, render.saturation, render.brightness, render.alpha);
         batch.draw(render.region, render.model.width, render.model.height, transformTmp);
     }
 
@@ -168,14 +167,14 @@ public class RenderSystem extends EntitySystem {
             // Floor tile.
             batch.draw(Media.getRandomFloorTile(
                     x, y, map.getRandomNumber(x, y, TileTextureIndicator.FLOOR.getValue()), isStatic
-            ), x, y, 1, 1);
+            ), x, y, 1.001f, 1.001f);
 
             // Drawing decorations on the floor.
             int clutterType = map.getRandomClutter(x, y, TileTextureIndicator.FLOOR.getValue());
 
             if (clutterType < Media.clutter.size) {
                 batch.draw(Media.clutter.get(clutterType),
-                        x, y, 1, 1);
+                        x, y, 1.001f, 1.001f);
             }
             return;
         }
@@ -183,7 +182,7 @@ public class RenderSystem extends EntitySystem {
         if ((code & 0b000000010) != 0) {
             // A down-facing wall.
             batch.draw(Media.wallDown.get(map.getRandomNumber(x, y, TileTextureIndicator.DOWN.getValue())),
-                    x, y + 0.5f, 1, 1);
+                    x, y + 0.5f, 1.001f, 1.001f);
         } else {
             // Maybe down-facing corners?
             if ((code & 0b000100010) == 0 && (code & 0b000000100) != 0) {
@@ -241,7 +240,7 @@ public class RenderSystem extends EntitySystem {
 
             if (clutterType < Media.wallClutter.size) {
                 batch.draw(Media.wallClutter.get(clutterType),
-                        x, y, 1, 1);
+                        x, y, 1.001f, 1.001f);
             }
         }
     }
@@ -251,7 +250,7 @@ public class RenderSystem extends EntitySystem {
         int cnt = 8;
         for (int j = y - 1; j <= y + 1; ++j) {
             for (int i = x - 1; i <= x + 1; ++i) {
-                ans |= (map.isPassable(i, j) ? 1 : 0) << cnt;
+                ans |= (map.isFloor(i, j) ? 1 : 0) << cnt;
                 --cnt;
             }
         }
@@ -271,6 +270,6 @@ public class RenderSystem extends EntitySystem {
         u2 = t.getU2() * u2 + t.getU() * (1 - u2);
         v = t.getV2() * v + t.getV() * (1 - v);
         v2 = t.getV2() * v2 + t.getV() * (1 - v2);
-        batch.draw(t.getTexture(), x, y, width, height, u, v, u2, v2);
+        batch.draw(t.getTexture(), x, y, width + 0.001f, height + 0.001f, u, v, u2, v2);
     }
 }

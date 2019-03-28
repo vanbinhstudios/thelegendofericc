@@ -42,8 +42,8 @@ public class MapGenerator {
     private GridPoint2 fillRoomReturnCenter(int x, int y, int width, int height) {
         int roomX = random.nextInt(width / 8 + 1);
         int roomY = random.nextInt(height / 8 + 1);
-        int roomWidth = Math.max(6, width / 8 + random.nextInt(Math.max(1 + width - roomX, 1)));
-        int roomHeight = Math.max(6, height / 8 + random.nextInt(Math.max(1 + height - roomY, 1)));
+        int roomWidth = Math.max(20, width / 8 + random.nextInt(Math.max(1 + width - roomX, 1)));
+        int roomHeight = Math.max(20, height / 8 + random.nextInt(Math.max(1 + height - roomY, 1)));
         GridPoint2 center = new GridPoint2(0, 0);
 
         int widthBoundary = Math.min(x + roomWidth, Math.min(this.width, x + width - 2));
@@ -157,7 +157,7 @@ public class MapGenerator {
         int starter = Math.min(firstRoom.x, secondRoom.x);
 
         while (starter <= Math.max(firstRoom.x, secondRoom.x)) {
-            if (!map.isPassable(starter, startFromFirst ? firstRoom.y : secondRoom.y)) {
+            if (!map.isFloor(starter, startFromFirst ? firstRoom.y : secondRoom.y)) {
                 map.setTile(starter, startFromFirst ? firstRoom.y : secondRoom.y, true);
             }
 
@@ -167,7 +167,7 @@ public class MapGenerator {
         starter = Math.min(firstRoom.y, secondRoom.y);
 
         while (starter <= Math.max(firstRoom.y, secondRoom.y)) {
-            if (!map.isPassable(startFromFirst ? secondRoom.x : firstRoom.x, starter)) {
+            if (!map.isFloor(startFromFirst ? secondRoom.x : firstRoom.x, starter)) {
                 map.setTile(startFromFirst ? secondRoom.x : firstRoom.x, starter, true);
             }
 
@@ -181,7 +181,7 @@ public class MapGenerator {
     private void printMap() {
         for (int j = 0; j < height; ++j) { // we have to draw the map in this way, cause i = x, j = y
             for (int i = 0; i < width; ++i) {
-                System.out.print(map.isPassable(i, j) ? 1 : 0);
+                System.out.print(map.isFloor(i, j) ? 1 : 0);
             }
             System.out.println();
         }

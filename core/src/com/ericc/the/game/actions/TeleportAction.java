@@ -1,11 +1,11 @@
 package com.ericc.the.game.actions;
 
-import com.badlogic.ashley.core.Entity;
+import com.ericc.the.game.map.StaircaseDestination;
 
 public class TeleportAction extends Action {
-    public Entity stairs;
+    public StaircaseDestination dest;
 
-    public TeleportAction(Entity stairs) {
-        this.stairs = stairs;
+    public TeleportAction(StaircaseDestination dest) {
+        this.dest = dest;
     }
 }

@@ -1,21 +1,23 @@
 package com.ericc.the.game.map;
 
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.MathUtils;
 import com.ericc.the.game.Mappers;
 import com.ericc.the.game.Media;
 import com.ericc.the.game.TileTextureIndicator;
 import com.ericc.the.game.components.PositionComponent;
-import com.ericc.the.game.components.StaircaseDestinationComponent;
-import com.ericc.the.game.entities.Stairs;
 import com.ericc.the.game.helpers.FogOfWar;
 import com.ericc.the.game.utils.RectangularBitset;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 
 public class Map {
+
+    private final GridPoint2 tmpGridPoint2 = new GridPoint2();
 
     private int width, height;
     private RectangularBitset map;
@@ -23,9 +25,13 @@ public class Map {
     public float[][] saturation;
     private int[][][] randomTileNumber;
     private int[][][] randomClutterNumber;
+
     private HashSet<GridPoint2> passableTiles; ///< stores every passable tile in a map (AFTER THE FIRST GENERATION)
     // the above is NOT AN INVARIANT, this changes after spawning some entities on some tiles from this collection
     private HashSet<Room> rooms; ///< stores every room made while generating (without corridors)
+    public final HashMap<GridPoint2, Entity> entityMap = new HashMap<>();
+
+
     private FogOfWar fogOfWar;
     public GridPoint2 entrance;
     public GridPoint2 exit;
@@ -95,12 +101,22 @@ public class Map {
         return inBoundaries(pos.x, pos.y);
     }
 
-    public boolean isPassable(int x, int y) {
+    public boolean isFloor(int x, int y) {
         if (!inBoundaries(x, y)) {
             return false;
         }
 
         return map.get(x, y);
+    }
+
+    public boolean isPassable(int x, int y) {
+        if (!isFloor(x, y)) {
+            return false;
+        }
+        tmpGridPoint2.x = x;
+        tmpGridPoint2.y = y;
+        Entity potentiallyBlocking = entityMap.get(tmpGridPoint2);
+        return potentiallyBlocking == null || !Mappers.collision.has(potentiallyBlocking);
     }
 
     public int width() {
@@ -160,14 +176,11 @@ public class Map {
      * Registers stairs in this map, determines whether that stairs are ascending or descending
      * and puts the entrance / exit in that position.
      */
-    public void registerStairs(Stairs stairs) {
-        StaircaseDestinationComponent destinationComponent = Mappers.stairsComponent.get(stairs);
-        PositionComponent positionComponent = Mappers.position.get(stairs);
-
-        if (destinationComponent.destination == StaircaseDestination.DESCENDING) {
-            this.exit = new GridPoint2(positionComponent.x, positionComponent.y);
+    public void registerStairs(PositionComponent pos, StaircaseDestination dest) {
+        if (dest == StaircaseDestination.DESCENDING) {
+            this.exit = new GridPoint2(pos.x, pos.y);
         } else {
-            this.entrance = new GridPoint2(positionComponent.x, positionComponent.y);
+            this.entrance = new GridPoint2(pos.x, pos.y);
         }
     }
 

@@ -28,8 +28,8 @@ import static java.lang.Integer.min;
 public class CameraSystem extends EntitySystem {
     private ImmutableArray<Entity> viewers;
 
-    public CameraSystem() {
-        super(9999); // Should be updated before other realtime systems.
+    public CameraSystem(int priority) {
+        super(priority); // Should be updated before other realtime systems.
     }
 
     @Override

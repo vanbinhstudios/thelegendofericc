@@ -6,6 +6,8 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.ericc.the.game.agencies.KeyboardAgency;
+import com.ericc.the.game.components.AgencyComponent;
 import com.ericc.the.game.components.CameraComponent;
 import com.ericc.the.game.components.FieldOfViewComponent;
 import com.ericc.the.game.entities.Player;
@@ -25,7 +27,7 @@ public class MainGame extends Game {
     private Dungeon dungeon;
     private Player player;
 
-    private Engines engines = new Engines();
+    private GameEngine gameEngine = new GameEngine();
 
     public final static boolean DEBUG = true; ///< turns the debug mode on and off
     private final static boolean MUSIC = false; ///< turns the music on and off
@@ -41,37 +43,41 @@ public class MainGame extends Game {
         viewport = new FillViewport(viewportWidth, viewportHeight, camera);
         viewport.apply();
 
-        this.dungeon = new Dungeon(engines);
+        this.dungeon = new Dungeon(gameEngine);
         dungeon.generateFirstLevel();
+
+        controls = new KeyboardController(gameEngine, camera);
+        Gdx.input.setInputProcessor(controls);
 
         player = new Player(
                 dungeon.getCurrentMap().getRandomPassableTile(),
                 dungeon.getCurrentMap(),
                 new FieldOfViewComponent(dungeon.getCurrentMap().width(), dungeon.getCurrentMap().height()),
-                new CameraComponent(viewport));
+                new CameraComponent(viewport),
+                new AgencyComponent(new KeyboardAgency(controls)));
 
-        controls = new KeyboardController(engines, player, camera);
-        Gdx.input.setInputProcessor(controls);
+        gameEngine.addEntity(player);
 
-        engines.addEntity(player);
+        int priority = 0;
+        gameEngine.addLogicSystem(new ActivitySystem(gameEngine, priority++));
+        gameEngine.addLogicSystem(new AgencySystem(priority++));
+        gameEngine.addLogicSystem(new MeleeAttackSystem(priority++));
+        gameEngine.addLogicSystem(new MovementSystem(priority++));
+        gameEngine.addLogicSystem(new TeleportSystem(dungeon, priority++));
+        gameEngine.addLogicSystem(new DamageSystem(priority++));
+        gameEngine.addLogicSystem(new FieldOfViewSystem(priority++));
+        gameEngine.addLogicSystem(new FogOfWarSystem(priority++));
+        gameEngine.addLogicSystem(new EntityMapSystem());
 
-        engines.addRealtimeSystem(new RenderSystem());
-        engines.addRealtimeSystem(new AnimationSystem());
-        engines.addRealtimeSystem(new TileChanger(.75f));
-        engines.addRealtimeSystem(new FadeSystem());
-        engines.addRealtimeSystem(new CameraSystem());
+        gameEngine.addRealtimeSystem(new TileChanger(.75f, priority++));
+        gameEngine.addRealtimeSystem(new CameraSystem(priority++));
+        gameEngine.addRealtimeSystem(new FadeSystem(priority++));
+        gameEngine.addRealtimeSystem(new DeathSystem(priority++));
+        gameEngine.addRealtimeSystem(new AnimationSystem(priority++));
+        gameEngine.addRealtimeSystem(new RenderSystem(priority++));
 
-        FieldOfViewSystem fieldOfViewSystem = new FieldOfViewSystem();
-        FogOfWarSystem fogOfWarSystem = new FogOfWarSystem();
-        engines.addLogicSystem(new AiSystem());
-        engines.addLogicSystem(new InitiativeSystem());
-        engines.addLogicSystem(new ActionSetterSystem());
-        engines.addLogicSystem(new MovementSystem());
-        engines.addLogicSystem(fieldOfViewSystem);
-        engines.addLogicSystem(fogOfWarSystem);
-        engines.addLogicSystem(new TeleportPlayerSystem(dungeon, engines, player));
-
-        initialisePlayersComponents(fieldOfViewSystem, fogOfWarSystem);
+        gameEngine.getSystem(FieldOfViewSystem.class).update(0);
+        gameEngine.getSystem(FogOfWarSystem.class).update(0);
 
         if (MUSIC) {
             Sound sound = Gdx.audio.newSound(Gdx.files.internal("music/8bitAdventure.mp3"));
@@ -82,26 +88,12 @@ public class MainGame extends Game {
 
     @Override
     public void render() {
-        engines.updateRealtimeEngine();
+        gameEngine.updateRealtimeEngine();
         fpsThrottle.sleepToNextFrame();
     }
 
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height);
-    }
-
-    /**
-     * Before any turn is taken by a player, there are some values that should be initialised like:
-     * - player's fov
-     * - player's fog of war
-     * - initial screen boundaries
-     * <p>
-     * And that is exactly what this function is meant to do.
-     */
-    private void initialisePlayersComponents(FieldOfViewSystem fieldOfViewSystem,
-                                             FogOfWarSystem fogOfWarSystem) {
-        fieldOfViewSystem.update(0); // update to calculate the initial fov
-        fogOfWarSystem.update(0);
     }
 }

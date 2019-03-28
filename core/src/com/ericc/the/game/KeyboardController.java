@@ -3,23 +3,22 @@ package com.ericc.the.game;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.ericc.the.game.actions.Actions;
-import com.ericc.the.game.components.FieldOfViewComponent;
-import com.ericc.the.game.entities.Player;
 import com.ericc.the.game.helpers.CameraZoom;
-
-import static com.ericc.the.game.MainGame.DEBUG;
 
 public class KeyboardController extends InputAdapter {
 
-    private Engines engines;
-    private Player player;
+    private GameEngine engines;
     private CameraZoom zoom;
+    public boolean up, down, left, right;
 
-    public KeyboardController(Engines engines, Player player, OrthographicCamera camera) {
+    public void clean() {
+        up = down = left = right = false;
+    }
+
+    public KeyboardController(GameEngine engines, OrthographicCamera camera) {
         this.engines = engines;
-        this.player = player;
         this.zoom = new CameraZoom(camera);
+        clean();
     }
 
     @Override
@@ -31,25 +30,21 @@ public class KeyboardController extends InputAdapter {
         switch (keycode) {
             case Input.Keys.S:
             case Input.Keys.DOWN:
-                player.intention.currentIntent = Actions.MOVE_DOWN;
+                down = true;
                 break;
             case Input.Keys.W:
             case Input.Keys.UP:
-                player.intention.currentIntent = Actions.MOVE_UP;
+                up = true;
                 break;
             case Input.Keys.A:
             case Input.Keys.LEFT:
-                player.intention.currentIntent = Actions.MOVE_LEFT;
+                left = true;
                 break;
             case Input.Keys.D:
             case Input.Keys.RIGHT:
-                player.intention.currentIntent = Actions.MOVE_RIGHT;
-                break;
-            case Input.Keys.SPACE:
-                player.intention.currentIntent = Actions.NOTHING;
+                right = true;
                 break;
             default:
-                player.intention.currentIntent = Actions.NOTHING;
                 break;
         }
 
@@ -70,6 +65,7 @@ public class KeyboardController extends InputAdapter {
             case Input.Keys.PLUS:
                 zoom.zoomInCamera();
                 break;
+            /*
             case Input.Keys.O:
                 if (DEBUG) {
                     player.pos.map.makeFogCoverTheEntireMap();
@@ -87,6 +83,7 @@ public class KeyboardController extends InputAdapter {
                     engines.enableFieldOfViewSystem();
                 }
                 break;
+            */
             default:
                 return false;
         }

@@ -6,7 +6,7 @@ import com.ericc.the.game.Direction;
 
 public class Model {
     public TextureRegion[] sheet;
-    public Affine2 defaultTransform = new Affine2();
+    public Affine2 defaultTransform;
     public float width = 1.0f;
     public float height = 1.0f;
 

@@ -19,8 +19,8 @@ public class AnimationSystem extends EntitySystem {
     private ImmutableArray<Entity> affineAnimated; // Entities with affine animation currently attached.
     private ImmutableArray<Entity> directed; // Entities with appearance varying with their orientation.
 
-    public AnimationSystem() {
-        super(10000);
+    public AnimationSystem(int priority) {
+        super(priority);
     }
 
     @Override

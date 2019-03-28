@@ -4,7 +4,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.GridPoint2;
-import com.ericc.the.game.Engines;
+import com.ericc.the.game.GameEngine;
 import com.ericc.the.game.Mappers;
 import com.ericc.the.game.components.PlayerComponent;
 import com.ericc.the.game.components.PositionComponent;
@@ -20,10 +20,10 @@ import java.util.HashMap;
  */
 public class Dungeon {
     private final HashMap<Integer, Level> levels;
-    private final Engines engines;
+    private final GameEngine engines;
     private int currentLevelNumber;
 
-    public Dungeon(Engines engines) {
+    public Dungeon(GameEngine engines) {
         levels = new HashMap<>();
         currentLevelNumber = 0;
         this.engines = engines;
@@ -71,10 +71,12 @@ public class Dungeon {
             int x = desiredPosition.x + move.x;
             int y = desiredPosition.y + move.y;
 
-            if (levels.get(currentLevelNumber).getMap().isPassable(x, y)) {
+            if (map.isFloor(x, y)) {
+                entityPosition.map.entityMap.remove(new GridPoint2(entityPosition.x, entityPosition.y));
                 entityPosition.x = x;
                 entityPosition.y = y;
                 entityPosition.map = map;
+                entityPosition.map.entityMap.put(new GridPoint2(x, y), entity);
                 return;
             }
         }

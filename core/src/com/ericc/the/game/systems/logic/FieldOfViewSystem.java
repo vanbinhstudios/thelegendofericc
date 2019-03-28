@@ -46,8 +46,8 @@ public class FieldOfViewSystem extends EntitySystem {
                     )
             );
 
-    public FieldOfViewSystem() {
-        super(100); // Depends on MovementSystem
+    public FieldOfViewSystem(int priority) {
+        super(priority); // Depends on MovementSystem
     }
 
     @Override
@@ -135,7 +135,7 @@ public class FieldOfViewSystem extends EntitySystem {
 
             // this piece of code was written to ensure that corners and walls are
             // rendered properly -> id does render them sometimes even though they are not in view range
-            if (pos.map.isPassable(castedX, castedY)) {
+            if (pos.map.isFloor(castedX, castedY)) {
                 checkMoves(Moves.moves, true, castedX, castedY, fov, pos);
                 checkMoves(Moves.diagonalMoves, false, castedX, castedY, fov, pos);
             } else {
@@ -159,7 +159,7 @@ public class FieldOfViewSystem extends EntitySystem {
             int posyTemp = castedY + move.y;
 
             if (pos.map.inBoundaries(posxTemp, posyTemp)
-                    && !pos.map.isPassable(posxTemp, posyTemp)
+                    && !pos.map.isFloor(posxTemp, posyTemp)
                     && (regularMoves || isCorner(posxTemp, posyTemp, fov, pos))) {
                 fov.visibility.set(posxTemp, posyTemp);
             }
@@ -176,8 +176,8 @@ public class FieldOfViewSystem extends EntitySystem {
 
             if (pos.map.inBoundaries(x + firstMove.x, y + firstMove.y)
                     && pos.map.inBoundaries(x + secondMove.x, y + secondMove.y)
-                    && !pos.map.isPassable(x + firstMove.x, y + firstMove.y)
-                    && !pos.map.isPassable(x + secondMove.x, y + secondMove.y)
+                    && !pos.map.isFloor(x + firstMove.x, y + firstMove.y)
+                    && !pos.map.isFloor(x + secondMove.x, y + secondMove.y)
                     && fov.visibility.get(x + firstMove.x, y + firstMove.y)
                     && fov.visibility.get(x + secondMove.x, y + secondMove.y)) {
                 return true;

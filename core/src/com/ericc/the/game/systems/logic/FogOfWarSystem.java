@@ -14,8 +14,8 @@ public class FogOfWarSystem extends EntitySystem {
 
     private ImmutableArray<Entity> entities; ///< all entities able to discover new tiles
 
-    public FogOfWarSystem() {
-        super(101); // Depends on FieldOfViewSystem
+    public FogOfWarSystem(int priority) {
+        super(priority); // Depends on FieldOfViewSystem
     }
 
     @Override

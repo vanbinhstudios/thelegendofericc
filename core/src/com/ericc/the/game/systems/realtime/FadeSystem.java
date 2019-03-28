@@ -15,8 +15,8 @@ public class FadeSystem extends EntitySystem {
     private ImmutableArray<Entity> entities;
     private ImmutableArray<Entity> players;
 
-    public FadeSystem() {
-        super(10000);
+    public FadeSystem(int priority) {
+        super(priority);
     }
 
     @Override
