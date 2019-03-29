@@ -20,6 +20,7 @@ public class CameraZoom {
 
     /**
      * Zooms the camera by the given value (either out or in)
+     *
      * @param zoom the value to add to a camera zoom
      */
     private void zoomCamera(float zoom) {
@@ -45,6 +46,7 @@ public class CameraZoom {
 
     /**
      * Checks whether we can zoom in or zoom out
+     *
      * @param zoom camera zoom altogether (sum of the previous zoom and the adder)
      * @return true if zoom is possible, false otherwise
      */

@@ -12,7 +12,7 @@ public class FpsThrottle {
     private long currentFrameStart; // The moment in which the current frame has begun
 
     public FpsThrottle(int maxFps) {
-        frameDuration = 1000/maxFps + 1;
+        frameDuration = 1000 / maxFps + 1;
         currentFrameStart = TimeUtils.millis();
     }
 

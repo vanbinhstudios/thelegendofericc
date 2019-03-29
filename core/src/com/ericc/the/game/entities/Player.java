@@ -2,35 +2,31 @@ package com.ericc.the.game.entities;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.GridPoint2;
-import com.ericc.the.game.Direction;
-import com.ericc.the.game.Media;
-import com.ericc.the.game.actions.NoAction;
+import com.ericc.the.game.Models;
 import com.ericc.the.game.components.*;
+import com.ericc.the.game.map.Map;
 
 /**
  * A mishmash for prototyping. This class should be broken down as soon as proper Actor systems are introduced.
  */
 public class Player extends Entity {
     public PositionComponent pos;
-    private DirectionComponent dir;
-    private SpriteSheetComponent renderable;
-    public CurrentActionComponent currentAction;
+    private RenderableComponent renderable;
 
-    public Player(int x, int y, FieldOfViewComponent fov) {
-        pos = new PositionComponent(x, y);
-        dir = new DirectionComponent(Direction.DOWN);
-        renderable = new SpriteSheetComponent(Media.playerBack, Media.playerRight, Media.playerFront, Media.playerLeft);
-        renderable.sprite.setOrigin(0, -0.35f);
-        currentAction = new CurrentActionComponent(new NoAction());
+    public Player(int x, int y, Map map, FieldOfViewComponent fov, CameraComponent camera, AgencyComponent agency) {
+        pos = new PositionComponent(x, y, map);
+        renderable = new RenderableComponent(Models.hero);
         add(pos);
         add(renderable);
-        add(dir);
-        add(currentAction);
         add(fov);
         add(new PlayerComponent());
+        add(new StatsComponent(50, 100, 50));
+        add(new CollisionComponent());
+        add(agency);
+        add(camera);
     }
 
-    public Player(GridPoint2 pos, FieldOfViewComponent fov) {
-        this(pos.x, pos.y, fov);
+    public Player(GridPoint2 pos, Map map, FieldOfViewComponent fov, CameraComponent camera, AgencyComponent agency) {
+        this(pos.x, pos.y, map, fov, camera, agency);
     }
 }
