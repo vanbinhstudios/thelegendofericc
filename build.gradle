@@ -1,6 +1,4 @@
 buildscript {
-    
-
     repositories {
         mavenLocal()
         mavenCentral()
@@ -9,9 +7,9 @@ buildscript {
         jcenter()
         google()
     }
+    
     dependencies {
         
-
     }
 }
 
@@ -20,8 +18,9 @@ allprojects {
     apply plugin: "idea"
 
     version = '1.0'
+    
     ext {
-        appName = "the-legend-of-ericc"
+        appName = "The Legend Of Eric"
         gdxVersion = '1.9.9'
         roboVMVersion = '2.3.5'
         box2DLightsVersion = '1.4'
@@ -40,24 +39,25 @@ allprojects {
 
 project(":desktop") {
     apply plugin: "java"
-
-
+    
     dependencies {
         compile project(":core")
-        compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
+        compile "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
-        
+        compile "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
+        compile "com.badlogicgames.gdx:gdx-controllers-desktop:$gdxVersion"
+        compile "com.badlogicgames.gdx:gdx-controllers-platform:$gdxVersion:natives-desktop"
+        compile "com.badlogicgames.gdx:gdx-controllers-lwjgl3:$gdxVersion"
     }
 }
 
 project(":core") {
     apply plugin: "java"
-
-
+    
     dependencies {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "com.badlogicgames.ashley:ashley:$ashleyVersion"
-        
+        compile "com.badlogicgames.gdx:gdx-controllers:$gdxVersion"
     }
 }
 
