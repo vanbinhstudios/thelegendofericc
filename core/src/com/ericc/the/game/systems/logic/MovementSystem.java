@@ -3,7 +3,6 @@ package com.ericc.the.game.systems.logic;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.ericc.the.game.utils.GridPoint;
 import com.badlogic.gdx.math.Vector2;
 import com.ericc.the.game.Direction;
 import com.ericc.the.game.Mappers;

@@ -1,6 +1,5 @@
 package com.ericc.the.game.utils;
 
-import com.ericc.the.game.utils.GridPoint;
 import com.badlogic.gdx.utils.Bits;
 
 public class RectangularBitset {

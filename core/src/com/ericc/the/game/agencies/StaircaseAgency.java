@@ -1,7 +1,6 @@
 package com.ericc.the.game.agencies;
 
 import com.badlogic.ashley.core.Entity;
-import com.ericc.the.game.utils.GridPoint;
 import com.ericc.the.game.Mappers;
 import com.ericc.the.game.actions.Action;
 import com.ericc.the.game.actions.Actions;

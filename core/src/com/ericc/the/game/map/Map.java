@@ -1,13 +1,12 @@
 package com.ericc.the.game.map;
 
 import com.badlogic.ashley.core.Entity;
-import com.ericc.the.game.utils.GridPoint;
 import com.badlogic.gdx.math.MathUtils;
 import com.ericc.the.game.Mappers;
 import com.ericc.the.game.Media;
 import com.ericc.the.game.TileTextureIndicator;
-import com.ericc.the.game.components.PositionComponent;
 import com.ericc.the.game.helpers.FogOfWar;
+import com.ericc.the.game.utils.GridPoint;
 import com.ericc.the.game.utils.RectangularBitset;
 
 import java.util.ArrayList;
@@ -169,11 +168,11 @@ public class Map {
      * Registers stairs in this map, determines whether that stairs are ascending or descending
      * and puts the entrance / exit in that position.
      */
-    public void registerStairs(PositionComponent pos, StaircaseDestination dest) {
+    public void registerStairs(GridPoint xy, StaircaseDestination dest) {
         if (dest == StaircaseDestination.DESCENDING) {
-            this.exit = pos.xy;
+            this.exit = xy;
         } else {
-            this.entrance = pos.xy;
+            this.entrance = xy;
         }
     }
 

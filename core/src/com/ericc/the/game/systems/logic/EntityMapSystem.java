@@ -1,7 +1,6 @@
 package com.ericc.the.game.systems.logic;
 
 import com.badlogic.ashley.core.*;
-import com.ericc.the.game.utils.GridPoint;
 import com.ericc.the.game.Mappers;
 import com.ericc.the.game.components.CollisionComponent;
 import com.ericc.the.game.components.PositionComponent;
