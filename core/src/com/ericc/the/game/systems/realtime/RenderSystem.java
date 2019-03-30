@@ -96,7 +96,7 @@ public class RenderSystem extends EntitySystem {
             for (int y = cam.top; y >= cam.bottom; --y) {
                 for (int x = cam.left; x <= cam.right; ++x) {
                     if (camPos.map.hasBeenSeenByPlayer(x, y)) {
-                        drawTile(batch, x, y, camPos.map, true);
+                        drawTile(batch, x, y, camPos.map);
                     }
                 }
                 while (entityIndex < visibleEntities.size()) {
@@ -134,9 +134,10 @@ public class RenderSystem extends EntitySystem {
         batch.draw(render.region, render.model.width, render.model.height, transformTmp);
     }
 
-    private void drawTile(SpriteBatch batch, int x, int y, Map map, boolean isStatic) {
+    private void drawTile(SpriteBatch batch, int x, int y, Map map) {
 
         batch.setColor(0.0f, map.saturation[x][y], map.brightness[x][y], 1.0f);
+        boolean isStatic = !(map.brightness[x][y] > .7);
 
         /*
         The nine-digit tile code describes the neighbourhood of the tile.
