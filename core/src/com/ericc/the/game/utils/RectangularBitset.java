@@ -1,6 +1,6 @@
 package com.ericc.the.game.utils;
 
-import com.badlogic.gdx.math.GridPoint2;
+import com.ericc.the.game.utils.GridPoint;
 import com.badlogic.gdx.utils.Bits;
 
 public class RectangularBitset {
@@ -38,7 +38,7 @@ public class RectangularBitset {
         return backingBitset.get(x * width + y);
     }
 
-    public boolean get(GridPoint2 point) {
+    public boolean get(GridPoint point) {
         return get(point.x, point.y);
     }
 
@@ -47,7 +47,7 @@ public class RectangularBitset {
         backingBitset.set(x * width + y);
     }
 
-    public void set(GridPoint2 point) {
+    public void set(GridPoint point) {
         set(point.x, point.y);
     }
 
@@ -60,7 +60,7 @@ public class RectangularBitset {
         }
     }
 
-    public void flip(GridPoint2 point) {
+    public void flip(GridPoint point) {
         flip(point.x, point.y);
     }
 
@@ -73,7 +73,7 @@ public class RectangularBitset {
         }
     }
 
-    public void assign(GridPoint2 point, boolean value) {
+    public void assign(GridPoint point, boolean value) {
         assign(point.x, point.y, value);
     }
 
@@ -82,7 +82,7 @@ public class RectangularBitset {
         backingBitset.clear(x * width + y);
     }
 
-    public void clear(GridPoint2 point) {
+    public void clear(GridPoint point) {
         clear(point.x, point.y);
     }
 

@@ -16,28 +16,28 @@ public class KeyboardAgency implements Agency {
     public Action chooseAction(PositionComponent pos) {
         if (controller.right) {
             controller.right = false;
-            if (pos.map.isPassable(pos.x + 1, pos.y) || !pos.map.isFloor(pos.x + 1, pos.y)) {
+            if (pos.map.isPassable(pos.xy.x + 1, pos.xy.y) || !pos.map.isFloor(pos.xy.x + 1, pos.xy.y)) {
                 return Actions.MOVE_RIGHT;
             } else {
                 return Actions.ATTACK_RIGHT;
             }
         } else if (controller.left) {
             controller.left = false;
-            if (pos.map.isPassable(pos.x - 1, pos.y) || !pos.map.isFloor(pos.x - 1, pos.y)) {
+            if (pos.map.isPassable(pos.xy.x - 1, pos.xy.y) || !pos.map.isFloor(pos.xy.x - 1, pos.xy.y)) {
                 return Actions.MOVE_LEFT;
             } else {
                 return Actions.ATTACK_LEFT;
             }
         } else if (controller.down) {
             controller.down = false;
-            if (pos.map.isPassable(pos.x, pos.y - 1) || !pos.map.isFloor(pos.x, pos.y - 1)) {
+            if (pos.map.isPassable(pos.xy.x, pos.xy.y - 1) || !pos.map.isFloor(pos.xy.x, pos.xy.y - 1)) {
                 return Actions.MOVE_DOWN;
             } else {
                 return Actions.ATTACK_DOWN;
             }
         } else if (controller.up) {
             controller.up = false;
-            if (pos.map.isPassable(pos.x, pos.y + 1) || !pos.map.isFloor(pos.x, pos.y + 1)) {
+            if (pos.map.isPassable(pos.xy.x, pos.xy.y + 1) || !pos.map.isFloor(pos.xy.x, pos.xy.y + 1)) {
                 return Actions.MOVE_UP;
             } else {
                 return Actions.ATTACK_UP;

@@ -22,13 +22,13 @@ public class MeleeAttackSystem extends IteratingSystem {
         pos.direction = move.direction;
 
         if (move.direction == Direction.LEFT) {
-            getEngine().addEntity(new Attack(pos.x - 1, pos.y, pos.map, move.direction));
+            getEngine().addEntity(new Attack(pos.xy.shift(-1, 0), pos.map, move.direction));
         } else if (move.direction == Direction.RIGHT) {
-            getEngine().addEntity(new Attack(pos.x + 1, pos.y, pos.map, move.direction));
+            getEngine().addEntity(new Attack(pos.xy.shift(1, 0), pos.map, move.direction));
         } else if (move.direction == Direction.UP) {
-            getEngine().addEntity(new Attack(pos.x, pos.y + 1, pos.map, move.direction));
+            getEngine().addEntity(new Attack(pos.xy.shift(0, 1), pos.map, move.direction));
         } else {
-            getEngine().addEntity(new Attack(pos.x, pos.y - 1, pos.map, move.direction));
+            getEngine().addEntity(new Attack(pos.xy.shift(0, -1), pos.map, move.direction));
         }
 
         entity.remove(AttackAction.class);

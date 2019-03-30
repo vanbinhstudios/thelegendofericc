@@ -3,7 +3,7 @@ package com.ericc.the.game.systems.logic;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.gdx.math.GridPoint2;
+import com.ericc.the.game.utils.GridPoint;
 import com.badlogic.gdx.math.Vector2;
 import com.ericc.the.game.Direction;
 import com.ericc.the.game.Mappers;
@@ -27,22 +27,21 @@ public class MovementSystem extends IteratingSystem {
 
         pos.direction = move.direction;
 
-        if (move.direction == Direction.LEFT && pos.map.isPassable(pos.x - 1, pos.y)) {
+        if (move.direction == Direction.LEFT && pos.map.isPassable(pos.xy.x - 1, pos.xy.y)) {
             dx = -1;
-        } else if (move.direction == Direction.RIGHT && pos.map.isPassable(pos.x + 1, pos.y)) {
+        } else if (move.direction == Direction.RIGHT && pos.map.isPassable(pos.xy.x + 1, pos.xy.y)) {
             dx = 1;
-        } else if (move.direction == Direction.UP && pos.map.isPassable(pos.x, pos.y + 1)) {
+        } else if (move.direction == Direction.UP && pos.map.isPassable(pos.xy.x, pos.xy.y + 1)) {
             dy = 1;
-        } else if (move.direction == Direction.DOWN && pos.map.isPassable(pos.x, pos.y - 1)) {
+        } else if (move.direction == Direction.DOWN && pos.map.isPassable(pos.xy.x, pos.xy.y - 1)) {
             dy = -1;
         }
 
         if (dy != 0 || dx != 0) {
-            pos.map.entityMap.remove(new GridPoint2(pos.x, pos.y));
+            pos.map.entityMap.remove(pos.xy);
             entity.add(new AffineAnimationComponent(new JumpAnimation(new Vector2(dx, dy), 0.6f, 0.15f)));
-            pos.x += dx;
-            pos.y += dy;
-            pos.map.entityMap.put(new GridPoint2(pos.x, pos.y), entity);
+            pos.xy = pos.xy.shift(dx, dy);
+            pos.map.entityMap.put(pos.xy, entity);
         }
 
         entity.remove(MovementAction.class);

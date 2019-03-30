@@ -1,7 +1,7 @@
 package com.ericc.the.game.systems.logic;
 
 import com.badlogic.ashley.core.*;
-import com.badlogic.gdx.math.GridPoint2;
+import com.ericc.the.game.utils.GridPoint;
 import com.ericc.the.game.Mappers;
 import com.ericc.the.game.components.CollisionComponent;
 import com.ericc.the.game.components.PositionComponent;
@@ -14,7 +14,7 @@ public class EntityMapSystem extends EntitySystem {
 
         for (Entity entity : engine.getEntitiesFor(family)) {
             PositionComponent pos = Mappers.position.get(entity);
-            pos.map.entityMap.put(new GridPoint2(pos.x, pos.y), entity);
+            pos.map.entityMap.put(pos.xy, entity);
         }
     }
 
@@ -22,13 +22,13 @@ public class EntityMapSystem extends EntitySystem {
         @Override
         public void entityRemoved(Entity entity) {
             PositionComponent pos = Mappers.position.get(entity);
-            pos.map.entityMap.remove(new GridPoint2(pos.x, pos.y));
+            pos.map.entityMap.remove(pos.xy);
         }
 
         @Override
         public void entityAdded(Entity entity) {
             PositionComponent pos = Mappers.position.get(entity);
-            pos.map.entityMap.put(new GridPoint2(pos.x, pos.y), entity);
+            pos.map.entityMap.put(pos.xy, entity);
         }
     }
 }

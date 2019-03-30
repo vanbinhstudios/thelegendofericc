@@ -27,14 +27,14 @@ public class FogOfWarSystem extends EntitySystem {
     public void update(float deltaTime) {
         for (Entity entity : entities) {
             FieldOfViewComponent fov = Mappers.fov.get(entity);
-            PositionComponent position = Mappers.position.get(entity);
+            PositionComponent pos = Mappers.position.get(entity);
 
             int updateMargin = FieldOfViewComponent.VIEW_RADIUS + 3;
 
-            for (int y = position.y + updateMargin; y >= position.y - updateMargin; --y) {
-                for (int x = position.x - updateMargin; x < position.x + updateMargin; ++x) {
-                    if (position.map.inBoundaries(x, y) && fov.visibility.get(x, y)) {
-                        position.map.markAsSeenByPlayer(x, y);
+            for (int y = pos.xy.y + updateMargin; y >= pos.xy.y - updateMargin; --y) {
+                for (int x = pos.xy.x - updateMargin; x < pos.xy.x + updateMargin; ++x) {
+                    if (pos.map.inBoundaries(x, y) && fov.visibility.get(x, y)) {
+                        pos.map.markAsSeenByPlayer(x, y);
                     }
                 }
             }

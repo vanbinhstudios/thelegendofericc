@@ -3,7 +3,7 @@ package com.ericc.the.game.systems.logic;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.gdx.math.GridPoint2;
+import com.ericc.the.game.utils.GridPoint;
 import com.ericc.the.game.Mappers;
 import com.ericc.the.game.actions.TeleportAction;
 import com.ericc.the.game.components.FieldOfViewComponent;
@@ -26,7 +26,7 @@ public class TeleportSystem extends IteratingSystem {
         PositionComponent pos = Mappers.position.get(teleporter);
         TeleportAction tp = Mappers.teleport.get(teleporter);
 
-        Entity subject = pos.map.entityMap.get(new GridPoint2(pos.x, pos.y));
+        Entity subject = pos.map.entityMap.get(pos.xy);
         if (subject == null || !Mappers.player.has(subject)) {
             teleporter.remove(TeleportAction.class);
             return;
@@ -36,8 +36,8 @@ public class TeleportSystem extends IteratingSystem {
 
         if (subjectFov != null) {
             final int MARGIN = FieldOfViewComponent.VIEW_RADIUS;
-            for (int x = pos.x - MARGIN; x <= pos.x + MARGIN; ++x) {
-                for (int y = pos.y - MARGIN; y <= pos.y + MARGIN; ++y) {
+            for (int x = pos.xy.x - MARGIN; x <= pos.xy.x + MARGIN; ++x) {
+                for (int y = pos.xy.y - MARGIN; y <= pos.xy.y + MARGIN; ++y) {
                     subjectFov.visibility.clear(x, y);
                 }
             }

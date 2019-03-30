@@ -38,7 +38,7 @@ public class FadeSystem extends EntitySystem {
 
             for (Entity player : players) {
                 FieldOfViewComponent fov = Mappers.fov.get(player);
-                targetBrightness = max(targetBrightness, fov.visibility.get(pos.x, pos.y) ? 1.0f : 0.3f);
+                targetBrightness = max(targetBrightness, fov.visibility.get(pos.xy.x, pos.xy.y) ? 1.0f : 0.3f);
             }
 
             render.brightness = converge(render.brightness, targetBrightness, deltaTime * fadingSpeed);
