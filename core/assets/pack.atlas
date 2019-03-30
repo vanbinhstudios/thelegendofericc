@@ -1,0 +1,433 @@
+
+pack.png
+size: 512,64
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+entity/crate/crate
+  rotate: false
+  xy: 324, 38
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+entity/hero/hero_back
+  rotate: false
+  xy: 468, 38
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+entity/hero/hero_front
+  rotate: false
+  xy: 486, 38
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+entity/hero/hero_left
+  rotate: false
+  xy: 20, 4
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+entity/hero/hero_right
+  rotate: false
+  xy: 38, 20
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+entity/mage/mage_back
+  rotate: false
+  xy: 56, 20
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+entity/mage/mage_front
+  rotate: false
+  xy: 74, 20
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+entity/mage/mage_left
+  rotate: false
+  xy: 92, 20
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+entity/mage/mage_right
+  rotate: false
+  xy: 110, 20
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+entity/sword
+  rotate: false
+  xy: 2, 22
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+map/clutter/clutter
+  rotate: false
+  xy: 2, 4
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 1
+map/clutter/clutter
+  rotate: false
+  xy: 36, 38
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 2
+map/clutter/clutter
+  rotate: false
+  xy: 54, 38
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 3
+map/clutter/clutter
+  rotate: false
+  xy: 72, 38
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 4
+map/clutter/clutter
+  rotate: false
+  xy: 90, 38
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 5
+map/clutter/clutter
+  rotate: false
+  xy: 108, 38
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 6
+map/clutter/clutter
+  rotate: false
+  xy: 126, 38
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 7
+map/clutter/clutter
+  rotate: false
+  xy: 144, 38
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 8
+map/clutter/clutter
+  rotate: false
+  xy: 162, 38
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 9
+map/clutter/clutter
+  rotate: false
+  xy: 180, 38
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 10
+map/clutter/clutter
+  rotate: false
+  xy: 198, 38
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 11
+map/clutter/clutter
+  rotate: false
+  xy: 216, 38
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 12
+map/clutter/clutter
+  rotate: false
+  xy: 234, 38
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 13
+map/clutter/clutter
+  rotate: false
+  xy: 252, 38
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 14
+map/clutter/clutter
+  rotate: false
+  xy: 270, 38
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 15
+map/clutter/clutter
+  rotate: false
+  xy: 288, 38
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 16
+map/clutter/clutter
+  rotate: false
+  xy: 306, 38
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 17
+map/clutter/wallClutter
+  rotate: false
+  xy: 182, 20
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 1
+map/clutter/wallClutter
+  rotate: false
+  xy: 200, 20
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 2
+map/clutter/wallClutter
+  rotate: false
+  xy: 218, 20
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 3
+map/clutter/wallClutter
+  rotate: false
+  xy: 236, 20
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 4
+map/clutter/wallClutter
+  rotate: false
+  xy: 254, 20
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 5
+map/clutter/wallClutter
+  rotate: false
+  xy: 272, 20
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 6
+map/clutter/wallClutter
+  rotate: false
+  xy: 290, 20
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 7
+map/clutter/wallClutter
+  rotate: false
+  xy: 308, 20
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 8
+map/floors/floor
+  rotate: false
+  xy: 342, 38
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 1
+map/floors/floor
+  rotate: false
+  xy: 360, 38
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 2
+map/floors/floor
+  rotate: false
+  xy: 378, 38
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 3
+map/floors/floor
+  rotate: false
+  xy: 396, 38
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 4
+map/floors/floor
+  rotate: false
+  xy: 414, 38
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 5
+map/floors/floor
+  rotate: false
+  xy: 432, 38
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 6
+map/floors/floor_reversed
+  rotate: false
+  xy: 450, 38
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 1
+map/stairs/stairs_down
+  rotate: false
+  xy: 128, 20
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 1
+map/stairs/stairs_up
+  rotate: false
+  xy: 146, 20
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 1
+map/void
+  rotate: false
+  xy: 164, 20
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+map/walls/wall_corner_left_down
+  rotate: false
+  xy: 326, 20
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+map/walls/wall_corner_left_up
+  rotate: false
+  xy: 344, 20
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+map/walls/wall_corner_right_down
+  rotate: false
+  xy: 362, 20
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+map/walls/wall_corner_right_up
+  rotate: false
+  xy: 380, 20
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+map/walls/wall_down
+  rotate: false
+  xy: 398, 20
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 1
+map/walls/wall_down
+  rotate: false
+  xy: 416, 20
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 2
+map/walls/wall_left
+  rotate: false
+  xy: 434, 20
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 1
+map/walls/wall_left
+  rotate: false
+  xy: 434, 20
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 3
+map/walls/wall_left
+  rotate: false
+  xy: 452, 20
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 2
+map/walls/wall_right
+  rotate: false
+  xy: 470, 20
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 1
+map/walls/wall_right
+  rotate: false
+  xy: 470, 20
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 3
+map/walls/wall_right
+  rotate: false
+  xy: 38, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 2
+map/walls/wall_up
+  rotate: false
+  xy: 56, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 1
+map/walls/wall_up
+  rotate: false
+  xy: 56, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 3
+map/walls/wall_up
+  rotate: false
+  xy: 74, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 2
+map/walls/wall_up
+  rotate: false
+  xy: 92, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 4
