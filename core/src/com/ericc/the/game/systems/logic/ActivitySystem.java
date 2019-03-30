@@ -47,7 +47,10 @@ public class ActivitySystem extends EntitySystem {
                         + ThreadLocalRandom.current().nextInt(1, 20));
             }
 
-            pending.addAll(entities.toArray());
+            for (Entity entity : entities) {
+                pending.add(entity);
+            }
+
             pending.sort(Comparator.comparingInt(a -> Mappers.agency.get(a).initiative));
         }
 
