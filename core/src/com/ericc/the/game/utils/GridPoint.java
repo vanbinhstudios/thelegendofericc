@@ -9,17 +9,18 @@ public class GridPoint {
         this.y = y;
     }
 
-    public GridPoint add(GridPoint other) {
-        return new GridPoint(this.x + other.x, this.y + other.y);
-    }
-
-    public GridPoint subtract(GridPoint other) {
-        return new GridPoint(this.x - other.x, this.y - other.y);
-    }
-
     public GridPoint shift(int x, int y) {
         return new GridPoint(this.x + x, this.y + y);
     }
+
+    public GridPoint add(GridPoint other) {
+        return shift(other.x, other.y);
+    }
+
+    public GridPoint subtract(GridPoint other) {
+        return shift(-other.x, -other.y);
+    }
+
 
     @Override
     public boolean equals(Object o) {
