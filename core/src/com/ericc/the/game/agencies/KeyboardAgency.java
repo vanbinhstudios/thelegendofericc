@@ -42,6 +42,8 @@ public class KeyboardAgency implements Agency {
             } else {
                 return Actions.ATTACK_UP;
             }
+        } else if (controller.space) {
+            return Actions.LONG;
         } else {
             return Actions.NOTHING;
         }

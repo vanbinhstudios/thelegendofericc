@@ -1,8 +1,8 @@
 package com.ericc.the.game.actions;
 
-public class NoAction extends Action {
+public class LongAction extends Action {
     @Override
     public int getBaseTimeCost() {
-        return 100;
+        return 500;
     }
 }

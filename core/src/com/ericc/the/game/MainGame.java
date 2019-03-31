@@ -59,7 +59,7 @@ public class MainGame extends Game {
         gameEngine.addEntity(player);
 
         int priority = 0;
-        gameEngine.addLogicSystem(new ActivitySystem(gameEngine, priority++));
+        gameEngine.addLogicSystem(new ActivitySystem(gameEngine, priority++, player));
         gameEngine.addLogicSystem(new AgencySystem(priority++));
         gameEngine.addLogicSystem(new MeleeAttackSystem(priority++));
         gameEngine.addLogicSystem(new MovementSystem(priority++));

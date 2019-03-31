@@ -11,8 +11,10 @@ import com.ericc.the.game.Mappers;
 import com.ericc.the.game.components.ActiveComponent;
 import com.ericc.the.game.components.AgencyComponent;
 import com.ericc.the.game.components.StatsComponent;
+import com.ericc.the.game.entities.Player;
 
 import java.util.Comparator;
+import java.util.PriorityQueue;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class ActivitySystem extends EntitySystem {
@@ -20,11 +22,17 @@ public class ActivitySystem extends EntitySystem {
     private ImmutableArray<Entity> entities;
     private ImmutableArray<Entity> active;
 
-    private Array<Entity> pending = new Array<>(false, 512);
+    private Comparator<Entity> timeLeftComparator = Comparator.comparingInt(e -> Mappers.agency.get(e).timeUnitsLeft);
+    private PriorityQueue<Entity> pending = new PriorityQueue<>(timeLeftComparator);
+    private Array<Entity> actingInThisMoment = new Array<>(false, 512);
     private GameEngine gameEngine;
 
-    public ActivitySystem(GameEngine gameEngine, int priority) {
+    private Player player;
+
+    public ActivitySystem(GameEngine gameEngine, int priority, Player player) {
+        super(priority);
         this.gameEngine = gameEngine;
+        this.player = player;
     }
 
     @Override
@@ -37,28 +45,62 @@ public class ActivitySystem extends EntitySystem {
     @Override
     public void update(float deltaTime) {
         for (Entity entity : active) {
-            entity.remove(ActiveComponent.class);
+            if (Mappers.active.has(entity)) {
+                entity.remove(ActiveComponent.class);
+                if (Mappers.agency.get(entity).timeUnitsLeft >= 0) {
+                    pending.add(entity);
+                }
+            }
         }
 
-        if (pending.isEmpty()) {
-            for (Entity entity : sapient) {
-                StatsComponent stats = Mappers.stats.get(entity);
-                Mappers.agency.get(entity).initiative = ((stats.agility + stats.intelligence) / 4
-                        + ThreadLocalRandom.current().nextInt(1, 20));
+        // Player has just pressed a key
+        if (actingInThisMoment.isEmpty() && pending.isEmpty()) {
+            for (Entity e : entities) {
+                if (Mappers.agency.get(e).timeUnitsLeft >= 0) {
+                    pending.add(e);
+                }
             }
-
-            for (Entity entity : entities) {
-                pending.add(entity);
-            }
-
-            pending.sort(Comparator.comparingInt(a -> Mappers.agency.get(a).initiative));
         }
 
-        Entity entity = pending.pop();
+        if (actingInThisMoment.isEmpty()) {
+            findActingInThisMoment();
+            rollInitiative();
+        }
+
+        Entity entity = actingInThisMoment.pop();
         entity.add(ActiveComponent.ACTIVE);
 
-        if (pending.isEmpty()) {
-            gameEngine.stopSpinning();
+        // Everyone has done their action
+        if (actingInThisMoment.isEmpty() && pending.isEmpty()) {
+            if (!Mappers.player.get(player).handled) {
+                int playerActionCost = Mappers.player.get(player).lastActionTimeCost;
+                for (Entity e : entities) {
+                    Mappers.agency.get(e).timeUnitsLeft += playerActionCost;
+                }
+                Mappers.player.get(player).handled = true;
+                gameEngine.stopSpinning();
+            }
         }
+    }
+
+    private void findActingInThisMoment() {
+        int previousTimeUnits = 0;
+        boolean moreThanOneHandled = false;
+        while (pending.peek() != null && (!moreThanOneHandled || Mappers.agency.get(pending.peek()).timeUnitsLeft == previousTimeUnits)) {
+            Entity e = pending.poll();
+            previousTimeUnits = Mappers.agency.get(e).timeUnitsLeft;
+            moreThanOneHandled = true;
+            actingInThisMoment.add(e);
+        }
+    }
+
+    private void rollInitiative() {
+        for (Entity entity : sapient) {
+            StatsComponent stats = Mappers.stats.get(entity);
+            Mappers.agency.get(entity).initiative = ((stats.agility + stats.intelligence) / 4
+                    + ThreadLocalRandom.current().nextInt(1, 20));
+        }
+
+        actingInThisMoment.sort(Comparator.comparingInt(a -> Mappers.agency.get(a).initiative));
     }
 }

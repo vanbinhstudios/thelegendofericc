@@ -9,10 +9,10 @@ public class KeyboardController extends InputAdapter {
 
     private GameEngine engines;
     private CameraZoom zoom;
-    public boolean up, down, left, right;
+    public boolean up, down, left, right, space;
 
     public void clean() {
-        up = down = left = right = false;
+        up = down = left = right = space = false;
     }
 
     public KeyboardController(GameEngine engines, OrthographicCamera camera) {
@@ -43,6 +43,9 @@ public class KeyboardController extends InputAdapter {
             case Input.Keys.D:
             case Input.Keys.RIGHT:
                 right = true;
+                break;
+            case Input.Keys.SPACE:
+                space = true;
                 break;
             default:
                 break;

@@ -19,6 +19,11 @@ public class AgencySystem extends IteratingSystem {
         AgencyComponent agency = Mappers.agency.get(entity);
         PositionComponent pos = Mappers.position.get(entity);
         Action action = agency.agency.chooseAction(pos);
+        agency.timeUnitsLeft -= action.getBaseTimeCost();
+        if (Mappers.player.has(entity)) {
+            Mappers.player.get(entity).lastActionTimeCost = action.getBaseTimeCost();
+            Mappers.player.get(entity).handled = false;
+        }
         entity.add(action);
     }
 }
