@@ -74,10 +74,10 @@ public class RenderSystem extends EntitySystem {
             final int margin = 5; // Assume that no sprite is more than 5 tiles away from it's logical position.
             for (Entity entity : entities) {
                 PositionComponent pos = Mappers.position.get(entity);
-                if (cam.left - margin <= pos.xy.x
-                        && pos.xy.x <= cam.right + margin
-                        && cam.bottom - margin <= pos.xy.y
-                        && pos.xy.y <= cam.top + margin) {
+                if (cam.left - margin <= pos.getX()
+                        && pos.getX() <= cam.right + margin
+                        && cam.bottom - margin <= pos.getY()
+                        && pos.getY() <= cam.top + margin) {
                     visibleEntities.add(entity);
                 }
             }
@@ -101,7 +101,7 @@ public class RenderSystem extends EntitySystem {
                 }
                 while (entityIndex < visibleEntities.size()) {
                     PositionComponent pos = Mappers.position.get(visibleEntities.get(entityIndex));
-                    if (pos.xy.y < y)
+                    if (pos.getY() < y)
                         break;
                     if (pos.map == camPos.map) {
                         drawEntity(visibleEntities.get(entityIndex));
@@ -128,7 +128,7 @@ public class RenderSystem extends EntitySystem {
         transformTmp.idt();
         transformTmp.mul(render.model.defaultTransform); // From bottom-left-corner space to origin space.
         transformTmp.mul(render.transform); // Apply affine animations.
-        transformTmp.translate(pos.xy.x, pos.xy.y); // Move to logical position.
+        transformTmp.translate(pos.getX(), pos.getY()); // Move to logical position.
 
         batch.setColor(0, render.saturation, render.brightness, render.alpha);
         batch.draw(render.region, render.model.width, render.model.height, transformTmp);

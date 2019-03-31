@@ -81,8 +81,8 @@ public class FieldOfViewSystem extends EntitySystem {
      */
     private void clearFOV(PositionComponent pos, FieldOfViewComponent fov) {
         int updateMargin = FieldOfViewComponent.VIEW_RADIUS + 4;
-        for (int y = pos.xy.y + updateMargin; y >= pos.xy.y - updateMargin; --y) {
-            for (int x = pos.xy.x - updateMargin; x < pos.xy.x + updateMargin; ++x) {
+        for (int y = pos.getY() + updateMargin; y >= pos.getY() - updateMargin; --y) {
+            for (int x = pos.getX() - updateMargin; x < pos.getX() + updateMargin; ++x) {
                 if (pos.map.inBoundaries(x, y)) {
                     fov.visibility.clear(x, y);
                 }
@@ -118,8 +118,8 @@ public class FieldOfViewSystem extends EntitySystem {
      * @param pos a PositionComponent of the same Entity
      */
     private void updateOneLine(float x, float y, FieldOfViewComponent fov, PositionComponent pos) {
-        float posx = pos.xy.x + .5f;
-        float posy = pos.xy.y + .5f;
+        float posx = pos.getX() + .5f;
+        float posy = pos.getY() + .5f;
 
         // Entity can only see in its radius (radius indicates that it is a circle)
         for (int i = 0; i < FieldOfViewComponent.VIEW_RADIUS; ++i) {

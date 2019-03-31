@@ -26,13 +26,13 @@ public class MovementSystem extends IteratingSystem {
 
         pos.direction = move.direction;
 
-        if (move.direction == Direction.LEFT && pos.map.isPassable(pos.xy.x - 1, pos.xy.y)) {
+        if (move.direction == Direction.LEFT && pos.map.isPassable(pos.getX() - 1, pos.getY())) {
             dx = -1;
-        } else if (move.direction == Direction.RIGHT && pos.map.isPassable(pos.xy.x + 1, pos.xy.y)) {
+        } else if (move.direction == Direction.RIGHT && pos.map.isPassable(pos.getX() + 1, pos.getY())) {
             dx = 1;
-        } else if (move.direction == Direction.UP && pos.map.isPassable(pos.xy.x, pos.xy.y + 1)) {
+        } else if (move.direction == Direction.UP && pos.map.isPassable(pos.getX(), pos.getY() + 1)) {
             dy = 1;
-        } else if (move.direction == Direction.DOWN && pos.map.isPassable(pos.xy.x, pos.xy.y - 1)) {
+        } else if (move.direction == Direction.DOWN && pos.map.isPassable(pos.getX(), pos.getY() - 1)) {
             dy = -1;
         }
 

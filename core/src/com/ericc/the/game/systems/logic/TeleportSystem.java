@@ -35,8 +35,8 @@ public class TeleportSystem extends IteratingSystem {
 
         if (subjectFov != null) {
             final int MARGIN = FieldOfViewComponent.VIEW_RADIUS;
-            for (int x = pos.xy.x - MARGIN; x <= pos.xy.x + MARGIN; ++x) {
-                for (int y = pos.xy.y - MARGIN; y <= pos.xy.y + MARGIN; ++y) {
+            for (int x = pos.getX() - MARGIN; x <= pos.getX() + MARGIN; ++x) {
+                for (int y = pos.getY() - MARGIN; y <= pos.getY() + MARGIN; ++y) {
                     subjectFov.visibility.clear(x, y);
                 }
             }

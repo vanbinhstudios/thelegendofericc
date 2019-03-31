@@ -20,4 +20,12 @@ public class PositionComponent implements Component {
     public PositionComponent(GridPoint xy, Map map) {
         this(xy, Direction.DOWN, map);
     }
+
+    public int getX() {
+        return xy.x;
+    }
+
+    public int getY() {
+        return xy.y;
+    }
 }

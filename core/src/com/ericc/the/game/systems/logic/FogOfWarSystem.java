@@ -31,8 +31,8 @@ public class FogOfWarSystem extends EntitySystem {
 
             int updateMargin = FieldOfViewComponent.VIEW_RADIUS + 3;
 
-            for (int y = pos.xy.y + updateMargin; y >= pos.xy.y - updateMargin; --y) {
-                for (int x = pos.xy.x - updateMargin; x < pos.xy.x + updateMargin; ++x) {
+            for (int y = pos.getY() + updateMargin; y >= pos.getY() - updateMargin; --y) {
+                for (int x = pos.getX() - updateMargin; x < pos.getX() + updateMargin; ++x) {
                     if (pos.map.inBoundaries(x, y) && fov.visibility.get(x, y)) {
                         pos.map.markAsSeenByPlayer(x, y);
                     }
