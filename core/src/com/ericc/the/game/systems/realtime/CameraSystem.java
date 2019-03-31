@@ -51,7 +51,7 @@ public class CameraSystem extends EntitySystem {
             cam.bottom = clamp(0, (int) bottomRight.y - 1, pos.map.height() - 1);
             cam.right = clamp(0, (int) bottomRight.x, pos.map.width() - 1);
 
-            cam.viewport.getCamera().position.lerp(new Vector3(pos.x, pos.y, 0),
+            cam.viewport.getCamera().position.lerp(new Vector3(pos.getX(), pos.getY(), 0),
                     1 - (float) Math.pow(.1f, Gdx.graphics.getDeltaTime()));
             cam.viewport.getCamera().update();
         }

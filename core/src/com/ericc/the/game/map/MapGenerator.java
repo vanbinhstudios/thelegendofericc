@@ -1,6 +1,6 @@
 package com.ericc.the.game.map;
 
-import com.badlogic.gdx.math.GridPoint2;
+import com.ericc.the.game.utils.GridPoint;
 
 import java.util.*;
 
@@ -39,37 +39,38 @@ public class MapGenerator {
      * Fills the given room (it randomizes the given arguments a little bit),
      * after that it returns the middle of the room that it has just generated
      */
-    private GridPoint2 fillRoomReturnCenter(int x, int y, int width, int height) {
+    private GridPoint fillRoomReturnCenter(int x, int y, int width, int height) {
         int roomX = random.nextInt(width / 8 + 1);
         int roomY = random.nextInt(height / 8 + 1);
         int roomWidth = Math.max(20, width / 8 + random.nextInt(Math.max(1 + width - roomX, 1)));
         int roomHeight = Math.max(20, height / 8 + random.nextInt(Math.max(1 + height - roomY, 1)));
-        GridPoint2 center = new GridPoint2(0, 0);
+        int centerX = 0;
+        int centerY = 0;
 
         int widthBoundary = Math.min(x + roomWidth, Math.min(this.width, x + width - 2));
         int heightBoundary = Math.min(y + roomHeight, Math.min(this.height, y + height - 2));
 
         if (Math.min(heightBoundary - (y + roomY + 1), widthBoundary - (x + roomX + 1)) <= 2) {
-            return new GridPoint2(x, y);
+            return new GridPoint(x, y);
         }
 
         for (int i = x + roomX + 1; i < widthBoundary; ++i) {
             for (int j = y + roomY + 1; j < heightBoundary; ++j) {
                 map.setTile(i, j, true);
 
-                if (center.x == 0) {
-                    center.y++;
+                if (centerX == 0) {
+                    centerY++;
                 }
             }
 
-            center.x++;
+            centerX++;
         }
 
-        map.addRoom(new Room(x + roomX, y + roomY, x + roomX + center.x, y + roomY + center.y));
-        center.x = x + roomX + (center.x / 2);
-        center.y = y + roomY + (center.y / 2);
+        map.addRoom(new Room(x + roomX, y + roomY, x + roomX + centerX, y + roomY + centerY));
+        centerX = x + roomX + (centerX / 2);
+        centerY = y + roomY + (centerY / 2);
 
-        return center;
+        return new GridPoint(centerX, centerY);
     }
 
     /**
@@ -82,7 +83,7 @@ public class MapGenerator {
      * @param width  the width of a rectangle (from x till x + width (excluded))
      * @param height the height of a rectangle (from y till y + height (excluded))
      */
-    private GridPoint2 generateMap(int x, int y, int width, int height) {
+    private GridPoint generateMap(int x, int y, int width, int height) {
         // this preserves the ratio (width:height and height:width) of every room (max ratio is 2:1)
         if ((width < this.maximalRoomSize && height < 2 * this.maximalRoomSize)
                 || (height < this.maximalRoomSize && width < 2 * this.maximalRoomSize)) {
@@ -102,8 +103,8 @@ public class MapGenerator {
             slice = width / 2;
         }
 
-        GridPoint2 firstRoom;
-        GridPoint2 secondRoom;
+        GridPoint firstRoom;
+        GridPoint secondRoom;
 
         if (pickHeight) {
             firstRoom = generateMap(x, y, width, slice);
@@ -152,7 +153,7 @@ public class MapGenerator {
      *                   a corridor till it reaches [x2][y2]. (Assumptions for the explanation x1 <= x2
      *                   y1 <= y2, the function look for that order on its own, though.)
      */
-    private void connectRooms(GridPoint2 firstRoom, GridPoint2 secondRoom) {
+    private void connectRooms(GridPoint firstRoom, GridPoint secondRoom) {
         boolean startFromFirst = firstRoom.x < secondRoom.x;
         int starter = Math.min(firstRoom.x, secondRoom.x);
 

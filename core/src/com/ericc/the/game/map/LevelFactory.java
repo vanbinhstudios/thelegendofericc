@@ -31,7 +31,7 @@ public class LevelFactory {
         );
 
         entities.add(exit);
-        map.registerStairs(exit.pos, StaircaseDestination.DESCENDING);
+        map.registerStairs(exit.pos.xy, StaircaseDestination.DESCENDING);
 
         if (levelNumber > 0) {
             Stairs entrance = new Stairs(map.getRandomPassableTileFromRooms(), map,
@@ -39,7 +39,7 @@ public class LevelFactory {
             );
 
             entities.add(entrance);
-            map.registerStairs(entrance.pos, StaircaseDestination.ASCENDING);
+            map.registerStairs(entrance.pos.xy, StaircaseDestination.ASCENDING);
         }
 
         return new Level(map, entities);

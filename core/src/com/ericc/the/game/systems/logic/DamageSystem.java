@@ -3,7 +3,6 @@ package com.ericc.the.game.systems.logic;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.gdx.math.GridPoint2;
 import com.ericc.the.game.Mappers;
 import com.ericc.the.game.components.*;
 
@@ -15,7 +14,7 @@ public class DamageSystem extends IteratingSystem {
     @Override
     protected void processEntity(Entity attack, float deltaTime) {
         PositionComponent pos = Mappers.position.get(attack);
-        Entity subject = pos.map.entityMap.get(new GridPoint2(pos.x, pos.y));
+        Entity subject = pos.map.entityMap.get(pos.xy);
 
         if (subject != null && !Mappers.player.has(subject)) {
             subject.remove(CollisionComponent.class);

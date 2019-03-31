@@ -7,10 +7,11 @@ import com.ericc.the.game.components.AttackComponent;
 import com.ericc.the.game.components.PositionComponent;
 import com.ericc.the.game.components.RenderableComponent;
 import com.ericc.the.game.map.Map;
+import com.ericc.the.game.utils.GridPoint;
 
 public class Attack extends Entity {
-    public Attack(int x, int y, Map map, Direction direction) {
-        add(new PositionComponent(x, y, map));
+    public Attack(GridPoint xy, Map map, Direction direction) {
+        add(new PositionComponent(xy, map));
         getComponent(PositionComponent.class).direction = direction;
         add(new AttackComponent());
         add(new RenderableComponent(Models.sword));
