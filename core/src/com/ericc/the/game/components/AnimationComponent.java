@@ -1,8 +1,6 @@
 package com.ericc.the.game.components;
 
 import com.badlogic.ashley.core.Component;
-import com.badlogic.gdx.math.Affine2;
-import com.ericc.the.game.animations.AffineAnimation;
 import com.ericc.the.game.animations.Animation;
 
 public class AnimationComponent implements Component {

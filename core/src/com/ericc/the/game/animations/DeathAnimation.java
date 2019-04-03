@@ -9,7 +9,6 @@ public class DeathAnimation implements Animation {
     private float fadingSpeed;
     private boolean desaturate;
     private float initialAlpha;
-    private float saturation;
     private float alpha;
 
     public DeathAnimation(float fadingSpeed, boolean desaturate, float initialAlpha) {

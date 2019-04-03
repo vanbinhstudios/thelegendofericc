@@ -17,7 +17,22 @@ import java.util.Comparator;
 import java.util.PriorityQueue;
 import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * Activity System is based on passing an activity token (ActiveComponent).
+ * From the point of view of game systems, there is always exactly one entity being active.
+ * However, there exists a notion of "logical time", that is, actions can take shorter or longer amounts of time.
+ * Actors accumulate time units (TU), each in their own separate pool. Each action costs
+ * a certain amount of TU deducted from the pool. Player action replenish actors' pools
+ * with TU amount equal to its cost. TU balance can be negative -- that means that actor cannot move until the balance
+ * becomes positive again.
+ * <p>
+ * Actors are arranged in a priority queue {@link #pending}, sorted by amount of TU left.
+ * If several actors have the same amount of TU left, the precise order of their actions is determined based
+ * on their initiative.
+ */
+
 public class ActivitySystem extends EntitySystem {
+
     private ImmutableArray<Entity> sapient;
     private ImmutableArray<Entity> entities;
     private ImmutableArray<Entity> active;
@@ -42,24 +57,19 @@ public class ActivitySystem extends EntitySystem {
         active = engine.getEntitiesFor(Family.all(ActiveComponent.class).get());
     }
 
-    // TODO Fix NPE
     @Override
     public void update(float deltaTime) {
         for (Entity entity : active) {
             if (Mappers.active.has(entity)) {
                 entity.remove(ActiveComponent.class);
-                if (Mappers.agency.get(entity).timeUnitsLeft >= 0) {
-                    pending.add(entity);
-                }
+                addToPendingIfCanAct(entity);
             }
         }
 
-        // Player has just pressed a key
+        // Player has just pressed a key. Start of a new "turn"
         if (actingInThisMoment.isEmpty() && pending.isEmpty()) {
-            for (Entity e : entities) {
-                if (Mappers.agency.get(e).timeUnitsLeft >= 0) {
-                    pending.add(e);
-                }
+            for (Entity entity : entities) {
+                addToPendingIfCanAct(entity);
             }
         }
 
@@ -82,16 +92,20 @@ public class ActivitySystem extends EntitySystem {
             entity.add(ActiveComponent.ACTIVE);
         }
 
-        // Everyone has done their action
-        if (actingInThisMoment.isEmpty() && pending.isEmpty()) {
-            if (!Mappers.player.get(player).handled) {
-                int playerActionCost = Mappers.player.get(player).lastActionTimeCost;
-                for (Entity e : entities) {
-                    Mappers.agency.get(e).timeUnitsLeft += playerActionCost;
-                }
-                Mappers.player.get(player).handled = true;
-                gameEngine.stopSpinning();
+        // Everyone has done their action and we should wait for player input
+        if (actingInThisMoment.isEmpty() && pending.isEmpty() && !Mappers.player.get(player).handled) {
+            int playerActionCost = Mappers.player.get(player).lastActionTimeCost;
+            for (Entity e : entities) {
+                Mappers.agency.get(e).timeUnitsLeft += playerActionCost;
             }
+            Mappers.player.get(player).handled = true;
+            gameEngine.stopSpinning();
+        }
+    }
+
+    private void addToPendingIfCanAct(Entity entity) {
+        if (!Mappers.death.has(entity) && Mappers.agency.get(entity).timeUnitsLeft >= 0) {
+            pending.add(entity);
         }
     }
 

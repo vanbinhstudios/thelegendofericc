@@ -5,7 +5,10 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
-import com.ericc.the.game.components.*;
+import com.ericc.the.game.components.AgencyComponent;
+import com.ericc.the.game.components.AttackComponent;
+import com.ericc.the.game.components.CollisionComponent;
+import com.ericc.the.game.components.DeathComponent;
 
 public class DeathSystem extends EntitySystem {
     private ImmutableArray<Entity> entities;
