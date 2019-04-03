@@ -10,7 +10,7 @@ import com.ericc.the.game.components.AnimationComponent;
 import com.ericc.the.game.components.RenderableComponent;
 
 public class AnimationSystem extends EntitySystem {
-    private ImmutableArray<Entity> affineanimated; // Entities with affine animation currently attached.
+    private ImmutableArray<Entity> animated; // Entities with affine animation currently attached.
 
 
     public AnimationSystem(int priority) {
@@ -19,14 +19,14 @@ public class AnimationSystem extends EntitySystem {
 
     @Override
     public void addedToEngine(Engine engine) {
-        affineanimated = engine.getEntitiesFor(Family.all(RenderableComponent.class, AnimationComponent.class).get());
+        animated = engine.getEntitiesFor(Family.all(RenderableComponent.class, AnimationComponent.class).get());
     }
 
     // TODO support for multiple animations taking place at once
     @Override
     public void update(float deltaTime) {
         // Update the animation-derived local transform.
-        for (Entity entity : affineanimated) {
+        for (Entity entity : animated) {
             RenderableComponent render = Mappers.renderable.get(entity);
             AnimationComponent animation = Mappers.animation.get(entity);
 
