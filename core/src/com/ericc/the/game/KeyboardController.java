@@ -3,6 +3,7 @@ package com.ericc.the.game;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.ericc.the.game.entities.Player;
 import com.ericc.the.game.helpers.CameraZoom;
 
 public class KeyboardController extends InputAdapter {
@@ -67,6 +68,9 @@ public class KeyboardController extends InputAdapter {
                 break;
             case Input.Keys.PLUS:
                 zoom.zoomInCamera();
+                break;
+            case Input.Keys.R:
+                VeryUglyGlobalState.playerRunning = !VeryUglyGlobalState.playerRunning;
                 break;
             /*
             case Input.Keys.O:

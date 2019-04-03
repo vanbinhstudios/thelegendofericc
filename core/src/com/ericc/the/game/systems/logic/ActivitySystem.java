@@ -79,7 +79,13 @@ public class ActivitySystem extends EntitySystem {
         }
 
         // Skip dying entities
-        Entity entity = actingInThisMoment.pop();
+        Entity entity;
+        // TODO LibGDX's Array throws an exception instead of returning null when it's empty. Use something else.
+        if (!actingInThisMoment.isEmpty()) {
+            entity = actingInThisMoment.pop();
+        } else {
+            entity = null;
+        }
         while (entity != null && Mappers.death.has(entity)) {
             if (!actingInThisMoment.isEmpty()) {
                 entity = actingInThisMoment.pop();
