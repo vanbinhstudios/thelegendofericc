@@ -70,7 +70,12 @@ public class ActivitySystem extends EntitySystem {
         // Skip dying entities
         Entity entity = actingInThisMoment.pop();
         while (entity != null && Mappers.death.has(entity)) {
-            entity = actingInThisMoment.pop();
+            if (!actingInThisMoment.isEmpty()) {
+                entity = actingInThisMoment.pop();
+            } else {
+                entity = null;
+            }
+
         }
         if (entity != null) {
             entity.add(ActiveComponent.ACTIVE);

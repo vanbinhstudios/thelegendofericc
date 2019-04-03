@@ -11,10 +11,10 @@ import com.ericc.the.game.utils.GridPoint;
 
 public class Attack extends Entity {
     public Attack(GridPoint xy, Map map, Direction direction) {
-        add(new PositionComponent(xy, map));
-        getComponent(PositionComponent.class).direction = direction;
+        add(new PositionComponent(xy, direction, map));
         add(new AttackComponent());
         add(new RenderableComponent(Models.sword));
         getComponent(RenderableComponent.class).brightness = 1.0f;
+        getComponent(RenderableComponent.class).alpha = 1.0f;
     }
 }

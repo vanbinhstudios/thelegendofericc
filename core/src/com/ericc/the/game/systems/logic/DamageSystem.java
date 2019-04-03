@@ -4,7 +4,11 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.ericc.the.game.Mappers;
-import com.ericc.the.game.components.*;
+import com.ericc.the.game.animations.DeathAnimation;
+import com.ericc.the.game.components.AnimationComponent;
+import com.ericc.the.game.components.AttackComponent;
+import com.ericc.the.game.components.DeathComponent;
+import com.ericc.the.game.components.PositionComponent;
 
 public class DamageSystem extends IteratingSystem {
     public DamageSystem(int priority) {
@@ -19,9 +23,12 @@ public class DamageSystem extends IteratingSystem {
         if (subject != null && !Mappers.player.has(subject)) {
 //            subject.remove(CollisionComponent.class);
 //            subject.remove(AgencyComponent.class);
-            subject.add(new DeathComponent(1 / 0.8f, true, 0.5f));
+            subject.add(new AnimationComponent(
+                    new DeathAnimation(1 / 0.8f, true, 0.5f)));
+            subject.add(new DeathComponent());
         }
 //        attack.remove(AttackComponent.class);
-        attack.add(new DeathComponent(1 / 0.3f, false, 1.0f));
+        attack.add(new AnimationComponent(new DeathAnimation(1 / 0.8f, true, 0.5f)));
+        attack.add(new DeathComponent());
     }
 }

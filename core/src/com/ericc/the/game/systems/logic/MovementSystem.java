@@ -8,7 +8,7 @@ import com.ericc.the.game.Direction;
 import com.ericc.the.game.Mappers;
 import com.ericc.the.game.actions.MovementAction;
 import com.ericc.the.game.animations.JumpAnimation;
-import com.ericc.the.game.components.AffineAnimationComponent;
+import com.ericc.the.game.components.AnimationComponent;
 import com.ericc.the.game.components.PositionComponent;
 
 public class MovementSystem extends IteratingSystem {
@@ -38,7 +38,7 @@ public class MovementSystem extends IteratingSystem {
 
         if (dy != 0 || dx != 0) {
             pos.map.entityMap.remove(pos.xy);
-            entity.add(new AffineAnimationComponent(new JumpAnimation(new Vector2(dx, dy), 0.6f, 0.15f)));
+            entity.add(new AnimationComponent(new JumpAnimation(new Vector2(dx, dy), 0.6f, 0.15f)));
             pos.xy = pos.xy.shift(dx, dy);
             pos.map.entityMap.put(pos.xy, entity);
         }

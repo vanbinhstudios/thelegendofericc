@@ -59,6 +59,7 @@ public class MainGame extends Game {
         gameEngine.addEntity(player);
 
         int priority = 0;
+        gameEngine.addLogicSystem(new DeathSystem(priority++));
         gameEngine.addLogicSystem(new ActivitySystem(gameEngine, priority++, player));
         gameEngine.addLogicSystem(new AgencySystem(priority++));
         gameEngine.addLogicSystem(new MeleeAttackSystem(priority++));
@@ -69,11 +70,12 @@ public class MainGame extends Game {
         gameEngine.addLogicSystem(new FogOfWarSystem(priority++));
         gameEngine.addLogicSystem(new EntityMapSystem());
 
+        gameEngine.addRealtimeSystem(new AnimationSystem(priority++));
         gameEngine.addRealtimeSystem(new TileChanger(.75f, priority++));
         gameEngine.addRealtimeSystem(new CameraSystem(priority++));
         gameEngine.addRealtimeSystem(new TileFadeSystem(priority++));
-        gameEngine.addRealtimeSystem(new DeathSystem(priority++));
-        gameEngine.addRealtimeSystem(new AnimationSystem(priority++));
+        gameEngine.addRealtimeSystem(new DirectedSpritesheetSystem(priority++));
+
         gameEngine.addRealtimeSystem(new RenderSystem(priority++));
 
         gameEngine.getSystem(FieldOfViewSystem.class).update(0);
