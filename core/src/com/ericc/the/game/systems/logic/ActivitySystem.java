@@ -67,8 +67,14 @@ public class ActivitySystem extends EntitySystem {
             rollInitiative();
         }
 
+        // Skip dying entities
         Entity entity = actingInThisMoment.pop();
-        entity.add(ActiveComponent.ACTIVE);
+        while (entity != null && Mappers.death.has(entity)) {
+            entity = actingInThisMoment.pop();
+        }
+        if (entity != null) {
+            entity.add(ActiveComponent.ACTIVE);
+        }
 
         // Everyone has done their action
         if (actingInThisMoment.isEmpty() && pending.isEmpty()) {

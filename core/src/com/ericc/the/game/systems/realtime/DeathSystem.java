@@ -32,22 +32,9 @@ public class DeathSystem extends EntitySystem {
             RenderableComponent render = Mappers.renderable.get(entity);
             DeathComponent death = Mappers.death.get(entity);
 
-            if (death.desaturate) {
-                render.saturation = 0f;
-            }
-            render.alpha = min(render.alpha, death.initialAlpha);
-            render.alpha = converge(render.alpha, 0, deltaTime * death.fadingSpeed);
-            if (render.alpha == 0.0f) {
-                engine.removeEntity(entity);
-            }
+
         }
     }
 
-    private float converge(float current, float target, float delta) {
-        if (current < target) {
-            return min(current + delta, target);
-        } else {
-            return max(current - delta, target);
-        }
-    }
+    p
 }
