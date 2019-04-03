@@ -21,14 +21,11 @@ public class DamageSystem extends IteratingSystem {
         Entity subject = pos.map.entityMap.get(pos.xy);
 
         if (subject != null && !Mappers.player.has(subject)) {
-//            subject.remove(CollisionComponent.class);
-//            subject.remove(AgencyComponent.class);
             subject.add(new AnimationComponent(
                     new DeathAnimation(1 / 0.8f, true, 0.5f)));
             subject.add(new DeathComponent());
         }
-//        attack.remove(AttackComponent.class);
-        attack.add(new AnimationComponent(new DeathAnimation(1 / 0.8f, true, 0.5f)));
+        attack.add(new AnimationComponent(new DeathAnimation(1 / 0.3f, false, 1.0f)));
         attack.add(new DeathComponent());
     }
 }

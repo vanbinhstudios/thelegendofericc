@@ -16,6 +16,7 @@ public class DeathAnimation implements Animation {
         this.fadingSpeed = fadingSpeed;
         this.desaturate = desaturate;
         this.initialAlpha = initialAlpha;
+        this.alpha = initialAlpha;
     }
 
     private float converge(float current, float target, float delta) {
@@ -28,9 +29,6 @@ public class DeathAnimation implements Animation {
 
     @Override
     public void update(float deltaTime) {
-        if (desaturate) {
-            saturation = 0f;
-        }
         alpha = min(alpha, initialAlpha);
         alpha = converge(alpha, 0, deltaTime * fadingSpeed);
     }
@@ -38,7 +36,9 @@ public class DeathAnimation implements Animation {
     @Override
     public void apply(RenderableComponent renderable) {
         renderable.alpha = alpha;
-        renderable.saturation = saturation;
+        if (desaturate) {
+            renderable.saturation = 0f;
+        }
     }
 
     @Override

@@ -19,6 +19,7 @@ public class DeathSystem extends EntitySystem {
         entities = engine.getEntitiesFor(Family.all(DeathComponent.class).get());
     }
 
+    // TODO Entities should be properly deleted from the engine (some kind of periodic GC?)
     @Override
     public void update(float deltaTime) {
         for (Entity entity : entities) {

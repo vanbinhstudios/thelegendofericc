@@ -9,6 +9,12 @@ import static java.lang.Float.min;
 
 /**
  * A simple parabolic jump.
+ *
+ * The transform is applied to the entity in it's local space: that is, the entity's origin
+ * is the pivot of the transform.
+ * Caveat: when an entity changes its logical position, the move animation follows *afterwards*!
+ * As such, those animations should return transforms relative to their *ending* state!
+ *
  */
 public class JumpAnimation implements Animation {
     private Vector2 startPosition;
@@ -36,6 +42,7 @@ public class JumpAnimation implements Animation {
 
         if (timeFraction > 1) {
             done = true;
+            return;
         }
 
         // Horizontal velocity is constant.

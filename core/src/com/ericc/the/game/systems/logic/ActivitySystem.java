@@ -42,6 +42,7 @@ public class ActivitySystem extends EntitySystem {
         active = engine.getEntitiesFor(Family.all(ActiveComponent.class).get());
     }
 
+    // TODO Fix NPE
     @Override
     public void update(float deltaTime) {
         for (Entity entity : active) {
