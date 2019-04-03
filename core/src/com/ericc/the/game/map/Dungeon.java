@@ -71,7 +71,7 @@ public class Dungeon {
             GridPoint newPosition = desiredPosition.add(move);
 
             if (map.isFloor(newPosition.x, newPosition.y)) {
-                entityPosition.map.entityMap.remove(newPosition);
+                entityPosition.map.entityMap.remove(entityPosition.xy);
                 entityPosition.xy = newPosition;
                 entityPosition.map = map;
                 entityPosition.map.entityMap.put(newPosition, entity);
