@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.ericc.the.game.Mappers;
 import com.ericc.the.game.Media;
 import com.ericc.the.game.TileTextureIndicator;
+import com.ericc.the.game.components.AnimationComponent;
 import com.ericc.the.game.helpers.FogOfWar;
 import com.ericc.the.game.utils.GridPoint;
 import com.ericc.the.game.utils.RectangularBitset;
@@ -206,5 +207,15 @@ public class Map {
                 }
             }
         }
+    }
+
+    public boolean hasAnimationDependency(GridPoint xy) {
+        Entity potentiallyBlocking = entityMap.get(xy);
+        if (potentiallyBlocking == null)
+            return false;
+        AnimationComponent animation = Mappers.animation.get(potentiallyBlocking);
+        if (animation == null)
+            return false;
+        return animation.animation.isBlocking() && !animation.animation.isOver();
     }
 }

@@ -3,7 +3,6 @@ package com.ericc.the.game;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.ericc.the.game.entities.Player;
 import com.ericc.the.game.helpers.CameraZoom;
 
 public class KeyboardController extends InputAdapter {
@@ -52,7 +51,7 @@ public class KeyboardController extends InputAdapter {
                 break;
         }
 
-        engines.updateLogicEngine();
+        engines.update();
         return false;
     }
 

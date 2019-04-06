@@ -28,4 +28,6 @@ public class Mappers {
     public static final ComponentMapper<TeleportAction> teleport = ComponentMapper.getFor(TeleportAction.class);
     public static final ComponentMapper<AttackAction> attack = ComponentMapper.getFor(AttackAction.class);
     public static final ComponentMapper<ActiveComponent> active = ComponentMapper.getFor(ActiveComponent.class);
+    public static final ComponentMapper<SyncComponent> sync = ComponentMapper.getFor(SyncComponent.class);
+
 }

@@ -20,7 +20,7 @@ public class Player extends Entity {
         add(renderable);
         add(fov);
         add(new PlayerComponent());
-        add(new StatsComponent(50, 100, 50));
+        add(new StatsComponent(10000, 100, 50));
         add(new CollisionComponent());
         add(agency);
         add(camera);
