@@ -18,13 +18,11 @@ import java.util.concurrent.ThreadLocalRandom;
  * Activity System is based on passing an activity token (ActiveComponent).
  * From the point of view of game systems, there is always exactly one entity being active.
  * However, there exists a notion of "logical time", that is, actions can take shorter or longer amounts of time.
- * Actors accumulate time units (TU), each in their own separate pool. Each action costs
- * a certain amount of TU deducted from the pool. Player action replenish actors' pools
- * with TU amount equal to its cost. TU balance can be negative -- that means that actor cannot move until the balance
- * becomes positive again.
+ * Actors accumulate delay, each in their own separate pool. Each action costs
+ * a certain amount of time - it is indicated by adding delay to the pool.
  * <p>
- * Actors are arranged in a priority queue {@link #pending}, sorted by amount of TU left.
- * If several actors have the same amount of TU left, the precise order of their actions is determined based
+ * Actors are arranged in a priority queue {@link #pending}, sorted by amount of their delay.
+ * If several actors have the same amount of delay, the precise order of their actions is determined based
  * on their initiative.
  */
 
