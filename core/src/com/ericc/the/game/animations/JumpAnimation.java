@@ -66,6 +66,6 @@ public class JumpAnimation implements Animation {
 
     @Override
     public boolean isBlocking() {
-        return false;
+        return true;
     }
 }

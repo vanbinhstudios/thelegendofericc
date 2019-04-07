@@ -5,6 +5,7 @@ import com.ericc.the.game.VeryUglyGlobalState;
 import com.ericc.the.game.actions.Action;
 import com.ericc.the.game.actions.Actions;
 import com.ericc.the.game.components.PositionComponent;
+import com.ericc.the.game.components.SyncComponent;
 
 public class KeyboardAgency implements Agency {
     private KeyboardController controller;
@@ -60,9 +61,10 @@ public class KeyboardAgency implements Agency {
                 return Actions.ATTACK_UP;
             }
         } else if (controller.space) {
-            return Actions.LONG;
+            controller.space = false;
+            return Actions.LONG_WAIT;
         } else {
-            return Actions.NOTHING;
+            return SyncComponent.SYNC;
         }
     }
 }

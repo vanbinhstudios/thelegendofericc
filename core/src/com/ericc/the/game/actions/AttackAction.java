@@ -10,7 +10,7 @@ public class AttackAction extends Action {
     }
 
     @Override
-    public int getBaseTimeCost() {
+    public int getDelay() {
         return 100;
     }
 }

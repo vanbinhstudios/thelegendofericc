@@ -11,7 +11,7 @@ public class TeleportAction extends Action {
 
     // TODO How to solve the mysterious case of stairs?
     @Override
-    public int getBaseTimeCost() {
+    public int getDelay() {
         return 100;
     }
 }

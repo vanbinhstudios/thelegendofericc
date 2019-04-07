@@ -15,6 +15,6 @@ public class Actions {
     public static AttackAction ATTACK_RIGHT = new AttackAction(Direction.RIGHT);
     public static AttackAction ATTACK_DOWN = new AttackAction(Direction.DOWN);
     public static AttackAction ATTACK_UP = new AttackAction(Direction.UP);
-    public static NoAction NOTHING = new NoAction();
-    public static LongAction LONG = new LongAction();
+    public static WaitAction WAIT = new WaitAction(100);
+    public static WaitAction LONG_WAIT = new WaitAction(500);
 }

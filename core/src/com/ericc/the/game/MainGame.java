@@ -60,7 +60,7 @@ public class MainGame extends Game {
 
         int priority = 0;
         gameEngine.addLogicSystem(new DeathSystem(priority++));
-        gameEngine.addLogicSystem(new ActivitySystem(gameEngine, priority++, player));
+        gameEngine.addLogicSystem(new ActivitySystem(gameEngine, priority++));
         gameEngine.addLogicSystem(new AgencySystem(priority++));
         gameEngine.addLogicSystem(new MeleeAttackSystem(priority++));
         gameEngine.addLogicSystem(new MovementSystem(priority++));
@@ -90,7 +90,7 @@ public class MainGame extends Game {
 
     @Override
     public void render() {
-        gameEngine.updateRealtimeEngine();
+        gameEngine.update();
         fpsThrottle.sleepToNextFrame();
     }
 
