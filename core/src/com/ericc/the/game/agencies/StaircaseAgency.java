@@ -23,7 +23,7 @@ public class StaircaseAgency implements Agency {
         if (standing != null && Mappers.player.has(standing)) {
             return new TeleportAction(dest);
         } else {
-            return Actions.NOTHING;
+            return Actions.WAIT;
         }
     }
 }

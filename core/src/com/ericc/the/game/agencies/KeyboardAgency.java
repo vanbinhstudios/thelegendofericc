@@ -61,7 +61,8 @@ public class KeyboardAgency implements Agency {
                 return Actions.ATTACK_UP;
             }
         } else if (controller.space) {
-            return Actions.LONG;
+            controller.space = false;
+            return Actions.LONG_WAIT;
         } else {
             return SyncComponent.SYNC;
         }

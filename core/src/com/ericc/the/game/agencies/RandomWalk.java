@@ -9,7 +9,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class RandomWalk implements Agency {
 
     static private final Action[] actions = {Actions.MOVE_DOWN, Actions.MOVE_LEFT,
-            Actions.MOVE_RIGHT, Actions.MOVE_UP, Actions.NOTHING};
+            Actions.MOVE_RIGHT, Actions.MOVE_UP, Actions.WAIT};
 
     @Override
     public Action chooseAction(PositionComponent pos) {

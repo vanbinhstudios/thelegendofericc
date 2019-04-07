@@ -6,7 +6,7 @@ public class SyncComponent extends Action {
     public static final SyncComponent SYNC = new SyncComponent();
 
     @Override
-    public int getBaseTimeCost() {
+    public int getDelay() {
         return 0;
     }
 }

@@ -46,7 +46,7 @@ public class MovementSystem extends IteratingSystem {
             pos.map.entityMap.remove(pos.xy);
             // TODO Decouple animation speed from movement cost
             entity.add(new AnimationComponent(new JumpAnimation(new Vector2(dx, dy),
-                    0.6f, 0.15f)));
+                    0.6f * move.delay / 100, 0.15f * move.delay / 100)));
             pos.xy = pos.xy.shift(dx, dy);
             pos.map.entityMap.put(pos.xy, entity);
         }
