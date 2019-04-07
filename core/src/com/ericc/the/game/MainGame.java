@@ -73,7 +73,7 @@ public class MainGame extends Game {
         gameEngine.addRealtimeSystem(new AnimationSystem(priority++));
         gameEngine.addRealtimeSystem(new TileChanger(.75f, priority++));
         gameEngine.addRealtimeSystem(new CameraSystem(priority++));
-        gameEngine.addRealtimeSystem(new TileFadeSystem(priority++));
+        gameEngine.addRealtimeSystem(new FovFadeSystem(priority++));
         gameEngine.addRealtimeSystem(new DirectedSpritesheetSystem(priority++));
 
         gameEngine.addRealtimeSystem(new RenderSystem(priority++));
