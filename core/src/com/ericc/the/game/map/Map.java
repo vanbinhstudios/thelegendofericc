@@ -112,6 +112,10 @@ public class Map {
         return potentiallyBlocking == null || !Mappers.collision.has(potentiallyBlocking);
     }
 
+    public Entity getEntity(GridPoint xy) {
+        return entityMap.get(xy);
+    }
+
     public int width() {
         return width;
     }

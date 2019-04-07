@@ -14,5 +14,6 @@ public class Mob extends Entity {
         add(new StatsComponent(45, 30, 20));
         add(new AgencyComponent(new RandomWalk()));
         add(new CollisionComponent());
+        add(new HostileComponent());
     }
 }

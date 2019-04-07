@@ -5,14 +5,14 @@ import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.utils.Array;
 import com.ericc.the.game.GameEngine;
 import com.ericc.the.game.Mappers;
-import com.ericc.the.game.components.ActiveComponent;
-import com.ericc.the.game.components.AgencyComponent;
-import com.ericc.the.game.components.StatsComponent;
-import com.ericc.the.game.components.SyncComponent;
+import com.ericc.the.game.components.*;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.PriorityQueue;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 /**
  * Activity System is based on passing an activity token (ActiveComponent).
@@ -32,11 +32,12 @@ public class ActivitySystem extends EntitySystem implements EntityListener {
     private ImmutableArray<Entity> entities;
     private ImmutableArray<Entity> active;
     private ImmutableArray<Entity> synchronizing;
+    private ImmutableArray<Entity> withfixedinitiative;
     private ActiveComponent token = new ActiveComponent();
 
     private Comparator<Entity> timeLeftComparator = Comparator.comparingInt(e -> Mappers.agency.get(e).delay);
     private PriorityQueue<Entity> pending = new PriorityQueue<>(timeLeftComparator);
-    private Array<Entity> actingInThisMoment = new Array<>(false, 512);
+    private ArrayList<Entity> actingInThisMoment = new ArrayList<>(512);
     private GameEngine gameEngine;
 
     public ActivitySystem(GameEngine gameEngine, int priority) {
@@ -46,6 +47,8 @@ public class ActivitySystem extends EntitySystem implements EntityListener {
 
     @Override
     public void addedToEngine(Engine engine) {
+        withfixedinitiative =
+                engine.getEntitiesFor(Family.all(AgencyComponent.class, FixedInitiativeComponent.class).get());
         sapient = engine.getEntitiesFor(Family.all(AgencyComponent.class, StatsComponent.class).get());
         entities = engine.getEntitiesFor(Family.all(AgencyComponent.class).get());
         active = engine.getEntitiesFor(Family.all(ActiveComponent.class).get());
@@ -82,7 +85,7 @@ public class ActivitySystem extends EntitySystem implements EntityListener {
         }
 
         if (!actingInThisMoment.isEmpty()) {
-            Entity entity = actingInThisMoment.pop();
+            Entity entity = actingInThisMoment.remove(0);
             entity.add(token);
         }
     }
@@ -113,7 +116,12 @@ public class ActivitySystem extends EntitySystem implements EntityListener {
                     + ThreadLocalRandom.current().nextInt(1, 20));
         }
 
-        actingInThisMoment.sort(Comparator.comparingInt(a -> Mappers.agency.get(a).initiative));
+        for (Entity entity : withfixedinitiative) {
+            FixedInitiativeComponent initiative = Mappers.fixedInitiative.get(entity);
+            Mappers.agency.get(entity).initiative = initiative.initiative;
+        }
+
+        actingInThisMoment.sort(Comparator.comparingInt((Entity e) -> Mappers.agency.get(e).initiative).reversed());
     }
 
     @Override
@@ -124,6 +132,6 @@ public class ActivitySystem extends EntitySystem implements EntityListener {
     @Override
     public void entityRemoved(Entity entity) {
         pending.remove(entity);
-        actingInThisMoment.removeValue(entity, true);
+        actingInThisMoment.remove(entity);
     }
 }

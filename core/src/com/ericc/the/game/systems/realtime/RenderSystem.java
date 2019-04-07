@@ -82,16 +82,10 @@ public class RenderSystem extends EntitySystem {
                 }
             }
 
-            /*
-            Depth-order the entities.
-            The ordering here is based on the logical position.
-            This might need to change in the future.
-            */
-            visibleEntities.sort((a, b) -> Mappers.position.get(b).xy.y - Mappers.position.get(a).xy.y);
+            // Depth-order the entities.
+            visibleEntities.sort((a, b) -> Mappers.renderable.get(b).zOrder - Mappers.renderable.get(a).zOrder);
 
-            /*
-            Perform the drawing.
-             */
+            // Perform the drawing.
             int entityIndex = 0;
             for (int y = cam.top; y >= cam.bottom; --y) {
                 for (int x = cam.left; x <= cam.right; ++x) {

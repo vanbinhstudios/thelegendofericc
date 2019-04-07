@@ -1,5 +1,6 @@
 package com.ericc.the.game.agencies;
 
+import com.ericc.the.game.Direction;
 import com.ericc.the.game.actions.Action;
 import com.ericc.the.game.actions.Actions;
 import com.ericc.the.game.components.PositionComponent;
@@ -8,8 +9,8 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class RandomWalk implements Agency {
 
-    static private final Action[] actions = {Actions.MOVE_DOWN, Actions.MOVE_LEFT,
-            Actions.MOVE_RIGHT, Actions.MOVE_UP, Actions.WAIT};
+    static private final Action[] actions = {Actions.MOVE(Direction.UP), Actions.MOVE(Direction.RIGHT),
+            Actions.MOVE(Direction.LEFT), Actions.MOVE(Direction.DOWN), Actions.WAIT};
 
     @Override
     public Action chooseAction(PositionComponent pos) {

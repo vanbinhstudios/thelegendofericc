@@ -1,8 +1,24 @@
 package com.ericc.the.game.utils;
 
+import com.ericc.the.game.Direction;
+
 public class GridPoint {
     public final int x;
     public final int y;
+
+    public static GridPoint fromDirection(Direction direction) {
+        switch (direction) {
+            case UP:
+                return new GridPoint(0, 1);
+            case RIGHT:
+                return new GridPoint(1, 0);
+            case DOWN:
+                return new GridPoint(0, -1);
+            case LEFT:
+                return new GridPoint(-1, 0);
+        }
+        throw new AssertionError("Not all directions covered");
+    }
 
     public GridPoint(int x, int y) {
         this.x = x;

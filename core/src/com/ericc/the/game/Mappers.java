@@ -5,6 +5,7 @@ import com.ericc.the.game.actions.AttackAction;
 import com.ericc.the.game.actions.MovementAction;
 import com.ericc.the.game.actions.TeleportAction;
 import com.ericc.the.game.components.*;
+import com.ericc.the.game.utils.RectangularBitset;
 
 
 /**
@@ -23,11 +24,13 @@ public class Mappers {
     public static final ComponentMapper<CollisionComponent> collision = ComponentMapper.getFor(CollisionComponent.class);
     public static final ComponentMapper<PlayerComponent> player = ComponentMapper.getFor(PlayerComponent.class);
     public static final ComponentMapper<DeathComponent> death = ComponentMapper.getFor(DeathComponent.class);
+    public static final ComponentMapper<FixedInitiativeComponent> fixedInitiative =
+            ComponentMapper.getFor(FixedInitiativeComponent.class);
+    public static final ComponentMapper<HostileComponent> hostile = ComponentMapper.getFor(HostileComponent.class);
 
     public static final ComponentMapper<MovementAction> movementAction = ComponentMapper.getFor(MovementAction.class);
     public static final ComponentMapper<TeleportAction> teleport = ComponentMapper.getFor(TeleportAction.class);
     public static final ComponentMapper<AttackAction> attack = ComponentMapper.getFor(AttackAction.class);
     public static final ComponentMapper<ActiveComponent> active = ComponentMapper.getFor(ActiveComponent.class);
     public static final ComponentMapper<SyncComponent> sync = ComponentMapper.getFor(SyncComponent.class);
-
 }
