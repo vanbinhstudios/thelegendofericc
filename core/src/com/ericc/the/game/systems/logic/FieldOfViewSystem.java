@@ -22,8 +22,6 @@ import java.util.List;
  */
 public class FieldOfViewSystem extends EntitySystem {
 
-    private ImmutableArray<Entity> entities; ///< all entities with fov available
-
     // a helper data structure which reduces the code lines to check whether the given
     // position is a visible corner
     public static List<List<GridPoint>> corners =
@@ -45,6 +43,7 @@ public class FieldOfViewSystem extends EntitySystem {
                             new GridPoint(-1, 0)
                     )
             );
+    private ImmutableArray<Entity> entities; ///< all entities with fov available
 
     public FieldOfViewSystem(int priority) {
         super(priority); // Depends on MovementSystem

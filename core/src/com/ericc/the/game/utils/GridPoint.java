@@ -6,6 +6,11 @@ public class GridPoint {
     public final int x;
     public final int y;
 
+    public GridPoint(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
     public static GridPoint fromDirection(Direction direction) {
         switch (direction) {
             case UP:
@@ -18,11 +23,6 @@ public class GridPoint {
                 return new GridPoint(-1, 0);
         }
         throw new AssertionError("Not all directions covered");
-    }
-
-    public GridPoint(int x, int y) {
-        this.x = x;
-        this.y = y;
     }
 
     public GridPoint shift(int x, int y) {

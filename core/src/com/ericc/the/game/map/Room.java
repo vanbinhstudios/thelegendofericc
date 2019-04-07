@@ -4,10 +4,9 @@ import com.ericc.the.game.utils.GridPoint;
 
 public class Room {
 
+    private static int counter = 0;
     private GridPoint leftDownCorner, rightUpperCorner;
     private int id;
-
-    private static int counter = 0;
 
     Room(int x1, int y1, int x2, int y2) {
         this(new GridPoint(x1, y1), new GridPoint(x2, y2));

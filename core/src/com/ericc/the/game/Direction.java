@@ -12,14 +12,14 @@ public enum Direction {
         this.direction = direction;
     }
 
-    public int getValue() {
-        return direction;
-    }
-
     /**
      * @return the number of possible values of this enum
      */
     public static int countValues() {
         return values().length;
+    }
+
+    public int getValue() {
+        return direction;
     }
 }

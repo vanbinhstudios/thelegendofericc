@@ -5,7 +5,6 @@ import com.ericc.the.game.actions.AttackAction;
 import com.ericc.the.game.actions.MovementAction;
 import com.ericc.the.game.actions.TeleportAction;
 import com.ericc.the.game.components.*;
-import com.ericc.the.game.utils.RectangularBitset;
 
 
 /**

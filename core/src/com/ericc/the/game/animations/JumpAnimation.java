@@ -16,11 +16,11 @@ import static java.lang.Float.min;
  * As such, those animations should return transforms relative to their *ending* state!
  */
 public class JumpAnimation implements Animation {
+    private final Affine2 transform = new Affine2();
     private Vector2 startPosition;
     private float time;
     private float duration;
     private float height;
-    private final Affine2 transform = new Affine2();
     private boolean done = false;
 
     /**

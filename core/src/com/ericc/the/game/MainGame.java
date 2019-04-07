@@ -18,20 +18,16 @@ import com.ericc.the.game.systems.realtime.*;
 
 public class MainGame extends Game {
 
+    public final static boolean DEBUG = true; ///< turns the debug mode on and off
+    private final static int viewportWidth = 24;
+    private final static int viewportHeight = 18;
+    private final static boolean MUSIC = false; ///< turns the music on and off
     private KeyboardController controls;
     private OrthographicCamera camera;
     private Viewport viewport;
-    private final static int viewportWidth = 24;
-    private final static int viewportHeight = 18;
-
     private Dungeon dungeon;
     private Player player;
-
     private GameEngine gameEngine = new GameEngine();
-
-    public final static boolean DEBUG = true; ///< turns the debug mode on and off
-    private final static boolean MUSIC = false; ///< turns the music on and off
-
     private FpsThrottle fpsThrottle = new FpsThrottle(60);
 
     @Override

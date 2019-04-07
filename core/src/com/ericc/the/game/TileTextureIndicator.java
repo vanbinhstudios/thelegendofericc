@@ -17,14 +17,14 @@ public enum TileTextureIndicator {
         this.direction = direction;
     }
 
-    public int getValue() {
-        return direction;
-    }
-
     /**
      * @return the number of possible values of this enum
      */
     public static int countValues() {
         return 5;
+    }
+
+    public int getValue() {
+        return direction;
     }
 }

@@ -2,17 +2,14 @@ package com.ericc.the.game.systems.logic;
 
 import com.badlogic.ashley.core.*;
 import com.badlogic.ashley.utils.ImmutableArray;
-import com.badlogic.gdx.utils.Array;
 import com.ericc.the.game.GameEngine;
 import com.ericc.the.game.Mappers;
 import com.ericc.the.game.components.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.PriorityQueue;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.stream.Collectors;
 
 /**
  * Activity System is based on passing an activity token (ActiveComponent).

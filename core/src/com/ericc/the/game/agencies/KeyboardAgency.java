@@ -54,7 +54,7 @@ public class KeyboardAgency implements Agency {
             return handleDirectionalInput(pos, Direction.DOWN);
         } else if (controller.up) {
             controller.up = false;
-           return handleDirectionalInput(pos, Direction.UP);
+            return handleDirectionalInput(pos, Direction.UP);
         } else if (controller.space) {
             controller.space = false;
             return Actions.LONG_WAIT;

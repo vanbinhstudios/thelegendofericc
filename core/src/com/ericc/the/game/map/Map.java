@@ -17,22 +17,19 @@ import java.util.HashSet;
 
 public class Map {
 
-    private int width, height;
-    private RectangularBitset map;
+    public final HashMap<GridPoint, Entity> entityMap = new HashMap<>();
     public float[][] brightness;
     public float[][] saturation;
+    public GridPoint entrance;
+    public GridPoint exit;
+    private int width, height;
+    private RectangularBitset map;
     private int[][][] randomTileNumber;
     private int[][][] randomClutterNumber;
-
     private HashSet<GridPoint> passableTiles; ///< stores every passable tile in a map (AFTER THE FIRST GENERATION)
     // the above is NOT AN INVARIANT, this changes after spawning some entities on some tiles from this collection
     private HashSet<Room> rooms; ///< stores every room made while generating (without corridors)
-    public final HashMap<GridPoint, Entity> entityMap = new HashMap<>();
-
-
     private FogOfWar fogOfWar;
-    public GridPoint entrance;
-    public GridPoint exit;
 
     Map(int width, int height) {
         this.width = width;

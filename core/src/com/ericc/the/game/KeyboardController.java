@@ -7,18 +7,18 @@ import com.ericc.the.game.helpers.CameraZoom;
 
 public class KeyboardController extends InputAdapter {
 
+    public boolean up, down, left, right, space;
     private GameEngine engines;
     private CameraZoom zoom;
-    public boolean up, down, left, right, space;
-
-    public void clean() {
-        up = down = left = right = space = false;
-    }
 
     public KeyboardController(GameEngine engines, OrthographicCamera camera) {
         this.engines = engines;
         this.zoom = new CameraZoom(camera);
         clean();
+    }
+
+    public void clean() {
+        up = down = left = right = space = false;
     }
 
     @Override
