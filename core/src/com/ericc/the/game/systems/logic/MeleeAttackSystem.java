@@ -23,17 +23,7 @@ public class MeleeAttackSystem extends IteratingSystem {
 
         pos.direction = move.direction;
 
-        GridPoint attackPosition;
-
-        if (move.direction == Direction.LEFT) {
-            attackPosition = pos.xy.shift(-1, 0);
-        } else if (move.direction == Direction.RIGHT) {
-            attackPosition = pos.xy.shift(1, 0);
-        } else if (move.direction == Direction.UP) {
-            attackPosition = pos.xy.shift(0, 1);
-        } else {
-            attackPosition = pos.xy.shift(0, -1);
-        }
+        GridPoint attackPosition = pos.xy.add(GridPoint.fromDirection(move.direction));
 
         if (pos.map.hasAnimationDependency(attackPosition)) {
             entity.add(SyncComponent.SYNC);

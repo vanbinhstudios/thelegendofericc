@@ -92,12 +92,20 @@ public class Map {
         return x >= 0 && x < width && y >= 0 && y < height;
     }
 
+    public boolean inBoundaries(GridPoint xy) {
+        return inBoundaries(xy.x, xy.y);
+    }
+
     public boolean isFloor(int x, int y) {
         if (!inBoundaries(x, y)) {
             return false;
         }
 
         return map.get(x, y);
+    }
+
+    public boolean isFloor(GridPoint xy) {
+        return isFloor(xy.x, xy.y);
     }
 
     public boolean isPassable(int x, int y) {
@@ -107,6 +115,10 @@ public class Map {
 
         Entity potentiallyBlocking = entityMap.get(new GridPoint(x, y));
         return potentiallyBlocking == null || !Mappers.collision.has(potentiallyBlocking);
+    }
+
+    public boolean isPassable(GridPoint xy) {
+        return isPassable(xy.x, xy.y);
     }
 
     public Entity getEntity(GridPoint xy) {
