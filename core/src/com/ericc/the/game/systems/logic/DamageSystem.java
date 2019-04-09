@@ -18,12 +18,12 @@ public class DamageSystem extends IteratingSystem {
         int damage = Mappers.damage.get(attack).damage;
         Entity subject = pos.map.entityMap.get(pos.xy);
 
-        // Target tile has a hittable entity standing on it (non-player and posessing statistics)
+        // Target tile has a hittable entity standing on it (non-player and possessing statistics)
         if (subject != null && !Mappers.player.has(subject) && Mappers.stats.has(subject)) {
             StatsComponent stats = Mappers.stats.get(subject);
 
             System.out.print("Initial HP: " + stats.health + " ");
-            stats.takeDamage(damage);
+            takeDamage(stats, damage);
             System.out.print("Final HP: " + stats.health + "\n");
 
             if (stats.health <= 0) {
@@ -41,5 +41,12 @@ public class DamageSystem extends IteratingSystem {
         subject.add(new AnimationComponent(
                 new DeathAnimation(1 / 0.8f, true, 0.5f)));
         subject.add(new DeathComponent());
+    }
+
+    // Wrapped in a method since the damage calculation will most likely become
+    // more complicated when armor / damage types and other factors that change
+    // the base damage value roll in.
+    private void takeDamage(StatsComponent stats, int damage) {
+        stats.health -= damage;
     }
 }

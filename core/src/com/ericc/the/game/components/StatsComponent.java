@@ -16,8 +16,4 @@ public class StatsComponent implements Component {
         this.maxHealth = health;
         this.health = this.maxHealth;
     }
-
-    public void takeDamage(int damage) {
-        this.health -= damage;
-    }
 }
