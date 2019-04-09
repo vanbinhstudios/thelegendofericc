@@ -21,8 +21,9 @@ public class GridPoint {
                 return new GridPoint(0, -1);
             case LEFT:
                 return new GridPoint(-1, 0);
+            default:
+                throw new AssertionError("Not all directions covered");
         }
-        throw new AssertionError("Not all directions covered");
     }
 
     public GridPoint shift(int x, int y) {
