@@ -1,13 +1,13 @@
 package com.ericc.the.game.map;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.MathUtils;
 import com.ericc.the.game.Mappers;
 import com.ericc.the.game.Media;
 import com.ericc.the.game.TileTextureIndicator;
-import com.ericc.the.game.components.PositionComponent;
+import com.ericc.the.game.components.AnimationComponent;
 import com.ericc.the.game.helpers.FogOfWar;
+import com.ericc.the.game.utils.GridPoint;
 import com.ericc.the.game.utils.RectangularBitset;
 
 import java.util.ArrayList;
@@ -17,24 +17,19 @@ import java.util.HashSet;
 
 public class Map {
 
-    private final GridPoint2 tmpGridPoint2 = new GridPoint2();
-
-    private int width, height;
-    private RectangularBitset map;
+    public final HashMap<GridPoint, Entity> entityMap = new HashMap<>();
     public float[][] brightness;
     public float[][] saturation;
+    public GridPoint entrance;
+    public GridPoint exit;
+    private int width, height;
+    private RectangularBitset map;
     private int[][][] randomTileNumber;
     private int[][][] randomClutterNumber;
-
-    private HashSet<GridPoint2> passableTiles; ///< stores every passable tile in a map (AFTER THE FIRST GENERATION)
+    private HashSet<GridPoint> passableTiles; ///< stores every passable tile in a map (AFTER THE FIRST GENERATION)
     // the above is NOT AN INVARIANT, this changes after spawning some entities on some tiles from this collection
     private HashSet<Room> rooms; ///< stores every room made while generating (without corridors)
-    public final HashMap<GridPoint2, Entity> entityMap = new HashMap<>();
-
-
     private FogOfWar fogOfWar;
-    public GridPoint2 entrance;
-    public GridPoint2 exit;
 
     Map(int width, int height) {
         this.width = width;
@@ -74,7 +69,7 @@ public class Map {
         map.set(x, y);
 
         if (passable) {
-            passableTiles.add(new GridPoint2(x, y));
+            passableTiles.add(new GridPoint(x, y));
         }
     }
 
@@ -97,8 +92,8 @@ public class Map {
         return x >= 0 && x < width && y >= 0 && y < height;
     }
 
-    public boolean inBoundaries(GridPoint2 pos) {
-        return inBoundaries(pos.x, pos.y);
+    public boolean inBoundaries(GridPoint xy) {
+        return inBoundaries(xy.x, xy.y);
     }
 
     public boolean isFloor(int x, int y) {
@@ -109,14 +104,25 @@ public class Map {
         return map.get(x, y);
     }
 
+    public boolean isFloor(GridPoint xy) {
+        return isFloor(xy.x, xy.y);
+    }
+
     public boolean isPassable(int x, int y) {
         if (!isFloor(x, y)) {
             return false;
         }
-        tmpGridPoint2.x = x;
-        tmpGridPoint2.y = y;
-        Entity potentiallyBlocking = entityMap.get(tmpGridPoint2);
+
+        Entity potentiallyBlocking = entityMap.get(new GridPoint(x, y));
         return potentiallyBlocking == null || !Mappers.collision.has(potentiallyBlocking);
+    }
+
+    public boolean isPassable(GridPoint xy) {
+        return isPassable(xy.x, xy.y);
+    }
+
+    public Entity getEntity(GridPoint xy) {
+        return entityMap.get(xy);
     }
 
     public int width() {
@@ -133,8 +139,8 @@ public class Map {
      * DISCLAIMER:
      * It does REMOVE the passable tile it is going to return from the passableTiles collection!
      */
-    public GridPoint2 getRandomPassableTile() {
-        GridPoint2 ret;
+    public GridPoint getRandomPassableTile() {
+        GridPoint ret;
 
         try {
             ret = passableTiles.iterator().next();
@@ -151,7 +157,7 @@ public class Map {
      * Returns random passable tile from any room which minimal dimension is
      * greater than 2. (This random passable tile for now is the right upper corner)
      */
-    public GridPoint2 getRandomPassableTileFromRooms() {
+    public GridPoint getRandomPassableTileFromRooms() {
         ArrayList<Room> roomsListed = new ArrayList<>(rooms);
         Room randomRoom = roomsListed.get(MathUtils.random(roomsListed.size() - 1));
         int ctr = 0;
@@ -176,11 +182,11 @@ public class Map {
      * Registers stairs in this map, determines whether that stairs are ascending or descending
      * and puts the entrance / exit in that position.
      */
-    public void registerStairs(PositionComponent pos, StaircaseDestination dest) {
+    public void registerStairs(GridPoint xy, StaircaseDestination dest) {
         if (dest == StaircaseDestination.DESCENDING) {
-            this.exit = new GridPoint2(pos.x, pos.y);
+            this.exit = xy;
         } else {
-            this.entrance = new GridPoint2(pos.x, pos.y);
+            this.entrance = xy;
         }
     }
 
@@ -214,5 +220,15 @@ public class Map {
                 }
             }
         }
+    }
+
+    public boolean hasAnimationDependency(GridPoint xy) {
+        Entity potentiallyBlocking = entityMap.get(xy);
+        if (potentiallyBlocking == null)
+            return false;
+        AnimationComponent animation = Mappers.animation.get(potentiallyBlocking);
+        if (animation == null)
+            return false;
+        return animation.animation.isBlocking() && !animation.animation.isOver();
     }
 }

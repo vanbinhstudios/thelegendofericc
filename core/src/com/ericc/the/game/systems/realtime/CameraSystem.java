@@ -12,8 +12,7 @@ import com.ericc.the.game.Mappers;
 import com.ericc.the.game.components.CameraComponent;
 import com.ericc.the.game.components.PositionComponent;
 
-import static java.lang.Integer.max;
-import static java.lang.Integer.min;
+import static com.badlogic.gdx.math.MathUtils.clamp;
 
 /**
  * This system is responsible for updating the screen boundaries
@@ -44,22 +43,16 @@ public class CameraSystem extends EntitySystem {
             PositionComponent pos = Mappers.position.get(viewer);
 
             Vector2 topLeft = cam.viewport.unproject(new Vector2(0, 0));
-            cam.top = clamp(0, (int) topLeft.y, pos.map.height() - 1);
-            cam.left = clamp(0, (int) topLeft.x, pos.map.width() - 1);
+            cam.top = clamp((int) topLeft.y, 0, pos.map.height() - 1);
+            cam.left = clamp((int) topLeft.x, 0, pos.map.width() - 1);
 
             Vector2 bottomRight = cam.viewport.unproject(new Vector2(cam.viewport.getScreenWidth(), cam.viewport.getScreenHeight()));
-            cam.bottom = clamp(0, (int) bottomRight.y - 1, pos.map.height() - 1);
-            cam.right = clamp(0, (int) bottomRight.x, pos.map.width() - 1);
+            cam.bottom = clamp((int) bottomRight.y - 1, 0, pos.map.height() - 1);
+            cam.right = clamp((int) bottomRight.x, 0, pos.map.width() - 1);
 
-            cam.viewport.getCamera().position.lerp(new Vector3(pos.x, pos.y, 0),
+            cam.viewport.getCamera().position.lerp(new Vector3(pos.getX(), pos.getY(), 0),
                     1 - (float) Math.pow(.1f, Gdx.graphics.getDeltaTime()));
             cam.viewport.getCamera().update();
         }
-    }
-
-    private int clamp(int lowerBound, int x, int upperBound) {
-        x = min(x, upperBound);
-        x = max(x, lowerBound);
-        return x;
     }
 }

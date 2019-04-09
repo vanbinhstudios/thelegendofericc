@@ -14,7 +14,7 @@ import com.ericc.the.game.components.*;
  */
 public class Mappers {
     public static final ComponentMapper<PositionComponent> position = ComponentMapper.getFor(PositionComponent.class);
-    public static final ComponentMapper<AffineAnimationComponent> affineAnimation = ComponentMapper.getFor(AffineAnimationComponent.class);
+    public static final ComponentMapper<AnimationComponent> animation = ComponentMapper.getFor(AnimationComponent.class);
     public static final ComponentMapper<RenderableComponent> renderable = ComponentMapper.getFor(RenderableComponent.class);
     public static final ComponentMapper<FieldOfViewComponent> fov = ComponentMapper.getFor(FieldOfViewComponent.class);
     public static final ComponentMapper<StatsComponent> stats = ComponentMapper.getFor(StatsComponent.class);
@@ -23,8 +23,13 @@ public class Mappers {
     public static final ComponentMapper<CollisionComponent> collision = ComponentMapper.getFor(CollisionComponent.class);
     public static final ComponentMapper<PlayerComponent> player = ComponentMapper.getFor(PlayerComponent.class);
     public static final ComponentMapper<DeathComponent> death = ComponentMapper.getFor(DeathComponent.class);
+    public static final ComponentMapper<FixedInitiativeComponent> fixedInitiative =
+            ComponentMapper.getFor(FixedInitiativeComponent.class);
+    public static final ComponentMapper<HostileComponent> hostile = ComponentMapper.getFor(HostileComponent.class);
 
     public static final ComponentMapper<MovementAction> movementAction = ComponentMapper.getFor(MovementAction.class);
     public static final ComponentMapper<TeleportAction> teleport = ComponentMapper.getFor(TeleportAction.class);
     public static final ComponentMapper<AttackAction> attack = ComponentMapper.getFor(AttackAction.class);
+    public static final ComponentMapper<ActiveComponent> active = ComponentMapper.getFor(ActiveComponent.class);
+    public static final ComponentMapper<SyncComponent> sync = ComponentMapper.getFor(SyncComponent.class);
 }

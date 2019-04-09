@@ -3,12 +3,12 @@ package com.ericc.the.game.map;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
-import com.badlogic.gdx.math.GridPoint2;
 import com.ericc.the.game.GameEngine;
 import com.ericc.the.game.Mappers;
 import com.ericc.the.game.components.PlayerComponent;
 import com.ericc.the.game.components.PositionComponent;
 import com.ericc.the.game.helpers.Moves;
+import com.ericc.the.game.utils.GridPoint;
 import com.ericc.the.game.utils.ImmutableArrayUtils;
 
 import java.util.ArrayList;
@@ -64,19 +64,17 @@ public class Dungeon {
         engines.removeFamily(notPlayersFamily);
     }
 
-    private void placeEntity(Entity entity, GridPoint2 desiredPosition, Map map) {
+    private void placeEntity(Entity entity, GridPoint desiredPosition, Map map) {
         PositionComponent entityPosition = Mappers.position.get(entity);
 
-        for (GridPoint2 move : Moves.moves) {
-            int x = desiredPosition.x + move.x;
-            int y = desiredPosition.y + move.y;
+        for (GridPoint move : Moves.moves) {
+            GridPoint newPosition = desiredPosition.add(move);
 
-            if (map.isFloor(x, y)) {
-                entityPosition.map.entityMap.remove(new GridPoint2(entityPosition.x, entityPosition.y));
-                entityPosition.x = x;
-                entityPosition.y = y;
+            if (map.isFloor(newPosition.x, newPosition.y)) {
+                entityPosition.map.entityMap.remove(entityPosition.xy);
+                entityPosition.xy = newPosition;
                 entityPosition.map = map;
-                entityPosition.map.entityMap.put(new GridPoint2(x, y), entity);
+                entityPosition.map.entityMap.put(newPosition, entity);
                 return;
             }
         }
@@ -88,7 +86,7 @@ public class Dungeon {
     private void placePlayer(InitialPlayerPosition positionType, Map map) {
         Family family = Family.all(PlayerComponent.class).get();
         for (Entity entity : engines.getEntitiesFor(family)) {
-            GridPoint2 position = null;
+            GridPoint position = null;
             switch (positionType) {
                 case LEVEL_EXIT:
                     position = levels.get(currentLevelNumber).getMap().exit;

@@ -18,20 +18,16 @@ import com.ericc.the.game.systems.realtime.*;
 
 public class MainGame extends Game {
 
+    public final static boolean DEBUG = true; ///< turns the debug mode on and off
+    private final static int viewportWidth = 24;
+    private final static int viewportHeight = 18;
+    private final static boolean MUSIC = false; ///< turns the music on and off
     private KeyboardController controls;
     private OrthographicCamera camera;
     private Viewport viewport;
-    private final static int viewportWidth = 24;
-    private final static int viewportHeight = 18;
-
     private Dungeon dungeon;
     private Player player;
-
     private GameEngine gameEngine = new GameEngine();
-
-    public final static boolean DEBUG = true; ///< turns the debug mode on and off
-    private final static boolean MUSIC = false; ///< turns the music on and off
-
     private FpsThrottle fpsThrottle = new FpsThrottle(60);
 
     @Override
@@ -59,21 +55,23 @@ public class MainGame extends Game {
         gameEngine.addEntity(player);
 
         int priority = 0;
+        gameEngine.addLogicSystem(new DeathSystem(priority++));
         gameEngine.addLogicSystem(new ActivitySystem(gameEngine, priority++));
         gameEngine.addLogicSystem(new AgencySystem(priority++));
         gameEngine.addLogicSystem(new MeleeAttackSystem(priority++));
-        gameEngine.addLogicSystem(new MovementSystem(priority++));
         gameEngine.addLogicSystem(new TeleportSystem(dungeon, priority++));
+        gameEngine.addLogicSystem(new MovementSystem(priority++));
         gameEngine.addLogicSystem(new DamageSystem(priority++));
         gameEngine.addLogicSystem(new FieldOfViewSystem(priority++));
         gameEngine.addLogicSystem(new FogOfWarSystem(priority++));
         gameEngine.addLogicSystem(new EntityMapSystem());
 
+        gameEngine.addRealtimeSystem(new AnimationSystem(priority++));
         gameEngine.addRealtimeSystem(new TileChanger(.75f, priority++));
         gameEngine.addRealtimeSystem(new CameraSystem(priority++));
-        gameEngine.addRealtimeSystem(new FadeSystem(priority++));
-        gameEngine.addRealtimeSystem(new DeathSystem(priority++));
-        gameEngine.addRealtimeSystem(new AnimationSystem(priority++));
+        gameEngine.addRealtimeSystem(new FovFadeSystem(priority++));
+        gameEngine.addRealtimeSystem(new DirectedSpritesheetSystem(priority++));
+
         gameEngine.addRealtimeSystem(new RenderSystem(priority++));
 
         gameEngine.getSystem(FieldOfViewSystem.class).update(0);
@@ -88,7 +86,7 @@ public class MainGame extends Game {
 
     @Override
     public void render() {
-        gameEngine.updateRealtimeEngine();
+        gameEngine.update();
         fpsThrottle.sleepToNextFrame();
     }
 

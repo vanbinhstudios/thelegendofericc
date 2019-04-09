@@ -11,11 +11,11 @@ import com.ericc.the.game.components.*;
 import static java.lang.Float.max;
 import static java.lang.Float.min;
 
-public class FadeSystem extends EntitySystem {
+public class FovFadeSystem extends EntitySystem {
     private ImmutableArray<Entity> entities;
     private ImmutableArray<Entity> players;
 
-    public FadeSystem(int priority) {
+    public FovFadeSystem(int priority) {
         super(priority);
     }
 
@@ -38,7 +38,7 @@ public class FadeSystem extends EntitySystem {
 
             for (Entity player : players) {
                 FieldOfViewComponent fov = Mappers.fov.get(player);
-                targetBrightness = max(targetBrightness, fov.visibility.get(pos.x, pos.y) ? 1.0f : 0.3f);
+                targetBrightness = max(targetBrightness, fov.visibility.get(pos.getX(), pos.getY()) ? 1.0f : 0.3f);
             }
 
             render.brightness = converge(render.brightness, targetBrightness, deltaTime * fadingSpeed);

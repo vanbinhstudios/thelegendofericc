@@ -8,4 +8,9 @@ public class AttackAction extends Action {
     public AttackAction(Direction direction) {
         this.direction = direction;
     }
+
+    @Override
+    public int getDelay() {
+        return 100;
+    }
 }

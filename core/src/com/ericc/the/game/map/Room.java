@@ -1,19 +1,18 @@
 package com.ericc.the.game.map;
 
-import com.badlogic.gdx.math.GridPoint2;
+import com.ericc.the.game.utils.GridPoint;
 
 public class Room {
 
-    private GridPoint2 leftDownCorner, rightUpperCorner;
+    private static int counter = 0;
+    private GridPoint leftDownCorner, rightUpperCorner;
     private int id;
 
-    private static int counter = 0;
-
     Room(int x1, int y1, int x2, int y2) {
-        this(new GridPoint2(x1, y1), new GridPoint2(x2, y2));
+        this(new GridPoint(x1, y1), new GridPoint(x2, y2));
     }
 
-    Room(GridPoint2 leftDownCorner, GridPoint2 rightUpperCorner) {
+    Room(GridPoint leftDownCorner, GridPoint rightUpperCorner) {
         this.leftDownCorner = leftDownCorner;
         this.rightUpperCorner = rightUpperCorner;
 
@@ -21,16 +20,16 @@ public class Room {
         id = counter;
     }
 
-    public GridPoint2 getCentre() {
-        return new GridPoint2((leftDownCorner.x + rightUpperCorner.x) / 2,
+    public GridPoint getCentre() {
+        return new GridPoint((leftDownCorner.x + rightUpperCorner.x) / 2,
                 (leftDownCorner.y + rightUpperCorner.y) / 2);
     }
 
-    public GridPoint2 getLeftDownCorner() {
+    public GridPoint getLeftDownCorner() {
         return leftDownCorner;
     }
 
-    public GridPoint2 getRightUpperCorner() {
+    public GridPoint getRightUpperCorner() {
         return rightUpperCorner;
     }
 

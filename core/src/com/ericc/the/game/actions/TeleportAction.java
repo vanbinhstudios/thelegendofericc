@@ -8,4 +8,9 @@ public class TeleportAction extends Action {
     public TeleportAction(StaircaseDestination dest) {
         this.dest = dest;
     }
+
+    @Override
+    public int getDelay() {
+        return 0;
+    }
 }

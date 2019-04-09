@@ -1,10 +1,10 @@
 package com.ericc.the.game.entities;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.math.GridPoint2;
 import com.ericc.the.game.Models;
 import com.ericc.the.game.components.*;
 import com.ericc.the.game.map.Map;
+import com.ericc.the.game.utils.GridPoint;
 
 /**
  * A mishmash for prototyping. This class should be broken down as soon as proper Actor systems are introduced.
@@ -13,8 +13,8 @@ public class Player extends Entity {
     public PositionComponent pos;
     private RenderableComponent renderable;
 
-    public Player(int x, int y, Map map, FieldOfViewComponent fov, CameraComponent camera, AgencyComponent agency) {
-        pos = new PositionComponent(x, y, map);
+    public Player(GridPoint xy, Map map, FieldOfViewComponent fov, CameraComponent camera, AgencyComponent agency) {
+        pos = new PositionComponent(xy, map);
         renderable = new RenderableComponent(Models.hero);
         add(pos);
         add(renderable);
@@ -24,9 +24,5 @@ public class Player extends Entity {
         add(new CollisionComponent());
         add(agency);
         add(camera);
-    }
-
-    public Player(GridPoint2 pos, Map map, FieldOfViewComponent fov, CameraComponent camera, AgencyComponent agency) {
-        this(pos.x, pos.y, map, fov, camera, agency);
     }
 }

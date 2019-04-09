@@ -1,7 +1,6 @@
 package com.ericc.the.game.agencies;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.math.GridPoint2;
 import com.ericc.the.game.Mappers;
 import com.ericc.the.game.actions.Action;
 import com.ericc.the.game.actions.Actions;
@@ -20,7 +19,7 @@ public class StaircaseAgency implements Agency {
 
     @Override
     public Action chooseAction(PositionComponent pos) {
-        Entity standing = pos.map.entityMap.get(new GridPoint2(pos.x, pos.y));
+        Entity standing = pos.map.entityMap.get(pos.xy);
         if (standing != null && Mappers.player.has(standing)) {
             return new TeleportAction(dest);
         } else {
