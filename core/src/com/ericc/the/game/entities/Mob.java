@@ -11,7 +11,7 @@ public class Mob extends Entity {
     public Mob(GridPoint xy, Map map) {
         add(new PositionComponent(xy, map));
         add(new RenderableComponent(Models.mage));
-        add(new StatsComponent(45, 30, 20));
+        add(new StatsComponent(45, 30, 20, 120));
         add(new AgencyComponent(new RandomWalk()));
         add(new CollisionComponent());
         add(new HostileComponent());

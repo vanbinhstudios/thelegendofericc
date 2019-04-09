@@ -19,6 +19,7 @@ public class MeleeAttackSystem extends IteratingSystem {
     protected void processEntity(Entity entity, float deltaTime) {
         PositionComponent pos = Mappers.position.get(entity);
         AttackAction move = Mappers.attack.get(entity);
+        int power = Mappers.stats.get(entity).strength;
 
         pos.direction = move.direction;
 
@@ -29,7 +30,7 @@ public class MeleeAttackSystem extends IteratingSystem {
             return;
         }
 
-        getEngine().addEntity(new Attack(attackPosition, pos.map, move.direction));
+        getEngine().addEntity(new Attack(attackPosition, pos.map, move.direction, power));
 
         entity.remove(AttackAction.class);
     }

@@ -26,6 +26,7 @@ public class Mappers {
     public static final ComponentMapper<FixedInitiativeComponent> fixedInitiative =
             ComponentMapper.getFor(FixedInitiativeComponent.class);
     public static final ComponentMapper<HostileComponent> hostile = ComponentMapper.getFor(HostileComponent.class);
+    public static final ComponentMapper<DamageComponent> damage = ComponentMapper.getFor(DamageComponent.class);
 
     public static final ComponentMapper<MovementAction> movementAction = ComponentMapper.getFor(MovementAction.class);
     public static final ComponentMapper<TeleportAction> teleport = ComponentMapper.getFor(TeleportAction.class);

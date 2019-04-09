@@ -15,6 +15,5 @@ public class PushableObject extends Entity {
         add(new PositionComponent(xy, map));
         add(new CollisionComponent());
         add(renderable);
-        add(new HostileComponent());
     }
 }
