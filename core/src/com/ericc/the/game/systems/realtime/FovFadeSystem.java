@@ -11,11 +11,11 @@ import com.ericc.the.game.components.*;
 import static java.lang.Float.max;
 import static java.lang.Float.min;
 
-public class FadeSystem extends EntitySystem {
+public class FovFadeSystem extends EntitySystem {
     private ImmutableArray<Entity> entities;
     private ImmutableArray<Entity> players;
 
-    public FadeSystem(int priority) {
+    public FovFadeSystem(int priority) {
         super(priority);
     }
 

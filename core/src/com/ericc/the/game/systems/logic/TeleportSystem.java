@@ -7,6 +7,7 @@ import com.ericc.the.game.Mappers;
 import com.ericc.the.game.actions.TeleportAction;
 import com.ericc.the.game.components.FieldOfViewComponent;
 import com.ericc.the.game.components.PositionComponent;
+import com.ericc.the.game.components.SyncComponent;
 import com.ericc.the.game.map.Dungeon;
 import com.ericc.the.game.map.InitialPlayerPosition;
 import com.ericc.the.game.map.StaircaseDestination;
@@ -24,6 +25,11 @@ public class TeleportSystem extends IteratingSystem {
     protected void processEntity(Entity teleporter, float deltaTime) {
         PositionComponent pos = Mappers.position.get(teleporter);
         TeleportAction tp = Mappers.teleport.get(teleporter);
+        if (pos.map.hasAnimationDependency(pos.xy)) {
+            teleporter.add(SyncComponent.SYNC);
+            return;
+        }
+
 
         Entity subject = pos.map.entityMap.get(pos.xy);
         if (subject == null || !Mappers.player.has(subject)) {

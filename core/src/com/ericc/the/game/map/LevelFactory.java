@@ -8,14 +8,14 @@ import com.ericc.the.game.entities.Stairs;
 import java.util.ArrayList;
 
 public class LevelFactory {
-    private final static int ROOM_WIDTH = 40;
-    private final static int ROOM_HEIGHT = 40;
+    private final static int MAP_WIDTH = 16;
+    private final static int MAP_HEIGHT = 16;
     private final static int ROOM_SIZE = 10;
-    private final static int MOBS_COUNT = 20;
-    private final static int CRATES_COUNT = 10;
+    private final static int MOBS_COUNT = 3;
+    private final static int CRATES_COUNT = 3;
 
     public static Level generate(int levelNumber) {
-        Map map = new MapGenerator(ROOM_WIDTH, ROOM_HEIGHT, ROOM_SIZE).generateMap();
+        Map map = new MapGenerator(MAP_WIDTH, MAP_HEIGHT, ROOM_SIZE).generateMap();
 
         ArrayList<Entity> entities = new ArrayList<>();
         for (int i = 0; i < MOBS_COUNT; i++) {

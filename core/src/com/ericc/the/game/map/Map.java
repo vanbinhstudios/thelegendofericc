@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.ericc.the.game.Mappers;
 import com.ericc.the.game.Media;
 import com.ericc.the.game.TileTextureIndicator;
+import com.ericc.the.game.components.AnimationComponent;
 import com.ericc.the.game.helpers.FogOfWar;
 import com.ericc.the.game.utils.GridPoint;
 import com.ericc.the.game.utils.RectangularBitset;
@@ -16,22 +17,19 @@ import java.util.HashSet;
 
 public class Map {
 
-    private int width, height;
-    private RectangularBitset map;
+    public final HashMap<GridPoint, Entity> entityMap = new HashMap<>();
     public float[][] brightness;
     public float[][] saturation;
+    public GridPoint entrance;
+    public GridPoint exit;
+    private int width, height;
+    private RectangularBitset map;
     private int[][][] randomTileNumber;
     private int[][][] randomClutterNumber;
-
     private HashSet<GridPoint> passableTiles; ///< stores every passable tile in a map (AFTER THE FIRST GENERATION)
     // the above is NOT AN INVARIANT, this changes after spawning some entities on some tiles from this collection
     private HashSet<Room> rooms; ///< stores every room made while generating (without corridors)
-    public final HashMap<GridPoint, Entity> entityMap = new HashMap<>();
-
-
     private FogOfWar fogOfWar;
-    public GridPoint entrance;
-    public GridPoint exit;
 
     Map(int width, int height) {
         this.width = width;
@@ -94,12 +92,20 @@ public class Map {
         return x >= 0 && x < width && y >= 0 && y < height;
     }
 
+    public boolean inBoundaries(GridPoint xy) {
+        return inBoundaries(xy.x, xy.y);
+    }
+
     public boolean isFloor(int x, int y) {
         if (!inBoundaries(x, y)) {
             return false;
         }
 
         return map.get(x, y);
+    }
+
+    public boolean isFloor(GridPoint xy) {
+        return isFloor(xy.x, xy.y);
     }
 
     public boolean isPassable(int x, int y) {
@@ -109,6 +115,14 @@ public class Map {
 
         Entity potentiallyBlocking = entityMap.get(new GridPoint(x, y));
         return potentiallyBlocking == null || !Mappers.collision.has(potentiallyBlocking);
+    }
+
+    public boolean isPassable(GridPoint xy) {
+        return isPassable(xy.x, xy.y);
+    }
+
+    public Entity getEntity(GridPoint xy) {
+        return entityMap.get(xy);
     }
 
     public int width() {
@@ -206,5 +220,15 @@ public class Map {
                 }
             }
         }
+    }
+
+    public boolean hasAnimationDependency(GridPoint xy) {
+        Entity potentiallyBlocking = entityMap.get(xy);
+        if (potentiallyBlocking == null)
+            return false;
+        AnimationComponent animation = Mappers.animation.get(potentiallyBlocking);
+        if (animation == null)
+            return false;
+        return animation.animation.isBlocking() && !animation.animation.isOver();
     }
 }
