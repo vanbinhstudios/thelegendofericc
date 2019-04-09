@@ -1,23 +1,27 @@
 package com.ericc.the.game.entities;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.math.GridPoint2;
 import com.ericc.the.game.Models;
-import com.ericc.the.game.actions.Actions;
-import com.ericc.the.game.components.*;
+import com.ericc.the.game.agencies.StaircaseAgency;
+import com.ericc.the.game.components.AgencyComponent;
+import com.ericc.the.game.components.FixedInitiativeComponent;
+import com.ericc.the.game.components.PositionComponent;
+import com.ericc.the.game.components.RenderableComponent;
+import com.ericc.the.game.map.Map;
 import com.ericc.the.game.map.StaircaseDestination;
+import com.ericc.the.game.utils.GridPoint;
 
 public class Stairs extends Entity {
-    public Stairs(int x, int y, StaircaseDestination destination) {
-        add(new PositionComponent(x, y));
-        add(new RenderableComponent(destination == StaircaseDestination.DESCENDING ? Models.stairsDown : Models.stairsUp));
-        add(new CurrentActionComponent(Actions.NOTHING));
-        add(new InteractivityComponent());
-        add(new OneSidedComponent());
-        add(new StaircaseDestinationComponent(destination));
-    }
+    public PositionComponent pos;
 
-    public Stairs(GridPoint2 pos, StaircaseDestination destination) {
-        this(pos.x, pos.y, destination);
+    public Stairs(GridPoint xy, Map map, StaircaseDestination destination) {
+        pos = new PositionComponent(xy, map);
+        add(pos);
+        add(new RenderableComponent(
+                destination == StaircaseDestination.DESCENDING ? Models.stairsDown : Models.stairsUp,
+                1));
+        add(new AgencyComponent(new StaircaseAgency(pos, destination)));
+        add(new FixedInitiativeComponent(100));
+        // TODO Stairs should be impassable for entities other than player
     }
 }

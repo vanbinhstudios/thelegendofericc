@@ -9,14 +9,13 @@ import com.ericc.the.game.Mappers;
 import com.ericc.the.game.components.FieldOfViewComponent;
 import com.ericc.the.game.components.PlayerComponent;
 import com.ericc.the.game.components.PositionComponent;
-import com.ericc.the.game.map.CurrentMap;
 
 public class FogOfWarSystem extends EntitySystem {
 
     private ImmutableArray<Entity> entities; ///< all entities able to discover new tiles
 
-    public FogOfWarSystem() {
-        super(101); // Depends on FieldOfViewSystem
+    public FogOfWarSystem(int priority) {
+        super(priority); // Depends on FieldOfViewSystem
     }
 
     @Override
@@ -28,14 +27,14 @@ public class FogOfWarSystem extends EntitySystem {
     public void update(float deltaTime) {
         for (Entity entity : entities) {
             FieldOfViewComponent fov = Mappers.fov.get(entity);
-            PositionComponent position = Mappers.position.get(entity);
+            PositionComponent pos = Mappers.position.get(entity);
 
             int updateMargin = FieldOfViewComponent.VIEW_RADIUS + 3;
 
-            for (int y = position.y + updateMargin; y >= position.y - updateMargin; --y) {
-                for (int x = position.x - updateMargin; x < position.x + updateMargin; ++x) {
-                    if (CurrentMap.map.inBoundaries(x, y) && fov.visibility.get(x, y)) {
-                        CurrentMap.map.markAsSeenByPlayer(x, y);
+            for (int y = pos.getY() + updateMargin; y >= pos.getY() - updateMargin; --y) {
+                for (int x = pos.getX() - updateMargin; x < pos.getX() + updateMargin; ++x) {
+                    if (pos.map.inBoundaries(x, y) && fov.visibility.get(x, y)) {
+                        pos.map.markAsSeenByPlayer(x, y);
                     }
                 }
             }

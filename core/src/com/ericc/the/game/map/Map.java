@@ -1,34 +1,35 @@
 package com.ericc.the.game.map;
 
-import com.badlogic.gdx.math.GridPoint2;
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.MathUtils;
 import com.ericc.the.game.Mappers;
 import com.ericc.the.game.Media;
 import com.ericc.the.game.TileTextureIndicator;
-import com.ericc.the.game.components.PositionComponent;
-import com.ericc.the.game.components.StaircaseDestinationComponent;
-import com.ericc.the.game.entities.Stairs;
+import com.ericc.the.game.components.AnimationComponent;
 import com.ericc.the.game.helpers.FogOfWar;
+import com.ericc.the.game.utils.GridPoint;
 import com.ericc.the.game.utils.RectangularBitset;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 
 public class Map {
 
-    private int width, height;
-    private RectangularBitset map;
+    public final HashMap<GridPoint, Entity> entityMap = new HashMap<>();
     public float[][] brightness;
     public float[][] saturation;
+    public GridPoint entrance;
+    public GridPoint exit;
+    private int width, height;
+    private RectangularBitset map;
     private int[][][] randomTileNumber;
     private int[][][] randomClutterNumber;
-    private HashSet<GridPoint2> passableTiles; ///< stores every passable tile in a map (AFTER THE FIRST GENERATION)
+    private HashSet<GridPoint> passableTiles; ///< stores every passable tile in a map (AFTER THE FIRST GENERATION)
     // the above is NOT AN INVARIANT, this changes after spawning some entities on some tiles from this collection
     private HashSet<Room> rooms; ///< stores every room made while generating (without corridors)
     private FogOfWar fogOfWar;
-    public GridPoint2 entrance;
-    public GridPoint2 exit;
 
     Map(int width, int height) {
         this.width = width;
@@ -58,8 +59,8 @@ public class Map {
                 randomTileNumber[x][y][TileTextureIndicator.FLOOR.getValue()] = MathUtils.random(0, Media.floors.size - 1);
 
                 // table for terrain clutter generation
-                randomClutterNumber[x][y][TileTextureIndicator.UP.getValue()] = MathUtils.random(0, 30*Media.wallClutter.size);
-                randomClutterNumber[x][y][TileTextureIndicator.FLOOR.getValue()] = MathUtils.random(0, 30*Media.clutter.size);
+                randomClutterNumber[x][y][TileTextureIndicator.UP.getValue()] = MathUtils.random(0, 30 * Media.wallClutter.size);
+                randomClutterNumber[x][y][TileTextureIndicator.FLOOR.getValue()] = MathUtils.random(0, 30 * Media.clutter.size);
             }
         }
     }
@@ -68,7 +69,7 @@ public class Map {
         map.set(x, y);
 
         if (passable) {
-            passableTiles.add(new GridPoint2(x, y));
+            passableTiles.add(new GridPoint(x, y));
         }
     }
 
@@ -76,7 +77,9 @@ public class Map {
         return randomTileNumber[x][y][direction];
     }
 
-    public int getRandomClutter(int x, int y, int direction) { return randomClutterNumber[x][y][direction]; }
+    public int getRandomClutter(int x, int y, int direction) {
+        return randomClutterNumber[x][y][direction];
+    }
 
     /**
      * Checks whether the given point in 2D grid is in boundaries of a map.
@@ -89,16 +92,37 @@ public class Map {
         return x >= 0 && x < width && y >= 0 && y < height;
     }
 
-    public boolean inBoundaries(GridPoint2 pos) {
-        return inBoundaries(pos.x, pos.y);
+    public boolean inBoundaries(GridPoint xy) {
+        return inBoundaries(xy.x, xy.y);
     }
 
-    public boolean isPassable(int x, int y) {
+    public boolean isFloor(int x, int y) {
         if (!inBoundaries(x, y)) {
             return false;
         }
 
         return map.get(x, y);
+    }
+
+    public boolean isFloor(GridPoint xy) {
+        return isFloor(xy.x, xy.y);
+    }
+
+    public boolean isPassable(int x, int y) {
+        if (!isFloor(x, y)) {
+            return false;
+        }
+
+        Entity potentiallyBlocking = entityMap.get(new GridPoint(x, y));
+        return potentiallyBlocking == null || !Mappers.collision.has(potentiallyBlocking);
+    }
+
+    public boolean isPassable(GridPoint xy) {
+        return isPassable(xy.x, xy.y);
+    }
+
+    public Entity getEntity(GridPoint xy) {
+        return entityMap.get(xy);
     }
 
     public int width() {
@@ -111,12 +135,12 @@ public class Map {
 
     /**
      * @return random passable point in the 2D grid of this map
-     *
+     * <p>
      * DISCLAIMER:
      * It does REMOVE the passable tile it is going to return from the passableTiles collection!
      */
-    public GridPoint2 getRandomPassableTile() {
-        GridPoint2 ret;
+    public GridPoint getRandomPassableTile() {
+        GridPoint ret;
 
         try {
             ret = passableTiles.iterator().next();
@@ -133,7 +157,7 @@ public class Map {
      * Returns random passable tile from any room which minimal dimension is
      * greater than 2. (This random passable tile for now is the right upper corner)
      */
-    public GridPoint2 getRandomPassableTileFromRooms() {
+    public GridPoint getRandomPassableTileFromRooms() {
         ArrayList<Room> roomsListed = new ArrayList<>(rooms);
         Room randomRoom = roomsListed.get(MathUtils.random(roomsListed.size() - 1));
         int ctr = 0;
@@ -158,14 +182,11 @@ public class Map {
      * Registers stairs in this map, determines whether that stairs are ascending or descending
      * and puts the entrance / exit in that position.
      */
-    public void registerStairs(Stairs stairs) {
-        StaircaseDestinationComponent destinationComponent = Mappers.stairsComponent.get(stairs);
-        PositionComponent positionComponent = Mappers.position.get(stairs);
-
-        if (destinationComponent.destination == StaircaseDestination.DESCENDING) {
-            this.exit = new GridPoint2(positionComponent.x, positionComponent.y);
+    public void registerStairs(GridPoint xy, StaircaseDestination dest) {
+        if (dest == StaircaseDestination.DESCENDING) {
+            this.exit = xy;
         } else {
-            this.entrance = new GridPoint2(positionComponent.x, positionComponent.y);
+            this.entrance = xy;
         }
     }
 
@@ -199,5 +220,15 @@ public class Map {
                 }
             }
         }
+    }
+
+    public boolean hasAnimationDependency(GridPoint xy) {
+        Entity potentiallyBlocking = entityMap.get(xy);
+        if (potentiallyBlocking == null)
+            return false;
+        AnimationComponent animation = Mappers.animation.get(potentiallyBlocking);
+        if (animation == null)
+            return false;
+        return animation.animation.isBlocking() && !animation.animation.isOver();
     }
 }

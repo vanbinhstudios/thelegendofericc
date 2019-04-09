@@ -3,24 +3,22 @@ package com.ericc.the.game;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.ericc.the.game.actions.Actions;
-import com.ericc.the.game.components.FieldOfViewComponent;
-import com.ericc.the.game.entities.Player;
 import com.ericc.the.game.helpers.CameraZoom;
-import com.ericc.the.game.map.CurrentMap;
-
-import static com.ericc.the.game.MainGame.DEBUG;
 
 public class KeyboardController extends InputAdapter {
 
-    private Engines engines;
-    private Player player;
+    public boolean up, down, left, right, space;
+    private GameEngine engines;
     private CameraZoom zoom;
 
-    public KeyboardController(Engines engines, Player player, OrthographicCamera camera) {
+    public KeyboardController(GameEngine engines, OrthographicCamera camera) {
         this.engines = engines;
-        this.player = player;
         this.zoom = new CameraZoom(camera);
+        clean();
+    }
+
+    public void clean() {
+        up = down = left = right = space = false;
     }
 
     @Override
@@ -32,34 +30,34 @@ public class KeyboardController extends InputAdapter {
         switch (keycode) {
             case Input.Keys.S:
             case Input.Keys.DOWN:
-                player.intention.currentIntent = Actions.MOVE_DOWN;
+                down = true;
                 break;
             case Input.Keys.W:
             case Input.Keys.UP:
-                player.intention.currentIntent = Actions.MOVE_UP;
+                up = true;
                 break;
             case Input.Keys.A:
             case Input.Keys.LEFT:
-                player.intention.currentIntent = Actions.MOVE_LEFT;
+                left = true;
                 break;
             case Input.Keys.D:
             case Input.Keys.RIGHT:
-                player.intention.currentIntent = Actions.MOVE_RIGHT;
+                right = true;
                 break;
             case Input.Keys.SPACE:
-                player.intention.currentIntent = Actions.NOTHING;
+                space = true;
                 break;
             default:
-                player.intention.currentIntent = Actions.NOTHING;
                 break;
         }
 
-        engines.updateLogicEngine();
+        engines.update();
         return false;
     }
 
     /**
      * Actions that player takes and should not affect the turn counter.
+     *
      * @return true if the action that should be taken should not update the turn counter
      */
     private boolean playersGUIActions(int keycode) {
@@ -70,9 +68,13 @@ public class KeyboardController extends InputAdapter {
             case Input.Keys.PLUS:
                 zoom.zoomInCamera();
                 break;
+            case Input.Keys.R:
+                VeryUglyGlobalState.playerRunning = !VeryUglyGlobalState.playerRunning;
+                break;
+            /*
             case Input.Keys.O:
                 if (DEBUG) {
-                    CurrentMap.map.makeFogCoverTheEntireMap();
+                    player.pos.map.makeFogCoverTheEntireMap();
                 }
                 break;
             case Input.Keys.I:
@@ -87,6 +89,7 @@ public class KeyboardController extends InputAdapter {
                     engines.enableFieldOfViewSystem();
                 }
                 break;
+            */
             default:
                 return false;
         }
