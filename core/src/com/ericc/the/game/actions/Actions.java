@@ -1,6 +1,8 @@
 package com.ericc.the.game.actions;
 
 import com.ericc.the.game.Direction;
+import com.ericc.the.game.components.Model;
+import com.ericc.the.game.utils.GridPoint;
 
 public class Actions {
     public static WaitAction WAIT = new WaitAction(100);
@@ -17,5 +19,10 @@ public class Actions {
 
     public static AttackAction ATTACK(Direction direction) {
         return new AttackAction(direction);
+    }
+
+    public static AreaOfEffectAttackAction AOEATTACK(GridPoint relativePosition, Model model, Direction direction,
+                                                     int width, int height, int delay, int power) {
+        return new AreaOfEffectAttackAction(relativePosition, model, direction, width, height, delay, power);
     }
 }

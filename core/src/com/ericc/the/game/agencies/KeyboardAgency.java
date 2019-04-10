@@ -1,9 +1,6 @@
 package com.ericc.the.game.agencies;
 
-import com.ericc.the.game.Direction;
-import com.ericc.the.game.KeyboardController;
-import com.ericc.the.game.Mappers;
-import com.ericc.the.game.VeryUglyGlobalState;
+import com.ericc.the.game.*;
 import com.ericc.the.game.actions.Action;
 import com.ericc.the.game.actions.Actions;
 import com.ericc.the.game.components.PositionComponent;
@@ -58,6 +55,9 @@ public class KeyboardAgency implements Agency {
         } else if (controller.space) {
             controller.space = false;
             return Actions.LONG_WAIT;
+        } else if (controller.q) {
+            controller.q = false;
+            return Actions.AOEATTACK(new GridPoint(-1, -1), Models.sword, Direction.UP, 3, 3, 300, 20);
         } else {
             return SyncComponent.SYNC;
         }
