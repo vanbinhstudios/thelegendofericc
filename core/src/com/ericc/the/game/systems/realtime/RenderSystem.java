@@ -81,7 +81,11 @@ public class RenderSystem extends EntitySystem {
             }
 
             // Depth-order the entities.
-            visibleEntities.sort((a, b) -> Mappers.renderable.get(b).zOrder - Mappers.renderable.get(a).zOrder);
+            visibleEntities.sort((a, b) -> {
+                if(Mappers.renderable.get(b).zOrder - Mappers.renderable.get(a).zOrder != 0)
+                return Mappers.renderable.get(b).zOrder - Mappers.renderable.get(a).zOrder;
+                else return Mappers.position.get(b).getY() - Mappers.position.get(a).getY();
+            });
 
             // Perform the drawing.
             int entityIndex = 0;
@@ -129,12 +133,14 @@ public class RenderSystem extends EntitySystem {
             HealthbarComponent bar = Mappers.healthbar.get(entity);
             StatsComponent stats = Mappers.stats.get(entity);
 
+            float barWidth = bar.model.width*((float)stats.health / (float)stats.maxHealth);
+
             transformTmp.idt();
             transformTmp.mul(bar.model.defaultTransform);
             transformTmp.mul(bar.transform);
             transformTmp.translate(pos.getX(), pos.getY());
 
-            batch.draw(bar.region, bar.model.width*((float)stats.health / (float)stats.maxHealth), bar.model.height, transformTmp);
+            batch.draw(bar.region, barWidth, bar.model.height, transformTmp);
         }
     }
 
