@@ -14,9 +14,7 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.ericc.the.game.Mappers;
 import com.ericc.the.game.Media;
 import com.ericc.the.game.TileTextureIndicator;
-import com.ericc.the.game.components.CameraComponent;
-import com.ericc.the.game.components.PositionComponent;
-import com.ericc.the.game.components.RenderableComponent;
+import com.ericc.the.game.components.*;
 import com.ericc.the.game.map.Map;
 import com.ericc.the.game.shaders.Shaders;
 
@@ -126,6 +124,18 @@ public class RenderSystem extends EntitySystem {
 
         batch.setColor(0, render.saturation, render.brightness, render.alpha);
         batch.draw(render.region, render.model.width, render.model.height, transformTmp);
+
+        if (Mappers.healthbar.has(entity)) {
+            HealthbarComponent bar = Mappers.healthbar.get(entity);
+            StatsComponent stats = Mappers.stats.get(entity);
+
+            transformTmp.idt();
+            transformTmp.mul(bar.model.defaultTransform);
+            transformTmp.mul(bar.transform);
+            transformTmp.translate(pos.getX(), pos.getY());
+
+            batch.draw(bar.region, bar.model.width*((float)stats.health / (float)stats.maxHealth), bar.model.height, transformTmp);
+        }
     }
 
     private void drawTile(SpriteBatch batch, int x, int y, Map map) {

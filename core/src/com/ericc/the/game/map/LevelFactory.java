@@ -19,7 +19,8 @@ public class LevelFactory {
 
         ArrayList<Entity> entities = new ArrayList<>();
         for (int i = 0; i < MOBS_COUNT; i++) {
-            entities.add(new Mob(map.getRandomPassableTile(), map));
+            Mob mob = new Mob(map.getRandomPassableTile(), map);
+            entities.add(mob);
         }
 
         for (int i = 0; i < CRATES_COUNT; i++) {

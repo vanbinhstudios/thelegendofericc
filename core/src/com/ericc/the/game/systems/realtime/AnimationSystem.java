@@ -7,6 +7,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.ericc.the.game.Mappers;
 import com.ericc.the.game.components.AnimationComponent;
+import com.ericc.the.game.components.HealthbarComponent;
 import com.ericc.the.game.components.RenderableComponent;
 
 public class AnimationSystem extends EntitySystem {
@@ -32,6 +33,12 @@ public class AnimationSystem extends EntitySystem {
 
             animation.animation.update(deltaTime);
             animation.animation.apply(render);
+
+            if (Mappers.healthbar.has(entity)) {
+                HealthbarComponent bar = Mappers.healthbar.get(entity);
+                animation.animation.apply(bar);
+            }
+
             if (animation.animation.isOver()) {
                 entity.remove(AnimationComponent.class);
             }
