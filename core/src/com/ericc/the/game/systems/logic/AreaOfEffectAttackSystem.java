@@ -11,6 +11,8 @@ import com.ericc.the.game.components.SyncComponent;
 import com.ericc.the.game.entities.Attack;
 import com.ericc.the.game.utils.GridPoint;
 
+import static com.ericc.the.game.Direction.*;
+
 public class AreaOfEffectAttackSystem extends IteratingSystem {
     public AreaOfEffectAttackSystem(int priority) {
         super(Family.all(PositionComponent.class, FieldOfViewComponent.class, AreaOfEffectAttackAction.class).get(), priority);
@@ -21,11 +23,34 @@ public class AreaOfEffectAttackSystem extends IteratingSystem {
         PositionComponent pos = Mappers.position.get(entity);
         FieldOfViewComponent fov = Mappers.fov.get(entity);
         AreaOfEffectAttackAction attack = Mappers.aoeattack.get(entity);
-        GridPoint bottomLeftCorner = pos.xy.add(attack.relativeStart);
+
+        System.out.println("ENTITYS POS " + pos.xy.x + " " + pos.xy.y);
+
+        int xMultiplier = 1;
+        int yMultiplier = 1;
+        GridPoint bottomLeftCorner = attack.isDirected
+                ? pos.xy.add(GridPoint.fromDirection(attack.direction))
+                : pos.xy.add(attack.relativeStart);
+
+        if (attack.isDirected) {
+            // this acts like a rotation (90 degrees, clockwise) when it comes to choosing the direction of the spell
+            xMultiplier = attack.direction == LEFT ? -1 : 1;
+            yMultiplier = attack.direction == DOWN ? -1 : 1;
+
+            if (attack.direction == DOWN || attack.direction == UP) {
+                int temp = attack.width;
+                attack.width = attack.height;
+                attack.height = temp;
+            }
+        }
+
+        System.out.println("DDDDDD");
 
         for (int xOffset = 0; xOffset < attack.width; ++xOffset) {
             for (int yOffset = 0; yOffset < attack.height; ++yOffset) {
-                GridPoint tileAffectedByAOE = bottomLeftCorner.shift(xOffset, yOffset);
+                int xOffsetMul = xOffset * xMultiplier;
+                int yOffsetMul = yOffset * yMultiplier;
+                GridPoint tileAffectedByAOE = bottomLeftCorner.shift(xOffsetMul, yOffsetMul);
 
                 if (fov.visibility.get(tileAffectedByAOE)
                         && pos.map.isFloor(tileAffectedByAOE)
@@ -38,14 +63,18 @@ public class AreaOfEffectAttackSystem extends IteratingSystem {
 
         for (int xOffset = 0; xOffset < attack.width; ++xOffset) {
             for (int yOffset = 0; yOffset < attack.height; ++yOffset) {
-                GridPoint tileAffectedByAOE = bottomLeftCorner.shift(xOffset, yOffset);
+                int xOffsetMul = xOffset * xMultiplier;
+                int yOffsetMul = yOffset * yMultiplier;
+                GridPoint tileAffectedByAOE = bottomLeftCorner.shift(xOffsetMul, yOffsetMul);
+
+                System.out.println(tileAffectedByAOE.x + " " + tileAffectedByAOE.y);
 
                 if (fov.visibility.get(tileAffectedByAOE)
                         && pos.map.isFloor(tileAffectedByAOE)
                         && !pos.xy.equals(tileAffectedByAOE)) {
                     getEngine().addEntity(
                             new Attack(
-                                    bottomLeftCorner.shift(xOffset, yOffset),
+                                    bottomLeftCorner.shift(xOffsetMul, yOffsetMul),
                                     pos.map,
                                     attack.power,
                                     attack.model,

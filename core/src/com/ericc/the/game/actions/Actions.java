@@ -17,12 +17,12 @@ public class Actions {
         return new MovementAction(direction, 50);
     }
 
-    public static AttackAction ATTACK(Direction direction) {
-        return new AttackAction(direction);
-    }
-
     public static AreaOfEffectAttackAction AOEATTACK(GridPoint relativePosition, Model model, Direction direction,
                                                      int width, int height, int delay, int power) {
         return new AreaOfEffectAttackAction(relativePosition, model, direction, width, height, delay, power);
+    }
+
+    public static AreaOfEffectAttackAction DIRECTEDAOEATTACK(Model model, Direction direction, int width, int height, int delay, int power) {
+        return new AreaOfEffectAttackAction(model, direction, width, height, delay, power);
     }
 }

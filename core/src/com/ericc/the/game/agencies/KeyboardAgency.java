@@ -32,7 +32,7 @@ public class KeyboardAgency implements Agency {
                 return Actions.MOVE(direction);
             }
         } else if (checkIfCanAttack(pos.map, targetXY)) {
-            return Actions.ATTACK(direction);
+            return Actions.DIRECTEDAOEATTACK(Models.sword, direction, 1, 1, 100, 40);
         } else {
             return SyncComponent.SYNC;
         }
@@ -58,6 +58,9 @@ public class KeyboardAgency implements Agency {
         } else if (controller.q) {
             controller.q = false;
             return Actions.AOEATTACK(new GridPoint(-1, -1), Models.sword, Direction.UP, 3, 3, 300, 20);
+        } else if (controller.e) {
+            controller.e = false;
+            return Actions.DIRECTEDAOEATTACK(Models.sword, Direction.DOWN, 6, 1, 100, 40);
         } else {
             return SyncComponent.SYNC;
         }

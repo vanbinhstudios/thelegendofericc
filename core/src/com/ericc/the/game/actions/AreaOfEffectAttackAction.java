@@ -13,16 +13,25 @@ public class AreaOfEffectAttackAction extends Action {
     public int height;
     public int delay;
     public int power;
+    //< indicates whether attack action is directed, if not the position of attack is determined by the relativeStart
+    public boolean isDirected;
 
     public AreaOfEffectAttackAction(GridPoint relativeStart, Model model, Direction direction,
                                     int width, int height, int delay, int power) {
+        this(model, direction, width, height, delay, power);
         this.relativeStart = relativeStart;
+        this.isDirected = false;
+    }
+
+    public AreaOfEffectAttackAction(Model model, Direction direction,
+                                    int width, int height, int delay, int power) {
         this.model = model;
         this.direction = direction;
         this.width = width;
         this.height = height;
         this.delay = delay;
         this.power = power;
+        this.isDirected = true;
     }
 
     @Override
