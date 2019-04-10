@@ -24,8 +24,6 @@ public class AreaOfEffectAttackSystem extends IteratingSystem {
         FieldOfViewComponent fov = Mappers.fov.get(entity);
         AreaOfEffectAttackAction attack = Mappers.aoeattack.get(entity);
 
-        System.out.println("ENTITYS POS " + pos.xy.x + " " + pos.xy.y);
-
         int xMultiplier = 1;
         int yMultiplier = 1;
         GridPoint bottomLeftCorner = attack.isDirected
@@ -42,9 +40,9 @@ public class AreaOfEffectAttackSystem extends IteratingSystem {
                 attack.width = attack.height;
                 attack.height = temp;
             }
-        }
 
-        System.out.println("DDDDDD");
+            pos.direction = attack.direction;
+        }
 
         for (int xOffset = 0; xOffset < attack.width; ++xOffset) {
             for (int yOffset = 0; yOffset < attack.height; ++yOffset) {
