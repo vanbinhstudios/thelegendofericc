@@ -8,6 +8,7 @@ import com.ericc.the.game.actions.Action;
 import com.ericc.the.game.components.ActiveComponent;
 import com.ericc.the.game.components.AgencyComponent;
 import com.ericc.the.game.components.PositionComponent;
+import com.ericc.the.game.components.StatsComponent;
 
 public class AgencySystem extends IteratingSystem {
     public AgencySystem(int priority) {
@@ -18,8 +19,10 @@ public class AgencySystem extends IteratingSystem {
     protected void processEntity(Entity entity, float deltaTime) {
         AgencyComponent agency = Mappers.agency.get(entity);
         PositionComponent pos = Mappers.position.get(entity);
-        Action action = agency.agency.chooseAction(pos);
-        agency.delay += action.getDelay();
+        StatsComponent stats = Mappers.stats.get(entity);
+
+        Action action = agency.agency.chooseAction(pos, stats);
+        agency.delay += action.getDelay() * ((stats != null) ? stats.delayMultiplier : 1.0);
         entity.add(action);
     }
 }

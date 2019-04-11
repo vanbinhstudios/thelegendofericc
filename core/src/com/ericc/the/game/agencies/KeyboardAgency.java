@@ -4,6 +4,7 @@ import com.ericc.the.game.*;
 import com.ericc.the.game.actions.Action;
 import com.ericc.the.game.actions.Actions;
 import com.ericc.the.game.components.PositionComponent;
+import com.ericc.the.game.components.StatsComponent;
 import com.ericc.the.game.components.SyncComponent;
 import com.ericc.the.game.map.Map;
 import com.ericc.the.game.utils.GridPoint;
@@ -39,7 +40,7 @@ public class KeyboardAgency implements Agency {
     }
 
     @Override
-    public Action chooseAction(PositionComponent pos) {
+    public Action chooseAction(PositionComponent pos, StatsComponent stats) {
         if (controller.right) {
             controller.right = false;
             return handleDirectionalInput(pos, Direction.RIGHT);
@@ -60,7 +61,15 @@ public class KeyboardAgency implements Agency {
             return Actions.AOEATTACK(new GridPoint(-1, -1), Models.sword, Direction.UP, 3, 3, 300, 20);
         } else if (controller.e) {
             controller.e = false;
-            return Actions.DIRECTEDAOEATTACK(Models.sword, Direction.DOWN, 6, 1, 100, 40);
+            return Actions.DIRECTEDAOEATTACK(Models.sword, pos.direction, 6, 1, 100, 40);
+        } else if (controller.n) {
+            controller.n = false;
+            stats.delayMultiplier *= 2;
+            return Actions.WAIT;
+        } else if (controller.m) {
+            controller.m = false;
+            stats.delayMultiplier /= 2;
+            return Actions.WAIT;
         } else {
             return SyncComponent.SYNC;
         }

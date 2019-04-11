@@ -7,7 +7,7 @@ import com.ericc.the.game.helpers.CameraZoom;
 
 public class KeyboardController extends InputAdapter {
 
-    public boolean up, down, left, right, space, q, e;
+    public boolean up, down, left, right, space, q, e, n, m;
     private GameEngine engines;
     private CameraZoom zoom;
 
@@ -18,7 +18,7 @@ public class KeyboardController extends InputAdapter {
     }
 
     public void clean() {
-        e = q = up = down = left = right = space = false;
+        n = m = e = q = up = down = left = right = space = false;
     }
 
     @Override
@@ -52,6 +52,12 @@ public class KeyboardController extends InputAdapter {
                 break;
             case Input.Keys.E:
                 e = true;
+                break;
+            case Input.Keys.N:
+                n = true;
+                break;
+            case Input.Keys.M:
+                m = true;
                 break;
             default:
                 break;
