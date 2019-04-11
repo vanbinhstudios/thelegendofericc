@@ -80,10 +80,6 @@ public class KeyboardAgency implements Agency {
             controller.m = false;
             stats.delayMultiplier /= 2;
             return Actions.WAIT;
-        } else if (controller.f) {
-            controller.m = false;
-            stats.delayMultiplier /= 2;
-            return Actions.WAIT;
         } else {
             return SyncComponent.SYNC;
         }
