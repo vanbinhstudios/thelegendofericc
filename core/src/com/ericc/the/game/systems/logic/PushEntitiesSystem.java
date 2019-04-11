@@ -5,6 +5,8 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.math.Vector2;
 import com.ericc.the.game.Mappers;
+import com.ericc.the.game.actions.Action;
+import com.ericc.the.game.actions.Actions;
 import com.ericc.the.game.actions.MovementAction;
 import com.ericc.the.game.actions.PushAction;
 import com.ericc.the.game.animations.JumpAnimation;
@@ -46,10 +48,10 @@ public class PushEntitiesSystem extends IteratingSystem {
         movePushableEntities(pos, push);
 
         while (!queue.empty()) {
-            queue.pop().add(new MovementAction(push.direction, push.delay));
+            queue.pop().add(Actions.PUSH(push.direction, push.delay));
         }
 
-        entity.add(new MovementAction(push.direction, push.delay));
+        entity.add(Actions.PUSH(push.direction, push.delay));
         entity.remove(PushAction.class);
     }
 

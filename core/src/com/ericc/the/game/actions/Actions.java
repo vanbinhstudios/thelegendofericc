@@ -9,12 +9,16 @@ public class Actions {
     public static WaitAction LONG_WAIT = new WaitAction(500);
     public static WaitAction NOTHING = new WaitAction(0);
 
-    public static MovementAction MOVE(Direction direction) {
-        return new MovementAction(direction, 100);
+    public static MovementAction MOVE(Direction direction, int delay) {
+        return new MovementAction(direction, delay, MovementAction.MOVEMENT_TYPE.CASUAL);
     }
 
-    public static MovementAction RUN(Direction direction) {
-        return new MovementAction(direction, 50);
+    public static MovementAction RUN(Direction direction, int delay) {
+        return new MovementAction(direction, delay, MovementAction.MOVEMENT_TYPE.RUN);
+    }
+
+    public static MovementAction PUSH(Direction direction, int delay) {
+        return new MovementAction(direction, delay, MovementAction.MOVEMENT_TYPE.PUSH);
     }
 
     public static AreaOfEffectAttackAction AOEATTACK(GridPoint relativePosition, Model model, Direction direction,

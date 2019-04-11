@@ -32,9 +32,9 @@ public class KeyboardAgency implements Agency {
         GridPoint targetXY = pos.xy.add(GridPoint.fromDirection(direction));
         if (checkIfCanMove(pos.map, targetXY)) {
             if (VeryUglyGlobalState.playerRunning) {
-                return Actions.RUN(direction);
+                return Actions.RUN(direction, 50);
             } else {
-                return Actions.MOVE(direction);
+                return Actions.MOVE(direction, 100);
             }
         } else if (checkIfCanPush(pos.map, targetXY)) {
             System.out.println("pushable");
