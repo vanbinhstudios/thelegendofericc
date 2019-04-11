@@ -12,7 +12,7 @@ public class LevelFactory {
     private final static int MAP_HEIGHT = 40;
     private final static int ROOM_SIZE = 10;
     private final static int MOBS_COUNT = 20;
-    private final static int CRATES_COUNT = 3;
+    private final static int CRATES_COUNT = 15;
 
     public static Level generate(int levelNumber) {
         Map map = new MapGenerator(MAP_WIDTH, MAP_HEIGHT, ROOM_SIZE).generateMap();

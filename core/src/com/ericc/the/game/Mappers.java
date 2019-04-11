@@ -3,6 +3,7 @@ package com.ericc.the.game;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.ericc.the.game.actions.AreaOfEffectAttackAction;
 import com.ericc.the.game.actions.MovementAction;
+import com.ericc.the.game.actions.PushAction;
 import com.ericc.the.game.actions.TeleportAction;
 import com.ericc.the.game.components.*;
 
@@ -30,6 +31,7 @@ public class Mappers {
     public static final ComponentMapper<HealthbarComponent> healthbar = ComponentMapper.getFor(HealthbarComponent.class);
 
     public static final ComponentMapper<MovementAction> movementAction = ComponentMapper.getFor(MovementAction.class);
+    public static final ComponentMapper<PushAction> pushAction = ComponentMapper.getFor(PushAction.class);
     public static final ComponentMapper<TeleportAction> teleport = ComponentMapper.getFor(TeleportAction.class);
     public static final ComponentMapper<AreaOfEffectAttackAction> aoeattack = ComponentMapper.getFor(AreaOfEffectAttackAction.class);
     public static final ComponentMapper<ActiveComponent> active = ComponentMapper.getFor(ActiveComponent.class);

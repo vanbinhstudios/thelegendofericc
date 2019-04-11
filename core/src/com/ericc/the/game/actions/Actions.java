@@ -25,4 +25,8 @@ public class Actions {
     public static AreaOfEffectAttackAction DIRECTEDAOEATTACK(Model model, Direction direction, int width, int height, int delay, int power) {
         return new AreaOfEffectAttackAction(model, direction, width, height, delay, power);
     }
+
+    public static PushAction PUSH(Direction direction) {
+        return new PushAction(direction, 150);
+    }
 }

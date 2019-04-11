@@ -11,9 +11,9 @@ import com.ericc.the.game.utils.GridPoint;
 
 public class PushableObject extends Entity {
     public PushableObject(GridPoint xy, Map map) {
-        RenderableComponent renderable = new RenderableComponent(Models.crate);
+        RenderableComponent renderable = new RenderableComponent(Models.crate, true);
         add(new PositionComponent(xy, map));
-        add(new CollisionComponent());
+        add(new CollisionComponent(true));
         add(renderable);
     }
 }

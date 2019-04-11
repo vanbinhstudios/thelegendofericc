@@ -24,6 +24,10 @@ public class KeyboardAgency implements Agency {
         return Mappers.hostile.has(map.getEntity(xy));
     }
 
+    private boolean checkIfCanPush(Map map, GridPoint xy) {
+        return Mappers.collision.has(map.getEntity(xy)) && Mappers.collision.get(map.getEntity(xy)).isPushable;
+    }
+
     private Action handleDirectionalInput(PositionComponent pos, Direction direction) {
         GridPoint targetXY = pos.xy.add(GridPoint.fromDirection(direction));
         if (checkIfCanMove(pos.map, targetXY)) {
@@ -32,6 +36,9 @@ public class KeyboardAgency implements Agency {
             } else {
                 return Actions.MOVE(direction);
             }
+        } else if (checkIfCanPush(pos.map, targetXY)) {
+            System.out.println("pushable");
+            return Actions.PUSH(direction);
         } else if (checkIfCanAttack(pos.map, targetXY)) {
             return Actions.DIRECTEDAOEATTACK(Models.sword, direction, 1, 1, 100, 40);
         } else {

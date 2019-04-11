@@ -212,6 +212,10 @@ public class Map {
         return fogOfWar.hasBeenSeenByPlayer(x, y);
     }
 
+    public boolean hasBeenSeenByPlayer(GridPoint xy) {
+        return fogOfWar.hasBeenSeenByPlayer(xy.x, xy.y);
+    }
+
     public void makeFogCoverTheEntireMap() {
         for (int i = 0; i < width; ++i) {
             for (int j = 0; j < height; ++j) {
