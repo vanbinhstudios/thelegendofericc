@@ -26,6 +26,9 @@ public class AreaOfEffectAttackSystem extends IteratingSystem {
 
         int xMultiplier = 1;
         int yMultiplier = 1;
+        int width = attack.width;
+        int height = attack.height;
+
         GridPoint bottomLeftCorner = attack.isDirected
                 ? pos.xy.add(GridPoint.fromDirection(attack.direction))
                 : pos.xy.add(attack.relativeStart);
@@ -36,16 +39,15 @@ public class AreaOfEffectAttackSystem extends IteratingSystem {
             yMultiplier = attack.direction == DOWN ? -1 : 1;
 
             if (attack.direction == DOWN || attack.direction == UP) {
-                int temp = attack.width;
-                attack.width = attack.height;
-                attack.height = temp;
+                width = attack.height;
+                height = attack.width;
             }
 
             pos.direction = attack.direction;
         }
 
-        for (int xOffset = 0; xOffset < attack.width; ++xOffset) {
-            for (int yOffset = 0; yOffset < attack.height; ++yOffset) {
+        for (int xOffset = 0; xOffset < width; ++xOffset) {
+            for (int yOffset = 0; yOffset < height; ++yOffset) {
                 int xOffsetMul = xOffset * xMultiplier;
                 int yOffsetMul = yOffset * yMultiplier;
                 GridPoint tileAffectedByAOE = bottomLeftCorner.shift(xOffsetMul, yOffsetMul);
@@ -59,8 +61,8 @@ public class AreaOfEffectAttackSystem extends IteratingSystem {
             }
         }
 
-        for (int xOffset = 0; xOffset < attack.width; ++xOffset) {
-            for (int yOffset = 0; yOffset < attack.height; ++yOffset) {
+        for (int xOffset = 0; xOffset < width; ++xOffset) {
+            for (int yOffset = 0; yOffset < height; ++yOffset) {
                 int xOffsetMul = xOffset * xMultiplier;
                 int yOffsetMul = yOffset * yMultiplier;
                 GridPoint tileAffectedByAOE = bottomLeftCorner.shift(xOffsetMul, yOffsetMul);
