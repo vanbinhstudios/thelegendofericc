@@ -1,10 +1,7 @@
 package com.ericc.the.game;
 
 import com.badlogic.ashley.core.ComponentMapper;
-import com.ericc.the.game.actions.AreaOfEffectAttackAction;
-import com.ericc.the.game.actions.MovementAction;
-import com.ericc.the.game.actions.PushAction;
-import com.ericc.the.game.actions.TeleportAction;
+import com.ericc.the.game.actions.*;
 import com.ericc.the.game.components.*;
 
 
@@ -36,4 +33,5 @@ public class Mappers {
     public static final ComponentMapper<AreaOfEffectAttackAction> aoeattack = ComponentMapper.getFor(AreaOfEffectAttackAction.class);
     public static final ComponentMapper<ActiveComponent> active = ComponentMapper.getFor(ActiveComponent.class);
     public static final ComponentMapper<SyncComponent> sync = ComponentMapper.getFor(SyncComponent.class);
+    public static final ComponentMapper<ShootAction> shoot = ComponentMapper.getFor(ShootAction.class);
 }

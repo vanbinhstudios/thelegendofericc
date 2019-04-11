@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.*;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.ericc.the.game.GameEngine;
 import com.ericc.the.game.Mappers;
+import com.ericc.the.game.agencies.Agency;
 import com.ericc.the.game.components.*;
 
 import java.util.ArrayList;
@@ -32,7 +33,10 @@ public class ActivitySystem extends EntitySystem implements EntityListener {
     private ImmutableArray<Entity> withfixedinitiative;
     private ActiveComponent token = new ActiveComponent();
 
-    private Comparator<Entity> timeLeftComparator = Comparator.comparingInt(e -> Mappers.agency.get(e).delay);
+    private Comparator<Entity> timeLeftComparator = Comparator.comparingInt(e -> {
+        AgencyComponent agency = Mappers.agency.get(e);
+        return agency == null ? 0 : agency.delay;
+    });
     private PriorityQueue<Entity> pending = new PriorityQueue<>(timeLeftComparator);
     private ArrayList<Entity> actingInThisMoment = new ArrayList<>(512);
     private GameEngine gameEngine;
