@@ -4,10 +4,12 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.ericc.the.game.Mappers;
+import com.ericc.the.game.Models;
 import com.ericc.the.game.actions.FlyAction;
 import com.ericc.the.game.animations.Animations;
 import com.ericc.the.game.animations.DeathAnimation;
 import com.ericc.the.game.components.*;
+import com.ericc.the.game.entities.Attack;
 import com.ericc.the.game.utils.GridPoint;
 
 public class ProjectileSystem extends IteratingSystem {
@@ -29,19 +31,7 @@ public class ProjectileSystem extends IteratingSystem {
         // Target tile has a hittable entity standing on it (non-player and possessing statistics)
         if (subject != null) {
             if (Mappers.stats.has(subject)) {
-                StatsComponent stats = Mappers.stats.get(subject);
-
-                System.out.print("Initial HP: " + stats.health + " ");
-                int damage = Mappers.damage.get(entity).damage;
-                stats.health -= damage;
-
-                System.out.print("Final HP: " + stats.health + "\n");
-
-                if (stats.health <= 0) {
-                    subject.add(new AnimationComponent(
-                            new DeathAnimation(1 / 0.8f, true, 0.5f)));
-                    subject.add(new DeathComponent());
-                }
+                getEngine().addEntity(new Attack(pos.xy, pos.map, Mappers.damage.get(entity).damage, Models.none));
             }
 
             entity.add(new AnimationComponent(new DeathAnimation(1 / 0.3f, false, 1.0f)));

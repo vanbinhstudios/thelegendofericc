@@ -59,11 +59,11 @@ public class MainGame extends Game {
         gameEngine.addLogicSystem(new ActivitySystem(gameEngine, priority++));
         gameEngine.addLogicSystem(new AgencySystem(priority++));
         gameEngine.addLogicSystem(new ShootSystem(priority++));
+        gameEngine.addLogicSystem(new ProjectileSystem(priority++));
         gameEngine.addLogicSystem(new AreaOfEffectAttackSystem(priority++));
         gameEngine.addLogicSystem(new TeleportSystem(dungeon, priority++));
         gameEngine.addLogicSystem(new PushEntitiesSystem(priority++));
         gameEngine.addLogicSystem(new MovementSystem(priority++));
-        gameEngine.addLogicSystem(new ProjectileSystem(priority++));
         gameEngine.addLogicSystem(new DamageSystem(priority++));
         gameEngine.addLogicSystem(new FieldOfViewSystem(priority++));
         gameEngine.addLogicSystem(new FogOfWarSystem(priority++));
