@@ -118,7 +118,7 @@ public class RenderSystem extends EntitySystem {
         PositionComponent pos = Mappers.position.get(entity);
         RenderableComponent render = Mappers.renderable.get(entity);
 
-        if (!render.visible)
+        if (!render.visible && !render.visibleInFog)
             return;
 
         transformTmp.idt();
