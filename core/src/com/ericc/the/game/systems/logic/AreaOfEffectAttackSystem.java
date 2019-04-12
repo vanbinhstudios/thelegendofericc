@@ -67,8 +67,6 @@ public class AreaOfEffectAttackSystem extends IteratingSystem {
                 int yOffsetMul = yOffset * yMultiplier;
                 GridPoint tileAffectedByAOE = bottomLeftCorner.shift(xOffsetMul, yOffsetMul);
 
-                System.out.println(tileAffectedByAOE.x + " " + tileAffectedByAOE.y);
-
                 if (fov.visibility.get(tileAffectedByAOE)
                         && pos.map.isFloor(tileAffectedByAOE)
                         && !pos.xy.equals(tileAffectedByAOE)) {

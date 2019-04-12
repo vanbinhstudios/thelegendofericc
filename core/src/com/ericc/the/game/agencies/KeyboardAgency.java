@@ -37,7 +37,6 @@ public class KeyboardAgency implements Agency {
                 return Actions.MOVE(direction, 100);
             }
         } else if (checkIfCanPush(pos.map, targetXY)) {
-            System.out.println("pushable");
             return Actions.PUSH(direction);
         } else if (checkIfCanAttack(pos.map, targetXY)) {
             return Actions.DIRECTED_AOE_ATTACK(Models.sword, direction, 1, 1, 100, 40);
