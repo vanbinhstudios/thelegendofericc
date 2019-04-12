@@ -15,16 +15,14 @@ public class DamageSystem extends IteratingSystem {
     @Override
     protected void processEntity(Entity attack, float deltaTime) {
         PositionComponent pos = Mappers.position.get(attack);
-        int damage = Mappers.damage.get(attack).damage;
+        int damage = Mappers.attack.get(attack).damage;
         Entity subject = pos.map.entityMap.get(pos.xy);
 
         // Target tile has a hittable entity standing on it (non-player and possessing statistics)
         if (subject != null && !Mappers.player.has(subject) && Mappers.stats.has(subject)) {
             StatsComponent stats = Mappers.stats.get(subject);
 
-            System.out.print("Initial HP: " + stats.health + " ");
             takeDamage(stats, damage);
-            System.out.print("Final HP: " + stats.health + "\n");
 
             if (stats.health <= 0) {
                 die(subject);

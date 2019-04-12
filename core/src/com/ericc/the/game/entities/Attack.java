@@ -24,8 +24,7 @@ public class Attack extends Entity {
     }
 
     private Attack(Model attackModel, int damage) {
-        add(new AttackComponent());
-        add(new DamageComponent(damage));
+        add(new AttackComponent(damage));
         add(new RenderableComponent(attackModel));
         getComponent(RenderableComponent.class).brightness = 1.0f;
         getComponent(RenderableComponent.class).alpha = 1.0f;
