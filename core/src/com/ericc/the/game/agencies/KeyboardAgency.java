@@ -67,7 +67,7 @@ public class KeyboardAgency implements Agency {
             return Actions.AOE_ATTACK(new GridPoint(-1, -1), Models.sword, Direction.UP, 3, 3, 300, 20);
         } else if (controller.e) {
             controller.e = false;
-            return Actions.DIRECTEDAOEATTACK(Models.sword, pos.direction, 6, 1, 100, 40);
+            return Actions.DIRECTED_AOE_ATTACK(Models.sword, pos.direction, 6, 1, 100, 40);
         } else if (controller.f) {
             controller.f = false;
             return Actions.SHOOT(pos.direction, 40);
