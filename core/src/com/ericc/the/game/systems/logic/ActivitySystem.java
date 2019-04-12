@@ -4,7 +4,6 @@ import com.badlogic.ashley.core.*;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.ericc.the.game.GameEngine;
 import com.ericc.the.game.Mappers;
-import com.ericc.the.game.agencies.Agency;
 import com.ericc.the.game.components.*;
 
 import java.util.ArrayList;

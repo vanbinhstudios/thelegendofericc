@@ -8,7 +8,10 @@ import com.ericc.the.game.Models;
 import com.ericc.the.game.actions.FlyAction;
 import com.ericc.the.game.animations.Animations;
 import com.ericc.the.game.animations.DeathAnimation;
-import com.ericc.the.game.components.*;
+import com.ericc.the.game.components.AnimationComponent;
+import com.ericc.the.game.components.DeathComponent;
+import com.ericc.the.game.components.PositionComponent;
+import com.ericc.the.game.components.SyncComponent;
 import com.ericc.the.game.entities.Attack;
 import com.ericc.the.game.utils.GridPoint;
 

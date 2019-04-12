@@ -13,12 +13,12 @@ public class MovementAction extends Action {
         this.type = type;
     }
 
-    public enum MovementType {
-        CASUAL, RUN, PUSH
-    }
-
     @Override
     public int getDelay() {
         return delay;
+    }
+
+    public enum MovementType {
+        CASUAL, RUN, PUSH
     }
 }

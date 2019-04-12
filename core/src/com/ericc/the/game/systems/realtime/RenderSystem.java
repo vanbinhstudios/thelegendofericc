@@ -26,16 +26,14 @@ import java.util.Comparator;
  * It is desirable to concentrate and contain graphics-related code here.
  */
 public class RenderSystem extends EntitySystem {
-    private final Affine2 transformTmp = new Affine2();
-
-    private SpriteBatch batch = new SpriteBatch();
-    private ImmutableArray<Entity> entities; // Renderable entities.
-    private ImmutableArray<Entity> viewers;
-
     private static Comparator<Entity> z_sort = Comparator
             .comparingInt((Entity e) -> Mappers.position.get(e).getY())
             .thenComparing((Entity e) -> Mappers.renderable.get(e).zOrder)
             .reversed();
+    private final Affine2 transformTmp = new Affine2();
+    private SpriteBatch batch = new SpriteBatch();
+    private ImmutableArray<Entity> entities; // Renderable entities.
+    private ImmutableArray<Entity> viewers;
 
     public RenderSystem(int priority) {
         super(priority); // Should be the last system to run.
@@ -135,7 +133,7 @@ public class RenderSystem extends EntitySystem {
             HealthbarComponent bar = Mappers.healthbar.get(entity);
             StatsComponent stats = Mappers.stats.get(entity);
 
-            float barWidth = bar.model.width*((float)stats.health / (float)stats.maxHealth);
+            float barWidth = bar.model.width * ((float) stats.health / (float) stats.maxHealth);
 
             transformTmp.idt();
             transformTmp.mul(bar.model.defaultTransform);

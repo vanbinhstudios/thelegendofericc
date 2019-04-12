@@ -3,20 +3,13 @@ package com.ericc.the.game.systems.logic;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.gdx.math.Vector2;
 import com.ericc.the.game.Mappers;
-import com.ericc.the.game.actions.Action;
 import com.ericc.the.game.actions.Actions;
-import com.ericc.the.game.actions.MovementAction;
 import com.ericc.the.game.actions.PushAction;
-import com.ericc.the.game.animations.JumpAnimation;
-import com.ericc.the.game.components.AnimationComponent;
 import com.ericc.the.game.components.PositionComponent;
 import com.ericc.the.game.components.SyncComponent;
-import com.ericc.the.game.entities.PushableObject;
 import com.ericc.the.game.utils.GridPoint;
 
-import java.util.ArrayList;
 import java.util.Stack;
 
 public class PushEntitiesSystem extends IteratingSystem {

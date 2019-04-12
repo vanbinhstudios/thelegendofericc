@@ -8,7 +8,7 @@ import com.ericc.the.game.map.Map;
 import com.ericc.the.game.utils.GridPoint;
 
 public class Projectile extends Entity {
-    public Projectile (GridPoint xy, Map map, Direction dir, int power, Model model) {
+    public Projectile(GridPoint xy, Map map, Direction dir, int power, Model model) {
         add(new PositionComponent(xy, dir, map));
         add(new AttackComponent(power));
         add(new RenderableComponent(model));
