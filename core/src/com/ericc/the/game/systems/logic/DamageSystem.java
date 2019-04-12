@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.ericc.the.game.Mappers;
+import com.ericc.the.game.actions.FlyAction;
 import com.ericc.the.game.animations.DeathAnimation;
 import com.ericc.the.game.components.*;
 
@@ -15,7 +16,7 @@ public class DamageSystem extends IteratingSystem {
     @Override
     protected void processEntity(Entity attack, float deltaTime) {
         PositionComponent pos = Mappers.position.get(attack);
-        int damage = Mappers.attack.get(attack).damage;
+        int damage = Mappers.damage.get(attack).damage;
         Entity subject = pos.map.entityMap.get(pos.xy);
 
         // Target tile has a hittable entity standing on it (non-player and possessing statistics)
@@ -30,7 +31,6 @@ public class DamageSystem extends IteratingSystem {
 
             // Fade out the attack animation
         }
-
         attack.add(new AnimationComponent(new DeathAnimation(1 / 0.3f, false, 1.0f)));
         attack.add(new DeathComponent());
     }
