@@ -3,6 +3,7 @@ package com.ericc.the.game.agencies;
 import com.ericc.the.game.*;
 import com.ericc.the.game.actions.Action;
 import com.ericc.the.game.actions.Actions;
+import com.ericc.the.game.components.Model;
 import com.ericc.the.game.components.PositionComponent;
 import com.ericc.the.game.components.StatsComponent;
 import com.ericc.the.game.components.SyncComponent;
@@ -64,10 +65,10 @@ public class KeyboardAgency implements Agency {
             return Actions.LONG_WAIT;
         } else if (controller.q) {
             controller.q = false;
-            return Actions.AOE_ATTACK(new GridPoint(-1, -1), Models.sword, Direction.UP, 3, 3, 300, 20);
+            return Actions.AOE_ATTACK(new GridPoint(-1, -1), Models.explosion1, Direction.UP, 3, 3, 300, 20);
         } else if (controller.e) {
             controller.e = false;
-            return Actions.DIRECTED_AOE_ATTACK(Models.sword, pos.direction, 6, 1, 100, 40);
+            return Actions.DIRECTED_AOE_ATTACK(Models.explosion3, pos.direction, 6, 1, 100, 40);
         } else if (controller.f) {
             controller.f = false;
             return Actions.SHOOT(pos.direction, 40);
