@@ -10,23 +10,24 @@ public class Actions {
     public static WaitAction NOTHING = new WaitAction(0);
 
     public static MovementAction MOVE(Direction direction, int delay) {
-        return new MovementAction(direction, delay, MovementAction.MOVEMENT_TYPE.CASUAL);
+        return new MovementAction(direction, delay, MovementAction.MovementType.CASUAL);
     }
 
     public static MovementAction RUN(Direction direction, int delay) {
-        return new MovementAction(direction, delay, MovementAction.MOVEMENT_TYPE.RUN);
+        return new MovementAction(direction, delay, MovementAction.MovementType.RUN);
     }
 
     public static MovementAction PUSH(Direction direction, int delay) {
-        return new MovementAction(direction, delay, MovementAction.MOVEMENT_TYPE.PUSH);
+        return new MovementAction(direction, delay, MovementAction.MovementType.PUSH);
     }
 
-    public static AreaOfEffectAttackAction AOEATTACK(GridPoint relativePosition, Model model, Direction direction,
-                                                     int width, int height, int delay, int power) {
+    public static AreaOfEffectAttackAction AOE_ATTACK(GridPoint relativePosition, Model model, Direction direction,
+                                                      int width, int height, int delay, int power) {
         return new AreaOfEffectAttackAction(relativePosition, model, direction, width, height, delay, power);
     }
 
-    public static AreaOfEffectAttackAction DIRECTEDAOEATTACK(Model model, Direction direction, int width, int height, int delay, int power) {
+    public static AreaOfEffectAttackAction DIRECTED_AOE_ATTACK(Model model, Direction direction,
+                                                               int width, int height, int delay, int power) {
         return new AreaOfEffectAttackAction(model, direction, width, height, delay, power);
     }
 

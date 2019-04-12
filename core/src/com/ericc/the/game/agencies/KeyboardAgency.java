@@ -40,7 +40,7 @@ public class KeyboardAgency implements Agency {
             System.out.println("pushable");
             return Actions.PUSH(direction);
         } else if (checkIfCanAttack(pos.map, targetXY)) {
-            return Actions.DIRECTEDAOEATTACK(Models.sword, direction, 1, 1, 100, 40);
+            return Actions.DIRECTED_AOE_ATTACK(Models.sword, direction, 1, 1, 100, 40);
         } else {
             return SyncComponent.SYNC;
         }
@@ -65,10 +65,10 @@ public class KeyboardAgency implements Agency {
             return Actions.LONG_WAIT;
         } else if (controller.q) {
             controller.q = false;
-            return Actions.AOEATTACK(new GridPoint(-1, -1), Models.sword, Direction.UP, 3, 3, 300, 20);
+            return Actions.AOE_ATTACK(new GridPoint(-1, -1), Models.sword, Direction.UP, 3, 3, 300, 20);
         } else if (controller.e) {
             controller.e = false;
-            return Actions.DIRECTEDAOEATTACK(Models.sword, pos.direction, 6, 1, 100, 40);
+            return Actions.DIRECTED_AOE_ATTACK(Models.sword, pos.direction, 6, 1, 100, 40);
         } else if (controller.n) {
             controller.n = false;
             stats.delayMultiplier *= 2;
