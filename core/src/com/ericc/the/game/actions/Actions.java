@@ -34,4 +34,12 @@ public class Actions {
     public static PushAction PUSH(Direction direction) {
         return new PushAction(direction, 150);
     }
+
+    public static FlyAction FLY(int delay) {
+        return new FlyAction(delay);
+    }
+
+    public static ShootAction SHOOT(Direction direction, int power) {
+        return new ShootAction(direction, power);
+    }
 }

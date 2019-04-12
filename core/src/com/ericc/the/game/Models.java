@@ -11,4 +11,5 @@ public class Models {
     public static Model stairsUp = new Model(Media.stairsUp, Media.stairsUp, Media.stairsUp, Media.stairsUp, new Affine2().translate(0, 0.1f));
     public static Model sword = new Model(Media.swordUp, Media.swordRight, Media.swordDown, Media.swordLeft, new Affine2().translate(0, 0.35f));
     public static Model healthbar = new Model(Media.healthbar, Media.healthbar, Media.healthbar, Media.healthbar, new Affine2().translate(0, 1f));
+    public static Model none = new Model(Media.dunVoid, Media.dunVoid, Media.dunVoid, Media.dunVoid, new Affine2());
 }

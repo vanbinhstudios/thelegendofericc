@@ -68,6 +68,9 @@ public class KeyboardAgency implements Agency {
         } else if (controller.e) {
             controller.e = false;
             return Actions.DIRECTED_AOE_ATTACK(Models.sword, pos.direction, 6, 1, 100, 40);
+        } else if (controller.f) {
+            controller.f = false;
+            return Actions.SHOOT(pos.direction, 40);
         } else if (controller.n) {
             controller.n = false;
             stats.delayMultiplier *= 2;

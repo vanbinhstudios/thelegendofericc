@@ -28,6 +28,10 @@ public class Animations {
         return JUMP(dir, .1f, delay);
     }
 
+    public static JumpAnimation SLIDE(Direction dir, int delay) {
+        return JUMP(dir, 0, delay);
+    }
+
     public static JumpAnimation MOVE_ANIMATION(MovementAction action) {
         switch (action.type) {
             case CASUAL:
