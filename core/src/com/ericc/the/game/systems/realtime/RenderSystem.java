@@ -82,9 +82,9 @@ public class RenderSystem extends EntitySystem {
 
             // Depth-order the entities.
             visibleEntities.sort((a, b) -> {
-                if(Mappers.renderable.get(b).zOrder - Mappers.renderable.get(a).zOrder != 0)
-                return Mappers.renderable.get(b).zOrder - Mappers.renderable.get(a).zOrder;
-                else return Mappers.position.get(b).getY() - Mappers.position.get(a).getY();
+                if(Mappers.position.get(b).getY() - Mappers.position.get(a).getY() != 0)
+                return Mappers.position.get(b).getY() - Mappers.position.get(a).getY();
+                else return Mappers.renderable.get(b).zOrder - Mappers.renderable.get(a).zOrder;
             });
 
             // Perform the drawing.
