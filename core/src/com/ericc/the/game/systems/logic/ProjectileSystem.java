@@ -31,7 +31,7 @@ public class ProjectileSystem extends IteratingSystem {
         // Target tile has a hittable entity standing on it (non-player and possessing statistics)
         if (subject != null) {
             if (Mappers.stats.has(subject)) {
-                getEngine().addEntity(new Attack(pos.xy, pos.map, Mappers.damage.get(entity).damage, Models.none));
+                getEngine().addEntity(new Attack(pos.xy, pos.map, Mappers.attack.get(entity).damage, Models.none));
             }
 
             entity.add(new AnimationComponent(new DeathAnimation(1 / 0.3f, false, 1.0f)));
