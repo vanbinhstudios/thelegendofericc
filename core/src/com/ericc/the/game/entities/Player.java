@@ -24,5 +24,6 @@ public class Player extends Entity {
         add(new CollisionComponent());
         add(agency);
         add(camera);
+        add(new HealthbarComponent(Models.healthbar));
     }
 }

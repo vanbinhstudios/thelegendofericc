@@ -6,6 +6,7 @@ import com.ericc.the.game.actions.Action;
 import com.ericc.the.game.actions.Actions;
 import com.ericc.the.game.actions.TeleportAction;
 import com.ericc.the.game.components.PositionComponent;
+import com.ericc.the.game.components.StatsComponent;
 import com.ericc.the.game.map.StaircaseDestination;
 
 public class StaircaseAgency implements Agency {
@@ -18,7 +19,7 @@ public class StaircaseAgency implements Agency {
     }
 
     @Override
-    public Action chooseAction(PositionComponent pos) {
+    public Action chooseAction(PositionComponent pos, StatsComponent stats) {
         Entity standing = pos.map.entityMap.get(pos.xy);
         if (standing != null && Mappers.player.has(standing)) {
             return new TeleportAction(dest);
