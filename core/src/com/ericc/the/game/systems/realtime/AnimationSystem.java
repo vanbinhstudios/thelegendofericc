@@ -6,41 +6,42 @@ import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.ericc.the.game.Mappers;
-import com.ericc.the.game.components.AffineAnimationComponent;
-import com.ericc.the.game.components.DirectionComponent;
-import com.ericc.the.game.components.SpriteSheetComponent;
+import com.ericc.the.game.components.AnimationComponent;
+import com.ericc.the.game.components.HealthbarComponent;
+import com.ericc.the.game.components.RenderableComponent;
 
-/**
- * The system responsible for:
- * - updating sprite textures accordingly to entity state changes
- * - updating the sprite-local transforms based on affine animations
- */
 public class AnimationSystem extends EntitySystem {
-    private ImmutableArray<Entity> affineAnimated; // Entities with affine animation currently attached.
-    private ImmutableArray<Entity> directed; // Entities with appearance varying with their orientation.
+    private ImmutableArray<Entity> animated; // Entities with affine animation currently attached.
 
-    @Override
-    public void addedToEngine(Engine engine) {
-        affineAnimated = engine.getEntitiesFor(Family.all(SpriteSheetComponent.class, AffineAnimationComponent.class).get());
-        directed = engine.getEntitiesFor(Family.all(SpriteSheetComponent.class, DirectionComponent.class).get());
+
+    public AnimationSystem(int priority) {
+        super(priority);
     }
 
     @Override
+    public void addedToEngine(Engine engine) {
+        animated = engine.getEntitiesFor(Family.all(RenderableComponent.class, AnimationComponent.class).get());
+    }
+
+    // TODO support for multiple animations taking place at once
+    @Override
     public void update(float deltaTime) {
-        // Update sprites according to orientation (face direction) of the Entity.
-        for (Entity entity : directed) {
-            SpriteSheetComponent render = Mappers.spriteSheet.get(entity);
-            DirectionComponent dir = Mappers.direction.get(entity);
-
-            render.sprite.setRegion(render.sheet[dir.direction.getValue()]);
-        }
         // Update the animation-derived local transform.
-        for (Entity entity : affineAnimated) {
-            SpriteSheetComponent render = Mappers.spriteSheet.get(entity);
-            AffineAnimationComponent animation = Mappers.affineAnimation.get(entity);
+        for (Entity entity : animated) {
+            RenderableComponent render = Mappers.renderable.get(entity);
+            AnimationComponent animation = Mappers.animation.get(entity);
 
-            animation.update(deltaTime);
-            render.transform.set(animation.getTransform());
+            animation.animation.update(deltaTime);
+            animation.animation.apply(render);
+
+            if (Mappers.healthbar.has(entity)) {
+                HealthbarComponent bar = Mappers.healthbar.get(entity);
+                animation.animation.apply(bar);
+            }
+
+            if (animation.animation.isOver()) {
+                entity.remove(AnimationComponent.class);
+            }
         }
     }
 }

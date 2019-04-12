@@ -1,23 +1,24 @@
 package com.ericc.the.game;
 
-import com.badlogic.ashley.core.Engine;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.ericc.the.game.actions.Actions;
-import com.ericc.the.game.entities.Player;
 import com.ericc.the.game.helpers.CameraZoom;
 
 public class KeyboardController extends InputAdapter {
 
-    private Engine logicEngine;
-    private Player player;
+    public boolean up, down, left, right, space, q, e, n, m, f;
+    private GameEngine engines;
     private CameraZoom zoom;
 
-    public KeyboardController(Engine logicEngine, Player player, OrthographicCamera camera) {
-        this.logicEngine = logicEngine;
-        this.player = player;
+    public KeyboardController(GameEngine engines, OrthographicCamera camera) {
+        this.engines = engines;
         this.zoom = new CameraZoom(camera);
+        clean();
+    }
+
+    public void clean() {
+        f = n = m = e = q = up = down = left = right = space = false;
     }
 
     @Override
@@ -26,41 +27,52 @@ public class KeyboardController extends InputAdapter {
             return false;
         }
 
-        boolean action = true;
-      
         switch (keycode) {
             case Input.Keys.S:
             case Input.Keys.DOWN:
-                player.currentAction.action = Actions.MOVE_DOWN;
+                down = true;
                 break;
             case Input.Keys.W:
             case Input.Keys.UP:
-                player.currentAction.action = Actions.MOVE_UP;
+                up = true;
                 break;
             case Input.Keys.A:
             case Input.Keys.LEFT:
-                player.currentAction.action = Actions.MOVE_LEFT;
+                left = true;
                 break;
             case Input.Keys.D:
             case Input.Keys.RIGHT:
-                player.currentAction.action = Actions.MOVE_RIGHT;
+                right = true;
                 break;
             case Input.Keys.SPACE:
-                player.currentAction.action = Actions.NOTHING;
+                space = true;
+                break;
+            case Input.Keys.Q:
+                q = true;
+                break;
+            case Input.Keys.E:
+                e = true;
+                break;
+            case Input.Keys.N:
+                n = true;
+                break;
+            case Input.Keys.M:
+                m = true;
+                break;
+            case Input.Keys.F:
+                f = true;
                 break;
             default:
-                player.currentAction.action = Actions.NOTHING;
-                action = false;
                 break;
         }
-        if (action) {
-            logicEngine.update(1);
-        }
-        return true;
+
+        engines.update();
+        return false;
     }
 
     /**
-     * Actions that player takes (in GUI) and should not affect the turn counter.
+     * Actions that player takes and should not affect the turn counter.
+     *
      * @return true if the action that should be taken should not update the turn counter
      */
     private boolean playersGUIActions(int keycode) {
@@ -71,6 +83,28 @@ public class KeyboardController extends InputAdapter {
             case Input.Keys.PLUS:
                 zoom.zoomInCamera();
                 break;
+            case Input.Keys.R:
+                VeryUglyGlobalState.playerRunning = !VeryUglyGlobalState.playerRunning;
+                break;
+            /*
+            case Input.Keys.O:
+                if (DEBUG) {
+                    player.pos.map.makeFogCoverTheEntireMap();
+                }
+                break;
+            case Input.Keys.I:
+                if (DEBUG) {
+                    FieldOfViewComponent playersFov = Mappers.fov.get(player);
+                    playersFov.visibility.setAll();
+                    engines.disableFieldOfViewSystem();
+                }
+                break;
+            case Input.Keys.U:
+                if (DEBUG) {
+                    engines.enableFieldOfViewSystem();
+                }
+                break;
+            */
             default:
                 return false;
         }

@@ -12,7 +12,13 @@ public class Media {
     public static TextureRegion wallLU, wallRU, wallLD, wallRD;
     public static TextureRegion playerFront, playerLeft, playerRight, playerBack;
     public static TextureRegion mobFront, mobLeft, mobRight, mobBack;
+    public static TextureRegion stairsDown, stairsUp;
+    public static TextureRegion crate;
     public static TextureAtlas atlas;
+    public static TextureRegion swordLeft, swordRight, swordUp, swordDown;
+    public static TextureRegion healthbar;
+    public static TextureRegion arrowUp, arrowRight, arrowLeft, arrowDown;
+    public static TextureRegion explosion1, explosion2, explosion3;
     public static int floorsConfiguration = 0;
 
     public static void loadAssets() {
@@ -46,6 +52,30 @@ public class Media {
         mobBack = atlas.findRegion("entity/mage/mage_back");
         mobLeft = atlas.findRegion("entity/mage/mage_left");
         mobRight = atlas.findRegion("entity/mage/mage_right");
+
+        crate = atlas.findRegion("entity/crate/crate");
+        stairsUp = atlas.findRegion("map/stairs/stairs_up");
+        stairsDown = atlas.findRegion("map/stairs/stairs_down");
+
+        swordRight = atlas.findRegion("entity/sword");
+        swordLeft = new TextureRegion(swordRight);
+        swordLeft.flip(true, false);
+        swordDown = new TextureRegion(swordRight);
+        swordDown.flip(true, true);
+        swordUp = swordRight;
+
+        arrowRight = atlas.findRegion("entity/weapons/arrow");
+        arrowLeft = new TextureRegion(arrowRight);
+        arrowLeft.flip(true, false);
+        arrowUp = atlas.findRegion("entity/weapons/arrowup");
+        arrowDown = new TextureRegion(arrowUp);
+        arrowDown.flip(false, true);
+
+        explosion1 = atlas.findRegion("entity/weapons/explosion1");
+        explosion2 = atlas.findRegion("entity/weapons/explosion2");
+        explosion3 = atlas.findRegion("entity/weapons/explosion3");
+
+        healthbar = atlas.findRegion("entity/healthbar");
     }
 
     public static void dispose() {
@@ -54,9 +84,10 @@ public class Media {
 
     /**
      * Return a random floor tile.
-     * @param x coords of a tile
-     * @param y coords of a tile
-     * @param index which floor tile to return
+     *
+     * @param x        coords of a tile
+     * @param y        coords of a tile
+     * @param index    which floor tile to return
      * @param isStatic indicates whether the tile should dynamically change the texture
      * @return
      */
