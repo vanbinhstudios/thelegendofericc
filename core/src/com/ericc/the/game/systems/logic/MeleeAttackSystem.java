@@ -18,7 +18,7 @@ public class MeleeAttackSystem extends IteratingSystem {
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
         PositionComponent pos = Mappers.position.get(entity);
-        AttackAction move = Mappers.attack.get(entity);
+        AttackAction move = Mappers.attackAction.get(entity);
         int power = Mappers.stats.get(entity).strength;
 
         pos.direction = move.direction;

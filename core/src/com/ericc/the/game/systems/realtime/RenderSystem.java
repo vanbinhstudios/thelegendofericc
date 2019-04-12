@@ -19,6 +19,7 @@ import com.ericc.the.game.map.Map;
 import com.ericc.the.game.shaders.Shaders;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 /**
  * The system responsible for drawing the map and the entities on the screen.
@@ -30,6 +31,11 @@ public class RenderSystem extends EntitySystem {
     private SpriteBatch batch = new SpriteBatch();
     private ImmutableArray<Entity> entities; // Renderable entities.
     private ImmutableArray<Entity> viewers;
+
+    private static Comparator<Entity> z_sort = Comparator
+            .comparingInt((Entity e) -> Mappers.position.get(e).getY())
+            .thenComparing((Entity e) -> Mappers.renderable.get(e).zOrder)
+            .reversed();
 
     public RenderSystem(int priority) {
         super(priority); // Should be the last system to run.
@@ -81,11 +87,7 @@ public class RenderSystem extends EntitySystem {
             }
 
             // Depth-order the entities.
-            visibleEntities.sort((a, b) -> {
-                if(Mappers.renderable.get(b).zOrder - Mappers.renderable.get(a).zOrder != 0)
-                return Mappers.renderable.get(b).zOrder - Mappers.renderable.get(a).zOrder;
-                else return Mappers.position.get(b).getY() - Mappers.position.get(a).getY();
-            });
+            visibleEntities.sort(z_sort);
 
             // Perform the drawing.
             int entityIndex = 0;
