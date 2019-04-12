@@ -5,15 +5,15 @@ import com.ericc.the.game.Direction;
 public class MovementAction extends Action {
     public Direction direction;
     public int delay;
-    public MOVEMENT_TYPE type;
+    public MovementType type;
 
-    public MovementAction(Direction direction, int delay, MOVEMENT_TYPE type) {
+    public MovementAction(Direction direction, int delay, MovementType type) {
         this.direction = direction;
         this.delay = delay;
         this.type = type;
     }
 
-    public enum MOVEMENT_TYPE {
+    public enum MovementType {
         CASUAL, RUN, PUSH
     }
 
