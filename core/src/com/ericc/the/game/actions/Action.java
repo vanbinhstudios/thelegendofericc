@@ -1,4 +1,7 @@
 package com.ericc.the.game.actions;
 
-public class Action {
+import com.badlogic.ashley.core.Component;
+
+public abstract class Action implements Component {
+    public abstract int getDelay();
 }

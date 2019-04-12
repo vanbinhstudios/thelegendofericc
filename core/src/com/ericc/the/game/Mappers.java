@@ -1,6 +1,9 @@
 package com.ericc.the.game;
 
 import com.badlogic.ashley.core.ComponentMapper;
+import com.ericc.the.game.actions.AttackAction;
+import com.ericc.the.game.actions.MovementAction;
+import com.ericc.the.game.actions.TeleportAction;
 import com.ericc.the.game.components.*;
 
 
@@ -11,17 +14,22 @@ import com.ericc.the.game.components.*;
  */
 public class Mappers {
     public static final ComponentMapper<PositionComponent> position = ComponentMapper.getFor(PositionComponent.class);
-    public static final ComponentMapper<DirectionComponent> direction = ComponentMapper.getFor(DirectionComponent.class);
-    public static final ComponentMapper<AffineAnimationComponent> affineAnimation = ComponentMapper.getFor(AffineAnimationComponent.class);
-    public static final ComponentMapper<SpriteSheetComponent> spriteSheet = ComponentMapper.getFor(SpriteSheetComponent.class);
-    public static final ComponentMapper<CurrentActionComponent> currentAction = ComponentMapper.getFor(CurrentActionComponent.class);
-    public static final ComponentMapper<IntentionComponent> intention = ComponentMapper.getFor(IntentionComponent.class);
+    public static final ComponentMapper<AnimationComponent> animation = ComponentMapper.getFor(AnimationComponent.class);
+    public static final ComponentMapper<RenderableComponent> renderable = ComponentMapper.getFor(RenderableComponent.class);
     public static final ComponentMapper<FieldOfViewComponent> fov = ComponentMapper.getFor(FieldOfViewComponent.class);
-    public static final ComponentMapper<AgilityComponent> agility = ComponentMapper.getFor(AgilityComponent.class);
-    public static final ComponentMapper<HealthComponent> health = ComponentMapper.getFor(HealthComponent.class);
-    public static final ComponentMapper<IntelligenceComponent> intelligence = ComponentMapper.getFor(IntelligenceComponent.class);
-    public static final ComponentMapper<MovementPointsComponent> movementPoints = ComponentMapper.getFor(MovementPointsComponent.class);
-    public static final ComponentMapper<StrengthComponent> strength = ComponentMapper.getFor(StrengthComponent.class);
-    public static final ComponentMapper<InitiativeComponent> initiative = ComponentMapper.getFor(InitiativeComponent.class);
-    public static final ComponentMapper<ScreenBoundariesComponent> screenBoundaries = ComponentMapper.getFor(ScreenBoundariesComponent.class);
+    public static final ComponentMapper<StatsComponent> stats = ComponentMapper.getFor(StatsComponent.class);
+    public static final ComponentMapper<CameraComponent> camera = ComponentMapper.getFor(CameraComponent.class);
+    public static final ComponentMapper<AgencyComponent> agency = ComponentMapper.getFor(AgencyComponent.class);
+    public static final ComponentMapper<CollisionComponent> collision = ComponentMapper.getFor(CollisionComponent.class);
+    public static final ComponentMapper<PlayerComponent> player = ComponentMapper.getFor(PlayerComponent.class);
+    public static final ComponentMapper<DeathComponent> death = ComponentMapper.getFor(DeathComponent.class);
+    public static final ComponentMapper<FixedInitiativeComponent> fixedInitiative =
+            ComponentMapper.getFor(FixedInitiativeComponent.class);
+    public static final ComponentMapper<HostileComponent> hostile = ComponentMapper.getFor(HostileComponent.class);
+
+    public static final ComponentMapper<MovementAction> movementAction = ComponentMapper.getFor(MovementAction.class);
+    public static final ComponentMapper<TeleportAction> teleport = ComponentMapper.getFor(TeleportAction.class);
+    public static final ComponentMapper<AttackAction> attack = ComponentMapper.getFor(AttackAction.class);
+    public static final ComponentMapper<ActiveComponent> active = ComponentMapper.getFor(ActiveComponent.class);
+    public static final ComponentMapper<SyncComponent> sync = ComponentMapper.getFor(SyncComponent.class);
 }
