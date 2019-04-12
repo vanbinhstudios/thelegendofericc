@@ -3,10 +3,9 @@ package com.ericc.the.game.systems.logic;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.gdx.math.Vector2;
 import com.ericc.the.game.Mappers;
 import com.ericc.the.game.actions.MovementAction;
-import com.ericc.the.game.animations.JumpAnimation;
+import com.ericc.the.game.animations.Animations;
 import com.ericc.the.game.components.AnimationComponent;
 import com.ericc.the.game.components.PositionComponent;
 import com.ericc.the.game.components.SyncComponent;
@@ -37,9 +36,7 @@ public class MovementSystem extends IteratingSystem {
 
         if (offset != null) {
             pos.map.entityMap.remove(pos.xy);
-            // TODO Decouple animation speed from movement cost
-            entity.add(new AnimationComponent(new JumpAnimation(new Vector2(offset.x, offset.y),
-                    0.6f * move.delay / 100, 0.15f * move.delay / 100)));
+            entity.add(new AnimationComponent(Animations.MOVE_ANIMATION(move)));
             pos.xy = pos.xy.add(offset);
             pos.map.entityMap.put(pos.xy, entity);
         }

@@ -16,6 +16,7 @@ public class Media {
     public static TextureRegion crate;
     public static TextureAtlas atlas;
     public static TextureRegion swordLeft, swordRight, swordUp, swordDown;
+    public static TextureRegion healthbar;
     public static int floorsConfiguration = 0;
 
     public static void loadAssets() {
@@ -60,6 +61,8 @@ public class Media {
         swordDown = new TextureRegion(swordRight);
         swordDown.flip(true, true);
         swordUp = swordRight;
+
+        healthbar = atlas.findRegion("entity/healthbar");
     }
 
     public static void dispose() {

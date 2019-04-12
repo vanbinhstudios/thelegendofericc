@@ -14,21 +14,23 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.ericc.the.game.Mappers;
 import com.ericc.the.game.Media;
 import com.ericc.the.game.TileTextureIndicator;
-import com.ericc.the.game.components.CameraComponent;
-import com.ericc.the.game.components.PositionComponent;
-import com.ericc.the.game.components.RenderableComponent;
+import com.ericc.the.game.components.*;
 import com.ericc.the.game.map.Map;
 import com.ericc.the.game.shaders.Shaders;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 /**
  * The system responsible for drawing the map and the entities on the screen.
  * It is desirable to concentrate and contain graphics-related code here.
  */
 public class RenderSystem extends EntitySystem {
+    private static Comparator<Entity> z_sort = Comparator
+            .comparingInt((Entity e) -> Mappers.position.get(e).getY())
+            .thenComparing((Entity e) -> Mappers.renderable.get(e).zOrder)
+            .reversed();
     private final Affine2 transformTmp = new Affine2();
-
     private SpriteBatch batch = new SpriteBatch();
     private ImmutableArray<Entity> entities; // Renderable entities.
     private ImmutableArray<Entity> viewers;
@@ -83,14 +85,14 @@ public class RenderSystem extends EntitySystem {
             }
 
             // Depth-order the entities.
-            visibleEntities.sort((a, b) -> Mappers.renderable.get(b).zOrder - Mappers.renderable.get(a).zOrder);
+            visibleEntities.sort(z_sort);
 
             // Perform the drawing.
             int entityIndex = 0;
             for (int y = cam.top; y >= cam.bottom; --y) {
                 for (int x = cam.left; x <= cam.right; ++x) {
                     if (camPos.map.hasBeenSeenByPlayer(x, y)) {
-                        drawTile(batch, x, y, camPos.map, true);
+                        drawTile(batch, x, y, camPos.map);
                     }
                 }
                 while (entityIndex < visibleEntities.size()) {
@@ -116,7 +118,7 @@ public class RenderSystem extends EntitySystem {
         PositionComponent pos = Mappers.position.get(entity);
         RenderableComponent render = Mappers.renderable.get(entity);
 
-        if (!render.visible)
+        if (!render.visible && !(render.visibleInFog && pos.map.hasBeenSeenByPlayer(pos.xy)))
             return;
 
         transformTmp.idt();
@@ -126,11 +128,26 @@ public class RenderSystem extends EntitySystem {
 
         batch.setColor(0, render.saturation, render.brightness, render.alpha);
         batch.draw(render.region, render.model.width, render.model.height, transformTmp);
+
+        if (Mappers.healthbar.has(entity)) {
+            HealthbarComponent bar = Mappers.healthbar.get(entity);
+            StatsComponent stats = Mappers.stats.get(entity);
+
+            float barWidth = bar.model.width * ((float) stats.health / (float) stats.maxHealth);
+
+            transformTmp.idt();
+            transformTmp.mul(bar.model.defaultTransform);
+            transformTmp.mul(bar.transform);
+            transformTmp.translate(pos.getX(), pos.getY());
+
+            batch.draw(bar.region, barWidth, bar.model.height, transformTmp);
+        }
     }
 
-    private void drawTile(SpriteBatch batch, int x, int y, Map map, boolean isStatic) {
+    private void drawTile(SpriteBatch batch, int x, int y, Map map) {
 
         batch.setColor(0.0f, map.saturation[x][y], map.brightness[x][y], 1.0f);
+        boolean isStatic = !(map.brightness[x][y] > .7);
 
         /*
         The nine-digit tile code describes the neighbourhood of the tile.

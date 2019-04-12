@@ -19,7 +19,9 @@ public class Stairs extends Entity {
         add(pos);
         add(new RenderableComponent(
                 destination == StaircaseDestination.DESCENDING ? Models.stairsDown : Models.stairsUp,
-                1));
+                1,
+                true)
+        );
         add(new AgencyComponent(new StaircaseAgency(pos, destination)));
         add(new FixedInitiativeComponent(100));
         // TODO Stairs should be impassable for entities other than player
