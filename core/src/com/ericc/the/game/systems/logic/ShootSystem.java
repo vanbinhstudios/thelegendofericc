@@ -26,7 +26,7 @@ public class ShootSystem extends IteratingSystem {
 
         if (pos.map.isFloor(startPos)) {
             getEngine().addEntity(
-                    new Projectile(startPos, pos.map, dir, Mappers.shoot.get(entity).power, Models.sword)
+                    new Projectile(startPos, pos.map, dir, Mappers.shoot.get(entity).power, Models.arrow)
             );
         }
 
