@@ -1,17 +1,19 @@
 package com.ericc.the.game.agencies;
 
-import com.ericc.the.game.*;
+import com.ericc.the.game.Direction;
+import com.ericc.the.game.KeyboardController;
+import com.ericc.the.game.Mappers;
+import com.ericc.the.game.Models;
 import com.ericc.the.game.actions.Action;
 import com.ericc.the.game.actions.Actions;
-import com.ericc.the.game.components.Model;
 import com.ericc.the.game.components.PositionComponent;
 import com.ericc.the.game.components.StatsComponent;
-import com.ericc.the.game.components.SyncComponent;
 import com.ericc.the.game.map.Map;
 import com.ericc.the.game.utils.GridPoint;
 
 public class KeyboardAgency implements Agency {
     private KeyboardController controller;
+    private boolean running;
 
     public KeyboardAgency(KeyboardController controller) {
         this.controller = controller;
@@ -32,7 +34,7 @@ public class KeyboardAgency implements Agency {
     private Action handleDirectionalInput(PositionComponent pos, Direction direction) {
         GridPoint targetXY = pos.xy.add(GridPoint.fromDirection(direction));
         if (checkIfCanMove(pos.map, targetXY)) {
-            if (VeryUglyGlobalState.playerRunning) {
+            if (running) {
                 return Actions.RUN(direction, 50);
             } else {
                 return Actions.MOVE(direction, 100);
@@ -42,7 +44,7 @@ public class KeyboardAgency implements Agency {
         } else if (checkIfCanAttack(pos.map, targetXY)) {
             return Actions.DIRECTED_AOE_ATTACK(Models.sword, direction, 1, 1, 100, 40);
         } else {
-            return SyncComponent.SYNC;
+            return Actions.WAIT;
         }
     }
 
@@ -80,8 +82,12 @@ public class KeyboardAgency implements Agency {
             controller.m = false;
             stats.delayMultiplier /= 2;
             return Actions.WAIT;
+        } else if (controller.r) {
+            controller.r = false;
+            running = !running;
+            return null;
         } else {
-            return SyncComponent.SYNC;
+            return null;
         }
     }
 }

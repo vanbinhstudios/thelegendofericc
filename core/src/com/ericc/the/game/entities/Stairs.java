@@ -7,6 +7,7 @@ import com.ericc.the.game.components.AgencyComponent;
 import com.ericc.the.game.components.FixedInitiativeComponent;
 import com.ericc.the.game.components.PositionComponent;
 import com.ericc.the.game.components.RenderableComponent;
+import com.ericc.the.game.map.Dungeon;
 import com.ericc.the.game.map.Map;
 import com.ericc.the.game.map.StaircaseDestination;
 import com.ericc.the.game.utils.GridPoint;
@@ -14,7 +15,7 @@ import com.ericc.the.game.utils.GridPoint;
 public class Stairs extends Entity {
     public PositionComponent pos;
 
-    public Stairs(GridPoint xy, Map map, StaircaseDestination destination) {
+    public Stairs(GridPoint xy, Map map, Dungeon dungeon, StaircaseDestination destination) {
         pos = new PositionComponent(xy, map);
         add(pos);
         add(new RenderableComponent(
@@ -22,7 +23,7 @@ public class Stairs extends Entity {
                 1,
                 true)
         );
-        add(new AgencyComponent(new StaircaseAgency(pos, destination)));
+        add(new AgencyComponent(new StaircaseAgency(pos, destination, dungeon)));
         add(new FixedInitiativeComponent(100));
         // TODO Stairs should be impassable for entities other than player
     }

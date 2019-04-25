@@ -4,11 +4,15 @@ import com.badlogic.ashley.core.*;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.ericc.the.game.GameEngine;
 import com.ericc.the.game.Mappers;
-import com.ericc.the.game.components.*;
+import com.ericc.the.game.actions.Action;
+import com.ericc.the.game.components.AgencyComponent;
+import com.ericc.the.game.components.FixedInitiativeComponent;
+import com.ericc.the.game.components.PositionComponent;
+import com.ericc.the.game.components.StatsComponent;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.PriorityQueue;
+import java.util.Stack;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -24,20 +28,16 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 
 public class ActivitySystem extends EntitySystem implements EntityListener {
-
     private ImmutableArray<Entity> sapient;
     private ImmutableArray<Entity> entities;
-    private ImmutableArray<Entity> active;
-    private ImmutableArray<Entity> synchronizing;
     private ImmutableArray<Entity> withfixedinitiative;
-    private ActiveComponent token = new ActiveComponent();
 
     private Comparator<Entity> timeLeftComparator = Comparator.comparingInt(e -> {
         AgencyComponent agency = Mappers.agency.get(e);
         return agency == null ? 0 : agency.delay;
     });
     private PriorityQueue<Entity> pending = new PriorityQueue<>(timeLeftComparator);
-    private ArrayList<Entity> actingInThisMoment = new ArrayList<>(512);
+    private Stack<Entity> actingInThisMoment = new Stack<>();
     private GameEngine gameEngine;
 
     public ActivitySystem(GameEngine gameEngine, int priority) {
@@ -51,8 +51,6 @@ public class ActivitySystem extends EntitySystem implements EntityListener {
                 engine.getEntitiesFor(Family.all(AgencyComponent.class, FixedInitiativeComponent.class).get());
         sapient = engine.getEntitiesFor(Family.all(AgencyComponent.class, StatsComponent.class).get());
         entities = engine.getEntitiesFor(Family.all(AgencyComponent.class).get());
-        active = engine.getEntitiesFor(Family.all(ActiveComponent.class).get());
-        synchronizing = engine.getEntitiesFor(Family.all(SyncComponent.class).get());
 
         engine.addEntityListener(Family.all(AgencyComponent.class).get(), this);
         for (Entity entity : entities) {
@@ -62,38 +60,32 @@ public class ActivitySystem extends EntitySystem implements EntityListener {
 
     @Override
     public void update(float deltaTime) {
-        for (Entity entity : active) {
-            if (!Mappers.agency.has(entity)) {
-                entity.remove(ActiveComponent.class);
-            } else if (Mappers.agency.get(entity).delay > 0) {
-                entity.remove(ActiveComponent.class);
-                pending.add(entity);
-            }
-        }
-
-        if (synchronizing.size() > 0) {
-            for (Entity entity : synchronizing) {
-                entity.remove(SyncComponent.class);
-            }
-            gameEngine.stopSpinning();
-            return;
-        }
-
         if (actingInThisMoment.isEmpty()) {
             findActingInThisMoment();
             rollInitiative();
         }
 
         if (!actingInThisMoment.isEmpty()) {
-            Entity entity = actingInThisMoment.remove(0);
-            entity.add(token);
+            Entity entity = actingInThisMoment.pop();
+
+            AgencyComponent agency = Mappers.agency.get(entity);
+            PositionComponent pos = Mappers.position.get(entity);
+            StatsComponent stats = Mappers.stats.get(entity);
+
+            Action action = agency.agency.chooseAction(pos, stats);
+
+            if (action == null || action.needsSync(entity, getEngine())) {
+                gameEngine.stopSpinning();
+                actingInThisMoment.push(entity);
+            } else {
+                action.execute(entity, getEngine());
+                agency.delay += action.getDelay() * ((stats != null) ? stats.delayMultiplier : 1.0);
+                pending.add(entity);
+            }
         }
     }
 
     private void findActingInThisMoment() {
-        if (pending.isEmpty())
-            return;
-
         Entity first = pending.peek();
         if (first == null) {
             return;
@@ -121,7 +113,7 @@ public class ActivitySystem extends EntitySystem implements EntityListener {
             Mappers.agency.get(entity).initiative = initiative.initiative;
         }
 
-        actingInThisMoment.sort(Comparator.comparingInt((Entity e) -> Mappers.agency.get(e).initiative).reversed());
+        actingInThisMoment.sort(Comparator.comparingInt((Entity e) -> Mappers.agency.get(e).initiative));
     }
 
     @Override

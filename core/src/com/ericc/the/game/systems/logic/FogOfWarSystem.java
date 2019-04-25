@@ -6,6 +6,7 @@ import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.ericc.the.game.Mappers;
+import com.ericc.the.game.components.DirtyFlag;
 import com.ericc.the.game.components.FieldOfViewComponent;
 import com.ericc.the.game.components.PlayerComponent;
 import com.ericc.the.game.components.PositionComponent;
@@ -20,7 +21,9 @@ public class FogOfWarSystem extends EntitySystem {
 
     @Override
     public void addedToEngine(Engine engine) {
-        entities = engine.getEntitiesFor(Family.all(PositionComponent.class, PlayerComponent.class, FieldOfViewComponent.class).get());
+        entities = engine.getEntitiesFor(Family.all(
+                PositionComponent.class, PlayerComponent.class,
+                FieldOfViewComponent.class, DirtyFlag.class).get());
     }
 
     @Override
@@ -38,6 +41,7 @@ public class FogOfWarSystem extends EntitySystem {
                     }
                 }
             }
+            entity.remove(DirtyFlag.class);
         }
     }
 }

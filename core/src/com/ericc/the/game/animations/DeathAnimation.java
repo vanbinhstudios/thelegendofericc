@@ -1,5 +1,6 @@
 package com.ericc.the.game.animations;
 
+import com.ericc.the.game.Direction;
 import com.ericc.the.game.components.RenderableComponent;
 
 import static java.lang.Float.max;
@@ -9,13 +10,11 @@ public class DeathAnimation implements Animation {
     private float fadingSpeed;
     private boolean desaturate;
     private float initialAlpha;
-    private float alpha;
 
     public DeathAnimation(float fadingSpeed, boolean desaturate, float initialAlpha) {
         this.fadingSpeed = fadingSpeed;
         this.desaturate = desaturate;
         this.initialAlpha = initialAlpha;
-        this.alpha = initialAlpha;
     }
 
     private float converge(float current, float target, float delta) {
@@ -27,13 +26,10 @@ public class DeathAnimation implements Animation {
     }
 
     @Override
-    public void update(float deltaTime) {
-        alpha = min(alpha, initialAlpha);
+    public void apply(Direction direction, float deltaTime, RenderableComponent renderable) {
+        float alpha = min(renderable.alpha, initialAlpha);
         alpha = converge(alpha, 0, deltaTime * fadingSpeed);
-    }
 
-    @Override
-    public void apply(RenderableComponent renderable) {
         renderable.alpha = alpha;
         if (desaturate) {
             renderable.saturation = 0f;
@@ -41,8 +37,8 @@ public class DeathAnimation implements Animation {
     }
 
     @Override
-    public boolean isOver() {
-        return alpha == 0;
+    public boolean isOver(float time) {
+        return time * fadingSpeed > initialAlpha;
     }
 
     @Override

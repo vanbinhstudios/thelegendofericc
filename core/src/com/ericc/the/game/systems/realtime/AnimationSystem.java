@@ -6,12 +6,11 @@ import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.ericc.the.game.Mappers;
-import com.ericc.the.game.components.AnimationComponent;
-import com.ericc.the.game.components.HealthbarComponent;
-import com.ericc.the.game.components.RenderableComponent;
+import com.ericc.the.game.actions.Effects;
+import com.ericc.the.game.components.*;
 
 public class AnimationSystem extends EntitySystem {
-    private ImmutableArray<Entity> animated; // Entities with affine animation currently attached.
+    private ImmutableArray<Entity> animated; // Entities with affine state currently attached.
 
 
     public AnimationSystem(int priority) {
@@ -20,27 +19,30 @@ public class AnimationSystem extends EntitySystem {
 
     @Override
     public void addedToEngine(Engine engine) {
-        animated = engine.getEntitiesFor(Family.all(RenderableComponent.class, AnimationComponent.class).get());
+        animated = engine.getEntitiesFor(Family.all(PositionComponent.class, RenderableComponent.class, AnimationComponent.class).get());
     }
 
     // TODO support for multiple animations taking place at once
     @Override
     public void update(float deltaTime) {
-        // Update the animation-derived local transform.
+        // Update the state-derived local transform.
         for (Entity entity : animated) {
+            PositionComponent pos = Mappers.position.get(entity);
             RenderableComponent render = Mappers.renderable.get(entity);
             AnimationComponent animation = Mappers.animation.get(entity);
 
-            animation.animation.update(deltaTime);
-            animation.animation.apply(render);
+            render.region = render.model.sheet[pos.direction.getValue()];
+
+            animation.localTime += deltaTime;
+            animation.animation.apply(pos.direction, animation.localTime, render);
 
             if (Mappers.healthbar.has(entity)) {
                 HealthbarComponent bar = Mappers.healthbar.get(entity);
-                animation.animation.apply(bar);
+                animation.animation.apply(pos.direction, animation.localTime, bar);
             }
 
-            if (animation.animation.isOver()) {
-                entity.remove(AnimationComponent.class);
+            if (animation.animation.isOver(animation.localTime)) {
+                Effects.setAnimation(entity, AnimationState.IDLE);
             }
         }
     }

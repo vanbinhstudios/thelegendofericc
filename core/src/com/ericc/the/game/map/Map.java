@@ -233,6 +233,6 @@ public class Map {
         AnimationComponent animation = Mappers.animation.get(potentiallyBlocking);
         if (animation == null)
             return false;
-        return animation.animation.isBlocking() && !animation.animation.isOver();
+        return animation.animation.isBlocking() && !animation.animation.isOver(animation.localTime);
     }
 }

@@ -16,5 +16,6 @@ public class Mob extends Entity {
         add(new CollisionComponent());
         add(new HostileComponent());
         add(new HealthbarComponent(Models.healthbar));
+        add(new AnimationComponent());
     }
 }

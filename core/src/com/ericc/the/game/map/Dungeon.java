@@ -37,7 +37,7 @@ public class Dungeon {
         saveProgress();
         Level newLevel;
         if (!levels.containsKey(levelNumber)) {
-            newLevel = LevelFactory.generate(levelNumber);
+            newLevel = LevelFactory.generate(levelNumber, this);
             levels.put(levelNumber, newLevel);
         } else {
             newLevel = levels.get(levelNumber);
@@ -105,7 +105,7 @@ public class Dungeon {
     }
 
     public void generateFirstLevel() {
-        Level firstLevel = LevelFactory.generate(0);
+        Level firstLevel = LevelFactory.generate(0, this);
         levels.put(0, firstLevel);
         loadProgress(firstLevel);
         // Player will be manually placed in MainGame

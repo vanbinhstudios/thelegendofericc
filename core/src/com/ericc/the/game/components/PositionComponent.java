@@ -21,6 +21,10 @@ public class PositionComponent implements Component {
         this(xy, Direction.DOWN, map);
     }
 
+    public PositionComponent(PositionComponent pos) {
+        this(pos.xy, pos.direction, pos.map);
+    }
+
     public int getX() {
         return xy.x;
     }

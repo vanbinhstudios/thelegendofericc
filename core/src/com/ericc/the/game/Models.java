@@ -15,5 +15,4 @@ public class Models {
     public static Model explosion1 = new Model(Media.explosion1, Media.explosion1, Media.explosion1, Media.explosion1, new Affine2().translate(0, 0.35f));
     public static Model explosion2 = new Model(Media.explosion2, Media.explosion2, Media.explosion2, Media.explosion2, new Affine2().translate(0, 0.35f));
     public static Model explosion3 = new Model(Media.explosion3, Media.explosion3, Media.explosion3, Media.explosion3, new Affine2().translate(0, 0.35f));
-    public static Model none = new Model(Media.dunVoid, Media.dunVoid, Media.dunVoid, Media.dunVoid, new Affine2());
 }

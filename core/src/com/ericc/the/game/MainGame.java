@@ -13,7 +13,10 @@ import com.ericc.the.game.components.FieldOfViewComponent;
 import com.ericc.the.game.entities.Player;
 import com.ericc.the.game.helpers.FpsThrottle;
 import com.ericc.the.game.map.Dungeon;
-import com.ericc.the.game.systems.logic.*;
+import com.ericc.the.game.systems.logic.ActivitySystem;
+import com.ericc.the.game.systems.logic.EntityMapSystem;
+import com.ericc.the.game.systems.logic.FieldOfViewSystem;
+import com.ericc.the.game.systems.logic.FogOfWarSystem;
 import com.ericc.the.game.systems.realtime.*;
 
 public class MainGame extends Game {
@@ -55,16 +58,7 @@ public class MainGame extends Game {
         gameEngine.addEntity(player);
 
         int priority = 0;
-        gameEngine.addLogicSystem(new DeathSystem(priority++));
         gameEngine.addLogicSystem(new ActivitySystem(gameEngine, priority++));
-        gameEngine.addLogicSystem(new AgencySystem(priority++));
-        gameEngine.addLogicSystem(new ShootSystem(priority++));
-        gameEngine.addLogicSystem(new ProjectileSystem(priority++));
-        gameEngine.addLogicSystem(new AreaOfEffectAttackSystem(priority++));
-        gameEngine.addLogicSystem(new TeleportSystem(dungeon, priority++));
-        gameEngine.addLogicSystem(new PushEntitiesSystem(priority++));
-        gameEngine.addLogicSystem(new MovementSystem(priority++));
-        gameEngine.addLogicSystem(new DamageSystem(priority++));
         gameEngine.addLogicSystem(new FieldOfViewSystem(priority++));
         gameEngine.addLogicSystem(new FogOfWarSystem(priority++));
         gameEngine.addLogicSystem(new EntityMapSystem());
@@ -73,12 +67,8 @@ public class MainGame extends Game {
         gameEngine.addRealtimeSystem(new TileChanger(.75f, priority++));
         gameEngine.addRealtimeSystem(new CameraSystem(priority++));
         gameEngine.addRealtimeSystem(new FovFadeSystem(priority++));
-        gameEngine.addRealtimeSystem(new DirectedSpritesheetSystem(priority++));
 
         gameEngine.addRealtimeSystem(new RenderSystem(priority++));
-
-        gameEngine.getSystem(FieldOfViewSystem.class).update(0);
-        gameEngine.getSystem(FogOfWarSystem.class).update(0);
 
         if (MUSIC) {
             Sound sound = Gdx.audio.newSound(Gdx.files.internal("music/8bitAdventure.mp3"));
@@ -90,7 +80,7 @@ public class MainGame extends Game {
     @Override
     public void render() {
         gameEngine.update();
-        fpsThrottle.sleepToNextFrame();
+        //fpsThrottle.sleepToNextFrame();
     }
 
     @Override
