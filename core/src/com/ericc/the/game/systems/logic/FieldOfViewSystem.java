@@ -100,7 +100,7 @@ public class FieldOfViewSystem extends EntitySystem {
         clearFOV(pos, fov);
 
         // sends a ray trace line every degree
-        for (int i = 0; i < 360; i += 10) {
+        for (int i = 0; i < 360; i += 8) {
             float x = MathUtils.cos(i * .01745f); // in radians, that's why there is a .175.. const
             float y = MathUtils.sin(i * .01745f);
 
@@ -112,8 +112,8 @@ public class FieldOfViewSystem extends EntitySystem {
     /**
      * Updates all tiles which are on the ray trace line, starting from the Entity's position.
      *
-     * @param x   a float value indicating in which direction the ray trace line goes (x axis)
-     * @param y   a float value indicating in which direction the ray trace line goes (y axis)
+     * @param x   a float value indicating in which dir the ray trace line goes (x axis)
+     * @param y   a float value indicating in which dir the ray trace line goes (y axis)
      * @param fov a Field of View Component of a given Entity
      * @param pos a PositionComponent of the same Entity
      */

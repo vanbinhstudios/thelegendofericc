@@ -6,6 +6,6 @@ public class Animations {
     public static final JumpAnimation PUSH = new JumpAnimation(0.1f, 0.20f);
     public static final JumpAnimation SLIDE = new JumpAnimation(0.0f, 0.05f);
     public static final IdleAnimation IDLE = new IdleAnimation();
-    public static final DeathAnimation DISAPPEAR = new DeathAnimation(1 / 0.3f, false, 1.0f);
-    public static final DeathAnimation WITHER = new DeathAnimation(1 / 0.5f, true, 0.7f);
+    public static final DeathAnimation DISAPPEAR = new DeathAnimation(1 / 2f, false, 1.0f);
+    public static final DeathAnimation WITHER = new DeathAnimation(1 / 2f, true, 0.7f);
 }

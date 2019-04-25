@@ -27,15 +27,14 @@ public class PushAction extends Action {
     @Override
     public boolean needsSync(Entity entity, Engine engine) {
         PositionComponent pos = Mappers.position.get(entity);
-        GridPoint fromPush = GridPoint.fromDirection(direction);
-        GridPoint start = pos.xy.add(fromPush);
+        GridPoint offset = GridPoint.fromDirection(direction);
 
+        GridPoint start = pos.xy;
         while (pos.map.isFloor(start) && !pos.map.isPassable(start)) {
             if (pos.map.hasAnimationDependency(start)) {
                 return true;
             }
-
-            start = start.add(fromPush);
+            start = start.add(offset);
         }
 
         return false;

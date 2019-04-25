@@ -37,12 +37,13 @@ public class MovementAction extends Action {
     @Override
     public void execute(Entity entity, Engine engine) {
         PositionComponent pos = Mappers.position.get(entity);
-        pos.direction = direction;
+        pos.dir = direction;
 
-        if (pos.map.isPassable(pos.xy.add(GridPoint.fromDirection(pos.direction)))) {
-            GridPoint offset = GridPoint.fromDirection(pos.direction);
+        if (pos.map.isPassable(pos.xy.add(GridPoint.fromDirection(pos.dir)))) {
+            GridPoint offset = GridPoint.fromDirection(pos.dir);
             Effects.moveBy(entity, offset);
-            AnimationState state = type == MovementType.WALK ? AnimationState.WALKING : AnimationState.RUNNING;
+            AnimationState state =
+                    (type == MovementType.WALK) ? AnimationState.WALKING : AnimationState.RUNNING;
             Effects.setAnimation(entity, state);
         }
     }

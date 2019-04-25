@@ -16,6 +16,7 @@ public class GameEngine {
     private ArrayList<EntitySystem> realtimeSystems = new ArrayList<>();
 
     public void update() {
+        engine.update(Gdx.graphics.getDeltaTime());
 
         for (EntitySystem es : realtimeSystems)
             es.setProcessing(false);
@@ -31,8 +32,6 @@ public class GameEngine {
             es.setProcessing(true);
         for (EntitySystem es : logicSystems)
             es.setProcessing(false);
-
-        engine.update(Gdx.graphics.getDeltaTime());
     }
 
     public void addLogicSystem(EntitySystem system) {

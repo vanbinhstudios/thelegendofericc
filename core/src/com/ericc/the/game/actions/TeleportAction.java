@@ -3,6 +3,7 @@ package com.ericc.the.game.actions;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.ericc.the.game.Mappers;
+import com.ericc.the.game.components.DirtyFlag;
 import com.ericc.the.game.components.FieldOfViewComponent;
 import com.ericc.the.game.components.PositionComponent;
 import com.ericc.the.game.map.Dungeon;
@@ -33,10 +34,12 @@ public class TeleportAction extends Action {
     public void execute(Entity teleporter, Engine engine) {
         PositionComponent pos = Mappers.position.get(teleporter);
 
-        Entity subject = pos.map.entityMap.get(pos.xy);
+        Entity subject = pos.map.collisionMap.get(pos.xy);
         if (subject == null || !Mappers.player.has(subject)) {
             return;
         }
+
+        subject.add(DirtyFlag.DIRTY);
 
         FieldOfViewComponent subjectFov = Mappers.fov.get(subject);
 

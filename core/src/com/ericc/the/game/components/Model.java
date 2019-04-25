@@ -31,13 +31,18 @@ public class Model {
     public float width = 1.0f;
     public float height = 1.0f;
 
-    public Model(TextureRegion up, TextureRegion right, TextureRegion down, TextureRegion left, Affine2 defaultTransform) {
+    public Model(TextureRegion up, TextureRegion right, TextureRegion down, TextureRegion left,
+                 Affine2 defaultTransform, boolean attack) {
         this.defaultTransform = defaultTransform;
         this.sheet = new TextureRegion[4];
         this.sheet[Direction.UP.getValue()] = up;
         this.sheet[Direction.DOWN.getValue()] = down;
         this.sheet[Direction.LEFT.getValue()] = left;
         this.sheet[Direction.RIGHT.getValue()] = right;
-        this.animationSheet = entityAnimationSheet;
+        this.animationSheet = attack ? attackAnimationSheet : entityAnimationSheet;
+    }
+
+    public Model(TextureRegion undirected, Affine2 defaultTransform, boolean attack) {
+        this(undirected, undirected, undirected, undirected, defaultTransform, attack);
     }
 }

@@ -31,14 +31,14 @@ public class AnimationSystem extends EntitySystem {
             RenderableComponent render = Mappers.renderable.get(entity);
             AnimationComponent animation = Mappers.animation.get(entity);
 
-            render.region = render.model.sheet[pos.direction.getValue()];
+            render.region = render.model.sheet[pos.dir.getValue()];
 
             animation.localTime += deltaTime;
-            animation.animation.apply(pos.direction, animation.localTime, render);
+            animation.animation.apply(pos.dir, animation.localTime, render);
 
             if (Mappers.healthbar.has(entity)) {
                 HealthbarComponent bar = Mappers.healthbar.get(entity);
-                animation.animation.apply(pos.direction, animation.localTime, bar);
+                animation.animation.apply(pos.dir, animation.localTime, bar);
             }
 
             if (animation.animation.isOver(animation.localTime)) {

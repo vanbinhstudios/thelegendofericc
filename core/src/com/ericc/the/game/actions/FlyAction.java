@@ -28,7 +28,7 @@ public class FlyAction extends Action {
         }
 
         AnimationComponent animation = Mappers.animation.get(entity);
-        if (animation != null && animation.animation.isBlocking() && !animation.animation.isOver(animation.localTime)) {
+        if (animation != null && animation.animation.isBlocking()) {
             return true;
         }
 
@@ -36,25 +36,26 @@ public class FlyAction extends Action {
     }
 
     @Override
-    public void execute(Entity entity, Engine engine) {
-        PositionComponent pos = Mappers.position.get(entity);
+    public void execute(Entity projectile, Engine engine) {
+        PositionComponent pos = Mappers.position.get(projectile);
 
-        Entity subject = pos.map.entityMap.get(pos.xy);
+        Entity target = pos.map.collisionMap.get(pos.xy);
 
         // Target tile has a hittable entity standing on it (non-player and possessing statistics)
-        if (subject != null) {
-            if (Mappers.stats.has(subject)) {
-                Effects.inflictDamage(subject, Mappers.damage.get(entity).damage);
+        if (target != null) {
+            if (Mappers.stats.has(target)) {
+                Effects.inflictDamage(target, Mappers.damage.get(projectile).damage);
             }
 
-            Effects.kill(entity);
+            Effects.kill(projectile);
         } else {
-            GridPoint offset = GridPoint.fromDirection(pos.direction);
-            if (!pos.map.isFloor(pos.xy.add(GridPoint.fromDirection(pos.direction)))) {
-                Effects.kill(entity);
+            GridPoint offset = GridPoint.fromDirection(pos.dir);
+            GridPoint newPos = pos.xy.add(offset);
+            if (!pos.map.isFloor(newPos)) {
+                Effects.kill(projectile);
             } else {
-                Effects.setAnimation(entity, AnimationState.SLIDING);
-                pos.xy = pos.xy.add(offset);
+                Effects.setAnimation(projectile, AnimationState.SLIDING);
+                pos.xy = newPos;
             }
         }
     }

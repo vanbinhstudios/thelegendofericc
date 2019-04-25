@@ -9,15 +9,21 @@ import com.ericc.the.game.utils.GridPoint;
 public class Effects {
     public static void moveBy(Entity entity, GridPoint offset) {
         PositionComponent pos = Mappers.position.get(entity);
-        pos.map.entityMap.remove(pos.xy);
+        pos.map.collisionMap.remove(pos.xy);
         pos.xy = pos.xy.add(offset);
-        pos.map.entityMap.put(pos.xy, entity);
+        pos.map.collisionMap.put(pos.xy, entity);
+
+        Entity trap = pos.map.trapMap.get(pos.xy);
+        if (trap != null) {
+            trap.add(ActivatedComponent.ACTIVE);
+        }
+
         entity.add(DirtyFlag.DIRTY);
     }
 
     public static void rotateTo(Entity entity, Direction dir) {
         PositionComponent pos = Mappers.position.get(entity);
-        pos.direction = dir;
+        pos.dir = dir;
     }
 
     public static void inflictDamage(Entity entity, int damage) {
@@ -31,7 +37,6 @@ public class Effects {
     public static void kill(Entity entity) {
         entity.remove(AgencyComponent.class);
         entity.remove(CollisionComponent.class);
-        entity.remove(AttackComponent.class);
         setAnimation(entity, AnimationState.DYING);
     }
 

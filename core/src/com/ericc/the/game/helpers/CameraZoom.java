@@ -38,7 +38,7 @@ public class CameraZoom {
     }
 
     /**
-     * Zooms the camera in any direction, multiplying the given parameter with a single step.
+     * Zooms the camera in any dir, multiplying the given parameter with a single step.
      */
     public void zoomAnyCamera(float multiplier) {
         zoomCamera(multiplier * this.cameraChange);

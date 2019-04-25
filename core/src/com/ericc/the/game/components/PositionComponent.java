@@ -8,12 +8,12 @@ import com.ericc.the.game.utils.GridPoint;
 // The logical position of the entity (on the map).
 public class PositionComponent implements Component {
     public GridPoint xy;
-    public Direction direction;
+    public Direction dir;
     public Map map;
 
-    public PositionComponent(GridPoint xy, Direction direction, Map map) {
+    public PositionComponent(GridPoint xy, Direction dir, Map map) {
         this.xy = xy;
-        this.direction = direction;
+        this.dir = dir;
         this.map = map;
     }
 
@@ -22,7 +22,7 @@ public class PositionComponent implements Component {
     }
 
     public PositionComponent(PositionComponent pos) {
-        this(pos.xy, pos.direction, pos.map);
+        this(pos.xy, pos.dir, pos.map);
     }
 
     public int getX() {

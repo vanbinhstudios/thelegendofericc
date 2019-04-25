@@ -12,10 +12,10 @@ public class Projectile extends Entity {
         add(new PositionComponent(xy, dir, map));
         add(new DamageComponent(damage));
         add(new RenderableComponent(model));
-        add(new AgencyComponent(new ProjectileAgency()));
-        add(new FixedInitiativeComponent(1000));
+        add(new AgencyComponent(new ProjectileAgency(), false));
         add(new AnimationComponent());
         getComponent(RenderableComponent.class).brightness = 1.0f;
         getComponent(RenderableComponent.class).alpha = 1.0f;
+        getComponent(AgencyComponent.class).initiative = 10000;
     }
 }

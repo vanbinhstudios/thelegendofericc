@@ -13,7 +13,7 @@ public class PushableObject extends Entity {
     public PushableObject(GridPoint xy, Map map) {
         RenderableComponent renderable = new RenderableComponent(Models.crate, true);
         add(new PositionComponent(xy, map));
-        add(new CollisionComponent(true));
+        add(new CollisionComponent(CollisionComponent.Type.CRATE));
         add(new AnimationComponent());
         add(renderable);
     }

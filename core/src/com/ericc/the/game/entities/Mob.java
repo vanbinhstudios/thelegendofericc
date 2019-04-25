@@ -12,9 +12,9 @@ public class Mob extends Entity {
         add(new PositionComponent(xy, map));
         add(new RenderableComponent(Models.mage));
         add(new StatsComponent(45, 30, 20, 120));
-        add(new AgencyComponent(new RandomWalk()));
-        add(new CollisionComponent());
-        add(new HostileComponent());
+        add(new AgencyComponent(new RandomWalk(), false));
+        add(new CollisionComponent(CollisionComponent.Type.LIVING));
+        add(new HostileTag());
         add(new HealthbarComponent(Models.healthbar));
         add(new AnimationComponent());
     }

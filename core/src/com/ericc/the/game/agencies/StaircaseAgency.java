@@ -23,7 +23,7 @@ public class StaircaseAgency implements Agency {
 
     @Override
     public Action chooseAction(PositionComponent pos, StatsComponent stats) {
-        Entity standing = pos.map.entityMap.get(pos.xy);
+        Entity standing = pos.map.collisionMap.get(pos.xy);
         if (standing != null && Mappers.player.has(standing)) {
             return new TeleportAction(dest, dungeon);
         } else {

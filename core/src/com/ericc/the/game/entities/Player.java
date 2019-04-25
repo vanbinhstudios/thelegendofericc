@@ -20,9 +20,9 @@ public class Player extends Entity {
         add(renderable);
         add(fov);
         add(DirtyFlag.DIRTY);
-        add(new PlayerComponent());
+        add(new PlayerTag());
         add(new StatsComponent(50, 100, 50, 100));
-        add(new CollisionComponent());
+        add(new CollisionComponent(CollisionComponent.Type.LIVING));
         add(agency);
         add(camera);
         add(new HealthbarComponent(Models.healthbar));

@@ -18,10 +18,8 @@ public class Mappers {
     public static final ComponentMapper<CameraComponent> camera = ComponentMapper.getFor(CameraComponent.class);
     public static final ComponentMapper<AgencyComponent> agency = ComponentMapper.getFor(AgencyComponent.class);
     public static final ComponentMapper<CollisionComponent> collision = ComponentMapper.getFor(CollisionComponent.class);
-    public static final ComponentMapper<PlayerComponent> player = ComponentMapper.getFor(PlayerComponent.class);
-    public static final ComponentMapper<FixedInitiativeComponent> fixedInitiative =
-            ComponentMapper.getFor(FixedInitiativeComponent.class);
-    public static final ComponentMapper<HostileComponent> hostile = ComponentMapper.getFor(HostileComponent.class);
+    public static final ComponentMapper<PlayerTag> player = ComponentMapper.getFor(PlayerTag.class);
+    public static final ComponentMapper<HostileTag> hostile = ComponentMapper.getFor(HostileTag.class);
     public static final ComponentMapper<DamageComponent> damage = ComponentMapper.getFor(DamageComponent.class);
     public static final ComponentMapper<HealthbarComponent> healthbar = ComponentMapper.getFor(HealthbarComponent.class);
 }

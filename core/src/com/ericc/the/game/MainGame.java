@@ -13,10 +13,7 @@ import com.ericc.the.game.components.FieldOfViewComponent;
 import com.ericc.the.game.entities.Player;
 import com.ericc.the.game.helpers.FpsThrottle;
 import com.ericc.the.game.map.Dungeon;
-import com.ericc.the.game.systems.logic.ActivitySystem;
-import com.ericc.the.game.systems.logic.EntityMapSystem;
-import com.ericc.the.game.systems.logic.FieldOfViewSystem;
-import com.ericc.the.game.systems.logic.FogOfWarSystem;
+import com.ericc.the.game.systems.logic.*;
 import com.ericc.the.game.systems.realtime.*;
 
 public class MainGame extends Game {
@@ -53,7 +50,7 @@ public class MainGame extends Game {
                 dungeon.getCurrentMap(),
                 new FieldOfViewComponent(dungeon.getCurrentMap().width(), dungeon.getCurrentMap().height()),
                 new CameraComponent(viewport),
-                new AgencyComponent(new KeyboardAgency(controls)));
+                new AgencyComponent(new KeyboardAgency(controls), false));
 
         gameEngine.addEntity(player);
 
@@ -61,6 +58,7 @@ public class MainGame extends Game {
         gameEngine.addLogicSystem(new ActivitySystem(gameEngine, priority++));
         gameEngine.addLogicSystem(new FieldOfViewSystem(priority++));
         gameEngine.addLogicSystem(new FogOfWarSystem(priority++));
+        gameEngine.addLogicSystem(new FlagRemover(priority++));
         gameEngine.addLogicSystem(new EntityMapSystem());
 
         gameEngine.addRealtimeSystem(new AnimationSystem(priority++));

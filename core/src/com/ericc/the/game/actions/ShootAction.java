@@ -10,17 +10,19 @@ import com.ericc.the.game.entities.Projectile;
 import com.ericc.the.game.utils.GridPoint;
 
 public class ShootAction extends Action {
+    private int delay;
     public Direction direction;
     public int power;
 
-    public ShootAction(Direction direction, int power) {
+    public ShootAction(Direction direction, int delay, int power) {
         this.direction = direction;
         this.power = power;
+        this.delay = delay;
     }
 
     @Override
     public int getDelay() {
-        return 100;
+        return delay;
     }
 
     @Override
