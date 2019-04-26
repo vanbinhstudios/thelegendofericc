@@ -61,16 +61,16 @@ public class ActivitySystem extends EntitySystem implements EntityListener {
 
     @Override
     public void update(float deltaTime) {
-        if (actingInThisMoment.isEmpty()) {
-            findActingInThisMoment();
-            rollInitiative();
-        }
 
         if (actor == null) {
             if (activated.size() > 0) {
                 actor = activated.get(0);
                 actor.remove(ActivatedComponent.class);
             } else {
+                if (actingInThisMoment.isEmpty()) {
+                    findActingInThisMoment();
+                    rollInitiative();
+                }
                 actor = actingInThisMoment.pop();
             }
 
