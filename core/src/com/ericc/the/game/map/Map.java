@@ -2,18 +2,18 @@ package com.ericc.the.game.map;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.MathUtils;
+import com.ericc.the.game.Direction;
 import com.ericc.the.game.Mappers;
 import com.ericc.the.game.Media;
 import com.ericc.the.game.TileTextureIndicator;
 import com.ericc.the.game.components.AnimationComponent;
 import com.ericc.the.game.helpers.FogOfWar;
+import com.ericc.the.game.helpers.Moves;
 import com.ericc.the.game.utils.GridPoint;
 import com.ericc.the.game.utils.RectangularBitset;
+import com.ericc.the.game.utils.WeightedGridPoint;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.*;
 
 public class Map {
 
@@ -222,5 +222,59 @@ public class Map {
         if (animation == null)
             return false;
         return animation.animation.isBlocking() && !animation.animation.isOver(animation.localTime);
+    }
+
+    public ArrayList<Direction> makePath(GridPoint source, GridPoint goal) {
+        HashMap<GridPoint, GridPoint> parent = new HashMap<>();
+        HashMap<GridPoint, Integer> currentWeight = new HashMap<>();
+        PriorityQueue<WeightedGridPoint> queue = new PriorityQueue<>(
+                new WeightedGridPoint.WeightedGridPointComparator()
+        );
+
+        queue.add(new WeightedGridPoint(source, 0));
+        parent.put(source, source);
+        currentWeight.put(source, 0);
+
+        while (!queue.isEmpty()) {
+            WeightedGridPoint top = queue.poll();
+
+            if (top.xy.equals(goal)) {
+                return reconstructPath(parent, source, goal);
+            }
+
+            for (GridPoint move : Moves.moves) {
+                GridPoint pos = top.xy.add(move);
+
+                if (!isFloor(pos)) {
+                    continue;
+                }
+
+                if (!currentWeight.containsKey(pos) || (top.weight + 1 < currentWeight.get(pos))) {
+                    int priority = top.weight + 1 + estimatePathLength(pos, goal);
+
+                    currentWeight.put(pos, top.weight + 1);
+                    queue.add(new WeightedGridPoint(pos, priority));
+                    parent.put(pos, top.xy);
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private ArrayList<Direction> reconstructPath(HashMap<GridPoint, GridPoint> parent, GridPoint source, GridPoint goal) {
+        ArrayList<Direction> directions = new ArrayList<>();
+
+        while (goal != parent.get(goal)) {
+            directions.add(Direction.fromGridPoints(goal, parent.get(goal)));
+            goal = parent.get(goal);
+        }
+
+        Collections.reverse(directions);
+        return directions;
+    }
+
+    private int estimatePathLength(GridPoint source, GridPoint goal) {
+        return Math.abs(source.x - goal.x) + Math.abs(source.y - goal.y);
     }
 }
