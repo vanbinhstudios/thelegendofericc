@@ -45,7 +45,7 @@ public class KeyboardAgency implements Agency {
         } else if (checkIfCanPush(pos.map, targetXY)) {
             return Actions.PUSH(direction, 150);
         } else if (checkIfCanAttack(pos.map, targetXY)) {
-            return Actions.AOE_ATTACK(Models.sword, Area.square(targetXY, 0), 100, 40);
+            return Actions.AOE_ATTACK(Models.sword, Area.square(targetXY, 0), direction, 100, 40);
         } else {
             return Actions.WAIT;
         }

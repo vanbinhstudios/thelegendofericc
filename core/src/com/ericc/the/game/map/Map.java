@@ -245,7 +245,7 @@ public class Map {
             for (GridPoint move : Moves.moves) {
                 GridPoint pos = top.xy.add(move);
 
-                if (!isFloor(pos)) {
+                if (!isPassable(pos) && !pos.equals(goal)) {
                     continue;
                 }
 
