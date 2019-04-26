@@ -22,7 +22,7 @@ public class FovFadeSystem extends EntitySystem {
     @Override
     public void addedToEngine(Engine engine) {
         entities = engine.getEntitiesFor(Family.all(RenderableComponent.class, PositionComponent.class).get());
-        players = engine.getEntitiesFor(Family.all(PlayerComponent.class, FieldOfViewComponent.class, CameraComponent.class).get());
+        players = engine.getEntitiesFor(Family.all(PlayerTag.class, FieldOfViewComponent.class, CameraComponent.class).get());
     }
 
     @Override

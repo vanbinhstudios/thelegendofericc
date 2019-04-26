@@ -4,19 +4,20 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.ericc.the.game.Direction;
 import com.ericc.the.game.Mappers;
-import com.ericc.the.game.components.AnimationState;
+import com.ericc.the.game.Models;
 import com.ericc.the.game.components.PositionComponent;
+import com.ericc.the.game.entities.Projectile;
 import com.ericc.the.game.utils.GridPoint;
 
-public class MovementAction extends Action {
+public class ShootAction extends Action {
+    private int delay;
     public Direction direction;
-    public int delay;
-    public MovementType type;
+    public int power;
 
-    public MovementAction(Direction direction, int delay, MovementType type) {
+    public ShootAction(Direction direction, int delay, int power) {
         this.direction = direction;
+        this.power = power;
         this.delay = delay;
-        this.type = type;
     }
 
     @Override
@@ -30,21 +31,17 @@ public class MovementAction extends Action {
         return pos.map.hasAnimationDependency(pos.xy);
     }
 
-    public enum MovementType {
-        WALK, RUN
-    }
-
     @Override
     public void execute(Entity entity, Engine engine) {
         PositionComponent pos = Mappers.position.get(entity);
-        pos.dir = direction;
 
-        if (pos.map.isPassable(pos.xy.add(GridPoint.fromDirection(pos.dir)))) {
-            GridPoint offset = GridPoint.fromDirection(pos.dir);
-            Effects.moveBy(entity, offset);
-            AnimationState state =
-                    (type == MovementType.WALK) ? AnimationState.WALKING : AnimationState.RUNNING;
-            Effects.setAnimation(entity, state);
+        GridPoint offset = GridPoint.fromDirection(direction);
+        GridPoint startPos = pos.xy.add(offset);
+
+        if (pos.map.isFloor(startPos)) {
+            engine.addEntity(
+                    new Projectile(startPos, pos.map, direction, power, Models.arrow)
+            );
         }
     }
 }

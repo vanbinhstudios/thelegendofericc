@@ -16,6 +16,9 @@ public class Media {
     public static TextureRegion crate;
     public static TextureAtlas atlas;
     public static TextureRegion swordLeft, swordRight, swordUp, swordDown;
+    public static TextureRegion healthbar;
+    public static TextureRegion arrowUp, arrowRight, arrowLeft, arrowDown;
+    public static TextureRegion explosion1, explosion2, explosion3;
     public static int floorsConfiguration = 0;
 
     public static void loadAssets() {
@@ -60,6 +63,19 @@ public class Media {
         swordDown = new TextureRegion(swordRight);
         swordDown.flip(true, true);
         swordUp = swordRight;
+
+        arrowRight = atlas.findRegion("entity/weapons/arrow");
+        arrowLeft = new TextureRegion(arrowRight);
+        arrowLeft.flip(true, false);
+        arrowUp = atlas.findRegion("entity/weapons/arrowup");
+        arrowDown = new TextureRegion(arrowUp);
+        arrowDown.flip(false, true);
+
+        explosion1 = atlas.findRegion("entity/weapons/explosion1");
+        explosion2 = atlas.findRegion("entity/weapons/explosion2");
+        explosion3 = atlas.findRegion("entity/weapons/explosion3");
+
+        healthbar = atlas.findRegion("entity/healthbar");
     }
 
     public static void dispose() {
