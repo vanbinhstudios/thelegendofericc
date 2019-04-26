@@ -14,7 +14,7 @@ public class LevelFactory {
     private final static int MOBS_COUNT = 20;
     private final static int CRATES_COUNT = 15;
 
-    public static Level generate(int levelNumber) {
+    public static Level generate(int levelNumber, Dungeon dungeon) {
         Map map = new MapGenerator(MAP_WIDTH, MAP_HEIGHT, ROOM_SIZE).generateMap();
 
         ArrayList<Entity> entities = new ArrayList<>();
@@ -27,7 +27,7 @@ public class LevelFactory {
             entities.add(new PushableObject(map.getRandomPassableTile(), map));
         }
 
-        Stairs exit = new Stairs(map.getRandomPassableTileFromRooms(), map,
+        Stairs exit = new Stairs(map.getRandomPassableTileFromRooms(), map, dungeon,
                 StaircaseDestination.DESCENDING
         );
 
@@ -35,7 +35,7 @@ public class LevelFactory {
         map.registerStairs(exit.pos.xy, StaircaseDestination.DESCENDING);
 
         if (levelNumber > 0) {
-            Stairs entrance = new Stairs(map.getRandomPassableTileFromRooms(), map,
+            Stairs entrance = new Stairs(map.getRandomPassableTileFromRooms(), map, dungeon,
                     StaircaseDestination.ASCENDING
             );
 

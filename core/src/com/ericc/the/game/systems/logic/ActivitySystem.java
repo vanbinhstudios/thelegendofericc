@@ -4,19 +4,21 @@ import com.badlogic.ashley.core.*;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.ericc.the.game.GameEngine;
 import com.ericc.the.game.Mappers;
-import com.ericc.the.game.components.*;
+import com.ericc.the.game.actions.Action;
+import com.ericc.the.game.components.ActivatedComponent;
+import com.ericc.the.game.components.AgencyComponent;
+import com.ericc.the.game.components.PositionComponent;
+import com.ericc.the.game.components.StatsComponent;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.PriorityQueue;
+import java.util.Stack;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * Activity System is based on passing an activity token (ActiveComponent).
- * From the point of view of game systems, there is always exactly one entity being active.
- * However, there exists a notion of "logical time", that is, actions can take shorter or longer amounts of time.
+ * The Activity System is responsible for sequencing and scheduling the agencies and actions of actors.
  * Actors accumulate delay, each in their own separate pool. Each action costs
- * a certain amount of time - it is indicated by adding delay to the pool.
+ * a certain amount of time - it is indicated by adding its delay to the actor's pool.
  * <p>
  * Actors are arranged in a priority queue {@link #pending}, sorted by amount of their delay.
  * If several actors have the same amount of delay, the precise order of their actions is determined based
@@ -24,21 +26,19 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 
 public class ActivitySystem extends EntitySystem implements EntityListener {
-
     private ImmutableArray<Entity> sapient;
     private ImmutableArray<Entity> entities;
-    private ImmutableArray<Entity> active;
-    private ImmutableArray<Entity> synchronizing;
-    private ImmutableArray<Entity> withfixedinitiative;
-    private ActiveComponent token = new ActiveComponent();
+    private ImmutableArray<Entity> activated;
 
     private Comparator<Entity> timeLeftComparator = Comparator.comparingInt(e -> {
         AgencyComponent agency = Mappers.agency.get(e);
         return agency == null ? 0 : agency.delay;
     });
     private PriorityQueue<Entity> pending = new PriorityQueue<>(timeLeftComparator);
-    private ArrayList<Entity> actingInThisMoment = new ArrayList<>(512);
+    private Stack<Entity> actingInThisMoment = new Stack<>();
     private GameEngine gameEngine;
+    private Action action;
+    private Entity actor;
 
     public ActivitySystem(GameEngine gameEngine, int priority) {
         super(priority);
@@ -47,53 +47,74 @@ public class ActivitySystem extends EntitySystem implements EntityListener {
 
     @Override
     public void addedToEngine(Engine engine) {
-        withfixedinitiative =
-                engine.getEntitiesFor(Family.all(AgencyComponent.class, FixedInitiativeComponent.class).get());
         sapient = engine.getEntitiesFor(Family.all(AgencyComponent.class, StatsComponent.class).get());
         entities = engine.getEntitiesFor(Family.all(AgencyComponent.class).get());
-        active = engine.getEntitiesFor(Family.all(ActiveComponent.class).get());
-        synchronizing = engine.getEntitiesFor(Family.all(SyncComponent.class).get());
+        activated = engine.getEntitiesFor(Family.all(ActivatedComponent.class).get());
 
         engine.addEntityListener(Family.all(AgencyComponent.class).get(), this);
         for (Entity entity : entities) {
-            pending.add(entity);
+            if (!Mappers.agency.get(entity).passive) {
+                pending.add(entity);
+            }
         }
     }
 
     @Override
     public void update(float deltaTime) {
-        for (Entity entity : active) {
-            if (!Mappers.agency.has(entity)) {
-                entity.remove(ActiveComponent.class);
-            } else if (Mappers.agency.get(entity).delay > 0) {
-                entity.remove(ActiveComponent.class);
-                pending.add(entity);
+
+        if (actor == null) {
+            if (activated.size() > 0) {
+                actor = activated.get(0);
+                actor.remove(ActivatedComponent.class);
+            } else {
+                if (actingInThisMoment.isEmpty()) {
+                    findActingInThisMoment();
+                    rollInitiative();
+                }
+                actor = actingInThisMoment.pop();
+            }
+
+            if (actor == null) {
+                // There are no actors.
+                gameEngine.stopSpinning();
+                return;
             }
         }
 
-        if (synchronizing.size() > 0) {
-            for (Entity entity : synchronizing) {
-                entity.remove(SyncComponent.class);
+        if (action == null) {
+            AgencyComponent agency = Mappers.agency.get(actor);
+            PositionComponent pos = Mappers.position.get(actor);
+            StatsComponent stats = Mappers.stats.get(actor);
+
+            action = agency.agency.chooseAction(pos, stats);
+            if (action == null) {
+                // The actor needs more time to think.
+                gameEngine.stopSpinning();
+                return;
             }
+        }
+
+        if (action.needsSync(actor, getEngine())) {
+            // The action needs to wait until some animation ends.
             gameEngine.stopSpinning();
             return;
         }
 
-        if (actingInThisMoment.isEmpty()) {
-            findActingInThisMoment();
-            rollInitiative();
+        AgencyComponent agency = Mappers.agency.get(actor);
+        StatsComponent stats = Mappers.stats.get(actor);
+
+        action.execute(actor, getEngine());
+
+        if (activated.size() == 0) {
+            agency.delay += action.getDelay() * ((stats != null) ? stats.delayMultiplier : 1.0);
+            pending.add(actor);
         }
 
-        if (!actingInThisMoment.isEmpty()) {
-            Entity entity = actingInThisMoment.remove(0);
-            entity.add(token);
-        }
+        action = null;
+        actor = null;
     }
 
     private void findActingInThisMoment() {
-        if (pending.isEmpty())
-            return;
-
         Entity first = pending.peek();
         if (first == null) {
             return;
@@ -116,17 +137,14 @@ public class ActivitySystem extends EntitySystem implements EntityListener {
                     + ThreadLocalRandom.current().nextInt(1, 20));
         }
 
-        for (Entity entity : withfixedinitiative) {
-            FixedInitiativeComponent initiative = Mappers.fixedInitiative.get(entity);
-            Mappers.agency.get(entity).initiative = initiative.initiative;
-        }
-
-        actingInThisMoment.sort(Comparator.comparingInt((Entity e) -> Mappers.agency.get(e).initiative).reversed());
+        actingInThisMoment.sort(Comparator.comparingInt((Entity e) -> Mappers.agency.get(e).initiative));
     }
 
     @Override
     public void entityAdded(Entity entity) {
-        pending.add(entity);
+        if (!Mappers.agency.get(entity).passive) {
+            pending.add(entity);
+        }
     }
 
     @Override

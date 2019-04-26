@@ -1,17 +1,21 @@
 package com.ericc.the.game.agencies;
 
-import com.ericc.the.game.*;
+import com.ericc.the.game.Direction;
+import com.ericc.the.game.KeyboardController;
+import com.ericc.the.game.Mappers;
+import com.ericc.the.game.Models;
 import com.ericc.the.game.actions.Action;
 import com.ericc.the.game.actions.Actions;
-import com.ericc.the.game.components.Model;
+import com.ericc.the.game.components.CollisionComponent;
 import com.ericc.the.game.components.PositionComponent;
 import com.ericc.the.game.components.StatsComponent;
-import com.ericc.the.game.components.SyncComponent;
 import com.ericc.the.game.map.Map;
+import com.ericc.the.game.utils.Area;
 import com.ericc.the.game.utils.GridPoint;
 
 public class KeyboardAgency implements Agency {
     private KeyboardController controller;
+    private boolean running;
 
     public KeyboardAgency(KeyboardController controller) {
         this.controller = controller;
@@ -26,23 +30,24 @@ public class KeyboardAgency implements Agency {
     }
 
     private boolean checkIfCanPush(Map map, GridPoint xy) {
-        return Mappers.collision.has(map.getEntity(xy)) && Mappers.collision.get(map.getEntity(xy)).isPushable;
+        CollisionComponent col = Mappers.collision.get(map.getEntity(xy));
+        return col != null && col.type == CollisionComponent.Type.CRATE;
     }
 
     private Action handleDirectionalInput(PositionComponent pos, Direction direction) {
         GridPoint targetXY = pos.xy.add(GridPoint.fromDirection(direction));
         if (checkIfCanMove(pos.map, targetXY)) {
-            if (VeryUglyGlobalState.playerRunning) {
+            if (running) {
                 return Actions.RUN(direction, 50);
             } else {
                 return Actions.MOVE(direction, 100);
             }
         } else if (checkIfCanPush(pos.map, targetXY)) {
-            return Actions.PUSH(direction);
+            return Actions.PUSH(direction, 150);
         } else if (checkIfCanAttack(pos.map, targetXY)) {
-            return Actions.DIRECTED_AOE_ATTACK(Models.sword, direction, 1, 1, 100, 40);
+            return Actions.AOE_ATTACK(Models.sword, Area.square(targetXY, 0), 100, 40);
         } else {
-            return SyncComponent.SYNC;
+            return Actions.WAIT;
         }
     }
 
@@ -65,13 +70,13 @@ public class KeyboardAgency implements Agency {
             return Actions.LONG_WAIT;
         } else if (controller.q) {
             controller.q = false;
-            return Actions.AOE_ATTACK(new GridPoint(-1, -1), Models.explosion1, Direction.UP, 3, 3, 300, 20);
+            return Actions.AOE_ATTACK(Models.explosion1, Area.square(pos.xy, 1), pos.dir, 200, 30);
         } else if (controller.e) {
             controller.e = false;
-            return Actions.DIRECTED_AOE_ATTACK(Models.explosion3, pos.direction, 6, 1, 100, 40);
+            return Actions.AOE_ATTACK(Models.explosion3, Area.ray(pos.xy, pos.dir, 5), pos.dir, 300, 40);
         } else if (controller.f) {
             controller.f = false;
-            return Actions.SHOOT(pos.direction, 40);
+            return Actions.SHOOT(pos.dir, 100, 40);
         } else if (controller.n) {
             controller.n = false;
             stats.delayMultiplier *= 2;
@@ -80,8 +85,12 @@ public class KeyboardAgency implements Agency {
             controller.m = false;
             stats.delayMultiplier /= 2;
             return Actions.WAIT;
+        } else if (controller.r) {
+            controller.r = false;
+            running = !running;
+            return null;
         } else {
-            return SyncComponent.SYNC;
+            return null;
         }
     }
 }

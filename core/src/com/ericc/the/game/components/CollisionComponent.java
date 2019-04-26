@@ -3,13 +3,11 @@ package com.ericc.the.game.components;
 import com.badlogic.ashley.core.Component;
 
 public class CollisionComponent implements Component {
-    public boolean isPushable;
+    public enum Type {CRATE, TRAP, LIVING}
 
-    public CollisionComponent() {
-        this.isPushable = false;
-    }
+    public Type type;
 
-    public CollisionComponent(boolean isPushable) {
-        this.isPushable = isPushable;
+    public CollisionComponent(Type type) {
+        this.type = type;
     }
 }

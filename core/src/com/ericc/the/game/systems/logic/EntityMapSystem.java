@@ -13,7 +13,12 @@ public class EntityMapSystem extends EntitySystem {
 
         for (Entity entity : engine.getEntitiesFor(family)) {
             PositionComponent pos = Mappers.position.get(entity);
-            pos.map.entityMap.put(pos.xy, entity);
+            CollisionComponent col = Mappers.collision.get(entity);
+            if (col.type == CollisionComponent.Type.CRATE || col.type == CollisionComponent.Type.LIVING) {
+                pos.map.collisionMap.put(pos.xy, entity);
+            } else {
+                pos.map.trapMap.put(pos.xy, entity);
+            }
         }
     }
 
@@ -21,13 +26,22 @@ public class EntityMapSystem extends EntitySystem {
         @Override
         public void entityRemoved(Entity entity) {
             PositionComponent pos = Mappers.position.get(entity);
-            pos.map.entityMap.remove(pos.xy);
+            if (pos.map.collisionMap.get(pos.xy) == entity) {
+                pos.map.collisionMap.remove(pos.xy);
+            } else if (pos.map.trapMap.get(pos.xy) == entity) {
+                pos.map.trapMap.remove(pos.xy);
+            }
         }
 
         @Override
         public void entityAdded(Entity entity) {
             PositionComponent pos = Mappers.position.get(entity);
-            pos.map.entityMap.put(pos.xy, entity);
+            CollisionComponent col = Mappers.collision.get(entity);
+            if (col.type == CollisionComponent.Type.CRATE || col.type == CollisionComponent.Type.LIVING) {
+                pos.map.collisionMap.put(pos.xy, entity);
+            } else {
+                pos.map.trapMap.put(pos.xy, entity);
+            }
         }
     }
 }

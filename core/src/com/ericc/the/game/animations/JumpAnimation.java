@@ -3,7 +3,9 @@ package com.ericc.the.game.animations;
 import com.badlogic.gdx.math.Affine2;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
+import com.ericc.the.game.Direction;
 import com.ericc.the.game.components.RenderableComponent;
+import com.ericc.the.game.utils.GridPoint;
 
 import static java.lang.Float.min;
 
@@ -12,36 +14,31 @@ import static java.lang.Float.min;
  * <p>
  * The transform is applied to the entity in it's local space: that is, the entity's origin
  * is the pivot of the transform.
- * Caveat: when an entity changes its logical position, the move animation follows *afterwards*!
+ * Caveat: when an entity changes its logical position, the move state follows *afterwards*!
  * As such, those animations should return transforms relative to their *ending* state!
  */
 public class JumpAnimation implements Animation {
     private final Affine2 transform = new Affine2();
-    private Vector2 startPosition;
-    private float time;
+    private final Vector2 startPosition = new Vector2();
+    private GridPoint offset;
     private float duration;
     private float height;
-    private boolean done = false;
 
-    /**
-     * @param transition the vector from start to end position
-     */
-    public JumpAnimation(Vector2 transition, float height, float duration) {
-        this.startPosition = transition.scl(-1); // Start here, land at (0, 0)
+    public JumpAnimation(float height, float duration) {
         this.duration = duration;
         this.height = height;
-        this.time = 0;
     }
 
     @Override
-    public void update(float deltaTime) {
-        time += deltaTime;
+    public void apply(Direction dir, float time, RenderableComponent renderable) {
+        offset = GridPoint.fromDirection(dir);
+        startPosition.set(-offset.x, -offset.y); // Start here, land at (0, 0)
+
         transform.idt();
         float timeFraction = time / duration;
 
         if (timeFraction > 1) {
-            done = true;
-            return;
+            timeFraction = 1;
         }
 
         // Horizontal velocity is constant.
@@ -52,16 +49,13 @@ public class JumpAnimation implements Animation {
         float heightTimeFraction = min(timeFraction, 1 - timeFraction);
         float currentHeight = height * Interpolation.pow2Out.apply(heightTimeFraction);
         transform.translate(0, currentHeight);
-    }
 
-    @Override
-    public void apply(RenderableComponent renderable) {
         renderable.transform.set(transform);
     }
 
     @Override
-    public boolean isOver() {
-        return done;
+    public boolean isOver(float time) {
+        return time > duration;
     }
 
     @Override
