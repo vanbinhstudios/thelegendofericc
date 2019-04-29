@@ -16,7 +16,7 @@ public class Media {
     public static TextureRegion crate;
     public static TextureAtlas atlas;
     public static TextureRegion swordLeft, swordRight, swordUp, swordDown;
-    public static TextureRegion healthbar;
+    public static TextureRegion healthBar;
     public static TextureRegion arrowUp, arrowRight, arrowLeft, arrowDown;
     public static TextureRegion explosion1, explosion2, explosion3;
     public static int floorsConfiguration = 0;
@@ -75,7 +75,7 @@ public class Media {
         explosion2 = atlas.findRegion("entity/weapons/explosion2");
         explosion3 = atlas.findRegion("entity/weapons/explosion3");
 
-        healthbar = atlas.findRegion("entity/healthbar");
+        healthBar = atlas.findRegion("entity/healthBar");
     }
 
     public static void dispose() {

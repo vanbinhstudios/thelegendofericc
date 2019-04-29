@@ -25,7 +25,8 @@ public class Player extends Entity {
         add(new CollisionComponent(CollisionComponent.Type.LIVING));
         add(agency);
         add(camera);
-        add(new HealthbarComponent(Models.healthbar));
+        add(new HealthBarComponent(Models.healthBar));
+        add(new ExperienceBarComponent(Models.experienceBar));
         add(new AnimationComponent());
     }
 }
