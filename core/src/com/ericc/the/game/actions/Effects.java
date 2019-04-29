@@ -30,12 +30,24 @@ public class Effects {
         StatsComponent targetStats = Mappers.stats.get(target);
         targetStats.health -= damage;
         if (targetStats.health <= 0) {
-            if (Mappers.stats.has(attackOwner) && Mappers.experienceWorth.has()) {
-                StatsComponent attackOwnerStats = Mappers.stats.get(attackOwner);
-
+            if (attackOwner != null
+                    && Mappers.experienceWorth.has(target)
+                    && Mappers.stats.has(attackOwner)) {
+                increaseExperience(attackOwner, Mappers.experienceWorth.get(target).experienceWorth);
             }
 
             kill(target);
+        }
+    }
+
+    public static void increaseExperience(Entity target, int experienceAmount) {
+        StatsComponent stats = Mappers.stats.get(target);
+        stats.experience += experienceAmount;
+        // TODO A proper levelling system
+        while (stats.experience > stats.maxExperience) {
+            stats.level++;
+            stats.experience -= stats.maxExperience;
+            stats.maxExperience *= 1.5;
         }
     }
 

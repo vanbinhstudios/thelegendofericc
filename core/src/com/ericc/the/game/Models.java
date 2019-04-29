@@ -18,14 +18,8 @@ public class Models {
             new Affine2().translate(0, 0.35f), true);
     public static Model healthBar = new Model(Media.healthBar,
             new Affine2().translate(0, 1.1f), false);
-    static {
-        healthBar.width = 0.9f;
-    }
     public static Model experienceBar = new Model(Media.experienceBar,
             new Affine2().translate(0, 0.9f), false);
-    static {
-        experienceBar.width = 0.9f;
-    }
     public static Model arrow = new Model(Media.arrowUp, Media.arrowRight, Media.arrowDown, Media.arrowLeft,
             new Affine2().translate(0, 0.35f), true);
     public static Model explosion1 = new Model(Media.explosion1,
@@ -34,4 +28,12 @@ public class Models {
             new Affine2().translate(0, 0.35f), true);
     public static Model explosion3 = new Model(Media.explosion3,
             new Affine2().translate(0, 0.35f), true);
+
+    static {
+        healthBar.width = 0.9f;
+    }
+
+    static {
+        experienceBar.width = 0.9f;
+    }
 }

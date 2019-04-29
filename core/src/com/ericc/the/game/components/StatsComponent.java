@@ -3,6 +3,7 @@ package com.ericc.the.game.components;
 import com.badlogic.ashley.core.Component;
 
 public class StatsComponent implements Component {
+    public static int FIRST_LEVEL_EXPERIENCE = 1000;
     public int intelligence;
     public int agility;
     public int strength;
@@ -12,8 +13,6 @@ public class StatsComponent implements Component {
     public int level;
     public int maxExperience;
     public float delayMultiplier;
-
-    public static int FIRST_LEVEL_EXPERIENCE = 1000;
 
     public StatsComponent(int intelligence, int agility, int strength, int health) {
         this.intelligence = intelligence;
