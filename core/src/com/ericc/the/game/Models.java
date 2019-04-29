@@ -21,7 +21,7 @@ public class Models {
     static {
         healthBar.width = 0.9f;
     }
-    public static Model experienceBar = new Model(Media.healthBar,
+    public static Model experienceBar = new Model(Media.experienceBar,
             new Affine2().translate(0, 0.9f), false);
     static {
         experienceBar.width = 0.9f;

@@ -2,6 +2,7 @@ package com.ericc.the.game;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.ericc.the.game.components.*;
+import com.ericc.the.game.utils.RectangularBitset;
 
 
 /**
@@ -23,5 +24,5 @@ public class Mappers {
     public static final ComponentMapper<DamageComponent> damage = ComponentMapper.getFor(DamageComponent.class);
     public static final ComponentMapper<HealthBarComponent> healthbar = ComponentMapper.getFor(HealthBarComponent.class);
     public static final ComponentMapper<ExperienceBarComponent> experienceBar = ComponentMapper.getFor(ExperienceBarComponent.class);
-
+    public static final ComponentMapper<OwnedByComponent> owner = ComponentMapper.getFor(OwnedByComponent.class);
 }

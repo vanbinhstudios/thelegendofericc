@@ -44,7 +44,8 @@ public class FlyAction extends Action {
         // Target tile has a hittable entity standing on it (non-player and possessing statistics)
         if (target != null) {
             if (Mappers.stats.has(target)) {
-                Effects.inflictDamage(target, Mappers.damage.get(projectile).damage);
+                Effects.inflictDamage(target, Mappers.damage.get(projectile).damage,
+                        Mappers.owner.get(projectile).owner);
             }
 
             Effects.kill(projectile);

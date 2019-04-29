@@ -26,11 +26,16 @@ public class Effects {
         pos.dir = dir;
     }
 
-    public static void inflictDamage(Entity entity, int damage) {
-        StatsComponent stats = Mappers.stats.get(entity);
-        stats.health -= damage;
-        if (stats.health <= 0) {
-            kill(entity);
+    public static void inflictDamage(Entity target, int damage, Entity attackOwner) {
+        StatsComponent targetStats = Mappers.stats.get(target);
+        targetStats.health -= damage;
+        if (targetStats.health <= 0) {
+            if (Mappers.stats.has(attackOwner) && Mappers.experienceWorth.has()) {
+                StatsComponent attackOwnerStats = Mappers.stats.get(attackOwner);
+
+            }
+
+            kill(target);
         }
     }
 

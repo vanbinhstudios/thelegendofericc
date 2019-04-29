@@ -1,4 +1,11 @@
 package com.ericc.the.game.components;
 
-public class ExperienceWorthComponent {
+import com.badlogic.ashley.core.Component;
+
+public class ExperienceWorthComponent implements Component {
+    public int experienceWorth;
+
+    public ExperienceWorthComponent(int experienceWorth) {
+        this.experienceWorth = experienceWorth;
+    }
 }
