@@ -2,6 +2,7 @@ package com.ericc.the.game.entities;
 
 import com.badlogic.ashley.core.Entity;
 import com.ericc.the.game.Models;
+import com.ericc.the.game.agencies.AstarAgency;
 import com.ericc.the.game.agencies.RandomWalk;
 import com.ericc.the.game.components.*;
 import com.ericc.the.game.map.Map;
@@ -12,7 +13,7 @@ public class Mob extends Entity {
         add(new PositionComponent(xy, map));
         add(new RenderableComponent(Models.mage));
         add(new StatsComponent(45, 30, 20, 120));
-        add(new AgencyComponent(new RandomWalk(), false));
+        add(new AgencyComponent(new AstarAgency(), false));
         add(new CollisionComponent(CollisionComponent.Type.LIVING));
         add(new HostileTag());
         add(new HealthbarComponent(Models.healthbar));
