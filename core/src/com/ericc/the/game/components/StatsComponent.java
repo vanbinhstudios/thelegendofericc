@@ -3,11 +3,15 @@ package com.ericc.the.game.components;
 import com.badlogic.ashley.core.Component;
 
 public class StatsComponent implements Component {
+    public static int FIRST_LEVEL_EXPERIENCE = 1000;
     public int intelligence;
     public int agility;
     public int strength;
     public int maxHealth;
     public int health;
+    public int experience;
+    public int level;
+    public int maxExperience;
     public float delayMultiplier;
 
     public StatsComponent(int intelligence, int agility, int strength, int health) {
@@ -17,6 +21,9 @@ public class StatsComponent implements Component {
         this.maxHealth = health;
         this.health = this.maxHealth;
         this.delayMultiplier = 1f;
+        this.experience = 200;
+        this.level = 1;
+        this.maxExperience = FIRST_LEVEL_EXPERIENCE;
     }
 
     public StatsComponent(int intelligence, int agility, int strength, int health, float delayMultiplier) {
