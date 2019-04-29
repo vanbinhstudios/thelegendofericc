@@ -35,6 +35,9 @@ public class AOEAttack extends Action {
     @Override
     public boolean needsSync(Entity entity, Engine engine) {
         PositionComponent pos = Mappers.position.get(entity);
+        if (pos.map.hasAnimationDependency(pos.xy)) {
+            return true;
+        }
 
         for (int x = area.left; x <= area.right; ++x) {
             for (int y = area.bottom; y <= area.top; ++y) {
@@ -50,6 +53,7 @@ public class AOEAttack extends Action {
     @Override
     public void execute(Entity entity, Engine engine) {
         PositionComponent pos = Mappers.position.get(entity);
+        pos.dir = dir;
 
         for (int x = area.left; x <= area.right; ++x) {
             for (int y = area.bottom; y <= area.top; ++y) {
@@ -59,7 +63,7 @@ public class AOEAttack extends Action {
                             new Attack(tile, pos.map, power, model, dir)
                     );
                     Entity subject = pos.map.collisionMap.get(tile);
-                    if (subject != null && !Mappers.player.has(subject) && Mappers.stats.has(subject)) {
+                    if (subject != null  && subject != entity && Mappers.stats.has(subject)) {
                         Effects.inflictDamage(subject, power, entity);
                     }
                 }
