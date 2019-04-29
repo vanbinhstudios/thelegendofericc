@@ -37,7 +37,12 @@ public class AnimationSystem extends EntitySystem {
             animation.animation.apply(pos.dir, animation.localTime, render);
 
             if (Mappers.healthbar.has(entity)) {
-                HealthbarComponent bar = Mappers.healthbar.get(entity);
+                HealthBarComponent bar = Mappers.healthbar.get(entity);
+                animation.animation.apply(pos.dir, animation.localTime, bar);
+            }
+
+            if (Mappers.experienceBar.has(entity)) {
+                ExperienceBarComponent bar = Mappers.experienceBar.get(entity);
                 animation.animation.apply(pos.dir, animation.localTime, bar);
             }
 

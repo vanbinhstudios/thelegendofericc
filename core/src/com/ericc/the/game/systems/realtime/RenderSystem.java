@@ -129,11 +129,32 @@ public class RenderSystem extends EntitySystem {
         batch.setColor(0, render.saturation, render.brightness, render.alpha);
         batch.draw(render.region, render.model.width, render.model.height, transformTmp);
 
+        drawHealthbar(entity, pos);
+        drawExperienceBar(entity, pos);
+    }
+
+    private void drawHealthbar(Entity entity, PositionComponent pos) {
         if (Mappers.healthbar.has(entity)) {
-            HealthbarComponent bar = Mappers.healthbar.get(entity);
+            HealthBarComponent bar = Mappers.healthbar.get(entity);
             StatsComponent stats = Mappers.stats.get(entity);
 
             float barWidth = bar.model.width * ((float) stats.health / (float) stats.maxHealth);
+
+            transformTmp.idt();
+            transformTmp.mul(bar.model.defaultTransform);
+            transformTmp.mul(bar.transform);
+            transformTmp.translate(pos.getX(), pos.getY());
+
+            batch.draw(bar.region, barWidth, bar.model.height, transformTmp);
+        }
+    }
+
+    private void drawExperienceBar(Entity entity, PositionComponent pos) {
+        if (Mappers.experienceBar.has(entity)) {
+            ExperienceBarComponent bar = Mappers.experienceBar.get(entity);
+            StatsComponent stats = Mappers.stats.get(entity);
+
+            float barWidth = bar.model.width * ((float) stats.experience / (float) stats.maxExperience);
 
             transformTmp.idt();
             transformTmp.mul(bar.model.defaultTransform);

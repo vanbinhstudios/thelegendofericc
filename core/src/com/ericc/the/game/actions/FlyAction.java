@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.Entity;
 import com.ericc.the.game.Mappers;
 import com.ericc.the.game.components.AnimationComponent;
 import com.ericc.the.game.components.AnimationState;
+import com.ericc.the.game.components.OwnedByComponent;
 import com.ericc.the.game.components.PositionComponent;
 import com.ericc.the.game.utils.GridPoint;
 
@@ -44,7 +45,9 @@ public class FlyAction extends Action {
         // Target tile has a hittable entity standing on it (non-player and possessing statistics)
         if (target != null) {
             if (Mappers.stats.has(target)) {
-                Effects.inflictDamage(target, Mappers.damage.get(projectile).damage);
+                OwnedByComponent ownedByComponent = Mappers.owner.get(projectile);
+                Effects.inflictDamage(target, Mappers.damage.get(projectile).damage,
+                        ownedByComponent != null ? ownedByComponent.owner : null);
             }
 
             Effects.kill(projectile);

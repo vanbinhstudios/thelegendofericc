@@ -10,9 +10,9 @@ import com.ericc.the.game.entities.Projectile;
 import com.ericc.the.game.utils.GridPoint;
 
 public class ShootAction extends Action {
-    private int delay;
     public Direction direction;
     public int power;
+    private int delay;
 
     public ShootAction(Direction direction, int delay, int power) {
         this.direction = direction;
@@ -40,7 +40,7 @@ public class ShootAction extends Action {
 
         if (pos.map.isFloor(startPos)) {
             engine.addEntity(
-                    new Projectile(startPos, pos.map, direction, power, Models.arrow)
+                    new Projectile(startPos, pos.map, direction, power, Models.arrow, entity)
             );
         }
     }
