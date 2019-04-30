@@ -25,4 +25,5 @@ public class Mappers {
     public static final ComponentMapper<ExperienceBarComponent> experienceBar = ComponentMapper.getFor(ExperienceBarComponent.class);
     public static final ComponentMapper<OwnedByComponent> owner = ComponentMapper.getFor(OwnedByComponent.class);
     public static final ComponentMapper<ExperienceWorthComponent> experienceWorth = ComponentMapper.getFor(ExperienceWorthComponent.class);
+    public static final ComponentMapper<SafetyMapComponent> safety = ComponentMapper.getFor(SafetyMapComponent.class);
 }

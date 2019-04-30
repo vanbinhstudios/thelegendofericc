@@ -28,5 +28,6 @@ public class Player extends Entity {
 //        add(new HealthBarComponent(Models.healthBar));
 //        add(new ExperienceBarComponent(Models.experienceBar));
         add(new AnimationComponent());
+        add(new SafetyMapComponent());
     }
 }
