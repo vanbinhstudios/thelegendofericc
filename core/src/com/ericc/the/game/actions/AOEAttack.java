@@ -63,7 +63,7 @@ public class AOEAttack extends Action {
                             new Attack(tile, pos.map, power, model, dir)
                     );
                     Entity subject = pos.map.collisionMap.get(tile);
-                    if (subject != null  && subject != entity && Mappers.stats.has(subject)) {
+                    if (subject != null && subject != entity && Mappers.stats.has(subject)) {
                         Effects.inflictDamage(subject, power, entity);
                     }
                 }

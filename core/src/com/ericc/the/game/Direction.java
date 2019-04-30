@@ -22,10 +22,6 @@ public enum Direction {
         return values().length;
     }
 
-    public int getValue() {
-        return direction;
-    }
-
     public static Direction fromGridPoint(GridPoint gp) {
         if (gp.x > 0) {
             return RIGHT;
@@ -48,5 +44,9 @@ public enum Direction {
 
     public static Direction fromGridPoints(GridPoint source, GridPoint goal) {
         return fromGridPoint(source.subtract(goal));
+    }
+
+    public int getValue() {
+        return direction;
     }
 }

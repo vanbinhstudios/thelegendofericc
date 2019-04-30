@@ -18,6 +18,7 @@ public class Media {
     public static TextureRegion swordLeft, swordRight, swordUp, swordDown;
     public static TextureRegion healthBar;
     public static TextureRegion experienceBar;
+    public static TextureRegion lvlUp;
     public static TextureRegion arrowUp, arrowRight, arrowLeft, arrowDown;
     public static TextureRegion explosion1, explosion2, explosion3;
     public static int floorsConfiguration = 0;
@@ -78,6 +79,7 @@ public class Media {
 
         healthBar = atlas.findRegion("entity/healthBar");
         experienceBar = atlas.findRegion("entity/experienceBar");
+        lvlUp = atlas.findRegion("entity/lvlUp");
     }
 
     public static void dispose() {
