@@ -26,11 +26,28 @@ public class Effects {
         pos.dir = dir;
     }
 
-    public static void inflictDamage(Entity entity, int damage) {
-        StatsComponent stats = Mappers.stats.get(entity);
-        stats.health -= damage;
-        if (stats.health <= 0) {
-            kill(entity);
+    public static void inflictDamage(Entity target, int damage, Entity attackOwner) {
+        StatsComponent targetStats = Mappers.stats.get(target);
+        targetStats.health -= damage;
+        if (targetStats.health <= 0) {
+            if (attackOwner != null
+                    && Mappers.experienceWorth.has(target)
+                    && Mappers.stats.has(attackOwner)) {
+                increaseExperience(attackOwner, Mappers.experienceWorth.get(target).experienceWorth);
+            }
+
+            kill(target);
+        }
+    }
+
+    public static void increaseExperience(Entity target, int experienceAmount) {
+        StatsComponent stats = Mappers.stats.get(target);
+        stats.experience += experienceAmount;
+        // TODO A proper levelling system
+        while (stats.experience > stats.maxExperience) {
+            stats.level++;
+            stats.experience -= stats.maxExperience;
+            stats.maxExperience *= 1.5;
         }
     }
 

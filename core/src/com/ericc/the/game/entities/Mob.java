@@ -16,7 +16,8 @@ public class Mob extends Entity {
         add(new AgencyComponent(new AstarAgency(), false));
         add(new CollisionComponent(CollisionComponent.Type.LIVING));
         add(new HostileTag());
-        add(new HealthbarComponent(Models.healthbar));
+        add(new ExperienceWorthComponent(300));
+        add(new HealthBarComponent(Models.healthBar));
         add(new AnimationComponent());
     }
 }

@@ -30,10 +30,6 @@ public class MovementAction extends Action {
         return pos.map.hasAnimationDependency(pos.xy);
     }
 
-    public enum MovementType {
-        WALK, RUN
-    }
-
     @Override
     public void execute(Entity entity, Engine engine) {
         PositionComponent pos = Mappers.position.get(entity);
@@ -46,5 +42,9 @@ public class MovementAction extends Action {
                     (type == MovementType.WALK) ? AnimationState.WALKING : AnimationState.RUNNING;
             Effects.setAnimation(entity, state);
         }
+    }
+
+    public enum MovementType {
+        WALK, RUN
     }
 }

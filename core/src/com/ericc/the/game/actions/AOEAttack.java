@@ -26,6 +26,7 @@ public class AOEAttack extends Action {
         this.dir = dir;
     }
 
+
     @Override
     public int getDelay() {
         return delay;
@@ -62,8 +63,8 @@ public class AOEAttack extends Action {
                             new Attack(tile, pos.map, power, model, dir)
                     );
                     Entity subject = pos.map.collisionMap.get(tile);
-                    if (subject != null && subject != entity && Mappers.stats.has(subject)) {
-                        Effects.inflictDamage(subject, power);
+                    if (subject != null  && subject != entity && Mappers.stats.has(subject)) {
+                        Effects.inflictDamage(subject, power, entity);
                     }
                 }
             }
