@@ -8,8 +8,8 @@ import com.ericc.the.game.MainGame;
  */
 public class CameraZoom {
 
-    private final float cameraZoomMaxDeviation = .3f;
-    private final float cameraChange = .05f; // a single step by which we can affect the camera
+    private final float cameraZoomMaxDeviation = .1f;
+    private final float cameraChange = .003f; // a single step by which we can affect the camera
     private OrthographicCamera camera;
     private float initialCameraZoom;
 

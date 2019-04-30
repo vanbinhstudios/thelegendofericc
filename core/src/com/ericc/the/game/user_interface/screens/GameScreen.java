@@ -1,19 +1,25 @@
 package com.ericc.the.game.user_interface.screens;
 
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.Family;
+import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.ericc.the.game.GameEngine;
 import com.ericc.the.game.KeyboardController;
+import com.ericc.the.game.Mappers;
 import com.ericc.the.game.Media;
 import com.ericc.the.game.agencies.KeyboardAgency;
 import com.ericc.the.game.components.AgencyComponent;
 import com.ericc.the.game.components.CameraComponent;
 import com.ericc.the.game.components.FieldOfViewComponent;
+import com.ericc.the.game.components.PlayerTag;
 import com.ericc.the.game.entities.Player;
 import com.ericc.the.game.helpers.FpsThrottle;
 import com.ericc.the.game.map.Dungeon;
@@ -23,8 +29,8 @@ import com.ericc.the.game.systems.realtime.*;
 public class GameScreen implements Screen {
 
     private final Game game;
-    private final static int viewportWidth = 24;
-    private final static int viewportHeight = 18;
+    private final static int viewportWidth = 800;
+    private final static int viewportHeight = 600;
     private final static boolean MUSIC = false; ///< turns the music on and off
     private KeyboardController controls;
     private OrthographicCamera camera;
@@ -45,6 +51,7 @@ public class GameScreen implements Screen {
 
         // we need a camera here to have an instance of Orthographic one in a viewport
         this.camera = new OrthographicCamera();
+        camera.zoom = 0.03f;
         viewport = new FillViewport(viewportWidth, viewportHeight, camera);
         viewport.apply();
 
@@ -82,12 +89,13 @@ public class GameScreen implements Screen {
             sound.play();
         }
 
-        overlay = new GameOverlay();
+        overlay = new GameOverlay(viewportWidth, viewportHeight, player);
     }
 
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height);
+        overlay.fitOverlay(width, height);
     }
 
     @Override
@@ -95,6 +103,7 @@ public class GameScreen implements Screen {
         gameEngine.update();
         overlay.getStage().act(delta);
         overlay.getStage().draw();
+        overlay.updateOverlay();
         fpsThrottle.sleepToNextFrame();
     }
 
