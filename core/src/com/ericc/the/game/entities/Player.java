@@ -27,5 +27,6 @@ public class Player extends Entity {
         add(camera);
         add(new HealthbarComponent(Models.healthbar));
         add(new AnimationComponent());
+        add(new SafetyMapComponent());
     }
 }

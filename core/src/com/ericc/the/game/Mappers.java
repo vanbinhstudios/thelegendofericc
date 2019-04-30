@@ -22,4 +22,5 @@ public class Mappers {
     public static final ComponentMapper<HostileTag> hostile = ComponentMapper.getFor(HostileTag.class);
     public static final ComponentMapper<DamageComponent> damage = ComponentMapper.getFor(DamageComponent.class);
     public static final ComponentMapper<HealthbarComponent> healthbar = ComponentMapper.getFor(HealthbarComponent.class);
+    public static final ComponentMapper<SafetyMapComponent> safety = ComponentMapper.getFor(SafetyMapComponent.class);
 }
