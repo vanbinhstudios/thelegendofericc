@@ -21,7 +21,7 @@ public class StatsComponent implements Component {
         this.maxHealth = health;
         this.health = this.maxHealth;
         this.delayMultiplier = 1f;
-        this.experience = 200;
+        this.experience = 0;
         this.level = 1;
         this.maxExperience = FIRST_LEVEL_EXPERIENCE;
     }

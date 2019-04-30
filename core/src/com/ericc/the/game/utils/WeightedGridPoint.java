@@ -11,12 +11,6 @@ public class WeightedGridPoint {
         this.weight = weight;
     }
 
-    public static class WeightedGridPointComparator implements Comparator<WeightedGridPoint> {
-        public int compare(WeightedGridPoint gp1, WeightedGridPoint gp2) {
-            return Integer.compare(gp1.weight, gp2.weight);
-        }
-    }
-
     @Override
     public int hashCode() {
         return xy.hashCode();
@@ -25,5 +19,11 @@ public class WeightedGridPoint {
     @Override
     public boolean equals(Object o) {
         return o.hashCode() == hashCode();
+    }
+
+    public static class WeightedGridPointComparator implements Comparator<WeightedGridPoint> {
+        public int compare(WeightedGridPoint gp1, WeightedGridPoint gp2) {
+            return Integer.compare(gp1.weight, gp2.weight);
+        }
     }
 }

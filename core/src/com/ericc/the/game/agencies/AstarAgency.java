@@ -18,10 +18,10 @@ import java.util.ArrayList;
 import static java.lang.Math.abs;
 
 public class AstarAgency implements Agency {
-    private RandomWalk randomWalk = new RandomWalk();
-
     public static final int RADIUS = 4;
     public int moveDelay = 25;
+    private RandomWalk randomWalk = new RandomWalk();
+
     @Override
     public Action chooseAction(PositionComponent pos, StatsComponent stats) {
         Map map = pos.map;
@@ -57,7 +57,7 @@ public class AstarAgency implements Agency {
                         GridPoint targetPos = pos.xy.add(GridPoint.fromDirection(dir));
                         Entity obstacle = map.getEntity(targetPos);
                         if (obstacle != null && Mappers.player.has(obstacle)) {
-                            return Actions.AOE_ATTACK(Models.sword, Area.square(targetPos, 0), dir,100, 5);
+                            return Actions.AOE_ATTACK(Models.sword, Area.square(targetPos, 0), dir, 100, 5);
                         }
                         return new MovementAction(path.get(0), moveDelay, MovementAction.MovementType.RUN);
                     }
