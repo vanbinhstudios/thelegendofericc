@@ -25,7 +25,7 @@ public class GameOverlay {
 
         player = currentPlayer;
 
-        info = new InfoText(10, 100);
+        info = new InfoText(10, 100, 30);
         hbar = new TopHealthbar(200, 15);
         ebar = new TopExpBar(200, 15);
         info.setPosition(20, height - 100);
@@ -53,7 +53,7 @@ public class GameOverlay {
         if (player != null) {
             hbar.setValue((float) Mappers.stats.get(player).health / (float) Mappers.stats.get(player).maxHealth);
             ebar.setValue((float) Mappers.stats.get(player).experience / (float) Mappers.stats.get(player).maxExperience);
-            info.setText("LVL: " + Mappers.stats.get(player).level + " HP: " + Mappers.stats.get(player).health);
+            info.setText("LVL: " + Mappers.stats.get(player).level + " HP: " + Mappers.stats.get(player).health + " Arrows: " + Mappers.stats.get(player).arrows);
         } else {
             hbar.setValue(0);
             ebar.setValue(0);
