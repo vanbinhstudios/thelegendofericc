@@ -67,6 +67,7 @@ public class GameScreen implements Screen {
         gameEngine.addLogicSystem(new ActivitySystem(gameEngine, priority++));
         gameEngine.addLogicSystem(new FieldOfViewSystem(priority++));
         gameEngine.addLogicSystem(new FogOfWarSystem(priority++));
+        gameEngine.addLogicSystem(new SafetyMapSystem(priority++));
         gameEngine.addLogicSystem(new FlagRemover(priority++));
         gameEngine.addLogicSystem(new EntityMapSystem());
 
