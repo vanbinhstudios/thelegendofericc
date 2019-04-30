@@ -1,4 +1,4 @@
-package com.ericc.the.game.user_interface.actors;
+package com.ericc.the.game.ui.actors;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;

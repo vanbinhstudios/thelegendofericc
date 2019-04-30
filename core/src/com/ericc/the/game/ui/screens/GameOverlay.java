@@ -1,22 +1,22 @@
-package com.ericc.the.game.user_interface.screens;
+package com.ericc.the.game.ui.screens;
 
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.ericc.the.game.Mappers;
 import com.ericc.the.game.entities.Player;
-import com.ericc.the.game.user_interface.actors.InfoText;
-import com.ericc.the.game.user_interface.actors.TopExpBar;
-import com.ericc.the.game.user_interface.actors.TopHealthbar;
+import com.ericc.the.game.ui.actors.InfoText;
+import com.ericc.the.game.ui.actors.TopExpBar;
+import com.ericc.the.game.ui.actors.TopHealthbar;
 
 public class GameOverlay {
 
-    private Stage stage;
-    private Viewport viewport;
-    private Player player;
     public TopHealthbar hbar;
     public TopExpBar ebar;
     public InfoText info;
+    private Stage stage;
+    private Viewport viewport;
+    private Player player;
 
     public GameOverlay(int width, int height, Player currentPlayer) {
         viewport = new FitViewport(width, height);
@@ -51,8 +51,8 @@ public class GameOverlay {
 
     public void updateOverlay() {
         if (player != null) {
-            hbar.setValue((float) Mappers.stats.get(player).health / (float)Mappers.stats.get(player).maxHealth);
-            ebar.setValue((float)Mappers.stats.get(player).experience / (float)Mappers.stats.get(player).maxExperience);
+            hbar.setValue((float) Mappers.stats.get(player).health / (float) Mappers.stats.get(player).maxHealth);
+            ebar.setValue((float) Mappers.stats.get(player).experience / (float) Mappers.stats.get(player).maxExperience);
             info.setText("LVL: " + Mappers.stats.get(player).level + " HP: " + Mappers.stats.get(player).health);
         } else {
             hbar.setValue(0);

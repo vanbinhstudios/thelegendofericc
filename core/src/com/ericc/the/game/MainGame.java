@@ -2,7 +2,7 @@ package com.ericc.the.game;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
-import com.ericc.the.game.user_interface.screens.GameScreen;
+import com.ericc.the.game.ui.screens.GameScreen;
 
 public class MainGame extends Game {
 

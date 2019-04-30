@@ -1,25 +1,19 @@
-package com.ericc.the.game.user_interface.screens;
+package com.ericc.the.game.ui.screens;
 
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.ericc.the.game.GameEngine;
 import com.ericc.the.game.KeyboardController;
-import com.ericc.the.game.Mappers;
 import com.ericc.the.game.Media;
 import com.ericc.the.game.agencies.KeyboardAgency;
 import com.ericc.the.game.components.AgencyComponent;
 import com.ericc.the.game.components.CameraComponent;
 import com.ericc.the.game.components.FieldOfViewComponent;
-import com.ericc.the.game.components.PlayerTag;
 import com.ericc.the.game.entities.Player;
 import com.ericc.the.game.helpers.FpsThrottle;
 import com.ericc.the.game.map.Dungeon;
@@ -28,10 +22,10 @@ import com.ericc.the.game.systems.realtime.*;
 
 public class GameScreen implements Screen {
 
-    private final Game game;
     private final static int viewportWidth = 800;
     private final static int viewportHeight = 600;
     private final static boolean MUSIC = false; ///< turns the music on and off
+    private final Game game;
     private KeyboardController controls;
     private OrthographicCamera camera;
     private Viewport viewport;

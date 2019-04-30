@@ -1,4 +1,4 @@
-package com.ericc.the.game.user_interface.actors;
+package com.ericc.the.game.ui.actors;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -8,7 +8,22 @@ import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
-public class TopHealthbar extends ProgressBar {
+public class TopExpBar extends ProgressBar {
+
+    public TopExpBar(int width, int height) {
+        super(0f, 1f, 0.01f, false, new ProgressBarStyle());
+        getStyle().background = getColoredDrawable(width, height, Color.GOLD);
+        getStyle().knob = getColoredDrawable(0, height, Color.YELLOW);
+        getStyle().knobBefore = getColoredDrawable(width, height, Color.YELLOW);
+
+        setWidth(width);
+        setHeight(height);
+
+        setAnimateDuration(0.0f);
+        setValue(0.2f);
+
+        setAnimateDuration(0.25f);
+    }
 
     public static Drawable getColoredDrawable(int width, int height, Color color) {
         Pixmap pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
@@ -20,21 +35,6 @@ public class TopHealthbar extends ProgressBar {
         pixmap.dispose();
 
         return drawable;
-    }
-
-    public TopHealthbar(int width, int height) {
-        super(0f, 1f, 0.01f, false, new ProgressBarStyle());
-        getStyle().background = getColoredDrawable(width, height, Color.RED);
-        getStyle().knob = getColoredDrawable(0, height, Color.GREEN);
-        getStyle().knobBefore = getColoredDrawable(width, height, Color.GREEN);
-
-        setWidth(width);
-        setHeight(height);
-
-        setAnimateDuration(0.0f);
-        setValue(1f);
-
-        setAnimateDuration(0.25f);
     }
 
     @Override

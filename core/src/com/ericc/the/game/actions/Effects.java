@@ -48,7 +48,7 @@ public class Effects {
             stats.level++;
             stats.experience -= stats.maxExperience;
             stats.maxExperience *= 1.5;
-            stats.health += Math.min(stats.level*25, stats.maxHealth - stats.health);
+            stats.health += Math.min(stats.level * 25, stats.maxHealth - stats.health);
         }
     }
 
