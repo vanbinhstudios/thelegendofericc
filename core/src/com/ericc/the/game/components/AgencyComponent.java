@@ -7,8 +7,10 @@ public class AgencyComponent implements Component {
     public Agency agency;
     public int initiative;
     public int delay;
+    public boolean passive;
 
-    public AgencyComponent(Agency agency) {
+    public AgencyComponent(Agency agency, boolean passive) {
         this.agency = agency;
+        this.passive = passive;
     }
 }

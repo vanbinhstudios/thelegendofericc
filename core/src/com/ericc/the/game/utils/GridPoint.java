@@ -39,6 +39,30 @@ public class GridPoint {
     }
 
 
+    public GridPoint unrotate(Direction dir) {
+        if (dir == Direction.DOWN) {
+            return new GridPoint(-x, -y);
+        } else if (dir == Direction.LEFT) {
+            return new GridPoint(y, -x);
+        } else if (dir == Direction.RIGHT) {
+            return new GridPoint(-y, x);
+        } else {
+            return this;
+        }
+    }
+
+    public GridPoint rotate(Direction dir) {
+        if (dir == Direction.DOWN) {
+            return new GridPoint(-x, -y);
+        } else if (dir == Direction.LEFT) {
+            return new GridPoint(-y, x);
+        } else if (dir == Direction.RIGHT) {
+            return new GridPoint(y, -x);
+        } else {
+            return this;
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

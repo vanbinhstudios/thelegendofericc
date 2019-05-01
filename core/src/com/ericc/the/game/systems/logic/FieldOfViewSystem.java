@@ -7,6 +7,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.MathUtils;
 import com.ericc.the.game.Mappers;
+import com.ericc.the.game.components.DirtyFlag;
 import com.ericc.the.game.components.FieldOfViewComponent;
 import com.ericc.the.game.components.PositionComponent;
 import com.ericc.the.game.helpers.Moves;
@@ -51,7 +52,7 @@ public class FieldOfViewSystem extends EntitySystem {
 
     @Override
     public void addedToEngine(Engine engine) {
-        entities = engine.getEntitiesFor(Family.all(PositionComponent.class, FieldOfViewComponent.class).get());
+        entities = engine.getEntitiesFor(Family.all(PositionComponent.class, FieldOfViewComponent.class, DirtyFlag.class).get());
     }
 
     @Override
@@ -99,7 +100,7 @@ public class FieldOfViewSystem extends EntitySystem {
         clearFOV(pos, fov);
 
         // sends a ray trace line every degree
-        for (int i = 0; i < 360; i++) {
+        for (int i = 0; i < 360; i += 8) {
             float x = MathUtils.cos(i * .01745f); // in radians, that's why there is a .175.. const
             float y = MathUtils.sin(i * .01745f);
 
@@ -111,8 +112,8 @@ public class FieldOfViewSystem extends EntitySystem {
     /**
      * Updates all tiles which are on the ray trace line, starting from the Entity's position.
      *
-     * @param x   a float value indicating in which direction the ray trace line goes (x axis)
-     * @param y   a float value indicating in which direction the ray trace line goes (y axis)
+     * @param x   a float value indicating in which dir the ray trace line goes (x axis)
+     * @param y   a float value indicating in which dir the ray trace line goes (y axis)
      * @param fov a Field of View Component of a given Entity
      * @param pos a PositionComponent of the same Entity
      */

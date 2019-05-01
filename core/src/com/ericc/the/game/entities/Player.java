@@ -19,11 +19,15 @@ public class Player extends Entity {
         add(pos);
         add(renderable);
         add(fov);
-        add(new PlayerComponent());
-        add(new StatsComponent(50, 100, 50, 100));
-        add(new CollisionComponent());
+        add(DirtyFlag.DIRTY);
+        add(new PlayerTag());
+        add(new StatsComponent(50, 100, 50, 200));
+        add(new CollisionComponent(CollisionComponent.Type.LIVING));
         add(agency);
         add(camera);
-        add(new HealthbarComponent(Models.healthbar));
+//        add(new HealthBarComponent(Models.healthBar));
+//        add(new ExperienceBarComponent(Models.experienceBar));
+        add(new AnimationComponent());
+        add(new SafetyMapComponent());
     }
 }

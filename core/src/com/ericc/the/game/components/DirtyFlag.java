@@ -2,5 +2,6 @@ package com.ericc.the.game.components;
 
 import com.badlogic.ashley.core.Component;
 
-public class DeathComponent implements Component {
+public enum DirtyFlag implements Component {
+    DIRTY
 }
