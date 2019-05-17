@@ -21,6 +21,7 @@ public class AstarAgency implements Agency {
     public static final int RADIUS = 5;
     public int moveDelay = 33;
     private RandomWalk randomWalk = new RandomWalk();
+
     @Override
     public Action chooseAction(PositionComponent pos, StatsComponent stats) {
         Map map = pos.map;
@@ -57,7 +58,7 @@ public class AstarAgency implements Agency {
                         GridPoint targetPos = pos.xy.add(GridPoint.fromDirection(dir));
                         Entity obstacle = map.getEntity(targetPos);
                         if (obstacle != null && Mappers.player.has(obstacle)) {
-                            return Actions.AOE_ATTACK(Models.sword, Area.square(targetPos, 0), dir, 100, 5);
+                            return Actions.AOE_ATTACK(Models.sword, Area.square(targetPos, 0), dir, 100, 5, 50);
                         }
                         return new MovementAction(path.get(0), moveDelay, MovementAction.MovementType.RUN);
                     }
