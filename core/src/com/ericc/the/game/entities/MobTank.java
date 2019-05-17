@@ -2,20 +2,20 @@ package com.ericc.the.game.entities;
 
 import com.badlogic.ashley.core.Entity;
 import com.ericc.the.game.Models;
-import com.ericc.the.game.agencies.AstarAgency;
+import com.ericc.the.game.agencies.ChargeToPlayerAgency;
 import com.ericc.the.game.components.*;
 import com.ericc.the.game.map.Map;
 import com.ericc.the.game.utils.GridPoint;
 
-public class Mob extends Entity {
-    public Mob(GridPoint xy, Map map) {
+public class MobTank extends Entity {
+    public MobTank(GridPoint xy, Map map) {
         add(new PositionComponent(xy, map));
-        add(new RenderableComponent(Models.mage));
-        add(new StatsComponent(45, 30, 20, 120, false));
-        add(new AgencyComponent(new AstarAgency(), false));
+        add(new RenderableComponent(Models.mage)); // TODO add new model
+        add(new StatsComponent(45, 30, 5, 150));
+        add(new AgencyComponent(new ChargeToPlayerAgency(), false));
         add(new CollisionComponent(CollisionComponent.Type.LIVING));
         add(new HostileTag());
-        add(new ExperienceWorthComponent(300));
+        add(new ExperienceWorthComponent(500));
         add(new HealthBarComponent(Models.healthBar));
         add(new AnimationComponent());
     }
