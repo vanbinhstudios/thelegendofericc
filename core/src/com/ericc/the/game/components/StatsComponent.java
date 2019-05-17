@@ -11,6 +11,7 @@ public class StatsComponent implements Component {
     public int health;
     public int experience;
     public int level;
+    public int arrows;
     public int maxExperience;
     public float delayMultiplier;
 
@@ -22,6 +23,7 @@ public class StatsComponent implements Component {
         this.health = this.maxHealth;
         this.delayMultiplier = 1f;
         this.experience = 0;
+        this.arrows = 30;
         this.level = 1;
         this.maxExperience = FIRST_LEVEL_EXPERIENCE;
     }
