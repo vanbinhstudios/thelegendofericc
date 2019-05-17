@@ -71,17 +71,21 @@ public class KeyboardAgency implements Agency {
             return Actions.LONG_WAIT;
         } else if (controller.q) {
             controller.q = false;
-            if (stats.mana > 50) {
-                return Actions.AOE_ATTACK(Models.explosion1, Area.square(pos.xy, 1), pos.dir, 200, 30, 50);
-            } else {
-                Flash.show("NO MANA!");
+            if (stats.level >= 4) {
+                if (stats.mana > 50) {
+                    return Actions.AOE_ATTACK(Models.explosion1, Area.square(pos.xy, 1), pos.dir, 200, 30, 50);
+                } else {
+                    Flash.show("NO MANA!");
+                }
             }
         } else if (controller.e) {
             controller.e = false;
-            if (stats.mana > 75) {
-                return Actions.AOE_ATTACK(Models.explosion3, Area.ray(pos.xy, pos.dir, 5), pos.dir, 300, 50, 75);
-            } else {
-                Flash.show("NO MANA!");
+            if (stats.level >= 2) {
+                if (stats.mana > 75) {
+                    return Actions.AOE_ATTACK(Models.explosion3, Area.ray(pos.xy, pos.dir, 5), pos.dir, 300, 50, 75);
+                } else {
+                    Flash.show("NO MANA!");
+                }
             }
         } else if (controller.f) {
             controller.f = false;
