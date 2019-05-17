@@ -52,6 +52,11 @@ public class AstarAgency implements Agency {
                 }
             }
         }
+
+        if (stats.health < 0.7 * stats.maxHealth) {
+            return Actions.HEAL();
+        }
+
         return randomWalk.chooseAction(pos, stats);
     }
 }

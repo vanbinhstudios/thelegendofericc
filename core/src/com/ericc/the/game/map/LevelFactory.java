@@ -72,10 +72,10 @@ public class LevelFactory {
 
     private static void generateMobs(int levelNumber, Map map, ArrayList<Entity> entities) {
         if (levelNumber == 0) {
-//            generateMageMobs(map, entities, 2);
-//            generateTankMobs(map, entities, 3);
-//            generateStandardMobs(map, entities, 15);
-            generateArcherMobs(map, entities, 20);
+            //generateMageMobs(map, entities, 2);
+            //generateTankMobs(map, entities, 3);
+            generateStandardMobs(map, entities, 15);
+            //generateArcherMobs(map, entities, 20);
         } else if (levelNumber == 1) {
             generateMageMobs(map, entities, 5);
             generateStandardMobs(map, entities, 10);

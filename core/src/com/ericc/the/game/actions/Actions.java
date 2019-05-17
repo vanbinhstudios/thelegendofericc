@@ -36,4 +36,8 @@ public class Actions {
     public static ShootAction SHOOT(Direction direction, int delay, int power) {
         return new ShootAction(direction, delay, power);
     }
+
+    public static Heal HEAL() {
+        return new Heal();
+    }
 }
