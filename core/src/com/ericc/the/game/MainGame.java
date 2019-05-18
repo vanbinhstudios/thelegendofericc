@@ -1,13 +1,12 @@
 package com.ericc.the.game;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Screen;
 import com.ericc.the.game.ui.screens.GameScreen;
 
 public class MainGame extends Game {
 
     public final static boolean DEBUG = true; ///< turns the debug mode on and off
-    private Screen gamescreen;
+    public static GameScreen gamescreen;
 
     @Override
     public void create() {

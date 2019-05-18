@@ -6,6 +6,7 @@ import com.ericc.the.game.Direction;
 import com.ericc.the.game.Mappers;
 import com.ericc.the.game.Models;
 import com.ericc.the.game.components.PositionComponent;
+import com.ericc.the.game.components.StatsComponent;
 import com.ericc.the.game.entities.Projectile;
 import com.ericc.the.game.utils.GridPoint;
 
@@ -35,13 +36,20 @@ public class ShootAction extends Action {
     public void execute(Entity entity, Engine engine) {
         PositionComponent pos = Mappers.position.get(entity);
 
-        GridPoint offset = GridPoint.fromDirection(direction);
-        GridPoint startPos = pos.xy.add(offset);
+        StatsComponent stats = Mappers.stats.get(entity);
 
-        if (pos.map.isFloor(startPos)) {
-            engine.addEntity(
-                    new Projectile(startPos, pos.map, direction, power, Models.arrow, entity)
-            );
+        if (stats.arrows > 0) {
+
+            GridPoint offset = GridPoint.fromDirection(direction);
+            GridPoint startPos = pos.xy.add(offset);
+
+            if (pos.map.isFloor(startPos)) {
+                engine.addEntity(
+                        new Projectile(startPos, pos.map, direction, power, Models.arrow, entity)
+                );
+                stats.arrows--;
+            }
+
         }
     }
 }

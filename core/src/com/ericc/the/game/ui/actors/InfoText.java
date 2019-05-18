@@ -7,8 +7,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
 public class InfoText extends Label {
 
-    public InfoText(int level, int hp) {
-        super("LVL: " + level + " HP: " + hp, new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+    static LabelStyle style = new Label.LabelStyle(new BitmapFont(), Color.WHITE);
+
+    public InfoText(int level, int hp, int arrows) {
+        super("LVL: " + level + " HP: " + hp + " Arrows: " + arrows, style);
     }
 
 }

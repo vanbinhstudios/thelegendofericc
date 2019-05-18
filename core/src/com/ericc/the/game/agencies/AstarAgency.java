@@ -47,7 +47,7 @@ public class AstarAgency implements Agency {
                         else
                             return new MovementAction(Direction.fromGridPoint(minMove), moveDelay, MovementAction.MovementType.RUN);
                     } else {
-                        return Charge.returnAction(pos, x, y, map, moveDelay, stats);
+                        return Charge.returnAction(pos, x, y, map, moveDelay, stats);-
                     }
                 }
             }

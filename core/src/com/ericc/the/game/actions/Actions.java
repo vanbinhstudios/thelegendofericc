@@ -17,12 +17,8 @@ public class Actions {
         return new MovementAction(direction, delay, MovementAction.MovementType.RUN);
     }
 
-    public static AOEAttack AOE_ATTACK(Model model, Area area, Direction dir, int delay, int power) {
-        return new AOEAttack(model, area, dir, delay, power);
-    }
-
-    public static AOEAttack AOE_ATTACK(Model model, Area area, int delay, int power) {
-        return new AOEAttack(model, area, Direction.UP, delay, power);
+    public static AOEAttack AOE_ATTACK(Model model, Area area, Direction dir, int delay, int power, int cost) {
+        return new AOEAttack(model, area, dir, delay, power, cost);
     }
 
     public static PushAction PUSH(Direction direction, int delay) {

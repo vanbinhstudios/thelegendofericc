@@ -6,6 +6,7 @@ import com.ericc.the.game.Direction;
 import com.ericc.the.game.Mappers;
 import com.ericc.the.game.components.Model;
 import com.ericc.the.game.components.PositionComponent;
+import com.ericc.the.game.components.StatsComponent;
 import com.ericc.the.game.entities.Attack;
 import com.ericc.the.game.utils.Area;
 import com.ericc.the.game.utils.GridPoint;
@@ -17,13 +18,15 @@ public class AOEAttack extends Action {
     public int power;
     public Area area;
     public Direction dir;
+    public int cost;
 
-    public AOEAttack(Model model, Area area, Direction dir, int delay, int power) {
+    public AOEAttack(Model model, Area area, Direction dir, int delay, int power, int cost) {
         this.area = area;
         this.model = model;
         this.delay = delay;
         this.power = power;
         this.dir = dir;
+        this.cost = cost;
     }
 
 
@@ -54,6 +57,10 @@ public class AOEAttack extends Action {
     public void execute(Entity entity, Engine engine) {
         PositionComponent pos = Mappers.position.get(entity);
         pos.dir = dir;
+
+        StatsComponent stats = Mappers.stats.get(entity);
+
+        stats.mana -= cost;
 
         for (int x = area.left; x <= area.right; ++x) {
             for (int y = area.bottom; y <= area.top; ++y) {

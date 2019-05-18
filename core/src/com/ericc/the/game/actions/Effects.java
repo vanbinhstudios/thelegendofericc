@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Entity;
 import com.ericc.the.game.Direction;
 import com.ericc.the.game.Mappers;
 import com.ericc.the.game.components.*;
+import com.ericc.the.game.ui.actors.Popup;
 import com.ericc.the.game.utils.GridPoint;
 
 public class Effects {
@@ -49,6 +50,18 @@ public class Effects {
             stats.experience -= stats.maxExperience;
             stats.maxExperience *= 1.5;
             stats.health += Math.min(stats.level * 25, stats.maxHealth - stats.health);
+            stats.mana += Math.min(stats.level * 25, stats.maxMana - stats.mana);
+
+            if (Mappers.player.has(target)) {
+                if (stats.level == 2) {
+                    Popup.show("You unlocked FIRE BEAM");
+                } else if (stats.level == 4) {
+                    // TODO change name
+                    Popup.show("You unlocked PIERDZENIE");
+                } else {
+                    Popup.show("No skills gained this time");
+                }
+            }
         }
     }
 
