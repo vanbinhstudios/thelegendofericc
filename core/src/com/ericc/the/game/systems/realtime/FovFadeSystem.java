@@ -7,6 +7,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.ericc.the.game.Mappers;
 import com.ericc.the.game.components.*;
+import com.ericc.the.game.utils.GridPoint;
 
 import static java.lang.Float.max;
 import static java.lang.Float.min;
@@ -38,7 +39,7 @@ public class FovFadeSystem extends EntitySystem {
 
             for (Entity player : players) {
                 FieldOfViewComponent fov = Mappers.fov.get(player);
-                targetBrightness = max(targetBrightness, fov.visibility.get(pos.getX(), pos.getY()) ? 1.0f : 0.3f);
+                targetBrightness = max(targetBrightness, fov.visibility[pos.xy.x][pos.xy.y] == fov.version ? 1.0f : 0.3f);
             }
 
             render.brightness = converge(render.brightness, targetBrightness, deltaTime * fadingSpeed);
@@ -59,8 +60,8 @@ public class FovFadeSystem extends EntitySystem {
                     if (!pos.map.inBoundaries(x, y)) continue;
                     if (!pos.map.hasBeenSeenByPlayer(x, y)) continue;
 
-                    float targetBrightness = fov.visibility.get(x, y) ? 1.0f : 0.5f;
-                    float targetSaturation = fov.visibility.get(x, y) ? 1.0f : 0.0f;
+                    float targetBrightness = fov.visibility[x][y] == fov.version ? 1.0f : 0.5f;
+                    float targetSaturation = fov.visibility[x][y] == fov.version ? 1.0f : 0.0f;
                     pos.map.brightness[x][y] = converge(pos.map.brightness[x][y], targetBrightness, deltaTime * fadingSpeed);
                     // Tune the minimum possible brightness up, because it looks weird when tiles are darker than the background.
                     pos.map.brightness[x][y] = max(pos.map.brightness[x][y], 0.3f);

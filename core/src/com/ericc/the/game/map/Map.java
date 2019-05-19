@@ -193,8 +193,8 @@ public class Map {
         return rooms;
     }
 
-    public void markAsSeenByPlayer(int x, int y) {
-        fogOfWar.markAsSeenByPlayer(x, y);
+    public void markAsSeenByPlayer(GridPoint xy) {
+        fogOfWar.markAsSeenByPlayer(xy);
     }
 
     public boolean hasBeenSeenByPlayer(int x, int y) {
@@ -203,16 +203,6 @@ public class Map {
 
     public boolean hasBeenSeenByPlayer(GridPoint xy) {
         return fogOfWar.hasBeenSeenByPlayer(xy.x, xy.y);
-    }
-
-    public void makeFogCoverTheEntireMap() {
-        for (int i = 0; i < width; ++i) {
-            for (int j = 0; j < height; ++j) {
-                if (inBoundaries(i, j)) {
-                    fogOfWar.markAsSeenByPlayer(i, j);
-                }
-            }
-        }
     }
 
     public boolean hasAnimationDependency(GridPoint xy) {

@@ -1,5 +1,6 @@
 package com.ericc.the.game.helpers;
 
+import com.ericc.the.game.utils.GridPoint;
 import com.ericc.the.game.utils.RectangularBitset;
 
 public class FogOfWar {
@@ -12,8 +13,8 @@ public class FogOfWar {
     /**
      * Registers a tile in a fog of war structure, marks it as seen.
      */
-    public void markAsSeenByPlayer(int x, int y) {
-        tileSeen.set(x, y);
+    public void markAsSeenByPlayer(GridPoint xy) {
+        tileSeen.set(xy);
     }
 
     /**
