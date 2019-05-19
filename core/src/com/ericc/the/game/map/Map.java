@@ -277,4 +277,81 @@ public class Map {
     private int estimatePathLength(GridPoint source, GridPoint goal) {
         return Math.abs(source.x - goal.x) + Math.abs(source.y - goal.y);
     }
+
+    // Variables used to calculate FOV. Passing them all through the recursion would be ugly and costly.
+    private float fov_radius;
+    private int fov_x;
+    private int fov_y;
+    private int[][] fov_tmp;
+    private int fov_version = 0;
+    private List<GridPoint> fov_result;
+
+    public List<GridPoint> calculateFOV(GridPoint xy, float radius) {
+        this.fov_radius = radius;
+        this.fov_x = xy.x;
+        this.fov_y = xy.y;
+        this.fov_version += 1;
+
+        fov_tmp[fov_x][fov_y] = fov_version;
+
+        fov_result = new ArrayList<>();
+        fov_result.add(xy);
+
+        castLight(1, 1.0f, 0.0f, 0, 1, 1, 0);
+        castLight(1, 1.0f, 0.0f, 1, 0, 0, 1);
+        castLight(1, 1.0f, 0.0f, 0, 1, -1, 0);
+        castLight(1, 1.0f, 0.0f, 1, 0, 0, -1);
+        castLight(1, 1.0f, 0.0f, 0, -1, 1, 0);
+        castLight(1, 1.0f, 0.0f, -1, 0, 0, 1);
+        castLight(1, 1.0f, 0.0f, 0, -1, -1, 0);
+        castLight(1, 1.0f, 0.0f, -1, 0, 0, -1);
+
+        return fov_result;
+    }
+
+    private void castLight(int row, float start, float end, int xx, int xy, int yx, int yy) {
+        float newStart = 0.0f;
+        if (start < end) {
+            return;
+        }
+        boolean blocked = false;
+        for (int distance = row; distance <= fov_radius && !blocked; ++distance) {
+            int deltaY = -distance;
+            for (int deltaX = -distance; deltaX <= 0; ++deltaX) {
+                int currentX = fov_x + deltaX * xx + deltaY * xy;
+                int currentY = fov_y + deltaX * yx + deltaY * yy;
+                float leftSlope = (deltaX - 0.5f) / (deltaY + 0.5f);
+                float rightSlope = (deltaX + 0.5f) / (deltaY - 0.5f);
+
+                if (!(currentX >= 0 && currentY >= 0 && currentX < this.width && currentY < this.height) || start < rightSlope) {
+                    continue;
+                } else if (end > leftSlope) {
+                    break;
+                }
+
+                if (
+                        fov_tmp[currentX][currentY] != fov_version
+                        && deltaX * deltaX + deltaY * deltaY <= fov_radius * fov_radius
+                ) {
+                    fov_result.add(new GridPoint(currentX, currentY));
+                    fov_tmp[currentX][currentY] = fov_version;
+                }
+
+                if (blocked) {
+                    if (!isFloor(currentX, currentY)) {
+                        newStart = rightSlope;
+                    } else {
+                        blocked = false;
+                        start = newStart;
+                    }
+                } else {
+                    if (!isFloor(currentX, currentY) && distance < fov_radius) {
+                        blocked = true;
+                        castLight(distance + 1, start, leftSlope, xx, xy, yx, yy);
+                        newStart = rightSlope;
+                    }
+                }
+            }
+        }
+    }
 }
