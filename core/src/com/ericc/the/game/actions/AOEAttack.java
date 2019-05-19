@@ -7,18 +7,19 @@ import com.ericc.the.game.Mappers;
 import com.ericc.the.game.components.Model;
 import com.ericc.the.game.components.PositionComponent;
 import com.ericc.the.game.entities.Attack;
-import com.ericc.the.game.utils.Area;
 import com.ericc.the.game.utils.GridPoint;
+
+import java.util.List;
 
 public class AOEAttack extends Action {
     // bottom left corner of the area we want to attack (relative to the position of the entity who casts the effect)
     public Model model;
     public int delay;
     public int power;
-    public Area area;
+    public List<GridPoint> area;
     public Direction dir;
 
-    public AOEAttack(Model model, Area area, Direction dir, int delay, int power) {
+    public AOEAttack(Model model, List<GridPoint> area, Direction dir, int delay, int power) {
         this.area = area;
         this.model = model;
         this.delay = delay;
@@ -39,12 +40,9 @@ public class AOEAttack extends Action {
             return true;
         }
 
-        for (int x = area.left; x <= area.right; ++x) {
-            for (int y = area.bottom; y <= area.top; ++y) {
-                GridPoint tile = new GridPoint(x, y);
-                if (pos.map.hasAnimationDependency(tile)) {
-                    return true;
-                }
+        for (GridPoint p : area) {
+            if (pos.map.hasAnimationDependency(p)) {
+                return true;
             }
         }
         return false;
@@ -55,17 +53,14 @@ public class AOEAttack extends Action {
         PositionComponent pos = Mappers.position.get(entity);
         pos.dir = dir;
 
-        for (int x = area.left; x <= area.right; ++x) {
-            for (int y = area.bottom; y <= area.top; ++y) {
-                GridPoint tile = new GridPoint(x, y);
-                if (pos.map.isFloor(tile) && !pos.xy.equals(tile)) {
-                    engine.addEntity(
-                            new Attack(tile, pos.map, power, model, dir)
-                    );
-                    Entity subject = pos.map.collisionMap.get(tile);
-                    if (subject != null && subject != entity && Mappers.stats.has(subject)) {
-                        Effects.inflictDamage(subject, power, entity);
-                    }
+        for (GridPoint p : area) {
+            if (pos.map.isFloor(p) && !pos.xy.equals(p)) {
+                engine.addEntity(
+                        new Attack(p, pos.map, power, model, dir)
+                );
+                Entity subject = pos.map.collisionMap.get(p);
+                if (subject != null && subject != entity && Mappers.stats.has(subject)) {
+                    Effects.inflictDamage(subject, power, entity);
                 }
             }
         }

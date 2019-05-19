@@ -12,10 +12,10 @@ import com.ericc.the.game.components.SafetyMapComponent;
 import com.ericc.the.game.components.StatsComponent;
 import com.ericc.the.game.helpers.Moves;
 import com.ericc.the.game.map.Map;
-import com.ericc.the.game.utils.Area;
 import com.ericc.the.game.utils.GridPoint;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class AstarAgency implements Agency {
     public static final int RADIUS = 5;
@@ -57,7 +57,7 @@ public class AstarAgency implements Agency {
                         GridPoint targetPos = pos.xy.add(GridPoint.fromDirection(dir));
                         Entity obstacle = map.getEntity(targetPos);
                         if (obstacle != null && Mappers.player.has(obstacle)) {
-                            return Actions.AOE_ATTACK(Models.sword, Area.square(targetPos, 0), dir, 100, 5);
+                            return Actions.AOE_ATTACK(Models.sword, Collections.singletonList(targetPos), dir, 100, 5);
                         }
                         return new MovementAction(path.get(0), moveDelay, MovementAction.MovementType.RUN);
                     }

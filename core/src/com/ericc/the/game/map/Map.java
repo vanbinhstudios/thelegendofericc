@@ -43,6 +43,7 @@ public class Map {
         map = new RectangularBitset(width, height);
         randomTileNumber = new int[width][height][TileTextureIndicator.countValues()];
         randomClutterNumber = new int[width][height][TileTextureIndicator.countValues()];
+        fov_tmp = new int[width][height];
 
         clearMap();
     }
@@ -353,5 +354,17 @@ public class Map {
                 }
             }
         }
+    }
+
+    public List<GridPoint> calculateRay(GridPoint origin, Direction dir, int length) {
+        List<GridPoint> ret = new ArrayList<>();
+        GridPoint offset = GridPoint.fromDirection(dir);
+        for (int i = 0; i < length; ++i) {
+            origin = origin.add(offset);
+            if (!isFloor(origin))
+                break;
+            ret.add(origin);
+        }
+        return ret;
     }
 }

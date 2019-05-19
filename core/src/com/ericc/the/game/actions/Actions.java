@@ -2,7 +2,9 @@ package com.ericc.the.game.actions;
 
 import com.ericc.the.game.Direction;
 import com.ericc.the.game.components.Model;
-import com.ericc.the.game.utils.Area;
+import com.ericc.the.game.utils.GridPoint;
+
+import java.util.List;
 
 public class Actions {
     public static WaitAction WAIT = new WaitAction(100);
@@ -17,11 +19,11 @@ public class Actions {
         return new MovementAction(direction, delay, MovementAction.MovementType.RUN);
     }
 
-    public static AOEAttack AOE_ATTACK(Model model, Area area, Direction dir, int delay, int power) {
+    public static AOEAttack AOE_ATTACK(Model model, List<GridPoint> area, Direction dir, int delay, int power) {
         return new AOEAttack(model, area, dir, delay, power);
     }
 
-    public static AOEAttack AOE_ATTACK(Model model, Area area, int delay, int power) {
+    public static AOEAttack AOE_ATTACK(Model model, List<GridPoint> area, int delay, int power) {
         return new AOEAttack(model, area, Direction.UP, delay, power);
     }
 

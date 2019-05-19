@@ -10,8 +10,9 @@ import com.ericc.the.game.components.CollisionComponent;
 import com.ericc.the.game.components.PositionComponent;
 import com.ericc.the.game.components.StatsComponent;
 import com.ericc.the.game.map.Map;
-import com.ericc.the.game.utils.Area;
 import com.ericc.the.game.utils.GridPoint;
+
+import java.util.Collections;
 
 public class KeyboardAgency implements Agency {
     private KeyboardController controller;
@@ -45,7 +46,7 @@ public class KeyboardAgency implements Agency {
         } else if (checkIfCanPush(pos.map, targetXY)) {
             return Actions.PUSH(direction, 150);
         } else if (checkIfCanAttack(pos.map, targetXY)) {
-            return Actions.AOE_ATTACK(Models.sword, Area.square(targetXY, 0), direction, 100, 40);
+            return Actions.AOE_ATTACK(Models.sword, Collections.singletonList(targetXY), direction, 100, 40);
         } else {
             return Actions.WAIT;
         }
@@ -70,10 +71,10 @@ public class KeyboardAgency implements Agency {
             return Actions.LONG_WAIT;
         } else if (controller.q) {
             controller.q = false;
-            return Actions.AOE_ATTACK(Models.explosion1, Area.square(pos.xy, 1), pos.dir, 200, 30);
+            return Actions.AOE_ATTACK(Models.explosion1, pos.map.calculateFOV(pos.xy, 100), pos.dir, 200, 30);
         } else if (controller.e) {
             controller.e = false;
-            return Actions.AOE_ATTACK(Models.explosion3, Area.ray(pos.xy, pos.dir, 5), pos.dir, 300, 40);
+            return Actions.AOE_ATTACK(Models.explosion3, pos.map.calculateRay(pos.xy, pos.dir, 5), pos.dir, 300, 40);
         } else if (controller.f) {
             controller.f = false;
             return Actions.SHOOT(pos.dir, 100, 40);
