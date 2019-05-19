@@ -26,18 +26,18 @@ public class Charge {
         GridPoint targetPos = pos.xy.add(GridPoint.fromDirection(dir));
         Entity obstacle = map.getEntity(targetPos);
         if (obstacle != null && Mappers.player.has(obstacle)) {
-            if (stats.canUseSkills) {
+            if (stats.canUseSkills && stats.mana > 50) {
                 int rand = MathUtils.random(0, 3);
 
                 switch (rand) {
                     case 1:
-                        return Actions.AOE_ATTACK(Models.explosion3, Area.ray(pos.xy, pos.dir, 8), pos.dir, 300, stats.strength); // TODO change models
+                        return Actions.AOE_ATTACK(Models.explosion3, Area.ray(pos.xy, pos.dir, 8), pos.dir, 300, stats.strength, 50); // TODO change models
                     default:
                     case 0:
-                        return Actions.AOE_ATTACK(Models.explosion1, Area.square(pos.xy, 2), pos.dir, 200, stats.strength); // TODO here too
+                        return Actions.AOE_ATTACK(Models.explosion1, Area.square(pos.xy, 2), pos.dir, 200, stats.strength, 50); // TODO here too
                 }
             } else {
-                return Actions.AOE_ATTACK(Models.sword, Area.square(targetPos, 0), dir, 100, stats.strength);
+                return Actions.AOE_ATTACK(Models.sword, Area.square(targetPos, 0), dir, 100, stats.strength, 50);
             }
         }
         return new MovementAction(path.get(0), moveDelay, MovementAction.MovementType.RUN);

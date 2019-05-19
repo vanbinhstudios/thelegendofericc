@@ -33,7 +33,7 @@ public class Actions {
         return new ShootAction(direction, delay, power);
     }
 
-    public static Heal HEAL() {
-        return new Heal();
+    public static SelfHeal SELFHEAL() {
+        return new SelfHeal();
     }
 }
