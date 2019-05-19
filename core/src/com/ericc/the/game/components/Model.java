@@ -20,6 +20,7 @@ public class Model {
         attackAnimationSheet.put(AnimationState.SLIDING, Animations.SLIDE);
         attackAnimationSheet.put(AnimationState.PUSHING, Animations.PUSH);
         attackAnimationSheet.put(AnimationState.DYING, Animations.DISAPPEAR);
+        attackAnimationSheet.put(AnimationState.HOVERING, Animations.HOVER);
 
         entityAnimationSheet.putAll(attackAnimationSheet);
         entityAnimationSheet.put(AnimationState.DYING, Animations.WITHER);

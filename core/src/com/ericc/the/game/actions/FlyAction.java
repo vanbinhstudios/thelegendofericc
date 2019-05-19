@@ -7,6 +7,9 @@ import com.ericc.the.game.components.AnimationComponent;
 import com.ericc.the.game.components.AnimationState;
 import com.ericc.the.game.components.OwnedByComponent;
 import com.ericc.the.game.components.PositionComponent;
+import com.ericc.the.game.effects.InflictDamage;
+import com.ericc.the.game.effects.Kill;
+import com.ericc.the.game.effects.SetAnimation;
 import com.ericc.the.game.utils.GridPoint;
 
 public class FlyAction extends Action {
@@ -46,18 +49,20 @@ public class FlyAction extends Action {
         if (target != null) {
             if (Mappers.stats.has(target)) {
                 OwnedByComponent ownedByComponent = Mappers.owner.get(projectile);
-                Effects.inflictDamage(target, Mappers.damage.get(projectile).damage,
-                        ownedByComponent != null ? ownedByComponent.owner : null);
+                new InflictDamage(
+                        Mappers.damage.get(projectile).damage,
+                        ownedByComponent != null ? ownedByComponent.owner : null
+                ).apply(target, engine);
             }
 
-            Effects.kill(projectile);
+            new Kill(null).apply(projectile, engine);
         } else {
             GridPoint offset = GridPoint.fromDirection(pos.dir);
             GridPoint newPos = pos.xy.add(offset);
             if (!pos.map.isFloor(newPos)) {
-                Effects.kill(projectile);
+                new Kill(null).apply(projectile, engine);
             } else {
-                Effects.setAnimation(projectile, AnimationState.SLIDING);
+                new SetAnimation(AnimationState.SLIDING).apply(projectile, engine);
                 pos.xy = newPos;
             }
         }

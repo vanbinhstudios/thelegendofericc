@@ -19,6 +19,7 @@ public class Map {
 
     public final HashMap<GridPoint, Entity> collisionMap = new HashMap<>();
     public final HashMap<GridPoint, Entity> trapMap = new HashMap<>();
+    public final HashMap<GridPoint, Entity> lootMap = new HashMap<>();
     public float[][] brightness;
     public float[][] saturation;
     public GridPoint entrance;

@@ -6,6 +6,7 @@ import com.ericc.the.game.Direction;
 import com.ericc.the.game.Mappers;
 import com.ericc.the.game.components.Model;
 import com.ericc.the.game.components.PositionComponent;
+import com.ericc.the.game.effects.InflictDamage;
 import com.ericc.the.game.entities.Attack;
 import com.ericc.the.game.utils.Area;
 import com.ericc.the.game.utils.GridPoint;
@@ -25,7 +26,6 @@ public class AOEAttack extends Action {
         this.power = power;
         this.dir = dir;
     }
-
 
     @Override
     public int getDelay() {
@@ -64,7 +64,7 @@ public class AOEAttack extends Action {
                     );
                     Entity subject = pos.map.collisionMap.get(tile);
                     if (subject != null && subject != entity && Mappers.stats.has(subject)) {
-                        Effects.inflictDamage(subject, power, entity);
+                        new InflictDamage(power, entity).apply(subject, engine);
                     }
                 }
             }

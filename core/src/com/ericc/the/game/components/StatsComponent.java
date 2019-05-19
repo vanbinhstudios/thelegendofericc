@@ -14,6 +14,7 @@ public class StatsComponent implements Component {
     public int arrows;
     public int maxExperience;
     public float delayMultiplier;
+    public int invulnerabilityTime = 0;
 
     public StatsComponent(int intelligence, int agility, int strength, int health) {
         this.intelligence = intelligence;
@@ -31,5 +32,10 @@ public class StatsComponent implements Component {
     public StatsComponent(int intelligence, int agility, int strength, int health, float delayMultiplier) {
         this(intelligence, agility, strength, health);
         this.delayMultiplier = delayMultiplier;
+    }
+
+    public void tick(int time) {
+        invulnerabilityTime -= time;
+        invulnerabilityTime = Math.max(0, invulnerabilityTime);
     }
 }

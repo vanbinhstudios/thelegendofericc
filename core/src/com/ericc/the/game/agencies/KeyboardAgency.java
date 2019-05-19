@@ -6,6 +6,8 @@ import com.ericc.the.game.Mappers;
 import com.ericc.the.game.Models;
 import com.ericc.the.game.actions.Action;
 import com.ericc.the.game.actions.Actions;
+import com.ericc.the.game.actions.SwitchItem;
+import com.ericc.the.game.actions.UseItem;
 import com.ericc.the.game.components.CollisionComponent;
 import com.ericc.the.game.components.PositionComponent;
 import com.ericc.the.game.components.StatsComponent;
@@ -47,7 +49,7 @@ public class KeyboardAgency implements Agency {
         } else if (checkIfCanAttack(pos.map, targetXY)) {
             return Actions.AOE_ATTACK(Models.sword, Area.square(targetXY, 0), direction, 100, 40);
         } else {
-            return Actions.WAIT;
+            return Actions.MOVE(direction, 50);
         }
     }
 
@@ -89,6 +91,12 @@ public class KeyboardAgency implements Agency {
             controller.r = false;
             running = !running;
             return null;
+        } else if (controller.i) {
+            controller.i = false;
+            return new UseItem();
+        } else if (controller.right_bracket) {
+            controller.right_bracket = false;
+            return new SwitchItem();
         } else {
             return null;
         }
