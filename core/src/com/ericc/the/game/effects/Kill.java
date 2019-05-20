@@ -2,6 +2,7 @@ package com.ericc.the.game.effects;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.math.MathUtils;
 import com.ericc.the.game.Mappers;
 import com.ericc.the.game.components.*;
 import com.ericc.the.game.entities.Loot;
@@ -15,6 +16,23 @@ public class Kill implements Effect {
 
     @Override
     public void apply(Entity entity, Engine engine) {
+        StatsComponent stats = Mappers.stats.get(entity);
+
+        if (stats != null) {
+            stats.lives--;
+
+            if (stats.lives > 0) {
+                int rand = MathUtils.random(0, 2);
+
+                if (rand == 0) {
+                    stats.health = stats.maxHealth;
+                    new SetAnimation(AnimationState.REBIRTH).apply(entity, engine);
+
+                    return;
+                }
+            }
+        }
+
         entity.remove(AgencyComponent.class);
         entity.remove(CollisionComponent.class);
         entity.add(new DeadTag());

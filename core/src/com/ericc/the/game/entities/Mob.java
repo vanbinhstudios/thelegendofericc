@@ -12,7 +12,7 @@ public class Mob extends Entity {
     public Mob(GridPoint xy, Map map) {
         add(new PositionComponent(xy, map));
         add(new RenderableComponent(Models.slimeSmall));
-        add(new StatsComponent(45, 30, 10, 120, false));
+        add(new StatsComponent(45, 30, 10, 120, false, 2));
         add(new AgencyComponent(new AstarAgency(), false));
         add(new CollisionComponent(CollisionComponent.Type.LIVING));
         add(new HostileTag());

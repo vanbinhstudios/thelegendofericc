@@ -9,4 +9,5 @@ public class Animations {
     public static final HoverAnimation HOVER = new HoverAnimation(0.1f, 5f);
     public static final DeathAnimation DISAPPEAR = new DeathAnimation(1 / 2f, false, 1.0f);
     public static final DeathAnimation WITHER = new DeathAnimation(1 / 2f, true, 0.7f);
+    public static final RebirthAnimation REBIRTH = new RebirthAnimation(1.2f, true, .7f);
 }

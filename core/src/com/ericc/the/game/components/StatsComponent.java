@@ -17,6 +17,12 @@ public class StatsComponent implements Component {
     public int maxExperience;
     public float delayMultiplier;
     public boolean canUseSkills;
+    public int lives;
+
+    public StatsComponent(int intelligence, int agility, int strength, int health, boolean canUseSkills, int lives) {
+        this(intelligence, agility, strength, health, 0, canUseSkills);
+        this.lives = lives;
+    }
 
     public StatsComponent(int intelligence, int agility, int strength, int health, boolean canUseSkills) {
         this(intelligence, agility, strength, health, 0, canUseSkills);
@@ -41,6 +47,7 @@ public class StatsComponent implements Component {
         this.level = 1;
         this.maxExperience = FIRST_LEVEL_EXPERIENCE;
         this.canUseSkills = canUseSkills;
+        this.lives = 1;
     }
 
     public void tick(int time) {
