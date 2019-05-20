@@ -16,8 +16,17 @@ public class StatsComponent implements Component {
     public int arrows;
     public int maxExperience;
     public float delayMultiplier;
+    public boolean canUseSkills;
+
+    public StatsComponent(int intelligence, int agility, int strength, int health, boolean canUseSkills) {
+        this(intelligence, agility, strength, health, 0, canUseSkills);
+    }
 
     public StatsComponent(int intelligence, int agility, int strength, int health, int mana) {
+        this(intelligence, agility, strength, health, mana, true);
+    }
+
+    public StatsComponent(int intelligence, int agility, int strength, int health, int mana, boolean canUseSkills) {
         this.intelligence = intelligence;
         this.agility = agility;
         this.strength = strength;
@@ -30,5 +39,6 @@ public class StatsComponent implements Component {
         this.arrows = 30;
         this.level = 1;
         this.maxExperience = FIRST_LEVEL_EXPERIENCE;
+        this.canUseSkills = canUseSkills;
     }
 }
