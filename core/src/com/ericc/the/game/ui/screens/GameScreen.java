@@ -25,7 +25,7 @@ public class GameScreen implements Screen {
 
     public final static int viewportWidth = 800;
     public final static int viewportHeight = 600;
-    private final static boolean MUSIC = false; ///< turns the music on and off
+    private final static boolean MUSIC = true; ///< turns the music on and off
     private final Game game;
     public GameOverlay overlay;
     private KeyboardController controls;
