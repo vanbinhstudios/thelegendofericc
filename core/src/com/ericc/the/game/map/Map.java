@@ -22,9 +22,9 @@ public class Map {
     public final HashMap<GridPoint, Entity> lootMap = new HashMap<>();
     public float[][] brightness;
     public float[][] saturation;
-    private float[][][] tint;
     public GridPoint entrance;
     public GridPoint exit;
+    private float[][][] tint;
     private int width, height;
     private RectangularBitset map;
     private int[][][] randomTileNumber;
@@ -34,6 +34,13 @@ public class Map {
     // the above is NOT AN INVARIANT, this changes after spawning some entities on some tiles from this collection
     private HashSet<Room> rooms; ///< stores every room made while generating (without corridors)
     private FogOfWar fogOfWar;
+    // Variables used to calculate FOV. Passing them all through the recursion would be ugly and costly.
+    private float fov_radius;
+    private int fov_x;
+    private int fov_y;
+    private int[][] fov_tmp;
+    private int fov_version = 0;
+    private List<GridPoint> fov_result;
 
     Map(int width, int height) {
         this.width = width;
@@ -286,14 +293,6 @@ public class Map {
         return Math.abs(source.x - goal.x) + Math.abs(source.y - goal.y);
     }
 
-    // Variables used to calculate FOV. Passing them all through the recursion would be ugly and costly.
-    private float fov_radius;
-    private int fov_x;
-    private int fov_y;
-    private int[][] fov_tmp;
-    private int fov_version = 0;
-    private List<GridPoint> fov_result;
-
     public List<GridPoint> calculateFOV(GridPoint xy, float radius) {
         this.fov_radius = radius;
         this.fov_x = xy.x;
@@ -339,7 +338,7 @@ public class Map {
 
                 if (
                         fov_tmp[currentX][currentY] != fov_version
-                        && deltaX * deltaX + deltaY * deltaY <= fov_radius * fov_radius
+                                && deltaX * deltaX + deltaY * deltaY <= fov_radius * fov_radius
                 ) {
                     fov_result.add(new GridPoint(currentX, currentY));
                     fov_tmp[currentX][currentY] = fov_version;

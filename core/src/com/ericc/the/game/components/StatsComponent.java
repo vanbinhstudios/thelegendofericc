@@ -17,11 +17,11 @@ public class StatsComponent implements Component {
     public int maxExperience;
     public float delayMultiplier;
     public boolean canUseSkills;
+    public int invulnerabilityTime = 0;
 
     public StatsComponent(int intelligence, int agility, int strength, int health, boolean canUseSkills) {
         this(intelligence, agility, strength, health, 0, canUseSkills);
     }
-    public int invulnerabilityTime = 0;
 
     public StatsComponent(int intelligence, int agility, int strength, int health, int mana) {
         this(intelligence, agility, strength, health, mana, true);

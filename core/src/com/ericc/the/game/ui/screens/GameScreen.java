@@ -1,6 +1,5 @@
 package com.ericc.the.game.ui.screens;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
@@ -22,11 +21,11 @@ import com.ericc.the.game.systems.logic.*;
 import com.ericc.the.game.systems.realtime.*;
 
 public class GameScreen implements Screen {
+    public static GameScreen gameScreen;
 
     public final static int viewportWidth = 800;
     public final static int viewportHeight = 600;
     private final static boolean MUSIC = true; ///< turns the music on and off
-    private final Game game;
     public GameOverlay overlay;
     private KeyboardController controls;
     private OrthographicCamera camera;
@@ -36,12 +35,9 @@ public class GameScreen implements Screen {
     private GameEngine gameEngine = new GameEngine();
     private FpsThrottle fpsThrottle = new FpsThrottle(60);
 
-    public GameScreen(Game game) {
-        this.game = game;
-    }
-
     @Override
     public void show() {
+        gameScreen = this;
         Media.loadAssets();
 
         // we need a camera here to have an instance of Orthographic one in a viewport
