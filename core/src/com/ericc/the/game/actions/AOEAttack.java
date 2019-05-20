@@ -4,7 +4,6 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.ericc.the.game.Direction;
 import com.ericc.the.game.Mappers;
-import com.ericc.the.game.components.FieldOfViewComponent;
 import com.ericc.the.game.components.Model;
 import com.ericc.the.game.components.PositionComponent;
 import com.ericc.the.game.components.StatsComponent;

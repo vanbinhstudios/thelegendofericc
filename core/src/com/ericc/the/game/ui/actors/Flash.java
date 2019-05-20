@@ -19,7 +19,7 @@ public class Flash {
         flash.setFontScale(7);
         flash.setAlignment(Align.center);
         flash.setPosition(GameScreen.viewportWidth / 2, GameScreen.viewportHeight / 2);
-        MainGame.gamescreen.overlay.getStage().addActor(flash);
+        GameScreen.gameScreen.overlay.getStage().addActor(flash);
         flash.addAction(sequence(alpha(0.7f, 0.06f), alpha(0, 0.06f), removeActor()));
 
     }
