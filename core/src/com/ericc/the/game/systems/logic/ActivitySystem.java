@@ -106,8 +106,13 @@ public class ActivitySystem extends EntitySystem implements EntityListener {
         action.execute(actor, getEngine());
 
         if (activated.size() == 0) {
-            agency.delay += action.getDelay() * ((stats != null) ? stats.delayMultiplier : 1.0);
-            pending.add(actor);
+            int delay = action.getDelay();
+            if (delay == 0) {
+                actingInThisMoment.push(actor);
+            } else {
+                agency.delay += action.getDelay() * ((stats != null) ? stats.delayMultiplier : 1.0);
+                pending.add(actor);
+            }
         }
 
         action = null;
@@ -123,6 +128,9 @@ public class ActivitySystem extends EntitySystem implements EntityListener {
         int dt = Mappers.agency.get(first).delay;
         for (Entity entity : pending) {
             Mappers.agency.get(entity).delay -= dt;
+            if (Mappers.stats.has(entity)) {
+                Mappers.stats.get(entity).tick(dt);
+            }
         }
 
         while (!pending.isEmpty() && Mappers.agency.get(pending.peek()).delay <= 0) {

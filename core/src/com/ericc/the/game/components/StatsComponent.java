@@ -21,6 +21,7 @@ public class StatsComponent implements Component {
     public StatsComponent(int intelligence, int agility, int strength, int health, boolean canUseSkills) {
         this(intelligence, agility, strength, health, 0, canUseSkills);
     }
+    public int invulnerabilityTime = 0;
 
     public StatsComponent(int intelligence, int agility, int strength, int health, int mana) {
         this(intelligence, agility, strength, health, mana, true);
@@ -40,5 +41,10 @@ public class StatsComponent implements Component {
         this.level = 1;
         this.maxExperience = FIRST_LEVEL_EXPERIENCE;
         this.canUseSkills = canUseSkills;
+    }
+
+    public void tick(int time) {
+        invulnerabilityTime -= time;
+        invulnerabilityTime = Math.max(0, invulnerabilityTime);
     }
 }

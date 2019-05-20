@@ -6,6 +6,9 @@ import com.ericc.the.game.Direction;
 import com.ericc.the.game.Mappers;
 import com.ericc.the.game.components.AnimationState;
 import com.ericc.the.game.components.PositionComponent;
+import com.ericc.the.game.effects.MoveBy;
+import com.ericc.the.game.effects.RotateTo;
+import com.ericc.the.game.effects.SetAnimation;
 import com.ericc.the.game.utils.GridPoint;
 
 import java.util.Stack;
@@ -54,14 +57,14 @@ public class PushAction extends Action {
 
         while (!stack.empty()) {
             Entity subject = stack.pop();
-            Effects.rotateTo(subject, direction);
-            Effects.setAnimation(subject, AnimationState.PUSHING);
-            Effects.moveBy(subject, offset);
+            new RotateTo(direction).apply(subject, engine);
+            new SetAnimation(AnimationState.PUSHING).apply(subject, engine);
+            new MoveBy(offset).apply(subject, engine);
         }
 
-        Effects.rotateTo(entity, direction);
-        Effects.setAnimation(entity, AnimationState.PUSHING);
-        Effects.moveBy(entity, offset);
+        new RotateTo(direction).apply(entity, engine);
+        new SetAnimation(AnimationState.PUSHING).apply(entity, engine);
+        new MoveBy(offset).apply(entity, engine);
     }
 
     private boolean canPush(PositionComponent pos) {

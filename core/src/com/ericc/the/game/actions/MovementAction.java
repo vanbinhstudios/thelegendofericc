@@ -6,6 +6,8 @@ import com.ericc.the.game.Direction;
 import com.ericc.the.game.Mappers;
 import com.ericc.the.game.components.AnimationState;
 import com.ericc.the.game.components.PositionComponent;
+import com.ericc.the.game.effects.MoveBy;
+import com.ericc.the.game.effects.SetAnimation;
 import com.ericc.the.game.utils.GridPoint;
 
 public class MovementAction extends Action {
@@ -37,10 +39,10 @@ public class MovementAction extends Action {
 
         if (pos.map.isPassable(pos.xy.add(GridPoint.fromDirection(pos.dir)))) {
             GridPoint offset = GridPoint.fromDirection(pos.dir);
-            Effects.moveBy(entity, offset);
+            new MoveBy(offset).apply(entity, engine);
             AnimationState state =
                     (type == MovementType.WALK) ? AnimationState.WALKING : AnimationState.RUNNING;
-            Effects.setAnimation(entity, state);
+            new SetAnimation(state).apply(entity, engine);
         }
     }
 

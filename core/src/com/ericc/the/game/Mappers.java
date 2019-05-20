@@ -26,4 +26,7 @@ public class Mappers {
     public static final ComponentMapper<OwnedByComponent> owner = ComponentMapper.getFor(OwnedByComponent.class);
     public static final ComponentMapper<ExperienceWorthComponent> experienceWorth = ComponentMapper.getFor(ExperienceWorthComponent.class);
     public static final ComponentMapper<SafetyMapComponent> safety = ComponentMapper.getFor(SafetyMapComponent.class);
+    public static final ComponentMapper<LootComponent> loot = ComponentMapper.getFor(LootComponent.class);
+    public static final ComponentMapper<DropComponent> drop = ComponentMapper.getFor(DropComponent.class);
+    public static final ComponentMapper<InventoryComponent> inventory = ComponentMapper.getFor(InventoryComponent.class);
 }

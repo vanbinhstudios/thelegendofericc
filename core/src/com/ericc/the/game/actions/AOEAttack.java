@@ -7,6 +7,7 @@ import com.ericc.the.game.Mappers;
 import com.ericc.the.game.components.Model;
 import com.ericc.the.game.components.PositionComponent;
 import com.ericc.the.game.components.StatsComponent;
+import com.ericc.the.game.effects.InflictDamage;
 import com.ericc.the.game.entities.Attack;
 import com.ericc.the.game.utils.GridPoint;
 
@@ -67,7 +68,7 @@ public class AOEAttack extends Action {
                 );
                 Entity subject = pos.map.collisionMap.get(p);
                 if (subject != null && subject != entity && Mappers.stats.has(subject)) {
-                    Effects.inflictDamage(subject, power, entity);
+                    new InflictDamage(power, entity).apply(subject, engine);
                 }
             }
         }
