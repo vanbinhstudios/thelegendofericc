@@ -84,6 +84,7 @@ public class GameScreen implements Screen {
         gameEngine.addRealtimeSystem(new TileChanger(.75f, priority++));
         gameEngine.addRealtimeSystem(new CameraSystem(priority++));
         gameEngine.addRealtimeSystem(new FovFadeSystem(priority++));
+        gameEngine.addRealtimeSystem(new GarbageCollector(priority++));
 
         gameEngine.addRealtimeSystem(new RenderSystem(priority++));
 
