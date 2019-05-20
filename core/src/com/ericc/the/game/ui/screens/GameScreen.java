@@ -99,6 +99,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        controls.tick(delta);
         gameEngine.update();
         overlay.getStage().act(delta);
         overlay.getStage().draw();
