@@ -27,7 +27,7 @@ public class GameScreen implements Screen {
     public final static int viewportHeight = 600;
     private final static boolean MUSIC = false; ///< turns the music on and off
     private final Game game;
-    public StatsOverlay overlay;
+    public GameOverlay overlay;
     private KeyboardController controls;
     private OrthographicCamera camera;
     private Viewport viewport;
@@ -63,7 +63,7 @@ public class GameScreen implements Screen {
                 new AgencyComponent(new KeyboardAgency(controls), false));
 
 
-        overlay = new StatsOverlay(viewportWidth, viewportHeight, player);
+        overlay = new GameOverlay(viewportWidth, viewportHeight, player);
         InputMultiplexer multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(controls);
         multiplexer.addProcessor(overlay.getStage());

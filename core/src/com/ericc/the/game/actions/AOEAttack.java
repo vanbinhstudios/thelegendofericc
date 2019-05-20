@@ -56,7 +56,6 @@ public class AOEAttack extends Action {
     @Override
     public void execute(Entity entity, Engine engine) {
         PositionComponent pos = Mappers.position.get(entity);
-        FieldOfViewComponent fov = Mappers.fov.get(entity);
         pos.dir = dir;
 
         StatsComponent stats = Mappers.stats.get(entity);
@@ -64,7 +63,7 @@ public class AOEAttack extends Action {
         stats.mana -= cost;
 
         for (GridPoint p : area) {
-            if (pos.map.isFloor(p) && !pos.xy.equals(p) && (fov == null ? true : fov.visibility.get(x, y))) {
+            if (pos.map.isFloor(p) && !pos.xy.equals(p)) {
                 engine.addEntity(
                         new Attack(p, pos.map, power, model, dir)
                 );
