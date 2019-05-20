@@ -1,5 +1,6 @@
 package com.ericc.the.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -8,6 +9,8 @@ import com.ericc.the.game.helpers.CameraZoom;
 public class KeyboardController extends InputAdapter {
 
     public boolean up, down, left, right, space, q, e, n, m, f, r, right_bracket, i;
+    public float up_delay, down_delay, left_delay, right_delay;
+    public boolean up_pressed, down_pressed, left_pressed, right_pressed;
     private GameEngine engines;
     private CameraZoom zoom;
 
@@ -31,18 +34,22 @@ public class KeyboardController extends InputAdapter {
             case Input.Keys.S:
             case Input.Keys.DOWN:
                 down = true;
+                down_pressed = true;
                 break;
             case Input.Keys.W:
             case Input.Keys.UP:
                 up = true;
+                up_pressed = true;
                 break;
             case Input.Keys.A:
             case Input.Keys.LEFT:
                 left = true;
+                left_pressed = true;
                 break;
             case Input.Keys.D:
             case Input.Keys.RIGHT:
                 right = true;
+                right_pressed = true;
                 break;
             case Input.Keys.SPACE:
                 space = true;
@@ -72,6 +79,33 @@ public class KeyboardController extends InputAdapter {
                 i = true;
                 break;
             default:
+                break;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+        switch (keycode) {
+            case Input.Keys.S:
+            case Input.Keys.DOWN:
+                down_pressed = false;
+                down_delay = 0;
+                break;
+            case Input.Keys.W:
+            case Input.Keys.UP:
+                up_pressed = false;
+                up_delay = 0;
+                break;
+            case Input.Keys.A:
+            case Input.Keys.LEFT:
+                left_pressed = false;
+                left_delay = 0;
+                break;
+            case Input.Keys.D:
+            case Input.Keys.RIGHT:
+                right_pressed = false;
+                right_delay = 0;
                 break;
         }
 
@@ -124,5 +158,38 @@ public class KeyboardController extends InputAdapter {
     public boolean scrolled(int amount) {
         zoom.zoomAnyCamera(amount);
         return false;
+    }
+
+    public void tick(float dt) {
+        final float repeatRate = 0.16f;
+
+        if (down_pressed)
+            down_delay += dt;
+        if (up_pressed)
+            up_delay += dt;
+        if (right_pressed)
+            right_delay += dt;
+        if (left_pressed)
+            left_delay += dt;
+
+        if (down_pressed && down_delay > repeatRate) {
+            down_delay %= repeatRate;
+            down = true;
+        }
+
+        if (left_pressed && left_delay > repeatRate) {
+            left_delay %= repeatRate;
+            left = true;
+        }
+
+        if (right_pressed && right_delay > repeatRate) {
+            right_delay %= repeatRate;
+            right = true;
+        }
+
+        if (up_pressed && up_delay > repeatRate) {
+            up_delay %= repeatRate;
+            up = true;
+        }
     }
 }
