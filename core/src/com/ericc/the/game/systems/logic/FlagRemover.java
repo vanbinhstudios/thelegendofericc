@@ -26,4 +26,5 @@ public class FlagRemover extends EntitySystem {
             entity.remove(DirtyFlag.class);
         }
     }
+
 }

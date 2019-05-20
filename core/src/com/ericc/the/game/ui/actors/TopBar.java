@@ -8,19 +8,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
-public class TopHealthbar extends ProgressBar {
+public class TopBar extends ProgressBar {
 
-    public TopHealthbar(int width, int height) {
+    public TopBar(int width, int height, Color background, Color filled) {
         super(0f, 1f, 0.01f, false, new ProgressBarStyle());
-        getStyle().background = getColoredDrawable(width, height, Color.RED);
-        getStyle().knob = getColoredDrawable(0, height, Color.GREEN);
-        getStyle().knobBefore = getColoredDrawable(width, height, Color.GREEN);
+        getStyle().background = getColoredDrawable(width, height, background);
+        getStyle().knob = getColoredDrawable(0, height, filled);
+        getStyle().knobBefore = getColoredDrawable(width, height, filled);
 
         setWidth(width);
         setHeight(height);
-
-        setAnimateDuration(0.0f);
-        setValue(1f);
 
         setAnimateDuration(0.25f);
     }

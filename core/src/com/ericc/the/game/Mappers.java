@@ -29,4 +29,5 @@ public class Mappers {
     public static final ComponentMapper<LootComponent> loot = ComponentMapper.getFor(LootComponent.class);
     public static final ComponentMapper<DropComponent> drop = ComponentMapper.getFor(DropComponent.class);
     public static final ComponentMapper<InventoryComponent> inventory = ComponentMapper.getFor(InventoryComponent.class);
+    public static final ComponentMapper<DeadTag> dead = ComponentMapper.getFor(DeadTag.class);
 }

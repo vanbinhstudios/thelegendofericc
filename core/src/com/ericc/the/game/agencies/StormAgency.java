@@ -10,10 +10,10 @@ import com.ericc.the.game.actions.WaitAction;
 import com.ericc.the.game.components.PositionComponent;
 import com.ericc.the.game.components.StatsComponent;
 import com.ericc.the.game.map.Map;
-import com.ericc.the.game.utils.Area;
 import com.ericc.the.game.utils.GridPoint;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 public class StormAgency implements Agency {
@@ -45,6 +45,6 @@ public class StormAgency implements Agency {
         }
 
         GridPoint randomTarget = targets.get(rng.nextInt(targets.size()));
-        return Actions.AOE_ATTACK(Models.sword, Area.square(randomTarget, 0), 200, 60);
+        return Actions.AOE_ATTACK(Models.sword, Collections.singletonList(randomTarget), 200, 60, 0);
     }
 }

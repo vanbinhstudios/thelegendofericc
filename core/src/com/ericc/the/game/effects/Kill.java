@@ -17,6 +17,7 @@ public class Kill implements Effect {
     public void apply(Entity entity, Engine engine) {
         entity.remove(AgencyComponent.class);
         entity.remove(CollisionComponent.class);
+        entity.add(new DeadTag());
         new SetAnimation(AnimationState.DYING).apply(entity, engine);
 
         if (Mappers.drop.has(entity) && Mappers.position.has(entity)) {
