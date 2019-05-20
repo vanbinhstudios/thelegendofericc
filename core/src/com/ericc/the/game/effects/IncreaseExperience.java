@@ -27,12 +27,12 @@ public class IncreaseExperience implements Effect {
 
             if (Mappers.player.has(entity)) {
                 if (stats.level == 2) {
-                    Popup.show("You unlocked FIRE BEAM");
+                    Popup.show("LEVEL UP", "You unlocked FIRE BEAM");
                 } else if (stats.level == 4) {
                     // TODO change name
-                    Popup.show("You unlocked PIERDZENIE");
+                    Popup.show("LEVEL UP", "You unlocked PIERDZENIE");
                 } else {
-                    Popup.show("No skills gained this time");
+                    Popup.show("LEVEL UP", "No skills gained this time");
                 }
             }
         }
