@@ -22,6 +22,7 @@ public class Map {
     public final HashMap<GridPoint, Entity> lootMap = new HashMap<>();
     public float[][] brightness;
     public float[][] saturation;
+    private float[][][] tint;
     public GridPoint entrance;
     public GridPoint exit;
     private int width, height;
@@ -29,6 +30,7 @@ public class Map {
     private int[][][] randomTileNumber;
     private int[][][] randomClutterNumber;
     private HashSet<GridPoint> passableTiles; ///< stores every passable tile in a map (AFTER THE FIRST GENERATION)
+    private ArrayList<GridPoint> vacantTiles;
     // the above is NOT AN INVARIANT, this changes after spawning some entities on some tiles from this collection
     private HashSet<Room> rooms; ///< stores every room made while generating (without corridors)
     private FogOfWar fogOfWar;
@@ -39,6 +41,7 @@ public class Map {
         brightness = new float[width][height];
         saturation = new float[width][height];
         this.passableTiles = new HashSet<>();
+        this.vacantTiles = new ArrayList<>();
         this.rooms = new HashSet<>();
         this.fogOfWar = new FogOfWar(width, height);
         map = new RectangularBitset(width, height);
@@ -72,6 +75,7 @@ public class Map {
 
         if (passable) {
             passableTiles.add(new GridPoint(x, y));
+            vacantTiles.add(new GridPoint(x, y));
         }
     }
 
@@ -132,19 +136,21 @@ public class Map {
      * @return random passable point in the 2D grid of this map
      * <p>
      * DISCLAIMER:
-     * It does REMOVE the passable tile it is going to return from the passableTiles collection!
+     * It does REMOVE the passable tile it is going to return from the vacantTiles collection!
      */
     public GridPoint getRandomPassableTile() {
         GridPoint ret;
 
+        Collections.shuffle(vacantTiles);
+
         try {
-            ret = passableTiles.iterator().next();
+            ret = vacantTiles.get(0);
         } catch (Exception e) {
             // TODO Instead of throwing an exception here, we would like to generate another map f.e.
             throw new IllegalStateException("Can't find room for more entities, check the map size.");
         }
 
-        passableTiles.remove(ret);
+        vacantTiles.remove(ret);
         return ret;
     }
 

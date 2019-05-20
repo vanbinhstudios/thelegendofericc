@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.ericc.the.game.Direction;
 import com.ericc.the.game.Mappers;
+import com.ericc.the.game.components.FieldOfViewComponent;
 import com.ericc.the.game.components.Model;
 import com.ericc.the.game.components.PositionComponent;
 import com.ericc.the.game.effects.InflictDamage;
@@ -53,12 +54,13 @@ public class AOEAttack extends Action {
     @Override
     public void execute(Entity entity, Engine engine) {
         PositionComponent pos = Mappers.position.get(entity);
+        FieldOfViewComponent fov = Mappers.fov.get(entity);
         pos.dir = dir;
 
         for (int x = area.left; x <= area.right; ++x) {
             for (int y = area.bottom; y <= area.top; ++y) {
                 GridPoint tile = new GridPoint(x, y);
-                if (pos.map.isFloor(tile) && !pos.xy.equals(tile)) {
+                if (pos.map.isFloor(tile) && !pos.xy.equals(tile) && (fov == null ? true : fov.visibility.get(x, y))) {
                     engine.addEntity(
                             new Attack(tile, pos.map, power, model, dir)
                     );
