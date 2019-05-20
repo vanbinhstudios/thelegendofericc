@@ -28,6 +28,14 @@ public class Models {
             new Affine2().translate(0, 0.35f), true);
     public static Model explosion3 = new Model(Media.explosion3,
             new Affine2().translate(0, 0.35f), true);
+    public static Model scrollOfStorms = new Model(Media.scrollOfStorms,
+            new Affine2().translate(0, 0.35f), false);
+    public static Model scrollOfInvulnerability = new Model(Media.scrollOfInvulnerability,
+            new Affine2().translate(0, 0.35f), false);
+    public static Model food = new Model(Media.food,
+            new Affine2().translate(0, 0.35f), false);
+    public static Model storm = new Model(Media.storm,
+            new Affine2().translate(0, 0.35f), false);
 
     static {
         healthBar.width = 0.9f;

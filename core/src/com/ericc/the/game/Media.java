@@ -21,6 +21,7 @@ public class Media {
     public static TextureRegion lvlUp;
     public static TextureRegion arrowUp, arrowRight, arrowLeft, arrowDown;
     public static TextureRegion explosion1, explosion2, explosion3;
+    public static TextureRegion scrollOfStorms, scrollOfInvulnerability, food, storm;
     public static int floorsConfiguration = 0;
 
     public static void loadAssets() {
@@ -80,6 +81,11 @@ public class Media {
         healthBar = atlas.findRegion("entity/healthBar");
         experienceBar = atlas.findRegion("entity/experienceBar");
         lvlUp = atlas.findRegion("entity/lvlUp");
+
+        scrollOfStorms = atlas.findRegion("entity/items/scrollofstorm");
+        scrollOfInvulnerability = atlas.findRegion("entity/items/scrollofinvulnerability");
+        food = atlas.findRegion("entity/items/food");
+        storm = atlas.findRegion("entity/items/storm");
     }
 
     public static void dispose() {

@@ -10,7 +10,7 @@ import com.ericc.the.game.utils.GridPoint;
 public class Storm extends Entity {
     public Storm(GridPoint xy, Map map, Entity owner) {
         add(new PositionComponent(xy, map));
-        add(new RenderableComponent(Models.explosion1));
+        add(new RenderableComponent(Models.storm));
         add(new AgencyComponent(new StormAgency(), false));
         add(new AnimationComponent());
         add(new OwnedByComponent(owner));
