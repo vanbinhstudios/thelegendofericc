@@ -41,6 +41,17 @@ public class TeleportAction extends Action {
 
         subject.add(DirtyFlag.DIRTY);
 
+        FieldOfViewComponent subjectFov = Mappers.fov.get(subject);
+
+        if (subjectFov != null) {
+            final int MARGIN = FieldOfViewComponent.VIEW_RADIUS;
+            for (int x = pos.getX() - MARGIN; x <= pos.getX() + MARGIN; ++x) {
+                for (int y = pos.getY() - MARGIN; y <= pos.getY() + MARGIN; ++y) {
+                    subjectFov.visibility.clear(x, y);
+                }
+            }
+        }
+
         if (dest == StaircaseDestination.DESCENDING) {
             dungeon.changeLevel(dungeon.getCurrentLevelNumber() + 1,
                     InitialPlayerPosition.LEVEL_ENTRANCE);

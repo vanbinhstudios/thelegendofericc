@@ -10,7 +10,6 @@ import com.ericc.the.game.components.DirtyFlag;
 import com.ericc.the.game.components.FieldOfViewComponent;
 import com.ericc.the.game.components.PlayerTag;
 import com.ericc.the.game.components.PositionComponent;
-import com.ericc.the.game.utils.GridPoint;
 
 public class FogOfWarSystem extends EntitySystem {
 
@@ -33,8 +32,14 @@ public class FogOfWarSystem extends EntitySystem {
             FieldOfViewComponent fov = Mappers.fov.get(entity);
             PositionComponent pos = Mappers.position.get(entity);
 
-            for (GridPoint point : fov.points) {
-                pos.map.markAsSeenByPlayer(point);
+            int updateMargin = FieldOfViewComponent.VIEW_RADIUS + 3;
+
+            for (int y = pos.getY() + updateMargin; y >= pos.getY() - updateMargin; --y) {
+                for (int x = pos.getX() - updateMargin; x < pos.getX() + updateMargin; ++x) {
+                    if (pos.map.inBoundaries(x, y) && fov.visibility.get(x, y)) {
+                        pos.map.markAsSeenByPlayer(x, y);
+                    }
+                }
             }
         }
     }
