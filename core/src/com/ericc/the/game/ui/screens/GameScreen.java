@@ -32,7 +32,7 @@ public class GameScreen implements Screen {
     private Viewport viewport;
     private Dungeon dungeon;
     private Player player;
-    private GameEngine gameEngine = new GameEngine();
+    public GameEngine gameEngine = new GameEngine();
     private FpsThrottle fpsThrottle = new FpsThrottle(60);
 
     @Override
