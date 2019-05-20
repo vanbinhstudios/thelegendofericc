@@ -11,7 +11,10 @@ public class Media {
     public static Array<TextureAtlas.AtlasRegion> floors, floorsRev;
     public static TextureRegion wallLU, wallRU, wallLD, wallRD;
     public static TextureRegion playerFront, playerLeft, playerRight, playerBack;
-    public static TextureRegion mobFront, mobLeft, mobRight, mobBack;
+    public static TextureRegion mageFront, mageLeft, mageRight, mageBack;
+    public static TextureRegion tankFront, tankLeft, tankRight, tankBack;
+    public static TextureRegion slimeSmallFront, slimeSmallLeft, slimeSmallRight, slimeSmallBack;
+    public static TextureRegion slimeBigFront, slimeBigLeft, slimeBigRight, slimeBigBack;
     public static TextureRegion stairsDown, stairsUp;
     public static TextureRegion crate;
     public static TextureAtlas atlas;
@@ -21,6 +24,7 @@ public class Media {
     public static TextureRegion lvlUp;
     public static TextureRegion arrowUp, arrowRight, arrowLeft, arrowDown;
     public static TextureRegion explosion1, explosion2, explosion3;
+    public static TextureRegion scrollOfStorms, scrollOfInvulnerability, food, storm;
     public static int floorsConfiguration = 0;
 
     public static void loadAssets() {
@@ -50,10 +54,25 @@ public class Media {
         playerLeft = atlas.findRegion("entity/hero/hero_left");
         playerRight = atlas.findRegion("entity/hero/hero_right");
 
-        mobFront = atlas.findRegion("entity/mage/mage_front");
-        mobBack = atlas.findRegion("entity/mage/mage_back");
-        mobLeft = atlas.findRegion("entity/mage/mage_left");
-        mobRight = atlas.findRegion("entity/mage/mage_right");
+        mageFront = atlas.findRegion("entity/mage/mage_front");
+        mageBack = atlas.findRegion("entity/mage/mage_back");
+        mageLeft = atlas.findRegion("entity/mage/mage_left");
+        mageRight = atlas.findRegion("entity/mage/mage_right");
+
+        tankFront = atlas.findRegion("entity/knight/knight_front");
+        tankBack = atlas.findRegion("entity/knight/knight_back");
+        tankLeft = atlas.findRegion("entity/knight/knight_left");
+        tankRight = atlas.findRegion("entity/knight/knight_right");
+
+        slimeSmallFront = atlas.findRegion("entity/small_slime/small_slime_front");
+        slimeSmallBack = atlas.findRegion("entity/small_slime/small_slime_back");
+        slimeSmallLeft = atlas.findRegion("entity/small_slime/small_slime_left");
+        slimeSmallRight = atlas.findRegion("entity/small_slime/small_slime_right");
+
+        slimeBigFront = atlas.findRegion("entity/big_slime/big_slime_front");
+        slimeBigBack = atlas.findRegion("entity/big_slime/big_slime_back");
+        slimeBigLeft = atlas.findRegion("entity/big_slime/big_slime_left");
+        slimeBigRight = atlas.findRegion("entity/big_slime/big_slime_right");
 
         crate = atlas.findRegion("entity/crate/crate");
         stairsUp = atlas.findRegion("map/stairs/stairs_up");
@@ -80,6 +99,11 @@ public class Media {
         healthBar = atlas.findRegion("entity/healthBar");
         experienceBar = atlas.findRegion("entity/experienceBar");
         lvlUp = atlas.findRegion("entity/lvlUp");
+
+        scrollOfStorms = atlas.findRegion("entity/items/scrollofstorm");
+        scrollOfInvulnerability = atlas.findRegion("entity/items/scrollofinvulnerability");
+        food = atlas.findRegion("entity/items/food");
+        storm = atlas.findRegion("entity/items/storm");
     }
 
     public static void dispose() {

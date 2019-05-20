@@ -6,7 +6,13 @@ import com.ericc.the.game.components.Model;
 public class Models {
     public static Model hero = new Model(Media.playerBack, Media.playerRight, Media.playerFront, Media.playerLeft,
             new Affine2().translate(0, 0.35f), false);
-    public static Model mage = new Model(Media.mobBack, Media.mobRight, Media.mobFront, Media.mobLeft,
+    public static Model mage = new Model(Media.mageBack, Media.mageRight, Media.mageFront, Media.mageLeft,
+            new Affine2().translate(0, 0.35f), false);
+    public static Model tank = new Model(Media.tankBack, Media.tankRight, Media.tankFront, Media.tankLeft,
+            new Affine2().translate(0, 0.35f), false);
+    public static Model slimeSmall = new Model(Media.slimeSmallBack, Media.slimeSmallRight, Media.slimeSmallFront, Media.slimeSmallLeft,
+            new Affine2().translate(0, 0.35f), false);
+    public static Model slimeBig = new Model(Media.slimeBigBack, Media.slimeBigRight, Media.slimeBigFront, Media.slimeBigLeft,
             new Affine2().translate(0, 0.35f), false);
     public static Model crate = new Model(Media.crate,
             new Affine2().translate(0, 0.35f), false);
@@ -28,6 +34,14 @@ public class Models {
             new Affine2().translate(0, 0.35f), true);
     public static Model explosion3 = new Model(Media.explosion3,
             new Affine2().translate(0, 0.35f), true);
+    public static Model scrollOfStorms = new Model(Media.scrollOfStorms,
+            new Affine2().translate(0, 0.35f), false);
+    public static Model scrollOfInvulnerability = new Model(Media.scrollOfInvulnerability,
+            new Affine2().translate(0, 0.35f), false);
+    public static Model food = new Model(Media.food,
+            new Affine2().translate(0, 0.35f), false);
+    public static Model storm = new Model(Media.storm,
+            new Affine2().translate(0, 0.35f), false);
 
     static {
         healthBar.width = 0.9f;

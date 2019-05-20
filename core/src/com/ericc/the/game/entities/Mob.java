@@ -11,7 +11,7 @@ import com.ericc.the.game.utils.GridPoint;
 public class Mob extends Entity {
     public Mob(GridPoint xy, Map map) {
         add(new PositionComponent(xy, map));
-        add(new RenderableComponent(Models.mage));
+        add(new RenderableComponent(Models.slimeSmall));
         add(new StatsComponent(45, 30, 10, 120, false));
         add(new AgencyComponent(new AstarAgency(), false));
         add(new CollisionComponent(CollisionComponent.Type.LIVING));
