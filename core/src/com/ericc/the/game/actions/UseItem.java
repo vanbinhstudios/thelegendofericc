@@ -22,7 +22,13 @@ public class UseItem extends Action {
     public void execute(Entity entity, Engine engine) {
         InventoryComponent inventory = Mappers.inventory.get(entity);
         if (inventory != null && inventory.items.size() > 0) {
-            Item item = inventory.items.remove(inventory.chosen);
+            Item item = inventory.items.get(inventory.chosen);
+            item.quantity--;
+
+            if (item.quantity == 0) {
+                inventory.items.remove(inventory.chosen);
+            }
+
             if (inventory.items.size() > 0) {
                 inventory.chosen %= inventory.items.size();
             }

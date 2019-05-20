@@ -6,6 +6,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.ericc.the.game.Mappers;
 import com.ericc.the.game.components.InventoryComponent;
+import com.ericc.the.game.components.Item;
 import com.ericc.the.game.entities.Player;
 import com.ericc.the.game.ui.actors.InfoText;
 import com.ericc.the.game.ui.actors.TopBar;
@@ -68,7 +69,9 @@ public class GameOverlay {
 
             InventoryComponent inventory = Mappers.inventory.get(player);
             if (inventory != null && inventory.items.size() > 0) {
-                item.setText("Chosen item: " + Mappers.inventory.get(player).items.get(Mappers.inventory.get(player).chosen).name);
+                Item itemAux = Mappers.inventory.get(player).items.get(Mappers.inventory.get(player).chosen);
+
+                item.setText("Chosen item: " + itemAux.name + " x " + itemAux.quantity);
             } else {
                 item.setText("Empty inventory");
             }

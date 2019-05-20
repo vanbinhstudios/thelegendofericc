@@ -10,11 +10,13 @@ public class Item {
     public Model model;
     public ItemType type;
     public String name;
+    public Integer quantity;
 
     public Item(String name, Model model, ItemType type, Effect... effects) {
         this.effects = Arrays.asList(effects);
         this.model = model;
         this.type = type;
         this.name = name;
+        this.quantity = 1;
     }
 }

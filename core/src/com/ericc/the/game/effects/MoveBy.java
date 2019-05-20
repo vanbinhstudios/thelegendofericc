@@ -36,7 +36,20 @@ public class MoveBy implements Effect {
                 } else if (item.type == ItemType.CARRIED) {
                     InventoryComponent inventory = Mappers.inventory.get(entity);
                     if (inventory != null) {
-                        inventory.items.add(item);
+                        boolean isIn = false;
+
+                        for (Item itemInv : inventory.items) {
+                            if (item.name.equals(itemInv.name)) {
+                                itemInv.quantity++;
+                                isIn = true;
+
+                                break;
+                            }
+                        }
+
+                        if (!isIn) {
+                            inventory.items.add(item);
+                        }
                     }
                 }
                 pos.map.lootMap.remove(pos.xy);
