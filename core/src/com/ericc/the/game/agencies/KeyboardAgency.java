@@ -11,8 +11,9 @@ import com.ericc.the.game.components.PositionComponent;
 import com.ericc.the.game.components.StatsComponent;
 import com.ericc.the.game.map.Map;
 import com.ericc.the.game.ui.actors.Flash;
-import com.ericc.the.game.utils.Area;
 import com.ericc.the.game.utils.GridPoint;
+
+import java.util.Collections;
 
 public class KeyboardAgency implements Agency {
     private KeyboardController controller;
@@ -46,7 +47,7 @@ public class KeyboardAgency implements Agency {
         } else if (checkIfCanPush(pos.map, targetXY)) {
             return Actions.PUSH(direction, 150);
         } else if (checkIfCanAttack(pos.map, targetXY)) {
-            return Actions.AOE_ATTACK(Models.sword, Area.square(targetXY, 0), direction, 100, 40, 0);
+            return Actions.AOE_ATTACK(Models.sword, Collections.singletonList(targetXY), direction, 100, 40, 0);
         } else {
             return Actions.WAIT;
         }
@@ -73,7 +74,7 @@ public class KeyboardAgency implements Agency {
             controller.q = false;
             if (stats.level >= 4) {
                 if (stats.mana > 50) {
-                    return Actions.AOE_ATTACK(Models.explosion1, Area.square(pos.xy, 1), pos.dir, 200, 30, 50);
+                    return Actions.AOE_ATTACK(Models.explosion1, pos.map.calculateFOV(pos.xy, 100), pos.dir, 200, 30, 50);
                 } else {
                     Flash.show("NO MANA!");
                 }
@@ -82,7 +83,7 @@ public class KeyboardAgency implements Agency {
             controller.e = false;
             if (stats.level >= 2) {
                 if (stats.mana > 75) {
-                    return Actions.AOE_ATTACK(Models.explosion3, Area.ray(pos.xy, pos.dir, 5), pos.dir, 300, 50, 75);
+                    return Actions.AOE_ATTACK(Models.explosion3, pos.map.calculateRay(pos.xy, pos.dir, 5), pos.dir, 300, 50, 75);
                 } else {
                     Flash.show("NO MANA!");
                 }
