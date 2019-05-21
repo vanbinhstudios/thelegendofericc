@@ -17,6 +17,4 @@ public class Popup {
         dialog.key(Input.Keys.ENTER, true); //sends "true" when the ENTER key is pressed
         dialog.show(GameScreen.gameScreen.overlay.getStage());
     }
-
-
 }

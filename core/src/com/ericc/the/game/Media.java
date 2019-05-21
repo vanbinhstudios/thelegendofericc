@@ -25,6 +25,7 @@ public class Media {
     public static TextureRegion arrowUp, arrowRight, arrowLeft, arrowDown;
     public static TextureRegion explosion1, explosion2, explosion3;
     public static TextureRegion scrollOfStorms, scrollOfInvulnerability, food, storm;
+    public static TextureRegion fireBeam, fireExplosion, arrowShot;
     public static int floorsConfiguration = 0;
 
     public static void loadAssets() {
@@ -104,6 +105,9 @@ public class Media {
         scrollOfInvulnerability = atlas.findRegion("entity/items/scrollofinvulnerability");
         food = atlas.findRegion("entity/items/food");
         storm = atlas.findRegion("entity/items/storm");
+        fireBeam = atlas.findRegion("entity/skills/firebeam");
+        fireExplosion = atlas.findRegion("entity/skills/fireexplosion");
+        arrowShot = atlas.findRegion("entity/skills/arrowshot");
     }
 
     public static void dispose() {

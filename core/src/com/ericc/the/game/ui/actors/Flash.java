@@ -16,7 +16,7 @@ public class Flash {
     public static void show(String text) {
         Label flash = new Label(text, style);
         flash.setColor(1, 1, 1, 0);
-        flash.setFontScale(7);
+        flash.setFontScale(4);
         flash.setAlignment(Align.center);
         flash.setPosition(GameScreen.viewportWidth / 2, GameScreen.viewportHeight / 2);
         GameScreen.gameScreen.overlay.getStage().addActor(flash);

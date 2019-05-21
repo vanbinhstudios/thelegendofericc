@@ -59,7 +59,7 @@ public class AOEAttack extends Action {
 
         StatsComponent stats = Mappers.stats.get(entity);
 
-        stats.mana -= cost;
+        if (stats != null) stats.mana -= cost;
 
         for (GridPoint p : area) {
             if (pos.map.isFloor(p) && !pos.xy.equals(p)) {

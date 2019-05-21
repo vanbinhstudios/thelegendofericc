@@ -16,7 +16,8 @@ public class IncreaseExperience implements Effect {
     @Override
     public void apply(Entity entity, Engine engine) {
         StatsComponent stats = Mappers.stats.get(entity);
-        stats.experience += amount;
+        if (stats != null) stats.experience += amount;
+        else return;
         // TODO A proper levelling system
         while (stats.experience > stats.maxExperience) {
             stats.level++;
