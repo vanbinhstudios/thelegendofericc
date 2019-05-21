@@ -19,18 +19,28 @@ public class Map {
 
     public final HashMap<GridPoint, Entity> collisionMap = new HashMap<>();
     public final HashMap<GridPoint, Entity> trapMap = new HashMap<>();
+    public final HashMap<GridPoint, Entity> lootMap = new HashMap<>();
     public float[][] brightness;
     public float[][] saturation;
     public GridPoint entrance;
     public GridPoint exit;
+    private float[][][] tint;
     private int width, height;
     private RectangularBitset map;
     private int[][][] randomTileNumber;
     private int[][][] randomClutterNumber;
     private HashSet<GridPoint> passableTiles; ///< stores every passable tile in a map (AFTER THE FIRST GENERATION)
+    private ArrayList<GridPoint> vacantTiles;
     // the above is NOT AN INVARIANT, this changes after spawning some entities on some tiles from this collection
     private HashSet<Room> rooms; ///< stores every room made while generating (without corridors)
     private FogOfWar fogOfWar;
+    // Variables used to calculate FOV. Passing them all through the recursion would be ugly and costly.
+    private float fov_radius;
+    private int fov_x;
+    private int fov_y;
+    private int[][] fov_tmp;
+    private int fov_version = 0;
+    private List<GridPoint> fov_result;
 
     Map(int width, int height) {
         this.width = width;
@@ -38,11 +48,13 @@ public class Map {
         brightness = new float[width][height];
         saturation = new float[width][height];
         this.passableTiles = new HashSet<>();
+        this.vacantTiles = new ArrayList<>();
         this.rooms = new HashSet<>();
         this.fogOfWar = new FogOfWar(width, height);
         map = new RectangularBitset(width, height);
         randomTileNumber = new int[width][height][TileTextureIndicator.countValues()];
         randomClutterNumber = new int[width][height][TileTextureIndicator.countValues()];
+        fov_tmp = new int[width][height];
 
         clearMap();
     }
@@ -71,6 +83,7 @@ public class Map {
 
         if (passable) {
             passableTiles.add(new GridPoint(x, y));
+            vacantTiles.add(new GridPoint(x, y));
         }
     }
 
@@ -131,19 +144,21 @@ public class Map {
      * @return random passable point in the 2D grid of this map
      * <p>
      * DISCLAIMER:
-     * It does REMOVE the passable tile it is going to return from the passableTiles collection!
+     * It does REMOVE the passable tile it is going to return from the vacantTiles collection!
      */
     public GridPoint getRandomPassableTile() {
         GridPoint ret;
 
+        Collections.shuffle(vacantTiles);
+
         try {
-            ret = passableTiles.iterator().next();
+            ret = vacantTiles.get(0);
         } catch (Exception e) {
             // TODO Instead of throwing an exception here, we would like to generate another map f.e.
             throw new IllegalStateException("Can't find room for more entities, check the map size.");
         }
 
-        passableTiles.remove(ret);
+        vacantTiles.remove(ret);
         return ret;
     }
 
@@ -276,5 +291,86 @@ public class Map {
 
     private int estimatePathLength(GridPoint source, GridPoint goal) {
         return Math.abs(source.x - goal.x) + Math.abs(source.y - goal.y);
+    }
+
+    public List<GridPoint> calculateFOV(GridPoint xy, float radius) {
+        this.fov_radius = radius;
+        this.fov_x = xy.x;
+        this.fov_y = xy.y;
+        this.fov_version += 1;
+
+        fov_tmp[fov_x][fov_y] = fov_version;
+
+        fov_result = new ArrayList<>();
+        fov_result.add(xy);
+
+        castLight(1, 1.0f, 0.0f, 0, 1, 1, 0);
+        castLight(1, 1.0f, 0.0f, 1, 0, 0, 1);
+        castLight(1, 1.0f, 0.0f, 0, 1, -1, 0);
+        castLight(1, 1.0f, 0.0f, 1, 0, 0, -1);
+        castLight(1, 1.0f, 0.0f, 0, -1, 1, 0);
+        castLight(1, 1.0f, 0.0f, -1, 0, 0, 1);
+        castLight(1, 1.0f, 0.0f, 0, -1, -1, 0);
+        castLight(1, 1.0f, 0.0f, -1, 0, 0, -1);
+
+        return fov_result;
+    }
+
+    private void castLight(int row, float start, float end, int xx, int xy, int yx, int yy) {
+        float newStart = 0.0f;
+        if (start < end) {
+            return;
+        }
+        boolean blocked = false;
+        for (int distance = row; distance <= fov_radius && !blocked; ++distance) {
+            int deltaY = -distance;
+            for (int deltaX = -distance; deltaX <= 0; ++deltaX) {
+                int currentX = fov_x + deltaX * xx + deltaY * xy;
+                int currentY = fov_y + deltaX * yx + deltaY * yy;
+                float leftSlope = (deltaX - 0.5f) / (deltaY + 0.5f);
+                float rightSlope = (deltaX + 0.5f) / (deltaY - 0.5f);
+
+                if (!(currentX >= 0 && currentY >= 0 && currentX < this.width && currentY < this.height) || start < rightSlope) {
+                    continue;
+                } else if (end > leftSlope) {
+                    break;
+                }
+
+                if (
+                        fov_tmp[currentX][currentY] != fov_version
+                                && deltaX * deltaX + deltaY * deltaY <= fov_radius * fov_radius
+                ) {
+                    fov_result.add(new GridPoint(currentX, currentY));
+                    fov_tmp[currentX][currentY] = fov_version;
+                }
+
+                if (blocked) {
+                    if (!isFloor(currentX, currentY)) {
+                        newStart = rightSlope;
+                    } else {
+                        blocked = false;
+                        start = newStart;
+                    }
+                } else {
+                    if (!isFloor(currentX, currentY) && distance < fov_radius) {
+                        blocked = true;
+                        castLight(distance + 1, start, leftSlope, xx, xy, yx, yy);
+                        newStart = rightSlope;
+                    }
+                }
+            }
+        }
+    }
+
+    public List<GridPoint> calculateRay(GridPoint origin, Direction dir, int length) {
+        List<GridPoint> ret = new ArrayList<>();
+        GridPoint offset = GridPoint.fromDirection(dir);
+        for (int i = 0; i < length; ++i) {
+            origin = origin.add(offset);
+            if (!isFloor(origin))
+                break;
+            ret.add(origin);
+        }
+        return ret;
     }
 }

@@ -12,26 +12,29 @@ import java.util.ArrayList;
 public class GameEngine {
     private Engine engine = new Engine();
     private boolean spinning;
+    private boolean stopped;
     private ArrayList<EntitySystem> logicSystems = new ArrayList<>();
     private ArrayList<EntitySystem> realtimeSystems = new ArrayList<>();
 
     public void update() {
-        engine.update(Gdx.graphics.getDeltaTime());
+        if (!stopped) {
+            engine.update(Gdx.graphics.getDeltaTime());
 
-        for (EntitySystem es : realtimeSystems)
-            es.setProcessing(false);
-        for (EntitySystem es : logicSystems)
-            es.setProcessing(true);
+            for (EntitySystem es : realtimeSystems)
+                es.setProcessing(false);
+            for (EntitySystem es : logicSystems)
+                es.setProcessing(true);
 
-        spinning = true;
-        while (spinning) {
-            engine.update(1);
+            spinning = true;
+            while (spinning) {
+                engine.update(1);
+            }
+
+            for (EntitySystem es : realtimeSystems)
+                es.setProcessing(true);
+            for (EntitySystem es : logicSystems)
+                es.setProcessing(false);
         }
-
-        for (EntitySystem es : realtimeSystems)
-            es.setProcessing(true);
-        for (EntitySystem es : logicSystems)
-            es.setProcessing(false);
     }
 
     public void addLogicSystem(EntitySystem system) {
@@ -63,5 +66,9 @@ public class GameEngine {
 
     public void stopSpinning() {
         spinning = false;
+    }
+
+    public void stopCompletely() {
+        stopped = true;
     }
 }

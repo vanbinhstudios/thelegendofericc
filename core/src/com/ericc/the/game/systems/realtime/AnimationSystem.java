@@ -6,8 +6,8 @@ import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.ericc.the.game.Mappers;
-import com.ericc.the.game.actions.Effects;
 import com.ericc.the.game.components.*;
+import com.ericc.the.game.effects.SetAnimation;
 
 public class AnimationSystem extends EntitySystem {
     private ImmutableArray<Entity> animated; // Entities with affine state currently attached.
@@ -47,7 +47,7 @@ public class AnimationSystem extends EntitySystem {
             }
 
             if (animation.animation.isOver(animation.localTime)) {
-                Effects.setAnimation(entity, AnimationState.IDLE);
+                new SetAnimation(AnimationState.IDLE).apply(entity, null);
             }
         }
     }

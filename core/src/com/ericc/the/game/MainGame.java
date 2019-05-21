@@ -1,17 +1,17 @@
 package com.ericc.the.game;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Screen;
 import com.ericc.the.game.ui.screens.GameScreen;
+import com.ericc.the.game.ui.screens.MainMenu;
 
 public class MainGame extends Game {
 
+    public static MainGame game;
     public final static boolean DEBUG = true; ///< turns the debug mode on and off
-    private Screen gamescreen;
 
     @Override
     public void create() {
-        gamescreen = new GameScreen(this);
-        setScreen(gamescreen);
+        game = this;
+        setScreen(new MainMenu());
     }
 }

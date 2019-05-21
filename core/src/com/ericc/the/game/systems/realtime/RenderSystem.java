@@ -87,11 +87,19 @@ public class RenderSystem extends EntitySystem {
             // Depth-order the entities.
             visibleEntities.sort(z_sort);
 
+            for (int y = cam.top; y >= cam.bottom; --y) {
+                for (int x = cam.left; x <= cam.right; ++x) {
+                    if (camPos.map.hasBeenSeenByPlayer(x, y) && camPos.map.isFloor(x, y)) {
+                        drawTile(batch, x, y, camPos.map);
+                    }
+                }
+            }
+
             // Perform the drawing.
             int entityIndex = 0;
             for (int y = cam.top; y >= cam.bottom; --y) {
                 for (int x = cam.left; x <= cam.right; ++x) {
-                    if (camPos.map.hasBeenSeenByPlayer(x, y)) {
+                    if (camPos.map.hasBeenSeenByPlayer(x, y) && !camPos.map.isFloor(x, y)) {
                         drawTile(batch, x, y, camPos.map);
                     }
                 }

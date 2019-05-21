@@ -1,7 +1,7 @@
 package com.ericc.the.game.ui.screens;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -21,26 +21,23 @@ import com.ericc.the.game.systems.logic.*;
 import com.ericc.the.game.systems.realtime.*;
 
 public class GameScreen implements Screen {
+    public static GameScreen gameScreen;
 
-    private final static int viewportWidth = 800;
-    private final static int viewportHeight = 600;
-    private final static boolean MUSIC = false; ///< turns the music on and off
-    private final Game game;
+    public final static int viewportWidth = 800;
+    public final static int viewportHeight = 600;
+    private final static boolean MUSIC = true; ///< turns the music on and off
+    public GameOverlay overlay;
     private KeyboardController controls;
     private OrthographicCamera camera;
     private Viewport viewport;
     private Dungeon dungeon;
     private Player player;
-    private GameEngine gameEngine = new GameEngine();
+    public GameEngine gameEngine = new GameEngine();
     private FpsThrottle fpsThrottle = new FpsThrottle(60);
-    private GameOverlay overlay;
-
-    public GameScreen(Game game) {
-        this.game = game;
-    }
 
     @Override
     public void show() {
+        gameScreen = this;
         Media.loadAssets();
 
         // we need a camera here to have an instance of Orthographic one in a viewport
@@ -53,13 +50,21 @@ public class GameScreen implements Screen {
         dungeon.generateFirstLevel();
 
         controls = new KeyboardController(gameEngine, camera);
-        Gdx.input.setInputProcessor(controls);
+
         player = new Player(
                 dungeon.getCurrentMap().getRandomPassableTile(),
                 dungeon.getCurrentMap(),
                 new FieldOfViewComponent(dungeon.getCurrentMap().width(), dungeon.getCurrentMap().height()),
                 new CameraComponent(viewport),
                 new AgencyComponent(new KeyboardAgency(controls), false));
+
+
+        overlay = new GameOverlay(viewportWidth, viewportHeight, player);
+        InputMultiplexer multiplexer = new InputMultiplexer();
+        multiplexer.addProcessor(controls);
+        multiplexer.addProcessor(overlay.getStage());
+        Gdx.input.setInputProcessor(multiplexer);
+
 
         gameEngine.addEntity(player);
 
@@ -75,6 +80,7 @@ public class GameScreen implements Screen {
         gameEngine.addRealtimeSystem(new TileChanger(.75f, priority++));
         gameEngine.addRealtimeSystem(new CameraSystem(priority++));
         gameEngine.addRealtimeSystem(new FovFadeSystem(priority++));
+        gameEngine.addRealtimeSystem(new GarbageCollector(priority++));
 
         gameEngine.addRealtimeSystem(new RenderSystem(priority++));
 
@@ -83,8 +89,6 @@ public class GameScreen implements Screen {
             sound.loop();
             sound.play();
         }
-
-        overlay = new GameOverlay(viewportWidth, viewportHeight, player);
     }
 
     @Override
@@ -95,6 +99,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        controls.tick(delta);
         gameEngine.update();
         overlay.getStage().act(delta);
         overlay.getStage().draw();
