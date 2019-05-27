@@ -2,13 +2,12 @@ package com.ericc.the.game.ui.actors;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import com.ericc.the.game.Media;
 
 public class Box extends Table {
 
@@ -21,15 +20,10 @@ public class Box extends Table {
     }
 
     public static Drawable getColoredDrawable(int width, int height, Color color) {
-        Pixmap pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
-        pixmap.setColor(color);
-        pixmap.fill();
-
-        TextureRegionDrawable drawable = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
-
-        pixmap.dispose();
-
-        return drawable;
+        Sprite sprite = new Sprite(Media.white);
+        sprite.setColor(color);
+        sprite.setSize(width, height);
+        return new SpriteDrawable(sprite);
     }
 
     @Override

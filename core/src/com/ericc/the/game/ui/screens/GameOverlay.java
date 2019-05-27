@@ -26,6 +26,7 @@ public class GameOverlay {
     public ItemTable inventoryTable;
     public InfoText info;
     public InfoText item;
+    public BitmapFont font = new BitmapFont();
     private Stage stage;
     private Viewport viewport;
     private Player player;
@@ -141,7 +142,7 @@ public class GameOverlay {
 
         for (int i = 0; i < constBindings.length; i++) {
             element = new Box(40, 40, Color.CLEAR);
-            Label.LabelStyle style = new Label.LabelStyle(new BitmapFont(), Color.BLACK);
+            Label.LabelStyle style = new Label.LabelStyle(font, Color.BLACK);
 
             if (constBindings[i].equals("Q") && Mappers.stats.get(player).level < 4) {
                 style.fontColor = Color.RED;
