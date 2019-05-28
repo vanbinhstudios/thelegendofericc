@@ -25,7 +25,7 @@ public class GameScreen implements Screen {
 
     public final static int viewportWidth = 800;
     public final static int viewportHeight = 600;
-    private final static boolean MUSIC = false; ///< turns the music on and off
+    private static boolean MUSIC = true; ///< turns the music on and off
     public GameOverlay overlay;
     private KeyboardController controls;
     private OrthographicCamera camera;
@@ -87,6 +87,7 @@ public class GameScreen implements Screen {
             Sound sound = Gdx.audio.newSound(Gdx.files.internal("music/8bitAdventure.mp3"));
             sound.loop();
             sound.play();
+            MUSIC = false;
         }
     }
 
