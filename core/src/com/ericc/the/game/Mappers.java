@@ -19,6 +19,7 @@ public class Mappers {
     public static final ComponentMapper<AgencyComponent> agency = ComponentMapper.getFor(AgencyComponent.class);
     public static final ComponentMapper<CollisionComponent> collision = ComponentMapper.getFor(CollisionComponent.class);
     public static final ComponentMapper<PlayerTag> player = ComponentMapper.getFor(PlayerTag.class);
+    public static final ComponentMapper<BossTag> boss = ComponentMapper.getFor(BossTag.class);
     public static final ComponentMapper<HostileTag> hostile = ComponentMapper.getFor(HostileTag.class);
     public static final ComponentMapper<DamageComponent> damage = ComponentMapper.getFor(DamageComponent.class);
     public static final ComponentMapper<HealthBarComponent> healthbar = ComponentMapper.getFor(HealthBarComponent.class);

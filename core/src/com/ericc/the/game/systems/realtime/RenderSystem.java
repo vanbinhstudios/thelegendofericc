@@ -134,7 +134,7 @@ public class RenderSystem extends EntitySystem {
         transformTmp.mul(render.transform); // Apply affine animations.
         transformTmp.translate(pos.getX(), pos.getY()); // Move to logical position.
 
-        batch.setColor(0, render.saturation, render.brightness, render.alpha);
+        batch.setColor(render.glow, render.saturation, render.brightness, render.alpha);
         batch.draw(render.region, render.model.width, render.model.height, transformTmp);
 
         drawHealthbar(entity, pos);

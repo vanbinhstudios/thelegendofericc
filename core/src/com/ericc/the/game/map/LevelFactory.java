@@ -70,11 +70,19 @@ public class LevelFactory {
         }
     }
 
+    private static void generateBossMobs(Map map, ArrayList<Entity> entities, int ctr) {
+        for (int i = 0; i < ctr; i++) {
+            Boss mob = new Boss(map.getRandomPassableTile(), map);
+            entities.add(mob);
+        }
+    }
+
     private static void generateMobs(int levelNumber, Map map, ArrayList<Entity> entities) {
         if (levelNumber == 0) {
             //generateMageMobs(map, entities, 20);
             //generateTankMobs(map, entities, 3);
-            generateStandardMobs(map, entities, 15);
+            generateStandardMobs(map, entities, 10);
+            generateBossMobs(map, entities, 1);
             //generateArcherMobs(map, entities, 20);
         } else if (levelNumber == 1) {
             generateMageMobs(map, entities, 5);

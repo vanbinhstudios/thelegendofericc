@@ -37,7 +37,19 @@ public class GarbageCollector extends IteratingSystem {
                 dialog.key(Input.Keys.ENTER, true);
                 dialog.show(GameScreen.gameScreen.overlay.getStage());
                 GameScreen.gameScreen.gameEngine.stopCompletely();
-            } else {
+            } else if (Mappers.boss.has(entity)) {
+                Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
+                Dialog dialog = new Dialog("You won!", skin, "dialog") {
+                    public void result(Object obj) {
+                        MainGame.game.setScreen(new MainMenu());
+                    }
+                };
+                dialog.text("Start a new game");
+                dialog.button("OK", true);
+                dialog.key(Input.Keys.ENTER, true);
+                dialog.show(GameScreen.gameScreen.overlay.getStage());
+                GameScreen.gameScreen.gameEngine.stopCompletely();
+            }else {
                 getEngine().removeEntity(entity);
             }
         } else {

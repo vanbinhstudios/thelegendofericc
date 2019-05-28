@@ -16,7 +16,7 @@ public class SetAnimation implements Effect {
     @Override
     public void apply(Entity entity, Engine engine) {
         AnimationComponent anim = Mappers.animation.get(entity);
-        if (anim != null) {
+        if (anim != null && anim.state != state) {
             anim.localTime = 0;
             anim.state = state;
             if (Mappers.renderable.has(entity)) {

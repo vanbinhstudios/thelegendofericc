@@ -14,6 +14,7 @@ public class StatsComponent implements Component {
     public int experience;
     public int level;
     public int arrows;
+    public float focus = 0;
     public int maxExperience;
     public float delayMultiplier;
     public boolean canUseSkills;

@@ -11,6 +11,7 @@ public class RenderableComponent implements Component {
     public float brightness = 0.0f;
     public float alpha = 1.0f;
     public float saturation = 1.0f;
+    public float glow = 0.0f;
     public boolean visible = false;
     public int zOrder;
     public boolean visibleInFog;

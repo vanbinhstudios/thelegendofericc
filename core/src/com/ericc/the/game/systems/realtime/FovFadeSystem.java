@@ -43,6 +43,14 @@ public class FovFadeSystem extends EntitySystem {
 
             render.brightness = converge(render.brightness, targetBrightness, deltaTime * fadingSpeed);
             render.visible = render.brightness > 0.3f;
+
+            StatsComponent stats = Mappers.stats.get(entity);
+            if (stats != null) {
+                render.glow = converge(render.glow, stats.focus / 100, deltaTime * fadingSpeed);
+                if (stats.invulnerabilityTime > 0) {
+                    render.glow = max(render.glow, 0.2f);
+                }
+            }
         }
 
 
