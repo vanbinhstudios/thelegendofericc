@@ -89,7 +89,7 @@ public class BossAgency implements Agency {
                     if (path == null) {
                         return Actions.WAIT;
                     }
-                    return new MovementAction(path.get(0), 40, MovementAction.MovementType.RUN);
+                    return new MovementAction(path.get(0), 25, MovementAction.MovementType.RUN);
                 }
             }
         }
@@ -101,7 +101,7 @@ public class BossAgency implements Agency {
         if (stats.focus >= 100) {
             stats.focus = 0;
             state = 0;
-            return Actions.AOE_ATTACK(Models.storm, pos.map.calculateFOV(pos.xy, 100).stream().filter(e->(e.x + e.y - pos.xy.x + pos.xy.y)%2==1).collect(Collectors.toList()), pos.dir, 100, 40, 0);
+            return Actions.AOE_ATTACK(Models.storm, pos.map.calculateFOV(pos.xy, 100).stream().filter(e->(e.x + e.y - pos.xy.x + pos.xy.y)%2==1).collect(Collectors.toList()), pos.dir, 100, 50, 0);
         }
         stats.focus += 2;
         return new ChargeAction(10);

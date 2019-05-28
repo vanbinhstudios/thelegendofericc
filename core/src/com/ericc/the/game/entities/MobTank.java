@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Entity;
 import com.ericc.the.game.Models;
 import com.ericc.the.game.agencies.ChargeToPlayerAgency;
 import com.ericc.the.game.components.*;
+import com.ericc.the.game.drops.ExampleDrop;
 import com.ericc.the.game.map.Map;
 import com.ericc.the.game.utils.GridPoint;
 
@@ -18,5 +19,6 @@ public class MobTank extends Entity {
         add(new ExperienceWorthComponent(500));
         add(new HealthBarComponent(Models.healthBar));
         add(new AnimationComponent());
+        add(new DropComponent(new ExampleDrop()));
     }
 }

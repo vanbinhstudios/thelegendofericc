@@ -42,6 +42,8 @@ public class Models {
             new Affine2().translate(0, 0.35f), false);
     public static Model storm = new Model(Media.storm,
             new Affine2().translate(0, 0.35f), false);
+    public static Model boss = new Model(Media.mageBack, Media.mageRight, Media.mageFront, Media.mageLeft,
+            new Affine2().translate(0, 0.35f).scale(1.5f, 1.5f), false);
 
     static {
         healthBar.width = 0.9f;
