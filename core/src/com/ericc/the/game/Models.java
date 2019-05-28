@@ -42,11 +42,14 @@ public class Models {
             new Affine2().translate(0, 0.35f), false);
     public static Model storm = new Model(Media.storm,
             new Affine2().translate(0, 0.35f), false);
-    public static Model boss = new Model(Media.mageBack, Media.mageRight, Media.mageFront, Media.mageLeft,
-            new Affine2().translate(0, 0.35f).scale(1.5f, 1.5f), false);
+    public static Model boss = new Model(Media.bossBack, Media.bossRight, Media.bossFront, Media.bossLeft,
+            new Affine2().translate(0, 0.35f), false);
+    public static Model bossHealthBar = new Model(Media.healthBar,
+            new Affine2().translate(0, 2.1f), false);
 
     static {
         healthBar.width = 0.9f;
+        boss.height = 2;
     }
 
     static {

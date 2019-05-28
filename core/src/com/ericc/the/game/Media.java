@@ -17,6 +17,7 @@ public class Media {
     public static TextureRegion playerFront, playerLeft, playerRight, playerBack;
     public static TextureRegion mageFront, mageLeft, mageRight, mageBack;
     public static TextureRegion tankFront, tankLeft, tankRight, tankBack;
+    public static TextureRegion bossFront, bossLeft, bossRight, bossBack;
     public static TextureRegion slimeSmallFront, slimeSmallLeft, slimeSmallRight, slimeSmallBack;
     public static TextureRegion slimeBigFront, slimeBigLeft, slimeBigRight, slimeBigBack;
     public static TextureRegion stairsDown, stairsUp;
@@ -70,6 +71,11 @@ public class Media {
         tankBack = atlas.findRegion("entity/knight/knight_back");
         tankLeft = atlas.findRegion("entity/knight/knight_left");
         tankRight = atlas.findRegion("entity/knight/knight_right");
+
+        bossFront = atlas.findRegion("entity/boss/necromancer_front");
+        bossLeft = atlas.findRegion("entity/boss/necromancer_left");
+        bossRight = atlas.findRegion("entity/boss/necromancer_right");
+        bossBack = atlas.findRegion("entity/boss/necromancer_back");
 
         slimeSmallFront = atlas.findRegion("entity/small_slime/small_slime_front");
         slimeSmallBack = atlas.findRegion("entity/small_slime/small_slime_back");
