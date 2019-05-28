@@ -83,7 +83,6 @@ public class LevelFactory {
             generateTankMobs(map, entities, 2);
             generateStandardMobs(map, entities, 3);
             generateArcherMobs(map, entities, 2);
-            generateBossMobs(map, entities, 10);
         } else if (levelNumber == 1) {
             generateMageMobs(map, entities, 5);
             generateTankMobs(map, entities, 5);
