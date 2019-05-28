@@ -11,6 +11,7 @@ public class MainGame extends Game {
 
     @Override
     public void create() {
+        Media.loadAssets();
         game = this;
         setScreen(new MainMenu());
     }

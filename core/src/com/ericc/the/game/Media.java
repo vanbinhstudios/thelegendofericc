@@ -31,6 +31,7 @@ public class Media {
     public static TextureRegion scrollOfStorms, scrollOfInvulnerability, food, storm;
     public static TextureRegion fireBeam, fireExplosion, arrowShot;
     public static TextureRegion white;
+    public static TextureRegion background;
     public static int floorsConfiguration = 0;
 
     public static void loadAssets() {
@@ -113,6 +114,8 @@ public class Media {
         fireBeam = atlas.findRegion("entity/skills/firebeam");
         fireExplosion = atlas.findRegion("entity/skills/fireexplosion");
         arrowShot = atlas.findRegion("entity/skills/arrowshot");
+
+        background = atlas.findRegion("entity/ericc");
 
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.WHITE);
