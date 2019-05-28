@@ -1,8 +1,12 @@
 package com.ericc.the.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 
 public class Media {
@@ -26,6 +30,7 @@ public class Media {
     public static TextureRegion explosion1, explosion2, explosion3;
     public static TextureRegion scrollOfStorms, scrollOfInvulnerability, food, storm;
     public static TextureRegion fireBeam, fireExplosion, arrowShot;
+    public static TextureRegion white;
     public static int floorsConfiguration = 0;
 
     public static void loadAssets() {
@@ -108,6 +113,12 @@ public class Media {
         fireBeam = atlas.findRegion("entity/skills/firebeam");
         fireExplosion = atlas.findRegion("entity/skills/fireexplosion");
         arrowShot = atlas.findRegion("entity/skills/arrowshot");
+
+        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        pixmap.setColor(Color.WHITE);
+        pixmap.fill();
+
+        white = new TextureRegion(new Texture(pixmap));
     }
 
     public static void dispose() {
