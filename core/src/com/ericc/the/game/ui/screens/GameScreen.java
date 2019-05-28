@@ -38,7 +38,6 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
         gameScreen = this;
-        Media.loadAssets();
 
         // we need a camera here to have an instance of Orthographic one in a viewport
         this.camera = new OrthographicCamera();
