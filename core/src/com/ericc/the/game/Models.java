@@ -43,13 +43,14 @@ public class Models {
     public static Model storm = new Model(Media.storm,
             new Affine2().translate(0, 0.35f), false);
     public static Model boss = new Model(Media.bossBack, Media.bossRight, Media.bossFront, Media.bossLeft,
-            new Affine2().translate(0, 0.35f), false);
+            new Affine2().translate(-0.5f, 0.35f), false);
     public static Model bossHealthBar = new Model(Media.healthBar,
-            new Affine2().translate(0, 2.1f), false);
+            new Affine2().translate(0, 4f), false);
 
     static {
         healthBar.width = 0.9f;
-        boss.height = 2;
+        boss.height = 4;
+        boss.width = 2;
     }
 
     static {
