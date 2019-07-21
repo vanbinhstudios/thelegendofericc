@@ -17,6 +17,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.ericc.the.game.Media;
+import com.ericc.the.game.ui.UiSkin;
 import com.ericc.the.game.ui.actors.Popup;
 
 public class MainMenu implements Screen {
@@ -30,7 +31,7 @@ public class MainMenu implements Screen {
     private Label title;
 
     public MainMenu() {
-        skin = new Skin(Gdx.files.internal("uiskin.json"));
+        skin = UiSkin.get();
 
         batch = new SpriteBatch();
         camera = new OrthographicCamera();
