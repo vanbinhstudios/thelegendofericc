@@ -18,6 +18,12 @@ import com.ericc.the.game.ui.actors.*;
 
 public class GameOverlay {
 
+    private static final Image images[] = {
+            new Image(new TextureRegionDrawable(Media.fireExplosion)),
+            new Image(new TextureRegionDrawable(Media.fireBeam)),
+            new Image(new TextureRegionDrawable(Media.arrowShot))
+    };
+    private static final String constBindings[] = {"Q", "E", "F", "I"};
     public TopBar healthBar;
     public TopBar manaBar;
     public TopBar experienceBar;
@@ -30,12 +36,6 @@ public class GameOverlay {
     private Stage stage;
     private Viewport viewport;
     private Player player;
-    private static final Image images[] = {
-            new Image(new TextureRegionDrawable(Media.fireExplosion)),
-            new Image(new TextureRegionDrawable(Media.fireBeam)),
-            new Image(new TextureRegionDrawable(Media.arrowShot))
-    };
-    private static final String constBindings[] = {"Q", "E", "F", "I"};
 
     public GameOverlay(int width, int height, Player currentPlayer) {
         viewport = new FitViewport(width, height);
@@ -132,7 +132,7 @@ public class GameOverlay {
 
         container = new Box(40, 40, Color.LIGHT_GRAY);
         element = new Box(30, 30, Color.GRAY);
-        if( !inventory.items.isEmpty() ) {
+        if (!inventory.items.isEmpty()) {
             element.add(new Image(new TextureRegionDrawable(inventory.items.get(inventory.chosen).model.sheet[0])));
         }
         container.add(element);
@@ -172,7 +172,7 @@ public class GameOverlay {
             if (inventory.chosen == i) element.setColor(Color.SLATE);
             element.add(new Image(new TextureRegionDrawable(inventory.items.get(i).model.sheet[0])));
             container.add(element);
-            if ( i % 4 == 3 ) inventoryTable.content.add(container).row();
+            if (i % 4 == 3) inventoryTable.content.add(container).row();
             else inventoryTable.content.add(container);
         }
     }

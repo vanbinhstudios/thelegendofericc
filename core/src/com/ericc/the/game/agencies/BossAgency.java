@@ -4,7 +4,10 @@ import com.badlogic.ashley.core.Entity;
 import com.ericc.the.game.Direction;
 import com.ericc.the.game.Mappers;
 import com.ericc.the.game.Models;
-import com.ericc.the.game.actions.*;
+import com.ericc.the.game.actions.Action;
+import com.ericc.the.game.actions.Actions;
+import com.ericc.the.game.actions.ChargeAction;
+import com.ericc.the.game.actions.MovementAction;
 import com.ericc.the.game.components.PositionComponent;
 import com.ericc.the.game.components.StatsComponent;
 import com.ericc.the.game.map.Map;
@@ -101,7 +104,7 @@ public class BossAgency implements Agency {
         if (stats.focus >= 100) {
             stats.focus = 0;
             state = 0;
-            return Actions.AOE_ATTACK(Models.storm, pos.map.calculateFOV(pos.xy, 100).stream().filter(e->(e.x + e.y - pos.xy.x + pos.xy.y)%2==1).collect(Collectors.toList()), pos.dir, 100, 50, 0);
+            return Actions.AOE_ATTACK(Models.storm, pos.map.calculateFOV(pos.xy, 100).stream().filter(e -> (e.x + e.y - pos.xy.x + pos.xy.y) % 2 == 1).collect(Collectors.toList()), pos.dir, 100, 50, 0);
         }
         stats.focus += 2;
         return new ChargeAction(10);

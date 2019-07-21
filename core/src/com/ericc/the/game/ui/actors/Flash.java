@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
-import com.ericc.the.game.MainGame;
 import com.ericc.the.game.ui.screens.GameScreen;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;

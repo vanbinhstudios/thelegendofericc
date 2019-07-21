@@ -12,7 +12,7 @@ public class ItemTable extends Table {
         this.setSize(width, height);
         this.setBackground(Box.getColoredDrawable(width, height, Color.GRAY));
 
-        content = new Box(width - borderWeight*2, height - borderWeight*2, Color.LIGHT_GRAY);
+        content = new Box(width - borderWeight * 2, height - borderWeight * 2, Color.LIGHT_GRAY);
         this.add(content);
     }
 
