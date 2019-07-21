@@ -1,8 +1,8 @@
 package com.ericc.the.game.drops;
 
 import com.ericc.the.game.Models;
-import com.ericc.the.game.components.Item;
-import com.ericc.the.game.components.ItemType;
+import com.ericc.the.game.items.Item;
+import com.ericc.the.game.items.ItemType;
 import com.ericc.the.game.effects.AddArrows;
 import com.ericc.the.game.effects.GrantInvulnerability;
 import com.ericc.the.game.effects.Heal;
