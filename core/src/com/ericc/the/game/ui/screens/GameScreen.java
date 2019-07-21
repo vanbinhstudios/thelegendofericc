@@ -9,7 +9,6 @@ import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.ericc.the.game.GameEngine;
 import com.ericc.the.game.KeyboardController;
-import com.ericc.the.game.Media;
 import com.ericc.the.game.agencies.KeyboardAgency;
 import com.ericc.the.game.components.AgencyComponent;
 import com.ericc.the.game.components.CameraComponent;
@@ -21,18 +20,17 @@ import com.ericc.the.game.systems.logic.*;
 import com.ericc.the.game.systems.realtime.*;
 
 public class GameScreen implements Screen {
-    public static GameScreen gameScreen;
-
     public final static int viewportWidth = 800;
     public final static int viewportHeight = 600;
+    public static GameScreen gameScreen;
     private static boolean MUSIC = true; ///< turns the music on and off
     public GameOverlay overlay;
+    public GameEngine gameEngine = new GameEngine();
     private KeyboardController controls;
     private OrthographicCamera camera;
     private Viewport viewport;
     private Dungeon dungeon;
     private Player player;
-    public GameEngine gameEngine = new GameEngine();
     private FpsThrottle fpsThrottle = new FpsThrottle(60);
 
     @Override

@@ -12,7 +12,7 @@ public class ItemTableTextOverlay extends Table {
         this.setSize(width, height);
         this.setBackground(Box.getColoredDrawable(width, height, Color.CLEAR));
 
-        content = new Box(width - borderWeight*2,  height - borderWeight*2, Color.CLEAR);
+        content = new Box(width - borderWeight * 2, height - borderWeight * 2, Color.CLEAR);
         this.add(content);
     }
 

@@ -11,7 +11,6 @@ import com.ericc.the.game.MainGame;
 import com.ericc.the.game.Mappers;
 import com.ericc.the.game.components.DeadTag;
 import com.ericc.the.game.components.RenderableComponent;
-import com.ericc.the.game.ui.actors.Popup;
 import com.ericc.the.game.ui.screens.GameScreen;
 import com.ericc.the.game.ui.screens.MainMenu;
 
@@ -49,7 +48,7 @@ public class GarbageCollector extends IteratingSystem {
                 dialog.key(Input.Keys.ENTER, true);
                 dialog.show(GameScreen.gameScreen.overlay.getStage());
                 GameScreen.gameScreen.gameEngine.stopCompletely();
-            }else {
+            } else {
                 getEngine().removeEntity(entity);
             }
         } else {

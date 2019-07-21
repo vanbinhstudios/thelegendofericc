@@ -20,14 +20,15 @@ import com.ericc.the.game.Media;
 import com.ericc.the.game.ui.actors.Popup;
 
 public class MainMenu implements Screen {
+    static Label.LabelStyle style = new Label.LabelStyle(new BitmapFont(), Color.WHITE);
+    private static Image background = new Image(new TextureRegionDrawable(Media.background));
     protected Stage stage;
     protected Skin skin;
     private SpriteBatch batch;
     private Viewport viewport;
     private OrthographicCamera camera;
-    private static Image background  = new Image(new TextureRegionDrawable(Media.background));
-    static Label.LabelStyle style = new Label.LabelStyle(new BitmapFont(), Color.WHITE);
     private Label title;
+
     public MainMenu() {
         skin = new Skin(Gdx.files.internal("uiskin.json"));
 
@@ -50,7 +51,7 @@ public class MainMenu implements Screen {
 
         Table mainTable = new Table();
         mainTable.setFillParent(true);
-        mainTable.setPosition(0, -GameScreen.viewportHeight/4, Align.center);
+        mainTable.setPosition(0, -GameScreen.viewportHeight / 4, Align.center);
 
         TextButton playButton = new TextButton("Play", skin);
         TextButton exitButton = new TextButton("Exit", skin);
@@ -60,7 +61,7 @@ public class MainMenu implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 ((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreen());
                 // TODO Proper intro text
-                Popup.show("","Down beneath the Faculty of Mathematics, Informatics and Mechanics\n" +
+                Popup.show("", "Down beneath the Faculty of Mathematics, Informatics and Mechanics\n" +
                         "there is a lair belonging to the Dark Master of Probability\n" +
                         "\n" +
                         "                ERICC                \n" +
@@ -88,7 +89,7 @@ public class MainMenu implements Screen {
         title.setFontScale(4);
 //        title.setFillParent(true);
         title.setAlignment(Align.center);
-        title.setPosition(GameScreen.viewportWidth/2, GameScreen.viewportHeight*0.8f);
+        title.setPosition(GameScreen.viewportWidth / 2, GameScreen.viewportHeight * 0.8f);
         stage.addActor(title);
 
     }
