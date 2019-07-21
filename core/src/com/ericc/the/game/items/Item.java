@@ -1,5 +1,6 @@
-package com.ericc.the.game.components;
+package com.ericc.the.game.items;
 
+import com.ericc.the.game.components.Model;
 import com.ericc.the.game.effects.Effect;
 
 import java.util.Arrays;

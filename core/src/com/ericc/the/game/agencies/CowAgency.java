@@ -14,7 +14,7 @@ import com.ericc.the.game.helpers.Moves;
 import com.ericc.the.game.map.Map;
 import com.ericc.the.game.utils.GridPoint;
 
-public class AstarAgency implements Agency {
+public class CowAgency implements Agency {
     public static final int RADIUS = 5;
     private RandomWalk randomWalk = new RandomWalk();
 
@@ -44,9 +44,7 @@ public class AstarAgency implements Agency {
                         if (minMove == null)
                             return Actions.WAIT;
                         else
-                            return new MovementAction(Direction.fromGridPoint(minMove), 2000 / stats.agility, MovementAction.MovementType.RUN);
-                    } else {
-                        return Charge.returnAction(pos, x, y, map, 2000 / stats.agility, stats);
+                            return new MovementAction(Direction.fromGridPoint(minMove), 2000 / stats.agility, MovementAction.MovementType.WALK);
                     }
                 }
             }

@@ -4,6 +4,8 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.ericc.the.game.Mappers;
 import com.ericc.the.game.components.*;
+import com.ericc.the.game.items.Item;
+import com.ericc.the.game.items.ItemType;
 import com.ericc.the.game.utils.GridPoint;
 
 public class MoveBy implements Effect {

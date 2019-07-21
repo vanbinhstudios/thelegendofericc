@@ -77,10 +77,17 @@ public class LevelFactory {
         }
     }
 
+    private static void generateCows(Map map, ArrayList<Entity> entities, int ctr) {
+        for (int i = 0; i < ctr; i++) {
+            Cow mob = new Cow(map.getRandomPassableTile(), map);
+            entities.add(mob);
+        }
+    }
+
     private static void generateMobs(int levelNumber, Map map, ArrayList<Entity> entities) {
         if (levelNumber == 0) {
+            generateCows(map, entities, 5);
             generateMageMobs(map, entities, 10);
-            generateTankMobs(map, entities, 2);
             generateStandardMobs(map, entities, 3);
             generateArcherMobs(map, entities, 2);
         } else if (levelNumber == 1) {

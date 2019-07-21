@@ -12,7 +12,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.ericc.the.game.Mappers;
 import com.ericc.the.game.Media;
 import com.ericc.the.game.components.InventoryComponent;
-import com.ericc.the.game.components.Item;
+import com.ericc.the.game.items.Item;
 import com.ericc.the.game.entities.Player;
 import com.ericc.the.game.ui.actors.*;
 

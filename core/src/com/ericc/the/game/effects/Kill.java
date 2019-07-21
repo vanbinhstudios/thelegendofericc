@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.ericc.the.game.Mappers;
 import com.ericc.the.game.components.*;
 import com.ericc.the.game.entities.Loot;
+import com.ericc.the.game.items.Item;
 
 public class Kill implements Effect {
     private Entity killer;
