@@ -14,6 +14,9 @@ The Legend of Ericc is a turn-based single player rogue-like game made in Java w
 -  Equipment system
 
 ## Gameplay
+### Screenshot
+<img src="https://i.imgur.com/l5Sa7qO.png">
+### Watch the video
 [![Watch the gamplay](https://img.youtube.com/vi/kV4Njg37hAQ/maxresdefault.jpg)](https://youtu.be/kV4Njg37hAQ)
 
 ## Assets
