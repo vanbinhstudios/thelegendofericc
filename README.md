@@ -9,6 +9,7 @@ The Legend of Ericc is a turn-based single player rogue-like game made in Java w
 
 ## Features
 -  Turn-based (nothing happens until you move)
+-  Field of view
 -  Random map generation
 -  Multiple monsters and skills
 -  Equipment system
